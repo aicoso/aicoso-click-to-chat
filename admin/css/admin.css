@@ -1,0 +1,434 @@
+/**
+ * Click to Chat - Admin CSS
+ *
+ * This file contains all the styles for the admin-facing aspects of the plugin.
+ */
+
+/* Admin Panel Styles */
+.ctc-admin-container {
+    max-width: 1200px;
+    margin-top: 20px;
+}
+
+.ctc-admin-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.ctc-admin-logo {
+    width: 50px;
+    height: 50px;
+    margin-right: 15px;
+}
+
+.ctc-admin-heading {
+    margin: 0;
+    padding: 0;
+}
+
+.ctc-admin-tabs {
+    margin-bottom: 20px;
+    border-bottom: 1px solid #ccc;
+}
+
+.ctc-admin-tabs .nav-tab {
+    margin-bottom: -1px;
+    font-size: 14px;
+}
+
+.ctc-admin-content {
+    background: #fff;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+}
+
+/* Form Styles */
+.ctc-form-table {
+    width: 100%;
+    margin-top: 15px;
+}
+
+.ctc-form-table th {
+    padding: 15px 10px 15px 0;
+    width: 200px;
+    text-align: left;
+    vertical-align: top;
+}
+
+.ctc-form-table td {
+    padding: 15px 10px;
+    vertical-align: middle;
+}
+
+.ctc-form-table input[type="text"],
+.ctc-form-table input[type="number"],
+.ctc-form-table select,
+.ctc-form-table textarea {
+    width: 350px;
+    max-width: 100%;
+}
+
+.ctc-form-table textarea {
+    min-height: 150px;
+}
+
+.ctc-color-field {
+    width: 80px !important;
+}
+
+.ctc-description {
+    color: #666;
+    font-style: italic;
+    margin-top: 5px;
+    display: block;
+}
+
+/* WhatsApp Numbers Management */
+.ctc-admin-description {
+    margin-bottom: 20px;
+}
+
+.ctc-admin-actions {
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: flex-start;
+}
+
+.ctc-admin-actions .button {
+    display: inline-flex;
+    align-items: center;
+    padding: 6px 12px;
+    height: auto;
+}
+
+.ctc-admin-actions .dashicons {
+    margin-right: 8px;
+    font-size: 18px;
+    line-height: 18px;
+    height: 18px;
+    width: 18px;
+}
+
+.ctc-numbers-container {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.ctc-number-item {
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    margin-bottom: 20px;
+    position: relative;
+    transition: all 0.2s ease;
+}
+
+.ctc-number-item:hover {
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.ctc-number-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px;
+    border-bottom: 1px solid #eee;
+    background: #f9f9f9;
+    border-radius: 4px 4px 0 0;
+}
+
+.ctc-number-title {
+    font-weight: 600;
+    font-size: 16px;
+    margin: 0;
+    color: #23282d;
+    flex: 1;
+}
+
+.ctc-number-actions {
+    display: flex;
+    gap: 12px;
+    margin-left: 15px;
+}
+
+.ctc-number-toggle {
+    color: #0073aa;
+    padding: 4px;
+}
+
+.ctc-number-toggle:hover {
+    color: #00a0d2;
+}
+
+.ctc-number-delete {
+    color: #a00;
+    padding: 4px;
+}
+
+.ctc-number-delete:hover {
+    color: #dc3232;
+}
+
+.ctc-number-actions .button-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.ctc-number-actions .dashicons {
+    font-size: 18px;
+    width: 18px;
+    height: 18px;
+}
+
+.ctc-number-content {
+    padding: 20px;
+    display: block;
+}
+
+.ctc-number-content.closed {
+    display: none;
+}
+
+.ctc-field-row {
+    display: flex;
+    flex-wrap: wrap;
+    margin: 0 -10px 15px;
+}
+
+.ctc-field-col {
+    flex: 1;
+    min-width: 250px;
+    padding: 0 10px;
+    margin-bottom: 10px;
+}
+
+.ctc-field-col {
+    position: relative;
+}
+
+.ctc-field-col label {
+    display: inline-block;
+    width: 120px;
+    margin-right: 10px;
+    font-weight: 600;
+    vertical-align: middle;
+}
+
+.ctc-field-col input {
+    width: calc(100% - 135px);
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.ctc-field-col .description {
+    display: block;
+    margin-top: 5px;
+    margin-left: 120px;
+    font-style: italic;
+    color: #666;
+    font-size: 12px;
+}
+
+.button-link {
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+}
+
+.button-link:focus {
+    outline: 1px dotted #0073aa;
+    box-shadow: none;
+}
+
+/* Assignments Section */
+.ctc-assignments-section {
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 1px solid #eee;
+}
+
+.ctc-assignments-heading {
+    margin-top: 0;
+    margin-bottom: 10px;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.ctc-assignment-type {
+    margin-bottom: 15px;
+}
+
+.ctc-assignment-label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 600;
+}
+
+.ctc-select2-container {
+    width: 100% !important;
+}
+
+/* Message Templates Styles */
+.ctc-templates-container {
+    margin-top: 20px;
+}
+
+.ctc-template-item {
+    margin-bottom: 30px;
+}
+
+.ctc-template-header {
+    background: #f9f9f9;
+    border: 1px solid #e5e5e5;
+    border-radius: 3px 3px 0 0;
+    padding: 10px 15px;
+    margin-bottom: 0;
+}
+
+.ctc-template-title {
+    margin: 0;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.ctc-template-content {
+    border: 1px solid #e5e5e5;
+    border-top: none;
+    border-radius: 0 0 3px 3px;
+    padding: 15px;
+}
+
+.ctc-template-textarea {
+    width: 100%;
+    min-height: 150px;
+}
+
+.ctc-template-preview-button {
+    margin-top: 10px !important;
+}
+
+.ctc-template-preview {
+    margin-top: 15px;
+    padding: 15px;
+    background: #f9f9f9;
+    border: 1px solid #e5e5e5;
+    border-radius: 3px;
+    white-space: pre-wrap;
+}
+
+.ctc-placeholders {
+    margin-top: 10px;
+}
+
+.ctc-placeholder-tag {
+    display: inline-block;
+    background: #e5e5e5;
+    padding: 3px 8px;
+    border-radius: 3px;
+    margin: 0 5px 5px 0;
+    font-family: monospace;
+    cursor: pointer;
+}
+
+/* Shortcode Generator Styles */
+.ctc-shortcode-generator {
+    display: flex;
+    flex-wrap: wrap;
+    margin-top: 20px;
+}
+
+.ctc-shortcode-form {
+    flex: 0 0 60%;
+    padding-right: 30px;
+}
+
+.ctc-shortcode-preview {
+    flex: 0 0 40%;
+}
+
+.ctc-shortcode-result {
+    margin-top: 20px;
+    padding: 15px;
+    background: #f9f9f9;
+    border: 1px solid #e5e5e5;
+    border-radius: 3px;
+    position: relative;
+}
+
+.ctc-shortcode-code {
+    font-family: monospace;
+    white-space: pre-wrap;
+    margin: 0;
+    padding: 0;
+}
+
+.ctc-copy-shortcode {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    cursor: pointer;
+    color: #0073aa;
+}
+
+.ctc-shortcode-preview-container {
+    margin-top: 20px;
+    padding: 15px;
+    background: #f9f9f9;
+    border: 1px solid #e5e5e5;
+    border-radius: 3px;
+    text-align: center;
+}
+
+.ctc-shortcode-preview-label {
+    margin-bottom: 10px;
+    font-weight: 600;
+}
+
+/* Responsive Admin Styles */
+@media screen and (max-width: 782px) {
+    .ctc-form-table th,
+    .ctc-form-table td {
+        display: block;
+        width: 100%;
+        padding: 10px 0;
+    }
+    
+    .ctc-form-table th {
+        padding-bottom: 0;
+    }
+    
+    .ctc-form-table input[type="text"],
+    .ctc-form-table input[type="number"],
+    .ctc-form-table select,
+    .ctc-form-table textarea {
+        width: 100%;
+    }
+    
+    .ctc-shortcode-generator {
+        display: block;
+    }
+    
+    .ctc-shortcode-form {
+        padding-right: 0;
+    }
+    
+    .ctc-field-col label {
+        display: block;
+        width: 100%;
+        margin-bottom: 5px;
+    }
+    
+    .ctc-field-col input {
+        width: 100%;
+        display: block;
+    }
+    
+    .ctc-field-col .description {
+        margin-left: 0;
+    }
+}

@@ -1,0 +1,204 @@
+/**
+ * Click to Chat - Public CSS
+ *
+ * This file contains all the styles for the public-facing aspects of the plugin.
+ */
+
+/* General Button Styles */
+.ctc-whatsapp-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px 16px;
+    border-radius: 4px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    margin: 10px 0;
+    cursor: pointer;
+    line-height: 1.5;
+    font-size: 14px;
+}
+
+.ctc-whatsapp-button:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    opacity: 0.9;
+    text-decoration: none;
+}
+
+.ctc-whatsapp-button:focus {
+    outline: none;
+    text-decoration: none;
+}
+
+/* WhatsApp Icon Styles */
+.ctc-whatsapp-icon {
+    display: inline-flex;
+    margin-right: 8px;
+}
+
+.ctc-whatsapp-icon svg {
+    width: 20px;
+    height: 20px;
+}
+
+/* Button Size Variations */
+.ctc-button-size-small {
+    padding: 6px 12px;
+    font-size: 12px;
+}
+
+.ctc-button-size-normal {
+    padding: 8px 16px;
+    font-size: 14px;
+}
+
+.ctc-button-size-large {
+    padding: 10px 20px;
+    font-size: 16px;
+}
+
+/* Button Alignment */
+.ctc-shortcode-container {
+    display: block;
+    width: 100%;
+    margin: 15px 0;
+}
+
+.ctc-align-left {
+    text-align: left;
+}
+
+.ctc-align-center {
+    text-align: center;
+}
+
+.ctc-align-right {
+    text-align: right;
+}
+
+/* Button Type Specific Styles */
+.ctc-button-product,
+.ctc-button-shop {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.ctc-button-cart,
+.ctc-button-checkout {
+    margin-top: 15px;
+    margin-bottom: 15px;
+    width: 100%;
+    max-width: 300px;
+}
+
+.ctc-cart-button-container,
+.ctc-checkout-button-container,
+.ctc-thankyou-button-container {
+    display: flex;
+    justify-content: center;
+    margin: 20px 0;
+}
+
+/* Floating Button Styles */
+.ctc-floating-button-container {
+    position: fixed;
+    z-index: 9999;
+    display: flex;
+}
+
+.ctc-floating-bottom_right {
+    bottom: 20px;
+    right: 20px;
+}
+
+.ctc-floating-bottom_left {
+    bottom: 20px;
+    left: 20px;
+}
+
+.ctc-floating-top_right {
+    top: 20px;
+    right: 20px;
+}
+
+.ctc-floating-top_left {
+    top: 20px;
+    left: 20px;
+}
+
+.ctc-floating-button-container .ctc-whatsapp-button {
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    padding: 0;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.ctc-floating-button-container .ctc-whatsapp-icon {
+    margin: 0;
+}
+
+.ctc-floating-button-container .ctc-whatsapp-icon svg {
+    width: 30px;
+    height: 30px;
+}
+
+.ctc-floating-button-container .ctc-button-text {
+    display: none;
+}
+
+/* Responsive Styles */
+@media screen and (max-width: 768px) {
+    .ctc-floating-button-container {
+        bottom: 15px;
+        right: 15px;
+    }
+    
+    .ctc-floating-button-container .ctc-whatsapp-button {
+        width: 50px;
+        height: 50px;
+    }
+    
+    .ctc-floating-button-container .ctc-whatsapp-icon svg {
+        width: 25px;
+        height: 25px;
+    }
+}
+
+/* WooCommerce Integration */
+.woocommerce div.product form.cart .ctc-whatsapp-button {
+    margin-top: 15px;
+    margin-bottom: 15px;
+}
+
+.woocommerce .products .product .ctc-whatsapp-button {
+    margin-top: 10px;
+}
+
+/* RTL Support */
+.rtl .ctc-whatsapp-icon {
+    margin-right: 0;
+    margin-left: 8px;
+}
+
+.rtl .ctc-floating-bottom_right {
+    right: auto;
+    left: 20px;
+}
+
+.rtl .ctc-floating-bottom_left {
+    left: auto;
+    right: 20px;
+}
+
+.rtl .ctc-floating-top_right {
+    right: auto;
+    left: 20px;
+}
+
+.rtl .ctc-floating-top_left {
+    left: auto;
+    right: 20px;
+}

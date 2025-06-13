@@ -1,0 +1,641 @@
+/**
+ * Click to Chat - Admin JavaScript
+ *
+ * This file contains all the JavaScript for the admin-facing aspects of the plugin.
+ */
+
+(function($) {
+    'use strict';
+
+    /**
+     * Initialize the admin functionality
+     */
+    function initAdmin() {
+        // Initialize tabs
+        initTabs();
+        
+        // Initialize color pickers
+        initColorPickers();
+        
+        // Initialize WhatsApp number management
+        initNumbersManagement();
+        
+        // Initialize message template previews
+        initMessageTemplates();
+        
+        // Initialize shortcode generator
+        initShortcodeGenerator();
+        
+        // Initialize select2 for multiselect dropdowns
+        initSelect2();
+    }
+
+    /**
+     * Initialize tab navigation
+     */
+    function initTabs() {
+        $('.ctc-admin-tabs .nav-tab').on('click', function(e) {
+            e.preventDefault();
+            
+            // Get the target tab
+            const targetTab = $(this).data('tab');
+            
+            // Update active tab
+            $('.ctc-admin-tabs .nav-tab').removeClass('nav-tab-active');
+            $(this).addClass('nav-tab-active');
+            
+            // Show the target tab content
+            $('.ctc-admin-tab-content').hide();
+            $('#' + targetTab).show();
+            
+            // Update the tab parameter in the URL
+            const url = new URL(window.location);
+            url.searchParams.set('tab', targetTab);
+            window.history.pushState({}, '', url);
+        });
+        
+        // Show the active tab on page load
+        const urlParams = new URLSearchParams(window.location.search);
+        const activeTab = urlParams.get('tab');
+        
+        if (activeTab) {
+            $('.ctc-admin-tabs .nav-tab[data-tab="' + activeTab + '"]').trigger('click');
+        } else {
+            // Default to the first tab
+            $('.ctc-admin-tabs .nav-tab:first').trigger('click');
+        }
+    }
+
+    /**
+     * Initialize color pickers
+     */
+    function initColorPickers() {
+        $('.ctc-color-field').wpColorPicker();
+    }
+    
+    /**
+     * Initialize WhatsApp number management
+     */
+    function initNumbersManagement() {
+        // Handle expand/collapse functionality
+        $(document).on('click', '.ctc-number-toggle', function() {
+            const $content = $(this).closest('.ctc-number-item').find('.ctc-number-content');
+            const $icon = $(this).find('.dashicons');
+            
+            $content.slideToggle(200, function() {
+                // Update icon based on visibility after animation completes
+                if ($content.is(':visible')) {
+                    $icon.removeClass('dashicons-arrow-down-alt2').addClass('dashicons-arrow-up-alt2');
+                } else {
+                    $icon.removeClass('dashicons-arrow-up-alt2').addClass('dashicons-arrow-down-alt2');
+                }
+            });
+        });
+        
+        // Handle number deletion
+        $(document).on('click', '.ctc-number-delete', function() {
+            const $item = $(this).closest('.ctc-number-item');
+            const numberName = $item.find('.ctc-number-title').text().trim();
+            const numberId = $item.data('id');
+            
+            if (confirm(ctc_admin.delete_number_confirm)) {
+                // Add the ID to a hidden input to track deleted numbers
+                if (!$('#ctc-deleted-numbers').length) {
+                    $('form').append('<input type="hidden" id="ctc-deleted-numbers" name="ctc_deleted_numbers" value="" />');
+                }
+                
+                let deletedNumbers = $('#ctc-deleted-numbers').val();
+                deletedNumbers = deletedNumbers ? deletedNumbers.split(',') : [];
+                deletedNumbers.push(numberId);
+                $('#ctc-deleted-numbers').val(deletedNumbers.join(','));
+                
+                // Remove the item from the UI
+                $item.slideUp(300, function() {
+                    $(this).remove();
+                });
+            }
+        });
+        
+        // Add new WhatsApp number
+        $('#ctc-add-number').on('click', function() {
+            // Get the template
+            const template = wp.template('ctc-number-template');
+            
+            // Get the next number ID and index
+            const nextId = parseInt($('#ctc-next-number-id').val());
+            const nextIndex = $('.ctc-number-item').length;
+            
+            // Render the template
+            const html = template({
+                id: nextId,
+                index: nextIndex
+            });
+            
+            // Append to container
+            $('#ctc-numbers-container').append(html);
+            
+            // Initialize select2 for the new selects
+            initSelect2();
+            
+            // Update the next ID
+            $('#ctc-next-number-id').val(nextId + 1);
+            
+            // Scroll to the new number
+            $('html, body').animate({
+                scrollTop: $('.ctc-number-item:last').offset().top - 50
+            }, 500);
+            
+            return false;
+        });
+        
+        // Validate number name on change to prevent duplicates
+        $(document).on('change', '.ctc-number-name', function() {
+            const $input = $(this);
+            const name = $input.val().trim();
+            
+            if (name === '') {
+                return;
+            }
+            
+            // Check for duplicate names
+            let isDuplicate = false;
+            $('.ctc-number-name').not($input).each(function() {
+                if ($(this).val().trim() === name) {
+                    isDuplicate = true;
+                    return false; // Break the loop
+                }
+            });
+            
+            if (isDuplicate) {
+                alert(ctc_admin.duplicate_name_error);
+                $input.val('').focus();
+            }
+        });
+        
+        // Ensure the first number is expanded by default
+        $('.ctc-number-item:first .ctc-number-content').show();
+        
+        // Initialize select2 for existing selects
+        initSelect2();
+        
+        // Helper function to update indices for all numbers
+        function updateNumberIndices() {
+            $('.ctc-number-item').each(function(index) {
+                const id = $(this).data('id');
+                
+                // Update all name attributes in this number item
+                $(this).find('[name^="ctc_numbers["]').each(function() {
+                    const name = $(this).attr('name');
+                    const newName = name.replace(/ctc_numbers\[\d+\]/, 'ctc_numbers[' + index + ']');
+                    $(this).attr('name', newName);
+                });
+            });
+        }
+    }
+
+    /**
+     * Initialize select2 for multiselect dropdowns
+     */
+    function initSelect2() {
+        // Products select
+        $('.ctc-product-select').select2({
+            placeholder: ctc_admin.select_products_text,
+            allowClear: true,
+            ajax: {
+                url: ctc_admin.ajaxurl,
+                dataType: 'json',
+                delay: 250,
+                data: function(params) {
+                    return {
+                        term: params.term,
+                        action: 'ctc_search_products',
+                        nonce: ctc_admin.nonce
+                    };
+                },
+                processResults: function(data) {
+                    return {
+                        results: data.data.results
+                    };
+                },
+                cache: true
+            },
+            minimumInputLength: 2
+        });
+        
+        // Categories select
+        $('.ctc-category-select').select2({
+            placeholder: ctc_admin.select_categories_text,
+            allowClear: true,
+            ajax: {
+                url: ctc_admin.ajaxurl,
+                dataType: 'json',
+                delay: 250,
+                data: function(params) {
+                    return {
+                        term: params.term,
+                        action: 'ctc_search_categories',
+                        nonce: ctc_admin.nonce
+                    };
+                },
+                processResults: function(data) {
+                    return {
+                        results: data.data.results
+                    };
+                },
+                cache: true
+            },
+            minimumInputLength: 0
+        });
+        
+        // Pages select
+        $('.ctc-page-select').select2({
+            placeholder: ctc_admin.select_pages_text,
+            allowClear: true,
+            ajax: {
+                url: ctc_admin.ajaxurl,
+                dataType: 'json',
+                delay: 250,
+                data: function(params) {
+                    return {
+                        term: params.term,
+                        action: 'ctc_search_pages',
+                        nonce: ctc_admin.nonce
+                    };
+                },
+                processResults: function(data) {
+                    return {
+                        results: data.data.results
+                    };
+                },
+                cache: true
+            },
+            minimumInputLength: 0
+        });
+    }
+
+    /**
+     * Initialize Select2 for various select inputs
+     */
+    function initSelect2() {
+        // Page select
+        $('.ctc-page-select').select2({
+            ajax: {
+                url: ctc_admin.ajaxurl,
+                dataType: 'json',
+                delay: 250,
+                data: function(params) {
+                    return {
+                        action: 'ctc_search_pages',
+                        term: params.term || '',
+                        nonce: ctc_admin.nonce
+                    };
+                },
+                processResults: function(data) {
+                    return {
+                        results: data.success ? data.data.results : []
+                    };
+                },
+                cache: true
+            },
+            minimumInputLength: 0,
+            placeholder: $(this).data('placeholder') || 'Select pages...',
+            allowClear: true
+        });
+        
+        // Post select
+        $('.ctc-post-select').select2({
+            ajax: {
+                url: ctc_admin.ajaxurl,
+                dataType: 'json',
+                delay: 250,
+                data: function(params) {
+                    return {
+                        action: 'ctc_search_posts',
+                        term: params.term || '',
+                        nonce: ctc_admin.nonce
+                    };
+                },
+                processResults: function(data) {
+                    return {
+                        results: data.success ? data.data.results : []
+                    };
+                },
+                cache: true
+            },
+            minimumInputLength: 0,
+            placeholder: $(this).data('placeholder') || 'Select posts...',
+            allowClear: true
+        });
+        
+        // Category select
+        $('.ctc-category-select').select2({
+            ajax: {
+                url: ctc_admin.ajaxurl,
+                dataType: 'json',
+                delay: 250,
+                data: function(params) {
+                    return {
+                        action: 'ctc_search_categories',
+                        term: params.term || '',
+                        nonce: ctc_admin.nonce
+                    };
+                },
+                processResults: function(data) {
+                    return {
+                        results: data.success ? data.data.results : []
+                    };
+                },
+                cache: true
+            },
+            minimumInputLength: 0,
+            placeholder: $(this).data('placeholder') || 'Select categories...',
+            allowClear: true
+        });
+        
+        // Tag select
+        $('.ctc-tag-select').select2({
+            ajax: {
+                url: ctc_admin.ajaxurl,
+                dataType: 'json',
+                delay: 250,
+                data: function(params) {
+                    return {
+                        action: 'ctc_search_tags',
+                        term: params.term || '',
+                        nonce: ctc_admin.nonce
+                    };
+                },
+                processResults: function(data) {
+                    return {
+                        results: data.success ? data.data.results : []
+                    };
+                },
+                cache: true
+            },
+            minimumInputLength: 0,
+            placeholder: $(this).data('placeholder') || 'Select tags...',
+            allowClear: true
+        });
+        
+        // Product select
+        $('.ctc-product-select').select2({
+            ajax: {
+                url: ctc_admin.ajaxurl,
+                dataType: 'json',
+                delay: 250,
+                data: function(params) {
+                    return {
+                        action: 'ctc_search_products',
+                        term: params.term || '',
+                        nonce: ctc_admin.nonce
+                    };
+                },
+                processResults: function(data) {
+                    return {
+                        results: data.success ? data.data.results : []
+                    };
+                },
+                cache: true
+            },
+            minimumInputLength: 0,
+            placeholder: $(this).data('placeholder') || 'Select products...',
+            allowClear: true
+        });
+    }
+
+    /**
+     * Initialize message template previews
+     */
+    function initMessageTemplates() {
+        // Preview template
+        $('.ctc-template-preview-button').on('click', function() {
+            const $button = $(this);
+            const $container = $button.closest('.ctc-template-item');
+            const templateType = $container.data('template-type');
+            const templateContent = $container.find('.ctc-template-textarea').val();
+            const $previewContainer = $container.find('.ctc-template-preview');
+            
+            // Show loading state
+            $button.prop('disabled', true).text(ctc_admin.loading_text);
+            
+            // Send AJAX request
+            $.ajax({
+                url: ctc_admin.ajaxurl,
+                type: 'POST',
+                data: {
+                    action: 'ctc_preview_message',
+                    template_type: templateType,
+                    template_content: templateContent,
+                    nonce: ctc_admin.nonce
+                },
+                success: function(response) {
+                    if (response.success) {
+                        $previewContainer.html(response.data.preview.replace(/\n/g, '<br>'));
+                        $previewContainer.show();
+                    } else {
+                        $previewContainer.html('<p class="error">' + response.data.message + '</p>');
+                        $previewContainer.show();
+                    }
+                },
+                error: function() {
+                    $previewContainer.html('<p class="error">Error generating preview.</p>');
+                    $previewContainer.show();
+                },
+                complete: function() {
+                    $button.prop('disabled', false).text(ctc_admin.preview_text);
+                }
+            });
+            
+            return false;
+        });
+        
+        // Insert placeholder into textarea
+        $(document).on('click', '.ctc-placeholder-tag', function() {
+            const placeholder = $(this).text();
+            const $textarea = $(this).closest('.ctc-template-item').find('.ctc-template-textarea');
+            
+            insertAtCursor($textarea[0], placeholder);
+            
+            return false;
+        });
+    }
+
+    /**
+     * Initialize shortcode generator
+     */
+    function initShortcodeGenerator() {
+        // Generate shortcode on form change
+        $('.ctc-shortcode-form select, .ctc-shortcode-form input').on('change', function() {
+            generateShortcode();
+        });
+        
+        // Copy shortcode to clipboard
+        $(document).on('click', '.ctc-copy-shortcode', function() {
+            const shortcode = $('.ctc-shortcode-code').text();
+            
+            copyToClipboard(shortcode);
+            
+            return false;
+        });
+        
+        // Initial shortcode generation
+        generateShortcode();
+    }
+
+    /**
+     * Generate shortcode based on form values
+     */
+    function generateShortcode() {
+        const $form = $('.ctc-shortcode-form');
+        const productId = $form.find('#shortcode_product_id').val();
+        const current = $form.find('#shortcode_current').is(':checked') ? 'yes' : 'no';
+        const text = $form.find('#shortcode_text').val();
+        const bgColor = $form.find('#shortcode_bg_color').val();
+        const textColor = $form.find('#shortcode_text_color').val();
+        const icon = $form.find('#shortcode_icon').is(':checked') ? 'yes' : 'no';
+        const showNumber = $form.find('#shortcode_show_number').val();
+        const size = $form.find('#shortcode_size').val();
+        const align = $form.find('#shortcode_align').val();
+        const type = $form.find('#shortcode_type').val();
+        const cssClass = $form.find('#shortcode_css_class').val();
+        
+        // Build the shortcode
+        let shortcode = '[whatsapp_button';
+        
+        if (productId) {
+            shortcode += ' product_id="' + productId + '"';
+        }
+        
+        shortcode += ' current="' + current + '"';
+        
+        if (text) {
+            shortcode += ' text="' + text + '"';
+        }
+        
+        if (bgColor) {
+            shortcode += ' bg_color="' + bgColor + '"';
+        }
+        
+        if (textColor) {
+            shortcode += ' text_color="' + textColor + '"';
+        }
+        
+        shortcode += ' icon="' + icon + '"';
+        
+        if (showNumber) {
+            shortcode += ' show_number="' + showNumber + '"';
+        }
+        
+        shortcode += ' size="' + size + '"';
+        shortcode += ' align="' + align + '"';
+        shortcode += ' type="' + type + '"';
+        
+        if (cssClass) {
+            shortcode += ' css_class="' + cssClass + '"';
+        }
+        
+        shortcode += ']';
+        
+        // Update the shortcode display
+        $('.ctc-shortcode-code').text(shortcode);
+        
+        // Update the preview
+        updateShortcodePreview();
+    }
+
+    /**
+     * Update the shortcode preview
+     */
+    function updateShortcodePreview() {
+        const $form = $('.ctc-shortcode-form');
+        const text = $form.find('#shortcode_text').val() || ctc_admin.default_button_text;
+        const bgColor = $form.find('#shortcode_bg_color').val() || '#25D366';
+        const textColor = $form.find('#shortcode_text_color').val() || '#ffffff';
+        const icon = $form.find('#shortcode_icon').is(':checked');
+        const size = $form.find('#shortcode_size').val();
+        const align = $form.find('#shortcode_align').val();
+        
+        // Create button HTML
+        let buttonHtml = '<div class="ctc-shortcode-container ctc-align-' + align + '">';
+        buttonHtml += '<a href="#" class="ctc-whatsapp-button ctc-button-size-' + size;
+        
+        if (icon) {
+            buttonHtml += ' ctc-button-with-icon';
+        }
+        
+        buttonHtml += '" style="background-color: ' + bgColor + '; color: ' + textColor + ';">';
+        
+        if (icon) {
+            buttonHtml += '<span class="ctc-whatsapp-icon">';
+            buttonHtml += '<svg viewBox="0 0 24 24" width="24" height="24">';
+            buttonHtml += '<path fill="currentColor" d="M17.498 14.382c-.301-.15-1.767-.867-2.04-.966-.273-.101-.473-.15-.673.15-.197.295-.771.964-.944 1.162-.175.195-.349.21-.646.075-.3-.15-1.263-.465-2.403-1.485-.888-.795-1.484-1.77-1.66-2.07-.174-.3-.019-.465.13-.615.136-.135.301-.345.451-.523.146-.181.194-.301.297-.496.1-.21.049-.375-.025-.524-.075-.15-.672-1.62-.922-2.206-.24-.584-.487-.51-.672-.51-.172-.015-.371-.015-.571-.015-.2 0-.523.074-.797.359-.273.3-1.045 1.02-1.045 2.475s1.07 2.865 1.219 3.075c.149.195 2.105 3.195 5.1 4.485.714.3 1.27.48 1.704.629.714.227 1.365.195 1.88.121.574-.091 1.767-.721 2.016-1.426.255-.705.255-1.29.18-1.425-.074-.135-.27-.21-.57-.345m-5.446 7.443h-.016c-1.77 0-3.524-.48-5.055-1.38l-.36-.214-3.75.975 1.005-3.645-.239-.375c-.99-1.576-1.516-3.391-1.516-5.26 0-5.445 4.455-9.885 9.942-9.885 2.654 0 5.145 1.035 7.021 2.91 1.875 1.859 2.909 4.35 2.909 6.99-.004 5.444-4.46 9.885-9.935 9.885M20.52 3.449C18.24 1.245 15.24 0 12.045 0 5.463 0 .104 5.334.101 11.893c0 2.096.549 4.14 1.595 5.945L0 24l6.335-1.652c1.746.943 3.71 1.444 5.71 1.447h.006c6.585 0 11.946-5.336 11.949-11.896 0-3.176-1.24-6.165-3.495-8.411"/>';
+            buttonHtml += '</svg>';
+            buttonHtml += '</span>';
+        }
+        
+        buttonHtml += '<span class="ctc-button-text">' + text + '</span>';
+        buttonHtml += '</a>';
+        buttonHtml += '</div>';
+        
+        // Update the preview
+        $('.ctc-shortcode-preview-container').html(buttonHtml);
+    }
+
+    /**
+     * Helper function to insert text at cursor position in textarea
+     */
+    function insertAtCursor(field, text) {
+        // IE support
+        if (document.selection) {
+            field.focus();
+            const sel = document.selection.createRange();
+            sel.text = text;
+            field.focus();
+        }
+        // Modern browsers
+        else if (field.selectionStart || field.selectionStart === 0) {
+            const startPos = field.selectionStart;
+            const endPos = field.selectionEnd;
+            const scrollTop = field.scrollTop;
+            
+            field.value = field.value.substring(0, startPos) + text + field.value.substring(endPos, field.value.length);
+            field.focus();
+            field.selectionStart = startPos + text.length;
+            field.selectionEnd = startPos + text.length;
+            field.scrollTop = scrollTop;
+        } else {
+            field.value += text;
+            field.focus();
+        }
+    }
+
+    /**
+     * Helper function to copy text to clipboard
+     */
+    function copyToClipboard(text) {
+        const textarea = document.createElement('textarea');
+        textarea.value = text;
+        textarea.setAttribute('readonly', '');
+        textarea.style.position = 'absolute';
+        textarea.style.left = '-9999px';
+        document.body.appendChild(textarea);
+        
+        textarea.select();
+        const success = document.execCommand('copy');
+        document.body.removeChild(textarea);
+        
+        if (success) {
+            alert(ctc_admin.copy_success);
+        } else {
+            alert(ctc_admin.copy_error);
+        }
+        
+        return success;
+    }
+
+    // Initialize when document is ready
+    $(document).ready(function() {
+        initAdmin();
+    });
+
+})(jQuery);
