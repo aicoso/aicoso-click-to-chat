@@ -192,9 +192,9 @@ class CTC_WhatsApp_Link_Generator {
         // Format the WhatsApp number
         $whatsapp_number = preg_replace( '/[^0-9]/', '', $whatsapp_number );
 
-        // Get the message template
-        $message_template = isset( $this->settings['message_templates']['cart'] ) ? 
-                           $this->settings['message_templates']['cart'] : '';
+        // Get the message template - using 'cart_checkout' as per the settings
+        $message_template = isset( $this->settings['message_templates']['cart_checkout'] ) ?
+                           $this->settings['message_templates']['cart_checkout'] : '';
 
         // Replace placeholders
         $message = $this->replace_cart_placeholders( $message_template );

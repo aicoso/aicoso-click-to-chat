@@ -315,11 +315,13 @@ class CTC_Admin {
         // Sanitize and update cart page settings
         $settings['cart_page'] = array(
             'enabled' => isset( $_POST['ctc_cart_page']['enabled'] ) ? true : false,
+            'position' => isset( $_POST['ctc_cart_page']['position'] ) ? sanitize_text_field( $_POST['ctc_cart_page']['position'] ) : 'after_cart_table',
         );
-        
+
         // Sanitize and update checkout page settings
         $settings['checkout_page'] = array(
             'enabled' => isset( $_POST['ctc_checkout_page']['enabled'] ) ? true : false,
+            'position' => isset( $_POST['ctc_checkout_page']['position'] ) ? sanitize_text_field( $_POST['ctc_checkout_page']['position'] ) : 'after_payment',
         );
         
         // Sanitize and update thank you page settings

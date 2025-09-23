@@ -231,6 +231,22 @@ $floating_positions = $settings_helper->get_floating_position_options();
                         </fieldset>
                     </td>
                 </tr>
+
+                <tr class="ctc-cart-position-row" <?php echo ( ! isset( $settings['cart_page']['enabled'] ) || ! $settings['cart_page']['enabled'] ) ? 'style="display:none;"' : ''; ?>>
+                    <th scope="row">
+                        <label for="ctc_cart_page_position"><?php esc_html_e( 'Cart Button Position', 'click-to-chat' ); ?></label>
+                    </th>
+                    <td>
+                        <select name="ctc_cart_page[position]" id="ctc_cart_page_position">
+                            <option value="after_cart_table" <?php selected( isset( $settings['cart_page']['position'] ) ? $settings['cart_page']['position'] : 'after_cart_table', 'after_cart_table' ); ?>><?php esc_html_e( 'After Cart Table', 'click-to-chat' ); ?></option>
+                            <option value="before_cart_table" <?php selected( isset( $settings['cart_page']['position'] ) ? $settings['cart_page']['position'] : '', 'before_cart_table' ); ?>><?php esc_html_e( 'Before Cart Table', 'click-to-chat' ); ?></option>
+                            <option value="proceed_to_checkout" <?php selected( isset( $settings['cart_page']['position'] ) ? $settings['cart_page']['position'] : '', 'proceed_to_checkout' ); ?>><?php esc_html_e( 'Next to Proceed to Checkout Button', 'click-to-chat' ); ?></option>
+                            <option value="after_cart_totals" <?php selected( isset( $settings['cart_page']['position'] ) ? $settings['cart_page']['position'] : '', 'after_cart_totals' ); ?>><?php esc_html_e( 'After Cart Totals', 'click-to-chat' ); ?></option>
+                            <option value="cart_actions" <?php selected( isset( $settings['cart_page']['position'] ) ? $settings['cart_page']['position'] : '', 'cart_actions' ); ?>><?php esc_html_e( 'In Cart Actions Area', 'click-to-chat' ); ?></option>
+                        </select>
+                        <p class="description"><?php esc_html_e( 'Choose where to display the WhatsApp button on the cart page', 'click-to-chat' ); ?></p>
+                    </td>
+                </tr>
                 
                 <tr>
                     <th scope="row">
@@ -243,6 +259,22 @@ $floating_positions = $settings_helper->get_floating_position_options();
                                 <?php esc_html_e( 'Show WhatsApp button on the checkout page', 'click-to-chat' ); ?>
                             </label>
                         </fieldset>
+                    </td>
+                </tr>
+
+                <tr class="ctc-checkout-position-row" <?php echo ( ! isset( $settings['checkout_page']['enabled'] ) || ! $settings['checkout_page']['enabled'] ) ? 'style="display:none;"' : ''; ?>>
+                    <th scope="row">
+                        <label for="ctc_checkout_page_position"><?php esc_html_e( 'Checkout Button Position', 'click-to-chat' ); ?></label>
+                    </th>
+                    <td>
+                        <select name="ctc_checkout_page[position]" id="ctc_checkout_page_position">
+                            <option value="after_payment" <?php selected( isset( $settings['checkout_page']['position'] ) ? $settings['checkout_page']['position'] : 'after_payment', 'after_payment' ); ?>><?php esc_html_e( 'After Payment Methods', 'click-to-chat' ); ?></option>
+                            <option value="before_payment" <?php selected( isset( $settings['checkout_page']['position'] ) ? $settings['checkout_page']['position'] : '', 'before_payment' ); ?>><?php esc_html_e( 'Before Payment Methods', 'click-to-chat' ); ?></option>
+                            <option value="after_order_review" <?php selected( isset( $settings['checkout_page']['position'] ) ? $settings['checkout_page']['position'] : '', 'after_order_review' ); ?>><?php esc_html_e( 'After Order Review', 'click-to-chat' ); ?></option>
+                            <option value="before_order_review" <?php selected( isset( $settings['checkout_page']['position'] ) ? $settings['checkout_page']['position'] : '', 'before_order_review' ); ?>><?php esc_html_e( 'Before Order Review', 'click-to-chat' ); ?></option>
+                            <option value="after_submit" <?php selected( isset( $settings['checkout_page']['position'] ) ? $settings['checkout_page']['position'] : '', 'after_submit' ); ?>><?php esc_html_e( 'After Place Order Button', 'click-to-chat' ); ?></option>
+                        </select>
+                        <p class="description"><?php esc_html_e( 'Choose where to display the WhatsApp button on the checkout page', 'click-to-chat' ); ?></p>
                     </td>
                 </tr>
                 

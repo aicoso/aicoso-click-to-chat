@@ -55,10 +55,16 @@ class CTC_Button_Display {
     private function init_hooks() {
         // Prevent multiple hook registrations
         static $hooks_registered = false;
-        
+
         if ($hooks_registered) {
             return;
         }
+
+        // Always try to add cart and checkout buttons using multiple hooks for compatibility
+        add_action( 'woocommerce_before_cart', array( $this, 'maybe_display_cart_button' ) );
+        add_action( 'woocommerce_after_cart', array( $this, 'maybe_display_cart_button' ) );
+        add_action( 'woocommerce_before_checkout_form', array( $this, 'maybe_display_checkout_button' ), 5 );
+        add_action( 'woocommerce_after_checkout_form', array( $this, 'maybe_display_checkout_button' ) );
         
         // Single product hooks
         if ( isset( $this->settings['single_product']['enabled'] ) && $this->settings['single_product']['enabled'] ) {
@@ -72,12 +78,12 @@ class CTC_Button_Display {
         
         // Cart page hooks
         if ( isset( $this->settings['cart_page']['enabled'] ) && $this->settings['cart_page']['enabled'] ) {
-            add_action( 'woocommerce_after_cart_table', array( $this, 'display_cart_button' ) );
+            $this->add_cart_page_hooks();
         }
         
         // Checkout page hooks
         if ( isset( $this->settings['checkout_page']['enabled'] ) && $this->settings['checkout_page']['enabled'] ) {
-            add_action( 'woocommerce_review_order_after_payment', array( $this, 'display_checkout_button' ) );
+            $this->add_checkout_page_hooks();
         }
         
         // Thank you page hooks
@@ -120,6 +126,66 @@ class CTC_Button_Display {
                 
             case 'after_short_description':
                 add_action( 'woocommerce_single_product_summary', array( $this, 'display_single_product_button' ), 25 );
+                break;
+        }
+    }
+
+    /**
+     * Add hooks for cart page
+     */
+    private function add_cart_page_hooks() {
+        $position = isset( $this->settings['cart_page']['position'] ) ?
+                    $this->settings['cart_page']['position'] : 'after_cart_table';
+
+        switch ( $position ) {
+            case 'after_cart_table':
+                add_action( 'woocommerce_after_cart_table', array( $this, 'display_cart_button' ) );
+                break;
+
+            case 'before_cart_table':
+                add_action( 'woocommerce_before_cart_table', array( $this, 'display_cart_button' ) );
+                break;
+
+            case 'proceed_to_checkout':
+                add_action( 'woocommerce_proceed_to_checkout', array( $this, 'display_cart_button' ), 25 );
+                break;
+
+            case 'after_cart_totals':
+                add_action( 'woocommerce_after_cart_totals', array( $this, 'display_cart_button' ) );
+                break;
+
+            case 'cart_actions':
+                add_action( 'woocommerce_cart_actions', array( $this, 'display_cart_button' ) );
+                break;
+        }
+    }
+
+    /**
+     * Add hooks for checkout page
+     */
+    private function add_checkout_page_hooks() {
+        $position = isset( $this->settings['checkout_page']['position'] ) ?
+                    $this->settings['checkout_page']['position'] : 'after_payment';
+
+        switch ( $position ) {
+            case 'after_payment':
+                add_action( 'woocommerce_review_order_after_payment', array( $this, 'display_checkout_button' ) );
+                break;
+
+            case 'before_payment':
+                add_action( 'woocommerce_review_order_before_payment', array( $this, 'display_checkout_button' ) );
+                break;
+
+            case 'after_order_review':
+                add_action( 'woocommerce_checkout_after_order_review', array( $this, 'display_checkout_button' ) );
+                break;
+
+            case 'before_order_review':
+                add_action( 'woocommerce_checkout_before_order_review', array( $this, 'display_checkout_button' ), 5 );
+                break;
+
+            case 'after_submit':
+                add_action( 'woocommerce_review_order_after_submit', array( $this, 'display_checkout_button' ) );
                 break;
         }
     }
@@ -219,6 +285,40 @@ class CTC_Button_Display {
     }
 
     /**
+     * Maybe display cart button based on settings
+     */
+    public function maybe_display_cart_button() {
+        // Check if cart buttons are enabled
+        if (!isset($this->settings['cart_page']['enabled']) || !$this->settings['cart_page']['enabled']) {
+            return;
+        }
+
+        // Only display on cart page
+        if (!is_cart()) {
+            return;
+        }
+
+        $this->display_cart_button();
+    }
+
+    /**
+     * Maybe display checkout button based on settings
+     */
+    public function maybe_display_checkout_button() {
+        // Check if checkout buttons are enabled
+        if (!isset($this->settings['checkout_page']['enabled']) || !$this->settings['checkout_page']['enabled']) {
+            return;
+        }
+
+        // Only display on checkout page
+        if (!is_checkout()) {
+            return;
+        }
+
+        $this->display_checkout_button();
+    }
+
+    /**
      * Display WhatsApp button on cart page
      */
     public function display_cart_button() {
@@ -226,24 +326,34 @@ class CTC_Button_Display {
         if (isset(self::$buttons_displayed['cart'])) {
             return;
         }
-        
+
         // Check if the page should be excluded
         if ($this->is_excluded()) {
             return;
         }
-        
+
         // Get the WhatsApp URL
         $whatsapp_url = $this->link_generator->get_cart_url();
-        
+
+        // If no URL, try to create a basic one with just the number
+        if (empty($whatsapp_url)) {
+            $whatsapp_number = $this->link_generator->get_whatsapp_number();
+            if (!empty($whatsapp_number)) {
+                $whatsapp_number = preg_replace('/[^0-9]/', '', $whatsapp_number);
+                $default_message = esc_html__('Hello! I need help with my cart on your website.', 'click-to-chat');
+                $whatsapp_url = 'https://wa.me/' . $whatsapp_number . '?text=' . urlencode($default_message);
+            }
+        }
+
         if (empty($whatsapp_url)) {
             return;
         }
-        
-        // Display the button
-        echo '<div class="ctc-cart-button-container">';
+
+        // Display the button with proper wrapper
+        echo '<div class="ctc-cart-button-container" style="margin: 20px 0;">';
         $this->render_button($whatsapp_url, 'cart');
         echo '</div>';
-        
+
         // Mark this button as displayed
         self::$buttons_displayed['cart'] = true;
     }
@@ -256,24 +366,34 @@ class CTC_Button_Display {
         if (isset(self::$buttons_displayed['checkout'])) {
             return;
         }
-        
+
         // Check if the page should be excluded
         if ($this->is_excluded()) {
             return;
         }
-        
+
         // Get the WhatsApp URL
         $whatsapp_url = $this->link_generator->get_cart_url();
-        
+
+        // If no URL, try to create a basic one with just the number
+        if (empty($whatsapp_url)) {
+            $whatsapp_number = $this->link_generator->get_whatsapp_number();
+            if (!empty($whatsapp_number)) {
+                $whatsapp_number = preg_replace('/[^0-9]/', '', $whatsapp_number);
+                $default_message = esc_html__('Hello! I need help with my checkout on your website.', 'click-to-chat');
+                $whatsapp_url = 'https://wa.me/' . $whatsapp_number . '?text=' . urlencode($default_message);
+            }
+        }
+
         if (empty($whatsapp_url)) {
             return;
         }
-        
-        // Display the button
-        echo '<div class="ctc-checkout-button-container">';
+
+        // Display the button with proper wrapper
+        echo '<div class="ctc-checkout-button-container" style="margin: 20px 0;">';
         $this->render_button($whatsapp_url, 'checkout');
         echo '</div>';
-        
+
         // Mark this button as displayed
         self::$buttons_displayed['checkout'] = true;
     }

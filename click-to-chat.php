@@ -179,10 +179,12 @@ function ctc_activate() {
             'position'    => 'after_add_to_cart'
         ),
         'cart_page' => array(
-            'enabled'     => false
+            'enabled'     => false,
+            'position'    => 'after_cart_table'
         ),
         'checkout_page' => array(
-            'enabled'     => false
+            'enabled'     => false,
+            'position'    => 'after_payment'
         ),
         'thankyou_page' => array(
             'enabled'     => false

@@ -13,21 +13,24 @@
     function initAdmin() {
         // Initialize tabs
         initTabs();
-        
+
         // Initialize color pickers
         initColorPickers();
-        
+
         // Initialize WhatsApp number management
         initNumbersManagement();
-        
+
         // Initialize message template previews
         initMessageTemplates();
-        
+
         // Initialize shortcode generator
         initShortcodeGenerator();
-        
+
         // Initialize select2 for multiselect dropdowns
         initSelect2();
+
+        // Initialize position field toggles
+        initPositionToggles();
     }
 
     /**
@@ -610,6 +613,46 @@
     }
 
     /**
+     * Initialize position field toggles
+     */
+    function initPositionToggles() {
+        // Toggle cart position field
+        $('#ctc_cart_page_enabled').on('change', function() {
+            if ($(this).is(':checked')) {
+                $('.ctc-cart-position-row').show();
+            } else {
+                $('.ctc-cart-position-row').hide();
+            }
+        });
+
+        // Toggle checkout position field
+        $('#ctc_checkout_page_enabled').on('change', function() {
+            if ($(this).is(':checked')) {
+                $('.ctc-checkout-position-row').show();
+            } else {
+                $('.ctc-checkout-position-row').hide();
+            }
+        });
+
+        // Also handle single product and shop page position fields if they exist
+        $('#ctc_single_product_enabled').on('change', function() {
+            if ($(this).is(':checked')) {
+                $('.ctc-single-position-row').show();
+            } else {
+                $('.ctc-single-position-row').hide();
+            }
+        });
+
+        $('#ctc_shop_page_enabled').on('change', function() {
+            if ($(this).is(':checked')) {
+                $('.ctc-shop-position-row').show();
+            } else {
+                $('.ctc-shop-position-row').hide();
+            }
+        });
+    }
+
+    /**
      * Helper function to copy text to clipboard
      */
     function copyToClipboard(text) {
@@ -619,17 +662,17 @@
         textarea.style.position = 'absolute';
         textarea.style.left = '-9999px';
         document.body.appendChild(textarea);
-        
+
         textarea.select();
         const success = document.execCommand('copy');
         document.body.removeChild(textarea);
-        
+
         if (success) {
             alert(ctc_admin.copy_success);
         } else {
             alert(ctc_admin.copy_error);
         }
-        
+
         return success;
     }
 
