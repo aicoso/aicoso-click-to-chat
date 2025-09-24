@@ -169,8 +169,19 @@ class CTC_Admin {
             'ctc-admin-js',
             'ctc_admin',
             array(
+                'ajaxurl' => admin_url('admin-ajax.php'),
                 'ajax_url' => admin_url('admin-ajax.php'),
                 'nonce'    => wp_create_nonce('ctc_admin_nonce'),
+                'delete_number_confirm' => esc_html__('Are you sure you want to delete this WhatsApp number?', 'click-to-chat'),
+                'duplicate_name_error' => esc_html__('This name is already being used. Please choose a different name.', 'click-to-chat'),
+                'loading_text' => esc_html__('Loading...', 'click-to-chat'),
+                'preview_text' => esc_html__('Preview', 'click-to-chat'),
+                'default_button_text' => esc_html__('Chat with us', 'click-to-chat'),
+                'copy_success' => esc_html__('Shortcode copied to clipboard!', 'click-to-chat'),
+                'copy_error' => esc_html__('Failed to copy shortcode. Please select and copy manually.', 'click-to-chat'),
+                'select_products_text' => esc_html__('Select products...', 'click-to-chat'),
+                'select_categories_text' => esc_html__('Select categories...', 'click-to-chat'),
+                'select_pages_text' => esc_html__('Select pages...', 'click-to-chat'),
                 'i18n'     => array(
                     'confirm_delete'   => esc_html__('Are you sure you want to delete this WhatsApp number?', 'click-to-chat'),
                     'number_required'  => esc_html__('WhatsApp number is required.', 'click-to-chat'),
@@ -340,44 +351,53 @@ class CTC_Admin {
         }
         
         // Sanitize and update exclusions
+        // Always reset exclusions to ensure removed items are cleared
+        $exclusions = array(
+            'pages'      => array(),
+            'posts'      => array(),
+            'categories' => array(),
+            'tags'       => array(),
+            'products'   => array(),
+        );
+
         if ( isset( $_POST['ctc_exclusions'] ) && is_array( $_POST['ctc_exclusions'] ) ) {
-            $exclusions = array(
-                'pages'      => array(),
-                'posts'      => array(),
-                'categories' => array(),
-                'tags'       => array(),
-            );
-            
             // Pages
             if ( isset( $_POST['ctc_exclusions']['pages'] ) && is_array( $_POST['ctc_exclusions']['pages'] ) ) {
                 foreach ( $_POST['ctc_exclusions']['pages'] as $page_id ) {
                     $exclusions['pages'][] = absint( $page_id );
                 }
             }
-            
+
             // Posts
             if ( isset( $_POST['ctc_exclusions']['posts'] ) && is_array( $_POST['ctc_exclusions']['posts'] ) ) {
                 foreach ( $_POST['ctc_exclusions']['posts'] as $post_id ) {
                     $exclusions['posts'][] = absint( $post_id );
                 }
             }
-            
+
             // Categories
             if ( isset( $_POST['ctc_exclusions']['categories'] ) && is_array( $_POST['ctc_exclusions']['categories'] ) ) {
                 foreach ( $_POST['ctc_exclusions']['categories'] as $category_id ) {
                     $exclusions['categories'][] = absint( $category_id );
                 }
             }
-            
+
             // Tags
             if ( isset( $_POST['ctc_exclusions']['tags'] ) && is_array( $_POST['ctc_exclusions']['tags'] ) ) {
                 foreach ( $_POST['ctc_exclusions']['tags'] as $tag_id ) {
                     $exclusions['tags'][] = absint( $tag_id );
                 }
             }
-            
-            $settings['exclusions'] = $exclusions;
+
+            // Products
+            if ( isset( $_POST['ctc_exclusions']['products'] ) && is_array( $_POST['ctc_exclusions']['products'] ) ) {
+                foreach ( $_POST['ctc_exclusions']['products'] as $product_id ) {
+                    $exclusions['products'][] = absint( $product_id );
+                }
+            }
         }
+
+        $settings['exclusions'] = $exclusions;
         
         // Update settings
         update_option( 'ctc_settings', $settings );

@@ -418,6 +418,28 @@ $floating_positions = $settings_helper->get_floating_position_options();
                         <p class="description"><?php esc_html_e( 'Select product tags where the WhatsApp button should not appear.', 'click-to-chat' ); ?></p>
                     </td>
                 </tr>
+
+                <tr>
+                    <th scope="row">
+                        <label for="ctc_exclude_products"><?php esc_html_e( 'Exclude Products', 'click-to-chat' ); ?></label>
+                    </th>
+                    <td>
+                        <select name="ctc_exclusions[products][]" id="ctc_exclude_products" class="ctc-product-select" multiple="multiple" style="width: 100%;">
+                            <?php
+                            // Show selected products
+                            if ( isset( $settings['exclusions']['products'] ) && is_array( $settings['exclusions']['products'] ) ) {
+                                foreach ( $settings['exclusions']['products'] as $product_id ) {
+                                    $product_title = get_the_title( $product_id );
+                                    if ( $product_title ) {
+                                        echo '<option value="' . esc_attr( $product_id ) . '" selected>' . esc_html( $product_title ) . '</option>';
+                                    }
+                                }
+                            }
+                            ?>
+                        </select>
+                        <p class="description"><?php esc_html_e( 'Select specific products where the WhatsApp button should not appear.', 'click-to-chat' ); ?></p>
+                    </td>
+                </tr>
             </table>
         </div>
         

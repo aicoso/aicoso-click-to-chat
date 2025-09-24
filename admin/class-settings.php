@@ -45,6 +45,7 @@ class CTC_Settings {
         add_action( 'wp_ajax_ctc_search_categories', array( $this, 'ajax_search_categories' ) );
         add_action( 'wp_ajax_ctc_search_pages', array( $this, 'ajax_search_pages' ) );
         add_action( 'wp_ajax_ctc_search_posts', array( $this, 'ajax_search_posts' ) );
+        add_action( 'wp_ajax_ctc_search_tags', array( $this, 'ajax_search_tags' ) );
         add_action( 'wp_ajax_ctc_preview_message', array( $this, 'ajax_preview_message' ) );
     }
 
@@ -122,19 +123,16 @@ class CTC_Settings {
         // Get search term
         $term = isset( $_GET['term'] ) ? sanitize_text_field( $_GET['term'] ) : '';
         
-        if ( empty( $term ) ) {
-            wp_send_json_error( array(
-                'message' => esc_html__( 'Search term is required.', 'click-to-chat' ),
-            ) );
-        }
-        
         // Search for products
         $args = array(
             'post_type'      => 'product',
             'post_status'    => 'publish',
             'posts_per_page' => 10,
-            's'              => $term,
         );
+
+        if ( ! empty( $term ) ) {
+            $args['s'] = $term;
+        }
         
         $products = get_posts( $args );
         
@@ -171,7 +169,7 @@ class CTC_Settings {
         }
         
         // Get search term
-        $term = isset( $_GET['term'] ) ? sanitize_text_field( $_GET['term'] ) : '';
+        $term = isset( $_GET['term'] ) ? sanitize_text_field( $_GET['term'] ) : '';;
         
         // Search for categories
         $args = array(
@@ -221,7 +219,7 @@ class CTC_Settings {
         }
         
         // Get search term
-        $term = isset( $_GET['term'] ) ? sanitize_text_field( $_GET['term'] ) : '';
+        $term = isset( $_GET['term'] ) ? sanitize_text_field( $_GET['term'] ) : '';;
         
         // Search for pages
         $args = array(
@@ -269,7 +267,7 @@ class CTC_Settings {
         }
         
         // Get search term
-        $term = isset( $_GET['term'] ) ? sanitize_text_field( $_GET['term'] ) : '';
+        $term = isset( $_GET['term'] ) ? sanitize_text_field( $_GET['term'] ) : '';;
         
         // Search for posts
         $args = array(
@@ -293,6 +291,56 @@ class CTC_Settings {
             );
         }
         
+        wp_send_json_success( array(
+            'results' => $results,
+        ) );
+    }
+
+    /**
+     * AJAX handler for searching product tags
+     */
+    public function ajax_search_tags() {
+        // Check nonce
+        if ( ! check_ajax_referer( 'ctc_admin_nonce', 'nonce', false ) ) {
+            wp_send_json_error( array(
+                'message' => esc_html__( 'Security check failed.', 'click-to-chat' ),
+            ) );
+        }
+
+        // Check permissions
+        if ( ! current_user_can( 'manage_options' ) ) {
+            wp_send_json_error( array(
+                'message' => esc_html__( 'You do not have permission to perform this action.', 'click-to-chat' ),
+            ) );
+        }
+
+        // Get search term
+        $term = isset( $_GET['term'] ) ? sanitize_text_field( $_GET['term'] ) : '';;
+
+        // Search for product tags
+        $args = array(
+            'taxonomy'   => 'product_tag',
+            'hide_empty' => false,
+            'number'     => 10,
+        );
+
+        if ( ! empty( $term ) ) {
+            $args['name__like'] = $term;
+        }
+
+        $tags = get_terms( $args );
+
+        // Format the results
+        $results = array();
+        if ( ! is_wp_error( $tags ) ) {
+            foreach ( $tags as $tag ) {
+                $results[] = array(
+                    'id'   => $tag->term_id,
+                    'text' => $tag->name,
+                );
+            }
+        }
+
         wp_send_json_success( array(
             'results' => $results,
         ) );

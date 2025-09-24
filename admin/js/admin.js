@@ -197,86 +197,6 @@
     }
 
     /**
-     * Initialize select2 for multiselect dropdowns
-     */
-    function initSelect2() {
-        // Products select
-        $('.ctc-product-select').select2({
-            placeholder: ctc_admin.select_products_text,
-            allowClear: true,
-            ajax: {
-                url: ctc_admin.ajaxurl,
-                dataType: 'json',
-                delay: 250,
-                data: function(params) {
-                    return {
-                        term: params.term,
-                        action: 'ctc_search_products',
-                        nonce: ctc_admin.nonce
-                    };
-                },
-                processResults: function(data) {
-                    return {
-                        results: data.data.results
-                    };
-                },
-                cache: true
-            },
-            minimumInputLength: 2
-        });
-        
-        // Categories select
-        $('.ctc-category-select').select2({
-            placeholder: ctc_admin.select_categories_text,
-            allowClear: true,
-            ajax: {
-                url: ctc_admin.ajaxurl,
-                dataType: 'json',
-                delay: 250,
-                data: function(params) {
-                    return {
-                        term: params.term,
-                        action: 'ctc_search_categories',
-                        nonce: ctc_admin.nonce
-                    };
-                },
-                processResults: function(data) {
-                    return {
-                        results: data.data.results
-                    };
-                },
-                cache: true
-            },
-            minimumInputLength: 0
-        });
-        
-        // Pages select
-        $('.ctc-page-select').select2({
-            placeholder: ctc_admin.select_pages_text,
-            allowClear: true,
-            ajax: {
-                url: ctc_admin.ajaxurl,
-                dataType: 'json',
-                delay: 250,
-                data: function(params) {
-                    return {
-                        term: params.term,
-                        action: 'ctc_search_pages',
-                        nonce: ctc_admin.nonce
-                    };
-                },
-                processResults: function(data) {
-                    return {
-                        results: data.data.results
-                    };
-                },
-                cache: true
-            },
-            minimumInputLength: 0
-        });
-    }
-
-    /**
      * Initialize Select2 for various select inputs
      */
     function initSelect2() {
@@ -301,7 +221,7 @@
                 cache: true
             },
             minimumInputLength: 0,
-            placeholder: $(this).data('placeholder') || 'Select pages...',
+            placeholder: ctc_admin.select_pages_text || 'Select pages...',
             allowClear: true
         });
         
@@ -326,7 +246,7 @@
                 cache: true
             },
             minimumInputLength: 0,
-            placeholder: $(this).data('placeholder') || 'Select posts...',
+            placeholder: 'Select posts...',
             allowClear: true
         });
         
@@ -351,7 +271,7 @@
                 cache: true
             },
             minimumInputLength: 0,
-            placeholder: $(this).data('placeholder') || 'Select categories...',
+            placeholder: ctc_admin.select_categories_text || 'Select categories...',
             allowClear: true
         });
         
@@ -376,7 +296,7 @@
                 cache: true
             },
             minimumInputLength: 0,
-            placeholder: $(this).data('placeholder') || 'Select tags...',
+            placeholder: 'Select tags...',
             allowClear: true
         });
         
@@ -401,7 +321,7 @@
                 cache: true
             },
             minimumInputLength: 0,
-            placeholder: $(this).data('placeholder') || 'Select products...',
+            placeholder: ctc_admin.select_products_text || 'Select products...',
             allowClear: true
         });
     }

@@ -255,17 +255,22 @@ class CTC_Button_Display {
      */
     public function display_shop_button() {
         global $product;
-        
+
         // Check if button has already been displayed for this product
         if (isset(self::$buttons_displayed['shop_' . $product->get_id()])) {
             return;
         }
-        
+
         if (!$product) {
             return;
         }
-        
-        // Check if the product should be excluded
+
+        // Check if the shop page itself is excluded (without product ID)
+        if ($this->is_excluded()) {
+            return;
+        }
+
+        // Check if the specific product should be excluded
         if ($this->is_excluded($product->get_id())) {
             return;
         }
@@ -528,56 +533,73 @@ class CTC_Button_Display {
         if (empty($this->settings['exclusions'])) {
             return false;
         }
-        
+
+        // Check specific product exclusions
+        if ($product_id && isset($this->settings['exclusions']['products']) && !empty($this->settings['exclusions']['products'])) {
+            if (in_array($product_id, $this->settings['exclusions']['products'], true)) {
+                return true;
+            }
+        }
+
         // Check product category exclusions
         if ($product_id && isset($this->settings['exclusions']['categories']) && !empty($this->settings['exclusions']['categories'])) {
             $product_categories = wp_get_post_terms($product_id, 'product_cat', array('fields' => 'ids'));
-            
+
             if (is_array($product_categories)) {
                 $excluded_categories = $this->settings['exclusions']['categories'];
-                
+
                 // Check if product is in any excluded category
                 if (array_intersect($product_categories, $excluded_categories)) {
                     return true;
                 }
             }
         }
-        
+
         // Check product tag exclusions
         if ($product_id && isset($this->settings['exclusions']['tags']) && !empty($this->settings['exclusions']['tags'])) {
             $product_tags = wp_get_post_terms($product_id, 'product_tag', array('fields' => 'ids'));
-            
+
             if (is_array($product_tags)) {
                 $excluded_tags = $this->settings['exclusions']['tags'];
-                
+
                 // Check if product has any excluded tag
                 if (array_intersect($product_tags, $excluded_tags)) {
                     return true;
                 }
             }
         }
-        
-        // Check if current page/post is excluded
+
+        // Get current page/post ID
         $current_id = get_the_ID();
-        
+
+        // Special handling for WooCommerce Shop page
+        if (is_shop()) {
+            $shop_page_id = wc_get_page_id('shop');
+            if ($shop_page_id && isset($this->settings['exclusions']['pages']) && !empty($this->settings['exclusions']['pages'])) {
+                if (in_array($shop_page_id, $this->settings['exclusions']['pages'], true)) {
+                    return true;
+                }
+            }
+        }
+
         if (!$current_id) {
             return false;
         }
-        
+
         // Check page exclusions
         if (is_page() && isset($this->settings['exclusions']['pages']) && !empty($this->settings['exclusions']['pages'])) {
             if (in_array($current_id, $this->settings['exclusions']['pages'], true)) {
                 return true;
             }
         }
-        
+
         // Check post exclusions
         if (is_single() && !is_product() && isset($this->settings['exclusions']['posts']) && !empty($this->settings['exclusions']['posts'])) {
             if (in_array($current_id, $this->settings['exclusions']['posts'], true)) {
                 return true;
             }
         }
-        
+
         return false;
     }
 }
