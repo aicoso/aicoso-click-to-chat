@@ -278,11 +278,22 @@ class CTC_Public {
             return;
         }
 
+        // Check if plugin is enabled globally
+        $plugin_enabled = isset($this->settings['plugin_enabled']) ? $this->settings['plugin_enabled'] : true;
+        if (!$plugin_enabled) {
+            return;
+        }
+
         // Check if cart or checkout is enabled
         $cart_enabled = isset($this->settings['cart_page']['enabled']) && $this->settings['cart_page']['enabled'];
         $checkout_enabled = isset($this->settings['checkout_page']['enabled']) && $this->settings['checkout_page']['enabled'];
 
         if (!$cart_enabled && !$checkout_enabled) {
+            return;
+        }
+
+        // Check if current page is excluded
+        if ($this->is_page_excluded()) {
             return;
         }
 
@@ -333,6 +344,50 @@ class CTC_Public {
             'show_icon' => isset($this->settings['button_settings']['icon']) && $this->settings['button_settings']['icon'] ? '1' : '0',
             'whatsapp_url' => $whatsapp_url,
         ));
+    }
+
+    /**
+     * Check if the current page is excluded
+     *
+     * @return bool True if page is excluded, false otherwise
+     */
+    private function is_page_excluded() {
+        // If exclusions not set or empty, nothing is excluded
+        if (empty($this->settings['exclusions'])) {
+            return false;
+        }
+
+        // Get current page ID
+        $current_id = get_the_ID();
+
+        // Special handling for WooCommerce Cart page
+        if (is_cart()) {
+            $cart_page_id = wc_get_page_id('cart');
+            if ($cart_page_id && isset($this->settings['exclusions']['pages']) && !empty($this->settings['exclusions']['pages'])) {
+                if (in_array($cart_page_id, $this->settings['exclusions']['pages'], true)) {
+                    return true;
+                }
+            }
+        }
+
+        // Special handling for WooCommerce Checkout page
+        if (is_checkout()) {
+            $checkout_page_id = wc_get_page_id('checkout');
+            if ($checkout_page_id && isset($this->settings['exclusions']['pages']) && !empty($this->settings['exclusions']['pages'])) {
+                if (in_array($checkout_page_id, $this->settings['exclusions']['pages'], true)) {
+                    return true;
+                }
+            }
+        }
+
+        // Check general page exclusions if we have a current ID
+        if ($current_id && isset($this->settings['exclusions']['pages']) && !empty($this->settings['exclusions']['pages'])) {
+            if (in_array($current_id, $this->settings['exclusions']['pages'], true)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
 

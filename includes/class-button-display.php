@@ -299,6 +299,12 @@ class CTC_Button_Display {
      * Maybe display cart button based on settings
      */
     public function maybe_display_cart_button() {
+        // Check if plugin is enabled
+        $plugin_enabled = isset($this->settings['plugin_enabled']) ? $this->settings['plugin_enabled'] : true;
+        if (!$plugin_enabled) {
+            return;
+        }
+
         // Check if cart buttons are enabled
         if (!isset($this->settings['cart_page']['enabled']) || !$this->settings['cart_page']['enabled']) {
             return;
@@ -316,6 +322,12 @@ class CTC_Button_Display {
      * Maybe display checkout button based on settings
      */
     public function maybe_display_checkout_button() {
+        // Check if plugin is enabled
+        $plugin_enabled = isset($this->settings['plugin_enabled']) ? $this->settings['plugin_enabled'] : true;
+        if (!$plugin_enabled) {
+            return;
+        }
+
         // Check if checkout buttons are enabled
         if (!isset($this->settings['checkout_page']['enabled']) || !$this->settings['checkout_page']['enabled']) {
             return;
