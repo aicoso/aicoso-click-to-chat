@@ -123,7 +123,8 @@ class CTC_Button_Display {
                 break;
                 
             case 'after_price':
-                add_action( 'woocommerce_after_price', array( $this, 'display_single_product_button' ) );
+                // Hook to woocommerce_single_product_summary with priority 11 (after price which is at 10)
+                add_action( 'woocommerce_single_product_summary', array( $this, 'display_single_product_button' ), 11 );
                 break;
                 
             case 'before_title':
@@ -213,7 +214,8 @@ class CTC_Button_Display {
                 break;
                 
             case 'after_price':
-                add_action( 'woocommerce_after_shop_loop_item_title', array( $this, 'display_shop_button' ), 15 );
+                // Hook to woocommerce_after_shop_loop_item_title with priority 11 (after price which is at 10)
+                add_action( 'woocommerce_after_shop_loop_item_title', array( $this, 'display_shop_button' ), 11 );
                 break;
                 
             case 'before_title':
