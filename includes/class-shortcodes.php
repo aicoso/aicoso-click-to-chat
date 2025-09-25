@@ -60,6 +60,12 @@ class CTC_Shortcodes {
      * @return string Shortcode output.
      */
     public function whatsapp_button_shortcode( $atts ) {
+        // Check if plugin is enabled
+        $plugin_enabled = isset( $this->settings['plugin_enabled'] ) ? $this->settings['plugin_enabled'] : true;
+        if ( ! $plugin_enabled ) {
+            return ''; // Return empty string if plugin is disabled
+        }
+
         // Extract and merge attributes with defaults
         $atts = shortcode_atts(
             array(

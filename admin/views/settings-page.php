@@ -53,7 +53,7 @@ $floating_positions = $settings_helper->get_floating_position_options();
                     <td>
                         <fieldset>
                             <label for="ctc_plugin_enabled">
-                                <input type="checkbox" name="ctc_plugin_enabled" id="ctc_plugin_enabled" value="1" <?php checked( true ); ?>>
+                                <input type="checkbox" name="ctc_plugin_enabled" id="ctc_plugin_enabled" value="1" <?php checked( isset( $settings['plugin_enabled'] ) ? $settings['plugin_enabled'] : true, true ); ?>>
                                 <?php esc_html_e( 'Enable plugin functionality', 'click-to-chat' ); ?>
                             </label>
                         </fieldset>

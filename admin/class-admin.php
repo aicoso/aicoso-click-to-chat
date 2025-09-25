@@ -289,7 +289,10 @@ class CTC_Admin {
     private function save_settings() {
         // Get existing settings
         $settings = get_option( 'ctc_settings', array() );
-        
+
+        // Save plugin enabled status
+        $settings['plugin_enabled'] = isset( $_POST['ctc_plugin_enabled'] ) ? true : false;
+
         // Sanitize and update button settings
         if ( isset( $_POST['ctc_button'] ) && is_array( $_POST['ctc_button'] ) ) {
             $button_settings = array(

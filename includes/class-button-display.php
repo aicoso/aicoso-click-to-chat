@@ -60,6 +60,12 @@ class CTC_Button_Display {
             return;
         }
 
+        // Check if plugin is enabled
+        $plugin_enabled = isset( $this->settings['plugin_enabled'] ) ? $this->settings['plugin_enabled'] : true;
+        if ( ! $plugin_enabled ) {
+            return; // Exit early if plugin is disabled
+        }
+
         // Always try to add cart and checkout buttons using multiple hooks for compatibility
         add_action( 'woocommerce_before_cart', array( $this, 'maybe_display_cart_button' ) );
         add_action( 'woocommerce_after_cart', array( $this, 'maybe_display_cart_button' ) );
