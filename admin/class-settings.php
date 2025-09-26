@@ -402,9 +402,14 @@ class CTC_Settings {
         switch ( $template_type ) {
             case 'single_product':
                 // Get price and decode HTML entities
-                $price = '$49.99';
                 if ( function_exists( 'wc_price' ) ) {
                     $price = html_entity_decode( wp_strip_all_tags( wc_price( 49.99 ) ), ENT_QUOTES | ENT_HTML5, 'UTF-8' );
+                } elseif ( function_exists( 'get_woocommerce_currency_symbol' ) ) {
+                    // Fallback: get currency symbol directly
+                    $price = get_woocommerce_currency_symbol() . '49.99';
+                } else {
+                    // Default fallback
+                    $price = '$49.99';
                 }
                 $replacements = array(
                     '{product_name}' => 'Sample Product',
@@ -415,9 +420,14 @@ class CTC_Settings {
 
             case 'variations':
                 // Get price and decode HTML entities
-                $variation_price = '$59.99';
                 if ( function_exists( 'wc_price' ) ) {
                     $variation_price = html_entity_decode( wp_strip_all_tags( wc_price( 59.99 ) ), ENT_QUOTES | ENT_HTML5, 'UTF-8' );
+                } elseif ( function_exists( 'get_woocommerce_currency_symbol' ) ) {
+                    // Fallback: get currency symbol directly
+                    $variation_price = get_woocommerce_currency_symbol() . '59.99';
+                } else {
+                    // Default fallback
+                    $variation_price = '$59.99';
                 }
                 $replacements = array(
                     '{product_name}'      => 'Sample Variable Product',
@@ -436,18 +446,25 @@ class CTC_Settings {
                 
             case 'cart_checkout':
                 // Decode all price entities
-                $price1 = '$99.98';
-                $price2 = '$29.99';
-                $subtotal = '$129.97';
-                $shipping = '$5.00';
-                $total = '$134.97';
-
                 if ( function_exists( 'wc_price' ) ) {
                     $price1 = html_entity_decode( wp_strip_all_tags( wc_price( 99.98 ) ), ENT_QUOTES | ENT_HTML5, 'UTF-8' );
                     $price2 = html_entity_decode( wp_strip_all_tags( wc_price( 29.99 ) ), ENT_QUOTES | ENT_HTML5, 'UTF-8' );
                     $subtotal = html_entity_decode( wp_strip_all_tags( wc_price( 129.97 ) ), ENT_QUOTES | ENT_HTML5, 'UTF-8' );
                     $shipping = html_entity_decode( wp_strip_all_tags( wc_price( 5.00 ) ), ENT_QUOTES | ENT_HTML5, 'UTF-8' );
                     $total = html_entity_decode( wp_strip_all_tags( wc_price( 134.97 ) ), ENT_QUOTES | ENT_HTML5, 'UTF-8' );
+                } elseif ( function_exists( 'get_woocommerce_currency_symbol' ) ) {
+                    $symbol = get_woocommerce_currency_symbol();
+                    $price1 = $symbol . '99.98';
+                    $price2 = $symbol . '29.99';
+                    $subtotal = $symbol . '129.97';
+                    $shipping = $symbol . '5.00';
+                    $total = $symbol . '134.97';
+                } else {
+                    $price1 = '$99.98';
+                    $price2 = '$29.99';
+                    $subtotal = '$129.97';
+                    $shipping = '$5.00';
+                    $total = '$134.97';
                 }
 
                 $replacements = array(
@@ -462,14 +479,19 @@ class CTC_Settings {
                 
             case 'thank_you':
                 // Decode all price entities
-                $price1 = '$99.98';
-                $price2 = '$29.99';
-                $order_total = '$134.97';
-
                 if ( function_exists( 'wc_price' ) ) {
                     $price1 = html_entity_decode( wp_strip_all_tags( wc_price( 99.98 ) ), ENT_QUOTES | ENT_HTML5, 'UTF-8' );
                     $price2 = html_entity_decode( wp_strip_all_tags( wc_price( 29.99 ) ), ENT_QUOTES | ENT_HTML5, 'UTF-8' );
                     $order_total = html_entity_decode( wp_strip_all_tags( wc_price( 134.97 ) ), ENT_QUOTES | ENT_HTML5, 'UTF-8' );
+                } elseif ( function_exists( 'get_woocommerce_currency_symbol' ) ) {
+                    $symbol = get_woocommerce_currency_symbol();
+                    $price1 = $symbol . '99.98';
+                    $price2 = $symbol . '29.99';
+                    $order_total = $symbol . '134.97';
+                } else {
+                    $price1 = '$99.98';
+                    $price2 = '$29.99';
+                    $order_total = '$134.97';
                 }
 
                 $date_format = function_exists( 'wc_date_format' ) ? wc_date_format() : get_option( 'date_format' );

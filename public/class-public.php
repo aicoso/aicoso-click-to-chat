@@ -53,6 +53,10 @@ class CTC_Public {
 
         // Enqueue block-specific scripts for cart and checkout
         add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_block_scripts' ) );
+
+        // AJAX handlers for variation URLs
+        add_action( 'wp_ajax_ctc_get_variation_url', array( $this, 'ajax_get_variation_url' ) );
+        add_action( 'wp_ajax_nopriv_ctc_get_variation_url', array( $this, 'ajax_get_variation_url' ) );
     }
 
     /**
@@ -545,6 +549,36 @@ class CTC_Public {
         }
 
         return false;
+    }
+
+    /**
+     * AJAX handler to get variation-specific WhatsApp URL
+     */
+    public function ajax_get_variation_url() {
+        // Check nonce
+        if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( $_POST['nonce'], 'ctc_public_nonce' ) ) {
+            wp_send_json_error( array( 'message' => __( 'Security check failed.', 'click-to-chat' ) ) );
+        }
+
+        // Get product ID and variations
+        $product_id = isset( $_POST['product_id'] ) ? intval( $_POST['product_id'] ) : 0;
+        $variations = isset( $_POST['variations'] ) ? $_POST['variations'] : array();
+
+        if ( ! $product_id ) {
+            wp_send_json_error( array( 'message' => __( 'Invalid product ID.', 'click-to-chat' ) ) );
+        }
+
+        // Initialize link generator
+        $link_generator = new CTC_WhatsApp_Link_Generator();
+
+        // Generate WhatsApp URL with variations
+        $whatsapp_url = $link_generator->get_product_url( $product_id, $variations );
+
+        if ( empty( $whatsapp_url ) ) {
+            wp_send_json_error( array( 'message' => __( 'Could not generate WhatsApp URL.', 'click-to-chat' ) ) );
+        }
+
+        wp_send_json_success( array( 'url' => $whatsapp_url ) );
     }
 }
 

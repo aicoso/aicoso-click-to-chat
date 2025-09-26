@@ -542,11 +542,20 @@ class CTC_WhatsApp_Link_Generator {
             }
         }
 
+        // Format price with proper currency symbol
+        if ( function_exists( 'wc_price' ) ) {
+            $formatted_price = html_entity_decode( wp_strip_all_tags( wc_price( $variation_price ) ), ENT_QUOTES | ENT_HTML5, 'UTF-8' );
+        } elseif ( function_exists( 'get_woocommerce_currency_symbol' ) ) {
+            $formatted_price = get_woocommerce_currency_symbol() . $variation_price;
+        } else {
+            $formatted_price = '$' . $variation_price;
+        }
+
         // Replace placeholders
         $replacements = array(
             '{product_name}'      => $product_name,
             '{variation_details}' => $variation_details,
-            '{variation_price}'   => wp_strip_all_tags( wc_price( $variation_price ) ),
+            '{variation_price}'   => $formatted_price,
             '{product_url}'       => $product_url,
         );
 

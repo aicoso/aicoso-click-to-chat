@@ -14,7 +14,8 @@
         // Handle floating button behavior
         initFloatingButton();
 
-        // Handle variable product behavior (handled in PHP for better SEO)
+        // Handle variable product behavior
+        initVariableProductHandler();
     }
 
     /**
@@ -67,6 +68,63 @@
                 $(this).css('transform', 'scale(1)');
             }
         );
+    }
+
+    /**
+     * Handle variable product changes
+     */
+    function initVariableProductHandler() {
+        // Check if we're on a single product page with variations
+        if (!$('.variations_form').length) {
+            return;
+        }
+
+        // Store the original URL and message template
+        let $productButton = $('.ctc-whatsapp-button.ctc-button-product');
+        if (!$productButton.length) {
+            // Try alternative selector
+            $productButton = $('.ctc-button-product a');
+            if (!$productButton.length) {
+                return;
+            }
+        }
+
+        const originalUrl = $productButton.attr('href');
+
+        // Listen for variation changes
+        $('.variations_form').on('found_variation', function(event, variation) {
+            // Get selected variation attributes
+            const variationData = {};
+            $('.variations select').each(function() {
+                const name = $(this).attr('name');
+                const value = $(this).val();
+                if (name && value) {
+                    variationData[name] = value;
+                }
+            });
+
+            // Make AJAX request to get updated WhatsApp URL
+            $.ajax({
+                url: ctc_public.ajaxurl,
+                type: 'POST',
+                data: {
+                    action: 'ctc_get_variation_url',
+                    product_id: variation.variation_id || $('input[name="product_id"]').val(),
+                    variations: variationData,
+                    nonce: ctc_public.nonce
+                },
+                success: function(response) {
+                    if (response.success && response.data.url) {
+                        $productButton.attr('href', response.data.url);
+                    }
+                }
+            });
+        });
+
+        // Reset URL when variations are reset
+        $('.variations_form').on('reset_data', function() {
+            $productButton.attr('href', originalUrl);
+        });
     }
 
     /**
