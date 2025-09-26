@@ -322,6 +322,53 @@ $floating_positions = $settings_helper->get_floating_position_options();
                     </td>
                 </tr>
             </table>
+
+            <h3><?php esc_html_e( 'Advanced Options', 'click-to-chat' ); ?></h3>
+            <div class="ctc-admin-notice ctc-admin-notice-warning">
+                <p><?php esc_html_e( 'Warning: The options below will hide WooCommerce purchase buttons. Only enable if you want to use WhatsApp as the primary contact method for orders.', 'click-to-chat' ); ?></p>
+            </div>
+            <table class="form-table ctc-form-table">
+                <tr>
+                    <th scope="row">
+                        <label><?php esc_html_e( 'Hide WooCommerce Buttons', 'click-to-chat' ); ?></label>
+                    </th>
+                    <td>
+                        <fieldset>
+                            <label for="ctc_hide_add_to_cart">
+                                <input type="checkbox" name="ctc_advanced[hide_add_to_cart]" id="ctc_hide_add_to_cart" value="1" <?php checked( isset( $settings['advanced']['hide_add_to_cart'] ) ? $settings['advanced']['hide_add_to_cart'] : false ); ?>>
+                                <?php esc_html_e( 'Hide "Add to Cart" buttons', 'click-to-chat' ); ?>
+                            </label>
+                            <p class="description"><?php esc_html_e( 'Hides Add to Cart buttons on shop and product pages', 'click-to-chat' ); ?></p>
+                            <br>
+                            <label for="ctc_hide_proceed_checkout">
+                                <input type="checkbox" name="ctc_advanced[hide_proceed_checkout]" id="ctc_hide_proceed_checkout" value="1" <?php checked( isset( $settings['advanced']['hide_proceed_checkout'] ) ? $settings['advanced']['hide_proceed_checkout'] : false ); ?>>
+                                <?php esc_html_e( 'Hide "Proceed to Checkout" button', 'click-to-chat' ); ?>
+                            </label>
+                            <p class="description"><?php esc_html_e( 'Hides the Proceed to Checkout button on the cart page', 'click-to-chat' ); ?></p>
+                            <br>
+                            <label for="ctc_hide_place_order">
+                                <input type="checkbox" name="ctc_advanced[hide_place_order]" id="ctc_hide_place_order" value="1" <?php checked( isset( $settings['advanced']['hide_place_order'] ) ? $settings['advanced']['hide_place_order'] : false ); ?>>
+                                <?php esc_html_e( 'Hide "Place Order" button', 'click-to-chat' ); ?>
+                            </label>
+                            <p class="description"><?php esc_html_e( 'Hides the Place Order button on the checkout page', 'click-to-chat' ); ?></p>
+                        </fieldset>
+                    </td>
+                </tr>
+                <tr>
+                    <th scope="row">
+                        <label for="ctc_catalog_mode"><?php esc_html_e( 'Catalog Mode', 'click-to-chat' ); ?></label>
+                    </th>
+                    <td>
+                        <fieldset>
+                            <label for="ctc_catalog_mode">
+                                <input type="checkbox" name="ctc_advanced[catalog_mode]" id="ctc_catalog_mode" value="1" <?php checked( isset( $settings['advanced']['catalog_mode'] ) ? $settings['advanced']['catalog_mode'] : false ); ?>>
+                                <?php esc_html_e( 'Enable catalog mode (hides all purchase buttons)', 'click-to-chat' ); ?>
+                            </label>
+                            <p class="description"><?php esc_html_e( 'Turns your store into a catalog where customers must contact via WhatsApp to purchase', 'click-to-chat' ); ?></p>
+                        </fieldset>
+                    </td>
+                </tr>
+            </table>
         </div>
         
         <!-- Exclusions Tab -->

@@ -401,7 +401,30 @@ class CTC_Admin {
         }
 
         $settings['exclusions'] = $exclusions;
-        
+
+        // Sanitize and update advanced settings
+        $catalog_mode = isset( $_POST['ctc_advanced']['catalog_mode'] ) ? true : false;
+
+        // If catalog mode is enabled, force all hide options to be true
+        if ($catalog_mode) {
+            $advanced = array(
+                'hide_add_to_cart' => true,
+                'hide_proceed_checkout' => true,
+                'hide_place_order' => true,
+                'catalog_mode' => true,
+            );
+        } else {
+            // Otherwise, check individual options
+            $advanced = array(
+                'hide_add_to_cart' => isset( $_POST['ctc_advanced']['hide_add_to_cart'] ) ? true : false,
+                'hide_proceed_checkout' => isset( $_POST['ctc_advanced']['hide_proceed_checkout'] ) ? true : false,
+                'hide_place_order' => isset( $_POST['ctc_advanced']['hide_place_order'] ) ? true : false,
+                'catalog_mode' => false,
+            );
+        }
+
+        $settings['advanced'] = $advanced;
+
         // Update settings
         update_option( 'ctc_settings', $settings );
         

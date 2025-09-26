@@ -31,6 +31,9 @@
 
         // Initialize position field toggles
         initPositionToggles();
+
+        // Initialize catalog mode and advanced options
+        initAdvancedOptions();
     }
 
     /**
@@ -249,8 +252,8 @@
             placeholder: 'Select posts...',
             allowClear: true
         });
-        
-        // Category select
+
+        // Category select (for exclusions, NOT for advanced options)
         $('.ctc-category-select').select2({
             ajax: {
                 url: ctc_admin.ajaxurl,
@@ -274,7 +277,7 @@
             placeholder: ctc_admin.select_categories_text || 'Select categories...',
             allowClear: true
         });
-        
+
         // Tag select
         $('.ctc-tag-select').select2({
             ajax: {
@@ -570,6 +573,38 @@
                 $('.ctc-shop-position-row').hide();
             }
         });
+    }
+
+    /**
+     * Initialize advanced options functionality
+     */
+    function initAdvancedOptions() {
+        // Handle catalog mode toggle
+        $('#ctc_catalog_mode').on('change', function() {
+            if ($(this).is(':checked')) {
+                // Check all hide button options
+                $('#ctc_hide_add_to_cart').prop('checked', true);
+                $('#ctc_hide_proceed_checkout').prop('checked', true);
+                $('#ctc_hide_place_order').prop('checked', true);
+
+                // Disable individual checkboxes when catalog mode is on
+                $('#ctc_hide_add_to_cart').prop('disabled', true);
+                $('#ctc_hide_proceed_checkout').prop('disabled', true);
+                $('#ctc_hide_place_order').prop('disabled', true);
+            } else {
+                // Enable individual checkboxes when catalog mode is off
+                $('#ctc_hide_add_to_cart').prop('disabled', false);
+                $('#ctc_hide_proceed_checkout').prop('disabled', false);
+                $('#ctc_hide_place_order').prop('disabled', false);
+            }
+        });
+
+        // Check catalog mode state on page load
+        if ($('#ctc_catalog_mode').is(':checked')) {
+            $('#ctc_hide_add_to_cart').prop('disabled', true);
+            $('#ctc_hide_proceed_checkout').prop('disabled', true);
+            $('#ctc_hide_place_order').prop('disabled', true);
+        }
     }
 
     /**

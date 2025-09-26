@@ -39,6 +39,9 @@ class CTC_Public {
      * Initialize hooks
      */
     private function init_hooks() {
+        // Handle advanced options for hiding WooCommerce buttons FIRST (before other hooks)
+        add_action( 'init', array( $this, 'handle_advanced_options' ), 999 );
+
         // Enqueue scripts and styles
         add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_assets' ) );
 
@@ -345,6 +348,160 @@ class CTC_Public {
             'whatsapp_url' => $whatsapp_url,
         ));
     }
+
+    /**
+     * Handle advanced options for hiding WooCommerce buttons
+     */
+    public function handle_advanced_options() {
+        // Check if plugin is enabled
+        $plugin_enabled = isset($this->settings['plugin_enabled']) ? $this->settings['plugin_enabled'] : true;
+        if (!$plugin_enabled) {
+            return;
+        }
+
+        // Check if any advanced options are enabled
+        if (!isset($this->settings['advanced'])) {
+            return;
+        }
+
+        $advanced = $this->settings['advanced'];
+
+        // Check for catalog mode first (overrides individual settings)
+        if (isset($advanced['catalog_mode']) && $advanced['catalog_mode']) {
+            $this->hide_all_purchase_buttons();
+            return;
+        }
+
+        // Hide Add to Cart buttons
+        if (isset($advanced['hide_add_to_cart']) && $advanced['hide_add_to_cart']) {
+            $this->hide_add_to_cart_buttons();
+        }
+
+        // Hide Proceed to Checkout button
+        if (isset($advanced['hide_proceed_checkout']) && $advanced['hide_proceed_checkout']) {
+            $this->hide_proceed_checkout_button();
+        }
+
+        // Hide Place Order button
+        if (isset($advanced['hide_place_order']) && $advanced['hide_place_order']) {
+            $this->hide_place_order_button();
+        }
+    }
+
+    /**
+     * Hide all purchase buttons (catalog mode)
+     */
+    private function hide_all_purchase_buttons() {
+        $this->hide_add_to_cart_buttons();
+        $this->hide_proceed_checkout_button();
+        $this->hide_place_order_button();
+    }
+
+    /**
+     * Hide Add to Cart buttons
+     */
+    private function hide_add_to_cart_buttons() {
+        // Remove add to cart buttons globally first
+        remove_action('woocommerce_single_product_summary', 'woocommerce_template_single_add_to_cart', 30);
+        remove_action('woocommerce_after_shop_loop_item', 'woocommerce_template_loop_add_to_cart', 10);
+
+        // Add CSS to hide any remaining add to cart buttons
+        add_action('wp_head', array($this, 'hide_add_to_cart_css'));
+
+    }
+
+    /**
+     * Hide Proceed to Checkout button
+     */
+    private function hide_proceed_checkout_button() {
+        // Remove proceed to checkout button
+        remove_action('woocommerce_proceed_to_checkout', 'woocommerce_button_proceed_to_checkout', 20);
+
+        // Add CSS to hide the button on all pages
+        add_action('wp_head', array($this, 'hide_proceed_checkout_css'));
+    }
+
+    /**
+     * Hide Place Order button
+     */
+    private function hide_place_order_button() {
+        // Add CSS to hide the place order button on all pages
+        add_action('wp_head', array($this, 'hide_place_order_css'));
+
+        // Optionally prevent form submission
+        add_action('wp_footer', array($this, 'disable_checkout_form_submission'));
+    }
+
+
+    /**
+     * Add CSS to hide Add to Cart buttons
+     */
+    public function hide_add_to_cart_css() {
+        ?>
+        <style type="text/css">
+            .single_add_to_cart_button,
+            .add_to_cart_button,
+            .product_type_simple.add_to_cart_button,
+            .product_type_variable.add_to_cart_button,
+            .product_type_grouped.add_to_cart_button,
+            .product_type_external.add_to_cart_button,
+            .ajax_add_to_cart,
+            form.cart button.single_add_to_cart_button {
+                display: none !important;
+            }
+        </style>
+        <?php
+    }
+
+    /**
+     * Add CSS to hide Proceed to Checkout button
+     */
+    public function hide_proceed_checkout_css() {
+        ?>
+        <style type="text/css">
+            .wc-proceed-to-checkout a.checkout-button,
+            .wc-proceed-to-checkout .checkout-button,
+            .wp-block-woocommerce-proceed-to-checkout-block {
+                display: none !important;
+            }
+        </style>
+        <?php
+    }
+
+    /**
+     * Add CSS to hide Place Order button
+     */
+    public function hide_place_order_css() {
+        ?>
+        <style type="text/css">
+            #place_order,
+            .woocommerce-checkout-payment button#place_order,
+            .wp-block-woocommerce-checkout-actions-block button {
+                display: none !important;
+            }
+        </style>
+        <?php
+    }
+
+    /**
+     * Disable checkout form submission
+     */
+    public function disable_checkout_form_submission() {
+        if (is_checkout()) {
+            ?>
+            <script type="text/javascript">
+                jQuery(document).ready(function($) {
+                    // Disable form submission
+                    $('form.checkout').on('submit', function(e) {
+                        e.preventDefault();
+                        return false;
+                    });
+                });
+            </script>
+            <?php
+        }
+    }
+
 
     /**
      * Check if the current page is excluded

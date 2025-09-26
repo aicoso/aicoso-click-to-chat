@@ -160,30 +160,30 @@ class CTC_Settings {
                 'message' => esc_html__( 'Security check failed.', 'click-to-chat' ),
             ) );
         }
-        
+
         // Check permissions
         if ( ! current_user_can( 'manage_options' ) ) {
             wp_send_json_error( array(
                 'message' => esc_html__( 'You do not have permission to perform this action.', 'click-to-chat' ),
             ) );
         }
-        
+
         // Get search term
-        $term = isset( $_GET['term'] ) ? sanitize_text_field( $_GET['term'] ) : '';;
-        
+        $term = isset( $_GET['term'] ) ? sanitize_text_field( $_GET['term'] ) : '';
+
         // Search for categories
         $args = array(
             'taxonomy'   => 'product_cat',
             'hide_empty' => false,
             'number'     => 10,
         );
-        
+
         if ( ! empty( $term ) ) {
             $args['name__like'] = $term;
         }
-        
+
         $categories = get_terms( $args );
-        
+
         // Format the results
         $results = array();
         if ( ! is_wp_error( $categories ) ) {
@@ -194,7 +194,7 @@ class CTC_Settings {
                 );
             }
         }
-        
+
         wp_send_json_success( array(
             'results' => $results,
         ) );
