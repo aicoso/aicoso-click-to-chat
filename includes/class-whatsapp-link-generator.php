@@ -655,12 +655,18 @@ class CTC_WhatsApp_Link_Generator {
         
         // Get cart totals safely
         $cart_subtotal = 0;
+        $tax_amount = 0;
         $shipping_method = esc_html__( 'Not calculated', 'click-to-chat' );
         $shipping_cost = '';
         $cart_total = 0;
-        
+
         if ( method_exists( WC()->cart, 'get_subtotal' ) ) {
             $cart_subtotal = WC()->cart->get_subtotal();
+        }
+
+        // Get tax amount
+        if ( method_exists( WC()->cart, 'get_taxes_total' ) ) {
+            $tax_amount = WC()->cart->get_taxes_total();
         }
         
         // Try to get shipping info
@@ -688,6 +694,7 @@ class CTC_WhatsApp_Link_Generator {
         $replacements = array(
             '{cart_items_list}' => $cart_items_list,
             '{cart_subtotal}'   => wp_strip_all_tags( wc_price( $cart_subtotal ) ),
+            '{tax_amount}'      => wp_strip_all_tags( wc_price( $tax_amount ) ),
             '{shipping_method}' => $shipping_method,
             '{shipping_cost}'   => $shipping_cost,
             '{cart_total}'      => wp_strip_all_tags( wc_price( $cart_total ) ),

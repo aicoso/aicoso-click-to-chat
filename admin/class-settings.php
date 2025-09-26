@@ -450,27 +450,31 @@ class CTC_Settings {
                     $price1 = html_entity_decode( wp_strip_all_tags( wc_price( 99.98 ) ), ENT_QUOTES | ENT_HTML5, 'UTF-8' );
                     $price2 = html_entity_decode( wp_strip_all_tags( wc_price( 29.99 ) ), ENT_QUOTES | ENT_HTML5, 'UTF-8' );
                     $subtotal = html_entity_decode( wp_strip_all_tags( wc_price( 129.97 ) ), ENT_QUOTES | ENT_HTML5, 'UTF-8' );
+                    $tax = html_entity_decode( wp_strip_all_tags( wc_price( 10.40 ) ), ENT_QUOTES | ENT_HTML5, 'UTF-8' );
                     $shipping = html_entity_decode( wp_strip_all_tags( wc_price( 5.00 ) ), ENT_QUOTES | ENT_HTML5, 'UTF-8' );
-                    $total = html_entity_decode( wp_strip_all_tags( wc_price( 134.97 ) ), ENT_QUOTES | ENT_HTML5, 'UTF-8' );
+                    $total = html_entity_decode( wp_strip_all_tags( wc_price( 145.37 ) ), ENT_QUOTES | ENT_HTML5, 'UTF-8' );
                 } elseif ( function_exists( 'get_woocommerce_currency_symbol' ) ) {
                     $symbol = get_woocommerce_currency_symbol();
                     $price1 = $symbol . '99.98';
                     $price2 = $symbol . '29.99';
                     $subtotal = $symbol . '129.97';
+                    $tax = $symbol . '10.40';
                     $shipping = $symbol . '5.00';
-                    $total = $symbol . '134.97';
+                    $total = $symbol . '145.37';
                 } else {
                     $price1 = '$99.98';
                     $price2 = '$29.99';
                     $subtotal = '$129.97';
+                    $tax = '$10.40';
                     $shipping = '$5.00';
-                    $total = '$134.97';
+                    $total = '$145.37';
                 }
 
                 $replacements = array(
                     '{cart_items_list}' => 'Sample Product x 2 - ' . $price1 . "\n" .
                                          'Another Product x 1 - ' . $price2,
                     '{cart_subtotal}'   => $subtotal,
+                    '{tax_amount}'      => $tax,
                     '{shipping_method}' => 'Flat rate',
                     '{shipping_cost}'   => $shipping,
                     '{cart_total}'      => $total,
@@ -601,6 +605,7 @@ class CTC_Settings {
                 $placeholders = array(
                     '{cart_items_list}' => esc_html__( 'List of items in cart', 'click-to-chat' ),
                     '{cart_subtotal}'   => esc_html__( 'Cart subtotal', 'click-to-chat' ),
+                    '{tax_amount}'      => esc_html__( 'Tax amount', 'click-to-chat' ),
                     '{shipping_method}' => esc_html__( 'Selected shipping method', 'click-to-chat' ),
                     '{shipping_cost}'   => esc_html__( 'Shipping cost', 'click-to-chat' ),
                     '{cart_total}'      => esc_html__( 'Cart total', 'click-to-chat' ),
