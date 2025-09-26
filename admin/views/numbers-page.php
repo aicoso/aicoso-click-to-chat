@@ -84,7 +84,16 @@ if ( ! empty( $whatsapp_numbers ) ) {
                             <textarea name="ctc_numbers[0][description]" id="ctc_numbers_description_1" rows="3" class="large-text"></textarea>
                             <span class="description"><?php esc_html_e( 'Optional description or notes about this number.', 'click-to-chat' ); ?></span>
                         </p>
-                        
+
+                        <!-- Default Number Checkbox -->
+                        <p>
+                            <label for="ctc_numbers_default_1">
+                                <input type="checkbox" name="ctc_numbers[0][is_default]" id="ctc_numbers_default_1" value="1" class="ctc-default-checkbox" />
+                                <?php esc_html_e( 'Use as Default Number', 'click-to-chat' ); ?>
+                            </label>
+                            <span class="description"><?php esc_html_e( 'This number will be used as fallback for pages/products without specific assignments.', 'click-to-chat' ); ?></span>
+                        </p>
+
                         <!-- Assignments Section -->
                         <div class="ctc-assignments-section">
                             <h4 class="ctc-assignments-heading"><?php esc_html_e( 'Assign this WhatsApp Number to:', 'click-to-chat' ); ?></h4>
@@ -146,7 +155,16 @@ if ( ! empty( $whatsapp_numbers ) ) {
                                 <textarea name="ctc_numbers[<?php echo esc_attr( $index ); ?>][description]" id="ctc_numbers_description_<?php echo esc_attr( $number['id'] ); ?>" rows="3" class="large-text"><?php echo esc_textarea( $number['description'] ); ?></textarea>
                                 <span class="description"><?php esc_html_e( 'Optional description or notes about this number.', 'click-to-chat' ); ?></span>
                             </p>
-                            
+
+                            <!-- Default Number Checkbox -->
+                            <p>
+                                <label for="ctc_numbers_default_<?php echo esc_attr( $number['id'] ); ?>">
+                                    <input type="checkbox" name="ctc_numbers[<?php echo esc_attr( $index ); ?>][is_default]" id="ctc_numbers_default_<?php echo esc_attr( $number['id'] ); ?>" value="1" <?php checked( ! empty( $number['is_default'] ) ); ?> class="ctc-default-checkbox" />
+                                    <?php esc_html_e( 'Use as Default Number', 'click-to-chat' ); ?>
+                                </label>
+                                <span class="description"><?php esc_html_e( 'This number will be used as fallback for pages/products without specific assignments.', 'click-to-chat' ); ?></span>
+                            </p>
+
                             <!-- Assignments Section -->
                             <div class="ctc-assignments-section">
                                 <h4 class="ctc-assignments-heading"><?php esc_html_e( 'Assign this WhatsApp Number to:', 'click-to-chat' ); ?></h4>

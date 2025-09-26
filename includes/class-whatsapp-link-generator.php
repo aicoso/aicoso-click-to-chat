@@ -38,44 +38,43 @@ class CTC_WhatsApp_Link_Generator {
      *
      * @param int $product_id Optional product ID.
      * @param int $category_id Optional category ID.
+     * @param int $page_id Optional page ID.
      * @return string The WhatsApp number to use.
      */
-    public function get_whatsapp_number( $product_id = null, $category_id = null ) {
-        // Default to the first number if nothing is set
+    public function get_whatsapp_number( $product_id = null, $category_id = null, $page_id = null ) {
+        // Return empty if no numbers configured
         if ( empty( $this->settings['whatsapp_numbers'] ) ) {
             return '';
         }
 
-        $default_number = isset( $this->settings['whatsapp_numbers'][0]['number'] ) ? 
-                          $this->settings['whatsapp_numbers'][0]['number'] : '';
-        
-        // Return early if no product or category was specified
-        if ( null === $product_id && null === $category_id ) {
-            return $default_number;
-        }
-
-        // If there's only one number, return that
-        if ( count( $this->settings['whatsapp_numbers'] ) === 1 ) {
-            return $default_number;
-        }
+        // First, check for specific assignments based on context
 
         // Check for product-specific assignments
         if ( $product_id ) {
+            $product_id = absint( $product_id );
+
             foreach ( $this->settings['whatsapp_numbers'] as $number_data ) {
-                if ( isset( $number_data['assignments']['products'] ) && 
-                     in_array( $product_id, $number_data['assignments']['products'], true ) ) {
-                    return $number_data['number'];
+                if ( ! empty( $number_data['assignments']['products'] ) &&
+                     is_array( $number_data['assignments']['products'] ) ) {
+                    // Convert all stored IDs to integers for comparison
+                    $assigned_products = array_map( 'absint', $number_data['assignments']['products'] );
+                    if ( in_array( $product_id, $assigned_products, true ) ) {
+                        return $number_data['number'];
+                    }
                 }
             }
 
-            // If no product-specific number, try product category
-            if ( $product_id && ! $category_id ) {
-                $terms = get_the_terms( $product_id, 'product_cat' );
-                if ( $terms && ! is_wp_error( $terms ) ) {
-                    foreach ( $terms as $term ) {
-                        foreach ( $this->settings['whatsapp_numbers'] as $number_data ) {
-                            if ( isset( $number_data['assignments']['categories'] ) && 
-                                 in_array( $term->term_id, $number_data['assignments']['categories'], true ) ) {
+            // If no direct product assignment, check product's categories
+            $terms = get_the_terms( $product_id, 'product_cat' );
+            if ( $terms && ! is_wp_error( $terms ) ) {
+                foreach ( $terms as $term ) {
+                    $term_id = absint( $term->term_id );
+                    foreach ( $this->settings['whatsapp_numbers'] as $number_data ) {
+                        if ( ! empty( $number_data['assignments']['categories'] ) &&
+                             is_array( $number_data['assignments']['categories'] ) ) {
+                            // Convert all stored IDs to integers for comparison
+                            $assigned_categories = array_map( 'absint', $number_data['assignments']['categories'] );
+                            if ( in_array( $term_id, $assigned_categories, true ) ) {
                                 return $number_data['number'];
                             }
                         }
@@ -86,16 +85,68 @@ class CTC_WhatsApp_Link_Generator {
 
         // Check for category-specific assignments
         if ( $category_id ) {
+            $category_id = absint( $category_id );
+
             foreach ( $this->settings['whatsapp_numbers'] as $number_data ) {
-                if ( isset( $number_data['assignments']['categories'] ) && 
-                     in_array( $category_id, $number_data['assignments']['categories'], true ) ) {
-                    return $number_data['number'];
+                if ( ! empty( $number_data['assignments']['categories'] ) &&
+                     is_array( $number_data['assignments']['categories'] ) ) {
+                    // Convert all stored IDs to integers for comparison
+                    $assigned_categories = array_map( 'absint', $number_data['assignments']['categories'] );
+                    if ( in_array( $category_id, $assigned_categories, true ) ) {
+                        return $number_data['number'];
+                    }
                 }
             }
         }
 
-        // Fall back to default number
-        return $default_number;
+        // Check for page-specific assignments
+        if ( $page_id ) {
+            $page_id = absint( $page_id );
+
+            foreach ( $this->settings['whatsapp_numbers'] as $number_data ) {
+                if ( ! empty( $number_data['assignments']['pages'] ) &&
+                     is_array( $number_data['assignments']['pages'] ) ) {
+                    // Convert all stored IDs to integers for comparison
+                    $assigned_pages = array_map( 'absint', $number_data['assignments']['pages'] );
+                    if ( in_array( $page_id, $assigned_pages, true ) ) {
+                        return $number_data['number'];
+                    }
+                }
+            }
+        }
+
+        // No specific assignment found, now look for a default/fallback number
+
+        // Step 1: Check if any number is explicitly marked as default
+        foreach ( $this->settings['whatsapp_numbers'] as $number_data ) {
+            if ( ! empty( $number_data['is_default'] ) ) {
+                return $number_data['number'];
+            }
+        }
+
+        // Step 2: Look for a number with NO assignments (implicit default)
+        foreach ( $this->settings['whatsapp_numbers'] as $number_data ) {
+            $has_assignments = false;
+
+            // Check if this number has any assignments
+            if ( isset( $number_data['assignments'] ) && is_array( $number_data['assignments'] ) ) {
+                if ( ! empty( $number_data['assignments']['products'] ) ||
+                     ! empty( $number_data['assignments']['categories'] ) ||
+                     ! empty( $number_data['assignments']['pages'] ) ) {
+                    $has_assignments = true;
+                }
+            }
+
+            // If this number has no assignments, use it as default
+            if ( ! $has_assignments ) {
+                return $number_data['number'];
+            }
+        }
+
+        // Step 3: If all numbers have assignments and none match, return empty
+        // This means no WhatsApp button should be shown on unassigned pages
+        // unless a number is explicitly marked as default
+        return '';
     }
 
     /**
@@ -118,8 +169,29 @@ class CTC_WhatsApp_Link_Generator {
         }
 
         // Get the WhatsApp number to use
-        $whatsapp_number = $this->get_whatsapp_number( $product_id );
-        
+        // When on shop/category pages, also check for page/category specific assignments
+        $page_id = null;
+        $category_id = null;
+
+        // Check if we're on shop page
+        if ( function_exists( 'is_shop' ) && is_shop() ) {
+            $page_id = wc_get_page_id( 'shop' );
+        }
+        // Check if we're on a category page
+        elseif ( function_exists( 'is_product_category' ) && is_product_category() ) {
+            $category = get_queried_object();
+            if ( $category && isset( $category->term_id ) ) {
+                $category_id = $category->term_id;
+            }
+        }
+        // Check if we're on any other page
+        elseif ( is_page() ) {
+            $page_id = get_the_ID();
+        }
+
+        // Get the appropriate number considering all contexts
+        $whatsapp_number = $this->get_whatsapp_number( $product_id, $category_id, $page_id );
+
         if ( empty( $whatsapp_number ) ) {
             return '';
         }
@@ -182,8 +254,14 @@ class CTC_WhatsApp_Link_Generator {
             return '';
         }
 
-        // Get the default WhatsApp number
-        $whatsapp_number = $this->get_whatsapp_number();
+        // Check if we're on a specific page (cart page might have a page ID)
+        $page_id = null;
+        if ( is_page() ) {
+            $page_id = get_the_ID();
+        }
+
+        // Get the WhatsApp number (will check page assignments if on a page)
+        $whatsapp_number = $this->get_whatsapp_number( null, null, $page_id );
         
         if ( empty( $whatsapp_number ) ) {
             return '';
@@ -223,8 +301,14 @@ class CTC_WhatsApp_Link_Generator {
             return '';
         }
 
-        // Get the default WhatsApp number
-        $whatsapp_number = $this->get_whatsapp_number();
+        // Check if we're on a specific page (thank you page might have a page ID)
+        $page_id = null;
+        if ( is_page() ) {
+            $page_id = get_the_ID();
+        }
+
+        // Get the WhatsApp number (will check page assignments if on a page)
+        $whatsapp_number = $this->get_whatsapp_number( null, null, $page_id );
         
         if ( empty( $whatsapp_number ) ) {
             return '';
@@ -250,9 +334,45 @@ class CTC_WhatsApp_Link_Generator {
      * @return string The generated WhatsApp URL.
      */
     public function get_floating_url() {
-        // Get the default WhatsApp number
-        $whatsapp_number = $this->get_whatsapp_number();
-            
+        // Get current context for number selection
+        $page_id = null;
+        $category_id = null;
+        $product_id = null;
+
+        // Check if we're on a product page
+        if ( function_exists( 'is_product' ) && is_product() ) {
+            global $product;
+            if ( $product && is_object( $product ) ) {
+                $product_id = $product->get_id();
+            }
+        }
+        // Check if we're on shop page
+        elseif ( function_exists( 'is_shop' ) && is_shop() ) {
+            $page_id = wc_get_page_id( 'shop' );
+        }
+        // Check if we're on a category page
+        elseif ( function_exists( 'is_product_category' ) && is_product_category() ) {
+            $category = get_queried_object();
+            if ( $category && isset( $category->term_id ) ) {
+                $category_id = $category->term_id;
+            }
+        }
+        // Check if we're on cart page
+        elseif ( function_exists( 'is_cart' ) && is_cart() ) {
+            $page_id = wc_get_page_id( 'cart' );
+        }
+        // Check if we're on checkout page
+        elseif ( function_exists( 'is_checkout' ) && is_checkout() ) {
+            $page_id = wc_get_page_id( 'checkout' );
+        }
+        // Check if we're on any other page
+        elseif ( is_page() ) {
+            $page_id = get_the_ID();
+        }
+
+        // Get the WhatsApp number considering all contexts
+        $whatsapp_number = $this->get_whatsapp_number( $product_id, $category_id, $page_id );
+
         if ( empty( $whatsapp_number ) ) {
             return '';
         }

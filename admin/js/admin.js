@@ -87,7 +87,7 @@
         $(document).on('click', '.ctc-number-toggle', function() {
             const $content = $(this).closest('.ctc-number-item').find('.ctc-number-content');
             const $icon = $(this).find('.dashicons');
-            
+
             $content.slideToggle(200, function() {
                 // Update icon based on visibility after animation completes
                 if ($content.is(':visible')) {
@@ -96,6 +96,14 @@
                     $icon.removeClass('dashicons-arrow-up-alt2').addClass('dashicons-arrow-down-alt2');
                 }
             });
+        });
+
+        // Handle default checkbox - only one can be selected
+        $(document).on('change', '.ctc-default-checkbox', function() {
+            if ($(this).is(':checked')) {
+                // Uncheck all other default checkboxes
+                $('.ctc-default-checkbox').not(this).prop('checked', false);
+            }
         });
         
         // Handle number deletion

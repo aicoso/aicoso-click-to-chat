@@ -514,6 +514,7 @@ class CTC_Admin {
                     'name'        => sanitize_text_field( $number_data['name'] ?? '' ),
                     'number'      => sanitize_text_field( $number_data['number'] ?? '' ),
                     'description' => sanitize_textarea_field( $number_data['description'] ?? '' ),
+                    'is_default'  => ! empty( $number_data['is_default'] ),
                     'assignments' => $assignments,
                 );
             }
