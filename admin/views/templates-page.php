@@ -23,12 +23,12 @@ $message_templates = isset( $settings['message_templates'] ) ? $settings['messag
 // Initialize templates if not set
 if ( empty( $message_templates ) ) {
     $message_templates = array(
-        'single_product' => esc_html__( "Hello! I'm interested in the product: *{product_name}*\nPrice: {price}\nURL: {product_url}\n\nDo you have this item in stock? I'd like to get more information.", 'click-to-chat' ),
-        'shop_page'      => esc_html__( "Hello! I'm browsing your {category_name} products and have a question.\nI was looking at: {current_page_url}\n\nCould you help me with more information about your products in this category?", 'click-to-chat' ),
-        'cart_checkout'  => esc_html__( "Hello! I'd like to complete my purchase of:\n{cart_items_list}\n---------------------\nSubtotal: {cart_subtotal}\nShipping: {shipping_method} - {shipping_cost}\nTotal: {cart_total}\n\nI have a few questions before finalizing my order.", 'click-to-chat' ),
-        'thank_you'      => esc_html__( "Hello! I've just placed order #{order_number} on {order_date}.\nMy order includes:\n{ordered_items_list}\n---------------------\nApplied Coupon: {coupon_code}\nTotal: {order_total}\n\nI'd like to confirm when this will be shipped.", 'click-to-chat' ),
-        'floating'       => esc_html__( "Hello! I was browsing your website at {current_page_url} and have a question.", 'click-to-chat' ),
-        'variations'     => esc_html__( "Hello! I'm interested in the product: *{product_name}*\nSelected options: {variation_details}\nPrice: {variation_price}\nURL: {product_url}\n\nIs this combination available for immediate shipping?", 'click-to-chat' ),
+        'single_product' => "Hello! I'm interested in the product: *{product_name}*\nPrice: {price}\nURL: {product_url}\n\nDo you have this item in stock? I'd like to get more information.",
+        'shop_page'      => "Hello! I'm browsing your {category_name} products and have a question.\nI was looking at: {current_page_url}\n\nCould you help me with more information about your products in this category?",
+        'cart_checkout'  => "Hello! I'd like to complete my purchase of:\n{cart_items_list}\n---------------------\nSubtotal: {cart_subtotal}\nShipping: {shipping_method} - {shipping_cost}\nTotal: {cart_total}\n\nI have a few questions before finalizing my order.",
+        'thank_you'      => "Hello! I've just placed order #{order_number} on {order_date}.\nMy order includes:\n{ordered_items_list}\n---------------------\nApplied Coupon: {coupon_code}\nTotal: {order_total}\n\nI'd like to confirm when this will be shipped.",
+        'floating'       => "Hello! I was browsing your website at {current_page_url} and have a question.",
+        'variations'     => "Hello! I'm interested in the product: *{product_name}*\nSelected options: {variation_details}\nPrice: {variation_price}\nURL: {product_url}\n\nIs this combination available for immediate shipping?",
     );
 }
 
@@ -64,7 +64,7 @@ $settings_helper = new CTC_Settings();
                         ?>
                     </div>
                     
-                    <textarea name="ctc_templates[single_product]" class="ctc-template-textarea" rows="8"><?php echo esc_textarea( $message_templates['single_product'] ?? '' ); ?></textarea>
+                    <textarea name="ctc_templates[single_product]" class="ctc-template-textarea" rows="8"><?php echo esc_textarea( html_entity_decode( $message_templates['single_product'] ?? '', ENT_QUOTES | ENT_HTML5, 'UTF-8' ) ); ?></textarea>
                     
                     <button type="button" class="button ctc-template-preview-button" data-template-type="single_product">
                         <?php esc_html_e( 'Preview', 'click-to-chat' ); ?>
@@ -90,7 +90,7 @@ $settings_helper = new CTC_Settings();
                         ?>
                     </div>
                     
-                    <textarea name="ctc_templates[variations]" class="ctc-template-textarea" rows="8"><?php echo esc_textarea( $message_templates['variations'] ?? '' ); ?></textarea>
+                    <textarea name="ctc_templates[variations]" class="ctc-template-textarea" rows="8"><?php echo esc_textarea( html_entity_decode( $message_templates['variations'] ?? '', ENT_QUOTES | ENT_HTML5, 'UTF-8' ) ); ?></textarea>
                     
                     <button type="button" class="button ctc-template-preview-button" data-template-type="variations">
                         <?php esc_html_e( 'Preview', 'click-to-chat' ); ?>
@@ -116,7 +116,7 @@ $settings_helper = new CTC_Settings();
                         ?>
                     </div>
                     
-                    <textarea name="ctc_templates[shop_page]" class="ctc-template-textarea" rows="8"><?php echo esc_textarea( $message_templates['shop_page'] ?? '' ); ?></textarea>
+                    <textarea name="ctc_templates[shop_page]" class="ctc-template-textarea" rows="8"><?php echo esc_textarea( html_entity_decode( $message_templates['shop_page'] ?? '', ENT_QUOTES | ENT_HTML5, 'UTF-8' ) ); ?></textarea>
                     
                     <button type="button" class="button ctc-template-preview-button" data-template-type="shop_page">
                         <?php esc_html_e( 'Preview', 'click-to-chat' ); ?>
@@ -142,7 +142,7 @@ $settings_helper = new CTC_Settings();
                         ?>
                     </div>
                     
-                    <textarea name="ctc_templates[cart_checkout]" class="ctc-template-textarea" rows="8"><?php echo esc_textarea( $message_templates['cart_checkout'] ?? '' ); ?></textarea>
+                    <textarea name="ctc_templates[cart_checkout]" class="ctc-template-textarea" rows="8"><?php echo esc_textarea( html_entity_decode( $message_templates['cart_checkout'] ?? '', ENT_QUOTES | ENT_HTML5, 'UTF-8' ) ); ?></textarea>
                     
                     <button type="button" class="button ctc-template-preview-button" data-template-type="cart_checkout">
                         <?php esc_html_e( 'Preview', 'click-to-chat' ); ?>
@@ -168,7 +168,7 @@ $settings_helper = new CTC_Settings();
                         ?>
                     </div>
                     
-                    <textarea name="ctc_templates[thank_you]" class="ctc-template-textarea" rows="8"><?php echo esc_textarea( $message_templates['thank_you'] ?? '' ); ?></textarea>
+                    <textarea name="ctc_templates[thank_you]" class="ctc-template-textarea" rows="8"><?php echo esc_textarea( html_entity_decode( $message_templates['thank_you'] ?? '', ENT_QUOTES | ENT_HTML5, 'UTF-8' ) ); ?></textarea>
                     
                     <button type="button" class="button ctc-template-preview-button" data-template-type="thank_you">
                         <?php esc_html_e( 'Preview', 'click-to-chat' ); ?>
@@ -194,7 +194,7 @@ $settings_helper = new CTC_Settings();
                         ?>
                     </div>
                     
-                    <textarea name="ctc_templates[floating]" class="ctc-template-textarea" rows="8"><?php echo esc_textarea( $message_templates['floating'] ?? '' ); ?></textarea>
+                    <textarea name="ctc_templates[floating]" class="ctc-template-textarea" rows="8"><?php echo esc_textarea( html_entity_decode( $message_templates['floating'] ?? '', ENT_QUOTES | ENT_HTML5, 'UTF-8' ) ); ?></textarea>
                     
                     <button type="button" class="button ctc-template-preview-button" data-template-type="floating">
                         <?php esc_html_e( 'Preview', 'click-to-chat' ); ?>

@@ -345,12 +345,13 @@
         $('.ctc-template-preview-button').on('click', function() {
             const $button = $(this);
             const $container = $button.closest('.ctc-template-item');
-            const templateType = $container.data('template-type');
+            const templateType = $button.data('template-type'); // Get from button, not container
             const templateContent = $container.find('.ctc-template-textarea').val();
             const $previewContainer = $container.find('.ctc-template-preview');
-            
+
+
             // Show loading state
-            $button.prop('disabled', true).text(ctc_admin.loading_text);
+            $button.prop('disabled', true).text(ctc_admin.loading_text || 'Loading...');
             
             // Send AJAX request
             $.ajax({
@@ -364,19 +365,31 @@
                 },
                 success: function(response) {
                     if (response.success) {
-                        $previewContainer.html(response.data.preview.replace(/\n/g, '<br>'));
+                        // Create a text node to properly display the preview without HTML interpretation
+                        var previewText = response.data.preview;
+                        // Convert line breaks to HTML for display
+                        var formattedPreview = previewText.split('\n').map(function(line) {
+                            return $('<div>').text(line).html();
+                        }).join('<br>');
+                        $previewContainer.html(formattedPreview);
                         $previewContainer.show();
                     } else {
                         $previewContainer.html('<p class="error">' + response.data.message + '</p>');
                         $previewContainer.show();
                     }
                 },
-                error: function() {
-                    $previewContainer.html('<p class="error">Error generating preview.</p>');
+                error: function(xhr, status, error) {
+                    let errorMessage = 'Error generating preview.';
+                    if (xhr.responseJSON && xhr.responseJSON.data && xhr.responseJSON.data.message) {
+                        errorMessage = xhr.responseJSON.data.message;
+                    } else if (error) {
+                        errorMessage = 'Error: ' + error;
+                    }
+                    $previewContainer.html('<p class="error">' + errorMessage + '</p>');
                     $previewContainer.show();
                 },
                 complete: function() {
-                    $button.prop('disabled', false).text(ctc_admin.preview_text);
+                    $button.prop('disabled', false).text(ctc_admin.preview_text || 'Preview');
                 }
             });
             

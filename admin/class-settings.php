@@ -366,14 +366,20 @@ class CTC_Settings {
         
         // Get template type and content
         $template_type = isset( $_POST['template_type'] ) ? sanitize_text_field( $_POST['template_type'] ) : '';
-        $template_content = isset( $_POST['template_content'] ) ? sanitize_textarea_field( $_POST['template_content'] ) : '';
-        
+        // Use wp_unslash to handle slashes and stripslashes_deep for arrays
+        $template_content = isset( $_POST['template_content'] ) ? wp_unslash( $_POST['template_content'] ) : '';
+
+        // Basic sanitization without encoding entities
+        $template_content = wp_check_invalid_utf8( $template_content );
+
         if ( empty( $template_type ) || empty( $template_content ) ) {
             wp_send_json_error( array(
                 'message' => esc_html__( 'Template type and content are required.', 'click-to-chat' ),
             ) );
         }
-        
+
+        // No need to decode since we're not encoding in the first place
+
         // Generate a preview with sample data based on template type
         $preview = $this->generate_template_preview( $template_type, $template_content );
         
@@ -392,57 +398,94 @@ class CTC_Settings {
     private function generate_template_preview( $template_type, $template_content ) {
         // Define sample data based on template type
         $replacements = array();
-        
+
         switch ( $template_type ) {
             case 'single_product':
+                // Get price and decode HTML entities
+                $price = '$49.99';
+                if ( function_exists( 'wc_price' ) ) {
+                    $price = html_entity_decode( wp_strip_all_tags( wc_price( 49.99 ) ), ENT_QUOTES | ENT_HTML5, 'UTF-8' );
+                }
                 $replacements = array(
-                    '{product_name}' => esc_html__( 'Sample Product', 'click-to-chat' ),
-                    '{price}'        => wc_price( 49.99 ),
-                    '{product_url}'  => esc_url( site_url( '/product/sample-product/' ) ),
+                    '{product_name}' => 'Sample Product',
+                    '{price}'        => $price,
+                    '{product_url}'  => site_url( '/product/sample-product/' ),
                 );
                 break;
-                
+
             case 'variations':
+                // Get price and decode HTML entities
+                $variation_price = '$59.99';
+                if ( function_exists( 'wc_price' ) ) {
+                    $variation_price = html_entity_decode( wp_strip_all_tags( wc_price( 59.99 ) ), ENT_QUOTES | ENT_HTML5, 'UTF-8' );
+                }
                 $replacements = array(
-                    '{product_name}'      => esc_html__( 'Sample Variable Product', 'click-to-chat' ),
-                    '{variation_details}' => esc_html__( 'Color: Blue, Size: Medium', 'click-to-chat' ),
-                    '{variation_price}'   => wc_price( 59.99 ),
-                    '{product_url}'       => esc_url( site_url( '/product/sample-variable-product/' ) ),
+                    '{product_name}'      => 'Sample Variable Product',
+                    '{variation_details}' => 'Color: Blue, Size: Medium',
+                    '{variation_price}'   => $variation_price,
+                    '{product_url}'       => site_url( '/product/sample-variable-product/' ),
                 );
                 break;
-                
+
             case 'shop_page':
                 $replacements = array(
-                    '{category_name}'   => esc_html__( 'Sample Category', 'click-to-chat' ),
-                    '{current_page_url}' => esc_url( site_url( '/product-category/sample-category/' ) ),
+                    '{category_name}'   => 'Sample Category',
+                    '{current_page_url}' => site_url( '/product-category/sample-category/' ),
                 );
                 break;
                 
             case 'cart_checkout':
+                // Decode all price entities
+                $price1 = '$99.98';
+                $price2 = '$29.99';
+                $subtotal = '$129.97';
+                $shipping = '$5.00';
+                $total = '$134.97';
+
+                if ( function_exists( 'wc_price' ) ) {
+                    $price1 = html_entity_decode( wp_strip_all_tags( wc_price( 99.98 ) ), ENT_QUOTES | ENT_HTML5, 'UTF-8' );
+                    $price2 = html_entity_decode( wp_strip_all_tags( wc_price( 29.99 ) ), ENT_QUOTES | ENT_HTML5, 'UTF-8' );
+                    $subtotal = html_entity_decode( wp_strip_all_tags( wc_price( 129.97 ) ), ENT_QUOTES | ENT_HTML5, 'UTF-8' );
+                    $shipping = html_entity_decode( wp_strip_all_tags( wc_price( 5.00 ) ), ENT_QUOTES | ENT_HTML5, 'UTF-8' );
+                    $total = html_entity_decode( wp_strip_all_tags( wc_price( 134.97 ) ), ENT_QUOTES | ENT_HTML5, 'UTF-8' );
+                }
+
                 $replacements = array(
-                    '{cart_items_list}' => esc_html__( 'Sample Product x 2 - ', 'click-to-chat' ) . wc_price( 99.98 ) . "\n" .
-                                         esc_html__( 'Another Product x 1 - ', 'click-to-chat' ) . wc_price( 29.99 ),
-                    '{cart_subtotal}'   => wc_price( 129.97 ),
-                    '{shipping_method}' => esc_html__( 'Flat rate', 'click-to-chat' ),
-                    '{shipping_cost}'   => wc_price( 5.00 ),
-                    '{cart_total}'      => wc_price( 134.97 ),
+                    '{cart_items_list}' => 'Sample Product x 2 - ' . $price1 . "\n" .
+                                         'Another Product x 1 - ' . $price2,
+                    '{cart_subtotal}'   => $subtotal,
+                    '{shipping_method}' => 'Flat rate',
+                    '{shipping_cost}'   => $shipping,
+                    '{cart_total}'      => $total,
                 );
                 break;
                 
             case 'thank_you':
+                // Decode all price entities
+                $price1 = '$99.98';
+                $price2 = '$29.99';
+                $order_total = '$134.97';
+
+                if ( function_exists( 'wc_price' ) ) {
+                    $price1 = html_entity_decode( wp_strip_all_tags( wc_price( 99.98 ) ), ENT_QUOTES | ENT_HTML5, 'UTF-8' );
+                    $price2 = html_entity_decode( wp_strip_all_tags( wc_price( 29.99 ) ), ENT_QUOTES | ENT_HTML5, 'UTF-8' );
+                    $order_total = html_entity_decode( wp_strip_all_tags( wc_price( 134.97 ) ), ENT_QUOTES | ENT_HTML5, 'UTF-8' );
+                }
+
+                $date_format = function_exists( 'wc_date_format' ) ? wc_date_format() : get_option( 'date_format' );
                 $replacements = array(
                     '{order_number}'      => '12345',
-                    '{order_date}'        => date_i18n( wc_date_format(), time() ),
-                    '{ordered_items_list}' => esc_html__( 'Sample Product x 2 - ', 'click-to-chat' ) . wc_price( 99.98 ) . "\n" .
-                                            esc_html__( 'Another Product x 1 - ', 'click-to-chat' ) . wc_price( 29.99 ),
+                    '{order_date}'        => date_i18n( $date_format, time() ),
+                    '{ordered_items_list}' => 'Sample Product x 2 - ' . $price1 . "\n" .
+                                            'Another Product x 1 - ' . $price2,
                     '{coupon_code}'       => 'SAMPLE10',
-                    '{order_total}'       => wc_price( 134.97 ),
+                    '{order_total}'       => $order_total,
                 );
                 break;
-                
+
             case 'floating':
                 $replacements = array(
-                    '{current_page_url}' => esc_url( site_url( '/sample-page/' ) ),
+                    '{current_page_url}' => site_url( '/sample-page/' ),
                 );
                 break;
         }

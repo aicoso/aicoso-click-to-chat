@@ -321,6 +321,11 @@
     white-space: pre-wrap;
 }
 
+.ctc-template-preview .error {
+    color: #dc3232;
+    font-weight: 600;
+}
+
 .ctc-placeholders {
     margin-top: 10px;
 }
