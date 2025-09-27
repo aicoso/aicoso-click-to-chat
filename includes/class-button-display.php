@@ -229,31 +229,38 @@ class CTC_Button_Display {
      */
     public function display_single_product_button() {
         global $product;
-        
+
         // Check if button has already been displayed for this product
         if (isset(self::$buttons_displayed['product_' . $product->get_id()])) {
             return;
         }
-        
+
         if (!$product) {
             return;
         }
-        
+
         // Check if the product should be excluded
         if ($this->is_excluded($product->get_id())) {
             return;
         }
-        
+
         // Get the WhatsApp URL
         $whatsapp_url = $this->link_generator->get_product_url($product->get_id());
-        
+
         if (empty($whatsapp_url)) {
             return;
         }
-        
-        // Display the button
+
+        // Get button position for wrapper class
+        $position = isset($this->settings['single_product']['position']) ?
+                    $this->settings['single_product']['position'] : 'below_add_to_cart';
+        $position_class = 'ctc-position-' . str_replace('_', '-', $position);
+
+        // Wrap button with position-specific container
+        echo '<div class="' . esc_attr($position_class) . '">';
         $this->render_button($whatsapp_url, 'product');
-        
+        echo '</div>';
+
         // Mark this button as displayed
         self::$buttons_displayed['product_' . $product->get_id()] = true;
     }

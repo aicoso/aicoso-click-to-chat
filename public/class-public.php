@@ -75,6 +75,14 @@ class CTC_Public {
             array(),
             CTC_VERSION
         );
+
+        // Enqueue additional layout fixes CSS with higher priority
+        wp_enqueue_style(
+            'ctc-layout-fixes',
+            CTC_PLUGIN_URL . 'public/css/button-layout-fixes.css',
+            array('ctc-public-styles'),
+            CTC_VERSION
+        );
         
         // Register and enqueue JavaScript
         wp_enqueue_script(
