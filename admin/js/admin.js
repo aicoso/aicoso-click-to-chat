@@ -411,26 +411,194 @@
      * Initialize shortcode generator
      */
     function initShortcodeGenerator() {
-        // Generate shortcode on form change
+        // New improved shortcode builder
+
+        // Handle button type selection
+        $('input[name="button_type"]').on('change', function() {
+            const type = $(this).val();
+            if (type === 'product') {
+                $('.ctc-product-options').show();
+            } else {
+                $('.ctc-product-options').hide();
+            }
+            generateImprovedShortcode();
+            updateImprovedPreview();
+        });
+
+        // Handle product source selection
+        $('input[name="product_source"]').on('change', function() {
+            if ($(this).val() === 'specific') {
+                $('.ctc-product-id-field').show();
+            } else {
+                $('.ctc-product-id-field').hide();
+            }
+            generateImprovedShortcode();
+        });
+
+        // Handle all parameter changes
+        $('.ctc-shortcode-param').on('change input', function() {
+            generateImprovedShortcode();
+            updateImprovedPreview();
+        });
+
+        // Handle copy button
+        $('#ctc-copy-shortcode').on('click', function() {
+            const shortcode = $('#ctc-generated-shortcode').text();
+            copyToClipboard(shortcode);
+
+            // Show success message
+            $('.ctc-copy-success').fadeIn().delay(2000).fadeOut();
+
+            // Change button text temporarily
+            const $btnText = $(this).find('.ctc-copy-text');
+            const originalText = $btnText.text();
+            $btnText.text('Copied!');
+            setTimeout(() => {
+                $btnText.text(originalText);
+            }, 2000);
+
+            return false;
+        });
+
+        // Handle advanced section collapse
+        $('.ctc-collapsible').on('click', function() {
+            $(this).toggleClass('active');
+            $('.ctc-advanced-content').slideToggle();
+        });
+
+        // Initialize on load
+        generateImprovedShortcode();
+        updateImprovedPreview();
+
+        // Legacy support - keep old functionality
         $('.ctc-shortcode-form select, .ctc-shortcode-form input').on('change', function() {
             generateShortcode();
         });
-        
-        // Copy shortcode to clipboard
+
         $(document).on('click', '.ctc-copy-shortcode', function() {
             const shortcode = $('.ctc-shortcode-code').text();
-            
             copyToClipboard(shortcode);
-            
             return false;
         });
-        
-        // Initial shortcode generation
-        generateShortcode();
     }
 
     /**
-     * Generate shortcode based on form values
+     * Generate improved shortcode
+     */
+    function generateImprovedShortcode() {
+        let shortcode = '[ctc_button';
+
+        // Get all parameters
+        const type = $('input[name="button_type"]:checked').val() || 'product';
+        const productSource = $('input[name="product_source"]:checked').val();
+        const productId = $('#ctc_product_id').val();
+        const text = $('#ctc_button_text').val();
+        const bgColor = $('#ctc_bg_color').val();
+        const textColor = $('#ctc_text_color').val();
+        const showIcon = $('input[data-param="icon"]').is(':checked');
+        const size = $('select[data-param="size"]').val();
+        const align = $('select[data-param="align"]').val();
+        const showNumber = $('select[data-param="show_number"]').val();
+        const message = $('textarea[data-param="message"]').val();
+        const cssClass = $('input[data-param="css_class"]').val();
+
+        // Add type
+        shortcode += ' type="' + type + '"';
+
+        // Product specific
+        if (type === 'product') {
+            if (productSource === 'current') {
+                shortcode += ' current="yes"';
+            } else {
+                shortcode += ' current="no"';
+                if (productId) {
+                    shortcode += ' product_id="' + productId + '"';
+                }
+            }
+        }
+
+        // Appearance
+        if (text) {
+            shortcode += ' text="' + text.replace(/"/g, '&quot;') + '"';
+        }
+
+        if (bgColor && bgColor !== '#25D366') {
+            shortcode += ' bg_color="' + bgColor + '"';
+        }
+
+        if (textColor && textColor !== '#ffffff') {
+            shortcode += ' text_color="' + textColor + '"';
+        }
+
+        shortcode += ' icon="' + (showIcon ? 'yes' : 'no') + '"';
+
+        if (size && size !== 'normal') {
+            shortcode += ' size="' + size + '"';
+        }
+
+        if (align && align !== 'center') {
+            shortcode += ' align="' + align + '"';
+        }
+
+        // Advanced
+        if (showNumber) {
+            shortcode += ' show_number="' + showNumber + '"';
+        }
+
+        if (message) {
+            shortcode += ' message="' + message.replace(/"/g, '&quot;') + '"';
+        }
+
+        if (cssClass) {
+            shortcode += ' css_class="' + cssClass + '"';
+        }
+
+        shortcode += ']';
+
+        $('#ctc-generated-shortcode').text(shortcode);
+    }
+
+    /**
+     * Update improved preview
+     */
+    function updateImprovedPreview() {
+        const text = $('#ctc_button_text').val() || ctc_admin.default_button_text || 'Order via WhatsApp';
+        const bgColor = $('#ctc_bg_color').val() || '#25D366';
+        const textColor = $('#ctc_text_color').val() || '#ffffff';
+        const showIcon = $('input[data-param="icon"]').is(':checked');
+        const size = $('select[data-param="size"]').val() || 'normal';
+        const align = $('select[data-param="align"]').val() || 'center';
+
+        let previewHtml = '<div class="ctc-align-' + align + '">';
+        previewHtml += '<a href="#" class="ctc-whatsapp-button ctc-button-size-' + size + '" ';
+        previewHtml += 'style="background-color: ' + bgColor + '; color: ' + textColor + ';" onclick="return false;">';
+
+        if (showIcon) {
+            previewHtml += '<span class="ctc-whatsapp-icon">';
+            previewHtml += '<svg viewBox="0 0 24 24" width="24" height="24">';
+            previewHtml += '<path fill="currentColor" d="M17.498 14.382c-.301-.15-1.767-.867-2.04-.966-.273-.101-.473-.15-.673.15-.197.295-.771.964-.944 1.162-.175.195-.349.21-.646.075-.3-.15-1.263-.465-2.403-1.485-.888-.795-1.484-1.77-1.66-2.07-.174-.3-.019-.465.13-.615.136-.135.301-.345.451-.523.146-.181.194-.301.297-.496.1-.21.049-.375-.025-.524-.075-.15-.672-1.62-.922-2.206-.24-.584-.487-.51-.672-.51-.172-.015-.371-.015-.571-.015-.2 0-.523.074-.797.359-.273.3-1.045 1.02-1.045 2.475s1.07 2.865 1.219 3.075c.149.195 2.105 3.195 5.1 4.485.714.3 1.27.48 1.704.629.714.227 1.365.195 1.88.121.574-.091 1.767-.721 2.016-1.426.255-.705.255-1.29.18-1.425-.074-.135-.27-.21-.57-.345m-5.446 7.443h-.016c-1.77 0-3.524-.48-5.055-1.38l-.36-.214-3.75.975 1.005-3.645-.239-.375c-.99-1.576-1.516-3.391-1.516-5.26 0-5.445 4.455-9.885 9.942-9.885 2.654 0 5.145 1.035 7.021 2.91 1.875 1.859 2.909 4.35 2.909 6.99-.004 5.444-4.46 9.885-9.935 9.885M20.52 3.449C18.24 1.245 15.24 0 12.045 0 5.463 0 .104 5.334.101 11.893c0 2.096.549 4.14 1.595 5.945L0 24l6.335-1.652c1.746.943 3.71 1.444 5.71 1.447h.006c6.585 0 11.946-5.336 11.949-11.896 0-3.176-1.24-6.165-3.495-8.411"/>';
+            previewHtml += '</svg>';
+            previewHtml += '</span>';
+        }
+
+        previewHtml += '<span class="ctc-button-text">' + escapeHtml(text) + '</span>';
+        previewHtml += '</a>';
+        previewHtml += '</div>';
+
+        $('#ctc-button-preview').html(previewHtml);
+    }
+
+    /**
+     * Escape HTML
+     */
+    function escapeHtml(text) {
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+    }
+
+    /**
+     * Generate shortcode based on form values (Legacy)
      */
     function generateShortcode() {
         const $form = $('.ctc-shortcode-form');

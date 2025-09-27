@@ -1,6 +1,6 @@
 <?php
 /**
- * Shortcode generator page view.
+ * Improved Shortcode Generator Page
  *
  * @package ClickToChat
  * @since 1.0.0
@@ -27,184 +27,589 @@ $whatsapp_numbers = isset( $settings['whatsapp_numbers'] ) ? $settings['whatsapp
 <div class="wrap ctc-admin-container">
     <div class="ctc-admin-header">
         <span class="ctc-admin-logo dashicons dashicons-whatsapp"></span>
-        <h1 class="ctc-admin-heading"><?php esc_html_e( 'Shortcode Generator', 'click-to-chat' ); ?></h1>
+        <h1 class="ctc-admin-heading"><?php esc_html_e( 'WhatsApp Button Shortcode Builder', 'click-to-chat' ); ?></h1>
     </div>
-    
-    <p><?php esc_html_e( 'Generate a shortcode to display a WhatsApp button anywhere in your content.', 'click-to-chat' ); ?></p>
-    
-    <div class="ctc-shortcode-generator">
-        <div class="ctc-shortcode-form">
-            <h3><?php esc_html_e( 'Configure Your Shortcode', 'click-to-chat' ); ?></h3>
-            <?php wp_nonce_field( 'ctc_shortcode_nonce', 'ctc_shortcode_nonce' ); ?>
-            
-            <table class="form-table ctc-form-table">
-                <tr>
-                    <th scope="row">
-                        <label for="ctc_shortcode_type"><?php esc_html_e( 'Button Type', 'click-to-chat' ); ?></label>
-                    </th>
-                    <td>
-                        <select id="ctc_shortcode_type" class="ctc-shortcode-param" data-param="type">
-                            <option value="product"><?php esc_html_e( 'Product Button', 'click-to-chat' ); ?></option>
-                            <option value="shop"><?php esc_html_e( 'Shop/Category Button', 'click-to-chat' ); ?></option>
-                            <option value="cart"><?php esc_html_e( 'Cart Button', 'click-to-chat' ); ?></option>
-                            <option value="floating"><?php esc_html_e( 'General Purpose Button', 'click-to-chat' ); ?></option>
-                        </select>
-                        <p class="description"><?php esc_html_e( 'Select the type of WhatsApp button you want to display.', 'click-to-chat' ); ?></p>
-                    </td>
-                </tr>
-                
-                <tr class="ctc-product-params">
-                    <th scope="row">
-                        <label><?php esc_html_e( 'Product Source', 'click-to-chat' ); ?></label>
-                    </th>
-                    <td>
-                        <fieldset>
-                            <label>
-                                <input type="radio" name="ctc_product_source" value="current" class="ctc-shortcode-param" data-param="current" data-value="yes" checked>
-                                <?php esc_html_e( 'Use current product (when used on product pages)', 'click-to-chat' ); ?>
-                            </label>
-                            <br>
-                            <label>
-                                <input type="radio" name="ctc_product_source" value="specific" class="ctc-product-source-toggle">
-                                <?php esc_html_e( 'Specify a product', 'click-to-chat' ); ?>
-                            </label>
-                            <div class="ctc-specific-product" style="display:none; margin-top:10px;">
-                                <select class="ctc-product-select ctc-shortcode-param" data-param="product_id" style="width: 100%;" data-placeholder="<?php esc_attr_e( 'Select a product...', 'click-to-chat' ); ?>"></select>
-                            </div>
-                        </fieldset>
-                    </td>
-                </tr>
-                
-                <tr>
-                    <th scope="row">
-                        <label for="ctc_shortcode_text"><?php esc_html_e( 'Button Text', 'click-to-chat' ); ?></label>
-                    </th>
-                    <td>
-                        <input type="text" id="ctc_shortcode_text" class="regular-text ctc-shortcode-param" data-param="text" placeholder="<?php echo esc_attr( $default_text ); ?>">
-                        <p class="description"><?php esc_html_e( 'Leave empty to use default button text from settings.', 'click-to-chat' ); ?></p>
-                    </td>
-                </tr>
-                
-                <tr>
-                    <th scope="row">
-                        <label for="ctc_shortcode_icon"><?php esc_html_e( 'WhatsApp Icon', 'click-to-chat' ); ?></label>
-                    </th>
-                    <td>
-                        <select id="ctc_shortcode_icon" class="ctc-shortcode-param" data-param="icon">
-                            <option value="yes"><?php esc_html_e( 'Show icon', 'click-to-chat' ); ?></option>
-                            <option value="no"><?php esc_html_e( 'Hide icon', 'click-to-chat' ); ?></option>
-                        </select>
-                    </td>
-                </tr>
-                
-                <tr>
-                    <th scope="row">
-                        <label for="ctc_shortcode_bg_color"><?php esc_html_e( 'Background Color', 'click-to-chat' ); ?></label>
-                    </th>
-                    <td>
-                        <input type="text" id="ctc_shortcode_bg_color" class="ctc-color-field ctc-shortcode-param" data-param="bg_color" value="<?php echo esc_attr( $default_bg_color ); ?>">
-                        <p class="description"><?php esc_html_e( 'Leave empty to use default color from settings.', 'click-to-chat' ); ?></p>
-                    </td>
-                </tr>
-                
-                <tr>
-                    <th scope="row">
-                        <label for="ctc_shortcode_text_color"><?php esc_html_e( 'Text Color', 'click-to-chat' ); ?></label>
-                    </th>
-                    <td>
-                        <input type="text" id="ctc_shortcode_text_color" class="ctc-color-field ctc-shortcode-param" data-param="text_color" value="<?php echo esc_attr( $default_text_color ); ?>">
-                        <p class="description"><?php esc_html_e( 'Leave empty to use default color from settings.', 'click-to-chat' ); ?></p>
-                    </td>
-                </tr>
-                
-                <tr>
-                    <th scope="row">
-                        <label for="ctc_shortcode_size"><?php esc_html_e( 'Button Size', 'click-to-chat' ); ?></label>
-                    </th>
-                    <td>
-                        <select id="ctc_shortcode_size" class="ctc-shortcode-param" data-param="size">
+
+    <!-- Quick Instructions -->
+    <div class="ctc-instructions-banner">
+        <h2>📚 <?php esc_html_e( 'How to Use Shortcodes', 'click-to-chat' ); ?></h2>
+        <p><?php esc_html_e( 'Create custom WhatsApp buttons and place them anywhere on your site using shortcodes.', 'click-to-chat' ); ?></p>
+        <div class="ctc-quick-steps">
+            <div class="ctc-step">
+                <span class="ctc-step-number">1</span>
+                <span><?php esc_html_e( 'Configure your button below', 'click-to-chat' ); ?></span>
+            </div>
+            <div class="ctc-step">
+                <span class="ctc-step-number">2</span>
+                <span><?php esc_html_e( 'Copy the generated shortcode', 'click-to-chat' ); ?></span>
+            </div>
+            <div class="ctc-step">
+                <span class="ctc-step-number">3</span>
+                <span><?php esc_html_e( 'Paste it in any post, page, or widget', 'click-to-chat' ); ?></span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Builder -->
+    <div class="ctc-builder-wrapper">
+        <!-- Left Side: Configuration -->
+        <div class="ctc-config-panel">
+            <h2 class="ctc-panel-title">⚙️ <?php esc_html_e( 'Button Configuration', 'click-to-chat' ); ?></h2>
+
+            <!-- Button Type Selection -->
+            <div class="ctc-field-section">
+                <h3><?php esc_html_e( 'Button Type', 'click-to-chat' ); ?></h3>
+                <div class="ctc-button-types">
+                    <label class="ctc-type-card">
+                        <input type="radio" name="button_type" value="product" class="ctc-shortcode-param" data-param="type" checked>
+                        <div class="ctc-type-card-inner">
+                            <span class="ctc-type-icon">📦</span>
+                            <span class="ctc-type-label"><?php esc_html_e( 'Product', 'click-to-chat' ); ?></span>
+                            <small><?php esc_html_e( 'For product pages', 'click-to-chat' ); ?></small>
+                        </div>
+                    </label>
+
+                    <label class="ctc-type-card">
+                        <input type="radio" name="button_type" value="cart" class="ctc-shortcode-param" data-param="type">
+                        <div class="ctc-type-card-inner">
+                            <span class="ctc-type-icon">🛒</span>
+                            <span class="ctc-type-label"><?php esc_html_e( 'Cart', 'click-to-chat' ); ?></span>
+                            <small><?php esc_html_e( 'Include cart items', 'click-to-chat' ); ?></small>
+                        </div>
+                    </label>
+
+                    <label class="ctc-type-card">
+                        <input type="radio" name="button_type" value="shop" class="ctc-shortcode-param" data-param="type">
+                        <div class="ctc-type-card-inner">
+                            <span class="ctc-type-icon">🏪</span>
+                            <span class="ctc-type-label"><?php esc_html_e( 'Shop', 'click-to-chat' ); ?></span>
+                            <small><?php esc_html_e( 'Shop/category pages', 'click-to-chat' ); ?></small>
+                        </div>
+                    </label>
+
+                    <label class="ctc-type-card">
+                        <input type="radio" name="button_type" value="floating" class="ctc-shortcode-param" data-param="type">
+                        <div class="ctc-type-card-inner">
+                            <span class="ctc-type-icon">💬</span>
+                            <span class="ctc-type-label"><?php esc_html_e( 'General', 'click-to-chat' ); ?></span>
+                            <small><?php esc_html_e( 'Simple contact', 'click-to-chat' ); ?></small>
+                        </div>
+                    </label>
+                </div>
+            </div>
+
+            <!-- Product Selection (for product type) -->
+            <div class="ctc-field-section ctc-product-options" style="display: block;">
+                <h3><?php esc_html_e( 'Product Selection', 'click-to-chat' ); ?></h3>
+                <div class="ctc-field-group">
+                    <label class="ctc-radio-option">
+                        <input type="radio" name="product_source" value="current" class="ctc-shortcode-param" data-param="current" checked>
+                        <span><?php esc_html_e( 'Use current product (auto-detect)', 'click-to-chat' ); ?></span>
+                    </label>
+                    <label class="ctc-radio-option">
+                        <input type="radio" name="product_source" value="specific">
+                        <span><?php esc_html_e( 'Specify product ID', 'click-to-chat' ); ?></span>
+                    </label>
+                    <div class="ctc-product-id-field" style="display: none;">
+                        <input type="number" id="ctc_product_id" class="ctc-shortcode-param" data-param="product_id" placeholder="<?php esc_attr_e( 'Enter product ID', 'click-to-chat' ); ?>">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Appearance -->
+            <div class="ctc-field-section">
+                <h3><?php esc_html_e( 'Appearance', 'click-to-chat' ); ?></h3>
+
+                <div class="ctc-field-group">
+                    <label for="ctc_button_text"><?php esc_html_e( 'Button Text', 'click-to-chat' ); ?></label>
+                    <input type="text" id="ctc_button_text" class="ctc-shortcode-param" data-param="text" placeholder="<?php echo esc_attr( $default_text ); ?>">
+                </div>
+
+                <div class="ctc-color-fields">
+                    <div class="ctc-field-group">
+                        <label><?php esc_html_e( 'Background', 'click-to-chat' ); ?></label>
+                        <input type="text" id="ctc_bg_color" class="ctc-color-field ctc-shortcode-param" data-param="bg_color" value="<?php echo esc_attr( $default_bg_color ); ?>">
+                    </div>
+                    <div class="ctc-field-group">
+                        <label><?php esc_html_e( 'Text Color', 'click-to-chat' ); ?></label>
+                        <input type="text" id="ctc_text_color" class="ctc-color-field ctc-shortcode-param" data-param="text_color" value="<?php echo esc_attr( $default_text_color ); ?>">
+                    </div>
+                </div>
+
+                <div class="ctc-size-align-fields">
+                    <div class="ctc-field-group">
+                        <label><?php esc_html_e( 'Size', 'click-to-chat' ); ?></label>
+                        <select class="ctc-shortcode-param" data-param="size">
                             <option value="small"><?php esc_html_e( 'Small', 'click-to-chat' ); ?></option>
                             <option value="normal" selected><?php esc_html_e( 'Normal', 'click-to-chat' ); ?></option>
                             <option value="large"><?php esc_html_e( 'Large', 'click-to-chat' ); ?></option>
                         </select>
-                    </td>
-                </tr>
-                
-                <tr>
-                    <th scope="row">
-                        <label for="ctc_shortcode_align"><?php esc_html_e( 'Button Alignment', 'click-to-chat' ); ?></label>
-                    </th>
-                    <td>
-                        <select id="ctc_shortcode_align" class="ctc-shortcode-param" data-param="align">
+                    </div>
+                    <div class="ctc-field-group">
+                        <label><?php esc_html_e( 'Alignment', 'click-to-chat' ); ?></label>
+                        <select class="ctc-shortcode-param" data-param="align">
                             <option value="left"><?php esc_html_e( 'Left', 'click-to-chat' ); ?></option>
                             <option value="center" selected><?php esc_html_e( 'Center', 'click-to-chat' ); ?></option>
                             <option value="right"><?php esc_html_e( 'Right', 'click-to-chat' ); ?></option>
                         </select>
-                    </td>
-                </tr>
-                
-                <tr>
-                    <th scope="row">
-                        <label for="ctc_shortcode_custom_class"><?php esc_html_e( 'Custom CSS Class', 'click-to-chat' ); ?></label>
-                    </th>
-                    <td>
-                        <input type="text" id="ctc_shortcode_custom_class" class="regular-text ctc-shortcode-param" data-param="css_class">
-                        <p class="description"><?php esc_html_e( 'Optional: Add custom CSS class to the button for additional styling.', 'click-to-chat' ); ?></p>
-                    </td>
-                </tr>
-                
-                <tr class="ctc-advanced-params">
-                    <th scope="row">
-                        <label for="ctc_shortcode_show_number"><?php esc_html_e( 'Specific WhatsApp Number', 'click-to-chat' ); ?></label>
-                    </th>
-                    <td>
-                        <select id="ctc_shortcode_show_number" class="ctc-shortcode-param" data-param="show_number">
-                            <option value=""><?php esc_html_e( 'Use default assignment rules', 'click-to-chat' ); ?></option>
-                            <?php foreach ( $whatsapp_numbers as $number ) : ?>
-                                <option value="<?php echo esc_attr( $number['id'] ); ?>"><?php echo esc_html( $number['name'] . ' (' . $number['number'] . ')' ); ?></option>
-                            <?php endforeach; ?>
-                        </select>
-                        <p class="description"><?php esc_html_e( 'Optional: Force the button to use a specific WhatsApp number.', 'click-to-chat' ); ?></p>
-                    </td>
-                </tr>
-                
-                <tr class="ctc-advanced-params">
-                    <th scope="row">
-                        <label for="ctc_shortcode_message"><?php esc_html_e( 'Custom Message', 'click-to-chat' ); ?></label>
-                    </th>
-                    <td>
-                        <textarea id="ctc_shortcode_message" class="large-text ctc-shortcode-param" data-param="message" rows="4"></textarea>
-                        <p class="description"><?php esc_html_e( 'Optional: Custom message template. Leave empty to use default messages from settings.', 'click-to-chat' ); ?></p>
-                    </td>
-                </tr>
-            </table>
-        </div>
-        
-        <div class="ctc-shortcode-preview">
-            <h3><?php esc_html_e( 'Your Shortcode', 'click-to-chat' ); ?></h3>
-            
-            <div class="ctc-shortcode-result">
-                <pre class="ctc-shortcode-code">[whatsapp_button]</pre>
-                <span class="ctc-copy-shortcode dashicons dashicons-clipboard" title="<?php esc_attr_e( 'Copy to clipboard', 'click-to-chat' ); ?>"></span>
-            </div>
-            
-            <div class="ctc-shortcode-preview-container">
-                <p class="ctc-shortcode-preview-label"><?php esc_html_e( 'Button Preview', 'click-to-chat' ); ?></p>
-                <div class="ctc-shortcode-preview-content">
-                    <!-- Live preview of the button will be displayed here by JavaScript -->
+                    </div>
+                </div>
+
+                <div class="ctc-field-group">
+                    <label class="ctc-checkbox-option">
+                        <input type="checkbox" class="ctc-shortcode-param" data-param="icon" checked>
+                        <span><?php esc_html_e( 'Show WhatsApp icon', 'click-to-chat' ); ?></span>
+                    </label>
                 </div>
             </div>
-            
-            <div class="ctc-shortcode-usage">
-                <h4><?php esc_html_e( 'How to Use This Shortcode', 'click-to-chat' ); ?></h4>
-                <p><?php esc_html_e( 'Copy the shortcode above and paste it into your post, page, or text widget content where you want the WhatsApp button to appear.', 'click-to-chat' ); ?></p>
-                <p><strong><?php esc_html_e( 'Examples:', 'click-to-chat' ); ?></strong></p>
-                <ul>
-                    <li><?php esc_html_e( 'To display a button for the current product:', 'click-to-chat' ); ?> <code>[whatsapp_button]</code></li>
-                    <li><?php esc_html_e( 'To display a button for a specific product:', 'click-to-chat' ); ?> <code>[whatsapp_button product_id="123" current="no"]</code></li>
-                    <li><?php esc_html_e( 'To display a cart button with custom text:', 'click-to-chat' ); ?> <code>[whatsapp_button type="cart" text="Order Now via WhatsApp"]</code></li>
+
+            <!-- Advanced Options -->
+            <div class="ctc-field-section ctc-advanced">
+                <h3 class="ctc-collapsible">
+                    <span class="dashicons dashicons-arrow-right-alt2"></span>
+                    <?php esc_html_e( 'Advanced Options', 'click-to-chat' ); ?>
+                </h3>
+                <div class="ctc-advanced-content" style="display: none;">
+                    <?php if ( ! empty( $whatsapp_numbers ) ) : ?>
+                    <div class="ctc-field-group">
+                        <label><?php esc_html_e( 'Specific Number', 'click-to-chat' ); ?></label>
+                        <select class="ctc-shortcode-param" data-param="show_number">
+                            <option value=""><?php esc_html_e( 'Use default', 'click-to-chat' ); ?></option>
+                            <?php foreach ( $whatsapp_numbers as $number ) : ?>
+                                <option value="<?php echo esc_attr( $number['id'] ); ?>">
+                                    <?php echo esc_html( $number['name'] . ' (' . $number['number'] . ')' ); ?>
+                                </option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
+                    <?php endif; ?>
+
+                    <div class="ctc-field-group">
+                        <label><?php esc_html_e( 'Custom Message', 'click-to-chat' ); ?></label>
+                        <textarea class="ctc-shortcode-param" data-param="message" rows="3" placeholder="<?php esc_attr_e( 'Optional custom message...', 'click-to-chat' ); ?>"></textarea>
+                    </div>
+
+                    <div class="ctc-field-group">
+                        <label><?php esc_html_e( 'CSS Class', 'click-to-chat' ); ?></label>
+                        <input type="text" class="ctc-shortcode-param" data-param="css_class" placeholder="<?php esc_attr_e( 'custom-class', 'click-to-chat' ); ?>">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Side: Preview & Output -->
+        <div class="ctc-preview-panel">
+            <!-- Live Preview -->
+            <div class="ctc-preview-section">
+                <h3>👁️ <?php esc_html_e( 'Live Preview', 'click-to-chat' ); ?></h3>
+                <div class="ctc-preview-area">
+                    <div id="ctc-button-preview">
+                        <!-- Preview will be generated here -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Generated Shortcode -->
+            <div class="ctc-shortcode-section">
+                <h3>📋 <?php esc_html_e( 'Your Shortcode', 'click-to-chat' ); ?></h3>
+                <div class="ctc-shortcode-box">
+                    <code id="ctc-generated-shortcode">[ctc_button]</code>
+                    <button type="button" class="ctc-copy-btn" id="ctc-copy-shortcode">
+                        <span class="dashicons dashicons-clipboard"></span>
+                        <span class="ctc-copy-text"><?php esc_html_e( 'Copy', 'click-to-chat' ); ?></span>
+                    </button>
+                </div>
+                <div class="ctc-copy-success" style="display: none;">
+                    ✅ <?php esc_html_e( 'Copied to clipboard!', 'click-to-chat' ); ?>
+                </div>
+            </div>
+
+            <!-- Quick Examples -->
+            <div class="ctc-examples-section">
+                <h3>💡 <?php esc_html_e( 'Quick Examples', 'click-to-chat' ); ?></h3>
+                <div class="ctc-example-list">
+                    <div class="ctc-example">
+                        <strong><?php esc_html_e( 'Basic button:', 'click-to-chat' ); ?></strong>
+                        <code>[ctc_button]</code>
+                    </div>
+                    <div class="ctc-example">
+                        <strong><?php esc_html_e( 'Specific product:', 'click-to-chat' ); ?></strong>
+                        <code>[ctc_button product_id="123"]</code>
+                    </div>
+                    <div class="ctc-example">
+                        <strong><?php esc_html_e( 'Cart button:', 'click-to-chat' ); ?></strong>
+                        <code>[ctc_button type="cart"]</code>
+                    </div>
+                    <div class="ctc-example">
+                        <strong><?php esc_html_e( 'Custom text:', 'click-to-chat' ); ?></strong>
+                        <code>[ctc_button text="Contact Us"]</code>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Help Tips -->
+            <div class="ctc-help-section">
+                <h3>❓ <?php esc_html_e( 'Where to Use', 'click-to-chat' ); ?></h3>
+                <ul class="ctc-help-list">
+                    <li>✅ <?php esc_html_e( 'In any WordPress post or page content', 'click-to-chat' ); ?></li>
+                    <li>✅ <?php esc_html_e( 'In text widgets', 'click-to-chat' ); ?></li>
+                    <li>✅ <?php esc_html_e( 'In page builders (Elementor, Gutenberg, etc.)', 'click-to-chat' ); ?></li>
+                    <li>✅ <?php esc_html_e( 'In product descriptions', 'click-to-chat' ); ?></li>
+                    <li>✅ <?php esc_html_e( 'Multiple buttons on the same page', 'click-to-chat' ); ?></li>
                 </ul>
             </div>
         </div>
     </div>
 </div>
+
+<style>
+/* Improved UI Styles */
+.ctc-admin-container {
+    max-width: 1200px;
+    margin: 20px auto;
+}
+
+.ctc-instructions-banner {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 25px;
+    border-radius: 8px;
+    margin: 20px 0;
+}
+
+.ctc-instructions-banner h2 {
+    color: white;
+    margin: 0 0 10px 0;
+}
+
+.ctc-quick-steps {
+    display: flex;
+    gap: 30px;
+    margin-top: 15px;
+}
+
+.ctc-step {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.ctc-step-number {
+    background: rgba(255,255,255,0.2);
+    color: white;
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 12px;
+}
+
+.ctc-builder-wrapper {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+.ctc-config-panel,
+.ctc-preview-panel {
+    background: white;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 20px;
+}
+
+.ctc-panel-title {
+    margin: 0 0 20px 0;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #f0f0f0;
+    font-size: 18px;
+}
+
+.ctc-field-section {
+    margin-bottom: 25px;
+}
+
+.ctc-field-section h3 {
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 12px;
+    color: #333;
+}
+
+.ctc-button-types {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+
+.ctc-type-card {
+    display: block;
+    cursor: pointer;
+}
+
+.ctc-type-card input {
+    display: none;
+}
+
+.ctc-type-card-inner {
+    border: 2px solid #e0e0e0;
+    border-radius: 6px;
+    padding: 12px;
+    text-align: center;
+    transition: all 0.2s;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.ctc-type-card input:checked + .ctc-type-card-inner {
+    border-color: #25D366;
+    background: #f0fff4;
+}
+
+.ctc-type-icon {
+    font-size: 24px;
+    margin-bottom: 5px;
+}
+
+.ctc-type-label {
+    font-weight: 500;
+    display: block;
+    margin-bottom: 2px;
+}
+
+.ctc-type-card small {
+    font-size: 11px;
+    color: #666;
+}
+
+.ctc-field-group {
+    margin-bottom: 15px;
+}
+
+.ctc-field-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-size: 13px;
+    font-weight: 500;
+}
+
+.ctc-field-group input[type="text"],
+.ctc-field-group input[type="number"],
+.ctc-field-group select,
+.ctc-field-group textarea {
+    width: 100%;
+    padding: 6px 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.ctc-color-fields,
+.ctc-size-align-fields {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+
+.ctc-radio-option,
+.ctc-checkbox-option {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+    cursor: pointer;
+}
+
+.ctc-radio-option input,
+.ctc-checkbox-option input {
+    margin: 0;
+}
+
+.ctc-product-id-field {
+    margin-top: 10px;
+    margin-left: 25px;
+}
+
+.ctc-collapsible {
+    cursor: pointer;
+    user-select: none;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.ctc-collapsible:hover {
+    color: #25D366;
+}
+
+.ctc-collapsible.active .dashicons {
+    transform: rotate(90deg);
+}
+
+.ctc-advanced-content {
+    margin-top: 15px;
+}
+
+/* Preview Panel */
+.ctc-preview-section,
+.ctc-shortcode-section,
+.ctc-examples-section,
+.ctc-help-section {
+    margin-bottom: 25px;
+}
+
+.ctc-preview-section h3,
+.ctc-shortcode-section h3,
+.ctc-examples-section h3,
+.ctc-help-section h3 {
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 12px;
+}
+
+.ctc-preview-area {
+    background: #f8f9fa;
+    padding: 30px;
+    border-radius: 6px;
+    text-align: center;
+    min-height: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.ctc-shortcode-box {
+    display: flex;
+    align-items: center;
+    background: #f8f9fa;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 12px;
+    gap: 10px;
+}
+
+.ctc-shortcode-box code {
+    flex: 1;
+    font-family: monospace;
+    font-size: 13px;
+}
+
+.ctc-copy-btn {
+    background: #25D366;
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    transition: background 0.2s;
+}
+
+.ctc-copy-btn:hover {
+    background: #20bd5a;
+}
+
+.ctc-copy-success {
+    margin-top: 8px;
+    color: #25D366;
+    font-weight: 500;
+    font-size: 13px;
+}
+
+.ctc-example-list {
+    background: #f8f9fa;
+    padding: 15px;
+    border-radius: 6px;
+}
+
+.ctc-example {
+    margin-bottom: 10px;
+    font-size: 13px;
+}
+
+.ctc-example:last-child {
+    margin-bottom: 0;
+}
+
+.ctc-example code {
+    background: white;
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-size: 12px;
+}
+
+.ctc-help-list {
+    margin: 0;
+    padding-left: 0;
+    list-style: none;
+}
+
+.ctc-help-list li {
+    margin-bottom: 8px;
+    font-size: 13px;
+}
+
+/* Button Preview Styles */
+.ctc-whatsapp-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 24px;
+    text-decoration: none;
+    border-radius: 25px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.ctc-whatsapp-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+}
+
+.ctc-button-size-small {
+    padding: 8px 16px;
+    font-size: 14px;
+}
+
+.ctc-button-size-large {
+    padding: 16px 32px;
+    font-size: 18px;
+}
+
+.ctc-whatsapp-icon svg {
+    width: 20px;
+    height: 20px;
+}
+
+.ctc-button-size-small .ctc-whatsapp-icon svg {
+    width: 16px;
+    height: 16px;
+}
+
+.ctc-button-size-large .ctc-whatsapp-icon svg {
+    width: 24px;
+    height: 24px;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+    .ctc-builder-wrapper {
+        grid-template-columns: 1fr;
+    }
+
+    .ctc-quick-steps {
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .ctc-button-types {
+        grid-template-columns: 1fr;
+    }
+}
+</style>
