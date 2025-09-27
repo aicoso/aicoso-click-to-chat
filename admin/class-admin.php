@@ -554,12 +554,12 @@ class CTC_Admin {
         // Process submitted templates
         if ( isset( $_POST['ctc_templates'] ) && is_array( $_POST['ctc_templates'] ) ) {
             $message_templates = array(
-                'single_product' => sanitize_textarea_field( $_POST['ctc_templates']['single_product'] ?? '' ),
-                'shop_page'      => sanitize_textarea_field( $_POST['ctc_templates']['shop_page'] ?? '' ),
-                'cart_checkout'  => sanitize_textarea_field( $_POST['ctc_templates']['cart_checkout'] ?? '' ),
-                'thank_you'      => sanitize_textarea_field( $_POST['ctc_templates']['thank_you'] ?? '' ),
-                'floating'       => sanitize_textarea_field( $_POST['ctc_templates']['floating'] ?? '' ),
-                'variations'     => sanitize_textarea_field( $_POST['ctc_templates']['variations'] ?? '' ),
+                'single_product' => sanitize_textarea_field( wp_unslash( $_POST['ctc_templates']['single_product'] ?? '' ) ),
+                'shop_page'      => sanitize_textarea_field( wp_unslash( $_POST['ctc_templates']['shop_page'] ?? '' ) ),
+                'cart_checkout'  => sanitize_textarea_field( wp_unslash( $_POST['ctc_templates']['cart_checkout'] ?? '' ) ),
+                'thank_you'      => sanitize_textarea_field( wp_unslash( $_POST['ctc_templates']['thank_you'] ?? '' ) ),
+                'floating'       => sanitize_textarea_field( wp_unslash( $_POST['ctc_templates']['floating'] ?? '' ) ),
+                'variations'     => sanitize_textarea_field( wp_unslash( $_POST['ctc_templates']['variations'] ?? '' ) ),
             );
             
             // Update message templates in settings

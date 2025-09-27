@@ -401,12 +401,12 @@ class CTC_WhatsApp_Link_Generator {
     private function build_whatsapp_url( $number, $message ) {
         // Decode HTML entities in the message
         $decoded_message = html_entity_decode($message, ENT_QUOTES | ENT_HTML5, 'UTF-8');
-            
-        // Make sure line breaks are preserved properly
-        $decoded_message = str_replace("\n", "%0A", $decoded_message);
-            
+
+        // URL encode the message (rawurlencode will properly handle newlines as %0A)
+        $encoded_message = rawurlencode($decoded_message);
+
         // Build the WhatsApp URL
-        return 'https://wa.me/' . $number . '?text=' . rawurlencode($decoded_message);
+        return 'https://wa.me/' . $number . '?text=' . $encoded_message;
     }
 
     /**
@@ -420,10 +420,33 @@ class CTC_WhatsApp_Link_Generator {
         if ( ! is_object( $product ) || ! $product instanceof WC_Product ) {
             return '';
         }
-        
-        // Get the message template
-        $message_template = isset( $this->settings['message_templates']['product'] ) ? 
-                           $this->settings['message_templates']['product'] : '';
+
+        // Determine which template to use based on context
+        $template_key = 'single_product'; // Default for single product pages
+
+        // If we're on shop page, use shop template
+        if ( function_exists( 'is_shop' ) && is_shop() ) {
+            $template_key = 'shop_page';
+        }
+        // If we're on product category page, use shop template
+        elseif ( function_exists( 'is_product_category' ) && is_product_category() ) {
+            $template_key = 'shop_page';
+        }
+
+        // Get the message template with fallback
+        $message_template = '';
+        if ( isset( $this->settings['message_templates'][$template_key] ) ) {
+            $message_template = $this->settings['message_templates'][$template_key];
+        }
+
+        // If no template is set, use default templates
+        if ( empty( $message_template ) ) {
+            if ( $template_key === 'single_product' ) {
+                $message_template = "Hello! I'm interested in the product: *{product_name}*\nPrice: {price}\nURL: {product_url}\n\nDo you have this item in stock? I'd like to get more information.";
+            } else if ( $template_key === 'shop_page' ) {
+                $message_template = "Hello! I'm browsing your {category_name} products and have a question.\nI was looking at: {current_page_url}\n\nCould you help me with more information about your products in this category?";
+            }
+        }
 
         // Get product data safely
         $product_name = '';
@@ -442,17 +465,41 @@ class CTC_WhatsApp_Link_Generator {
             $product_url = get_permalink( $product->get_id() );
         }
 
-        // Replace placeholders
+        // Build replacements based on template type
         $replacements = array(
             '{product_name}' => $product_name,
             '{price}'        => wp_strip_all_tags( wc_price( $product_price ) ),
             '{product_url}'  => $product_url,
         );
-        
+
+        // Add shop-specific placeholders if using shop template
+        if ( $template_key === 'shop_page' ) {
+            // Get current page URL
+            $current_page_url = '';
+            if ( function_exists( 'get_permalink' ) ) {
+                global $wp;
+                $current_page_url = home_url( add_query_arg( array(), $wp->request ) );
+            }
+
+            // Get category name if on category page
+            $category_name = '';
+            if ( function_exists( 'is_product_category' ) && is_product_category() ) {
+                $category = get_queried_object();
+                if ( $category && isset( $category->name ) ) {
+                    $category_name = $category->name;
+                }
+            } else {
+                $category_name = 'shop';
+            }
+
+            $replacements['{current_page_url}'] = $current_page_url;
+            $replacements['{category_name}'] = $category_name;
+        }
+
         foreach ( $replacements as $placeholder => $value ) {
             $message_template = str_replace( $placeholder, $value, $message_template );
         }
-        
+
         return $message_template;
     }
 
