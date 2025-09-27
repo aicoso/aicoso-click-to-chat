@@ -26,366 +26,346 @@ $floating_positions = $settings_helper->get_floating_position_options();
 <div class="wrap ctc-admin-container">
     <div class="ctc-admin-header">
         <span class="ctc-admin-logo dashicons dashicons-whatsapp"></span>
-        <h1 class="ctc-admin-heading"><?php esc_html_e( 'Click to Chat', 'click-to-chat' ); ?></h1>
+        <h1 class="ctc-admin-heading"><?php esc_html_e( 'Plugin Settings', 'click-to-chat' ); ?></h1>
     </div>
-    
-    <h2 class="nav-tab-wrapper ctc-admin-tabs">
-        <a href="#" class="nav-tab" data-tab="ctc-tab-general"><?php esc_html_e( 'General Settings', 'click-to-chat' ); ?></a>
-        <a href="#" class="nav-tab" data-tab="ctc-tab-button"><?php esc_html_e( 'Button Settings', 'click-to-chat' ); ?></a>
-        <a href="#" class="nav-tab" data-tab="ctc-tab-display"><?php esc_html_e( 'Display Settings', 'click-to-chat' ); ?></a>
-        <a href="#" class="nav-tab" data-tab="ctc-tab-exclusions"><?php esc_html_e( 'Exclusions', 'click-to-chat' ); ?></a>
-    </h2>
-    
+
+    <!-- Instructions Banner - Same style as Templates page -->
+    <div class="ctc-instructions-banner">
+        <h2><span class="dashicons dashicons-admin-generic"></span> <?php esc_html_e( 'Configure Your WhatsApp Integration', 'click-to-chat' ); ?></h2>
+        <p><?php esc_html_e( 'Customize how the WhatsApp button appears and behaves across your WooCommerce store.', 'click-to-chat' ); ?></p>
+        <div class="ctc-quick-steps">
+            <div class="ctc-step">
+                <span class="ctc-step-number">1</span>
+                <span><?php esc_html_e( 'General settings', 'click-to-chat' ); ?></span>
+            </div>
+            <div class="ctc-step">
+                <span class="ctc-step-number">2</span>
+                <span><?php esc_html_e( 'Button appearance', 'click-to-chat' ); ?></span>
+            </div>
+            <div class="ctc-step">
+                <span class="ctc-step-number">3</span>
+                <span><?php esc_html_e( 'Display locations', 'click-to-chat' ); ?></span>
+            </div>
+            <div class="ctc-step">
+                <span class="ctc-step-number">4</span>
+                <span><?php esc_html_e( 'Save your settings', 'click-to-chat' ); ?></span>
+            </div>
+        </div>
+    </div>
+
     <form method="post" action="">
         <?php wp_nonce_field( 'ctc_settings_nonce', 'ctc_settings_nonce' ); ?>
-        
+
+        <!-- Tab Navigation -->
+        <div class="ctc-settings-nav">
+            <button type="button" class="ctc-settings-nav-item active" data-tab="general">
+                <span class="dashicons dashicons-admin-settings"></span>
+                <?php esc_html_e( 'General', 'click-to-chat' ); ?>
+            </button>
+            <button type="button" class="ctc-settings-nav-item" data-tab="button">
+                <span class="dashicons dashicons-button"></span>
+                <?php esc_html_e( 'Button Style', 'click-to-chat' ); ?>
+            </button>
+            <button type="button" class="ctc-settings-nav-item" data-tab="display">
+                <span class="dashicons dashicons-visibility"></span>
+                <?php esc_html_e( 'Display', 'click-to-chat' ); ?>
+            </button>
+            <button type="button" class="ctc-settings-nav-item" data-tab="exclusions">
+                <span class="dashicons dashicons-hidden"></span>
+                <?php esc_html_e( 'Exclusions', 'click-to-chat' ); ?>
+            </button>
+        </div>
+
         <!-- General Settings Tab -->
-        <div id="ctc-tab-general" class="ctc-admin-tab-content ctc-admin-content">
-            <h2><?php esc_html_e( 'General Settings', 'click-to-chat' ); ?></h2>
-            
-            <p><?php esc_html_e( 'Configure the general settings for the Click to Chat plugin.', 'click-to-chat' ); ?></p>
-            
-            <table class="form-table ctc-form-table">
-                <tr>
-                    <th scope="row">
-                        <label><?php esc_html_e( 'Plugin Status', 'click-to-chat' ); ?></label>
-                    </th>
-                    <td>
-                        <fieldset>
-                            <label for="ctc_plugin_enabled">
-                                <input type="checkbox" name="ctc_plugin_enabled" id="ctc_plugin_enabled" value="1" <?php checked( isset( $settings['plugin_enabled'] ) ? $settings['plugin_enabled'] : true, true ); ?>>
-                                <?php esc_html_e( 'Enable plugin functionality', 'click-to-chat' ); ?>
-                            </label>
-                        </fieldset>
-                        <p class="description"><?php esc_html_e( 'When disabled, no WhatsApp buttons will be displayed.', 'click-to-chat' ); ?></p>
-                    </td>
-                </tr>
-                
-                <tr>
-                    <th scope="row">
-                        <label><?php esc_html_e( 'WhatsApp Numbers', 'click-to-chat' ); ?></label>
-                    </th>
-                    <td>
-                        <p>
-                            <?php esc_html_e( 'Configure your WhatsApp numbers in the', 'click-to-chat' ); ?> 
-                            <a href="<?php echo esc_url( admin_url( 'admin.php?page=click-to-chat-numbers' ) ); ?>"><?php esc_html_e( 'WhatsApp Numbers', 'click-to-chat' ); ?></a>
-                            <?php esc_html_e( 'section.', 'click-to-chat' ); ?>
-                        </p>
-                    </td>
-                </tr>
-                
-                <tr>
-                    <th scope="row">
-                        <label><?php esc_html_e( 'Message Templates', 'click-to-chat' ); ?></label>
-                    </th>
-                    <td>
-                        <p>
-                            <?php esc_html_e( 'Configure your message templates in the', 'click-to-chat' ); ?> 
-                            <a href="<?php echo esc_url( admin_url( 'admin.php?page=click-to-chat-templates' ) ); ?>"><?php esc_html_e( 'Message Templates', 'click-to-chat' ); ?></a>
-                            <?php esc_html_e( 'section.', 'click-to-chat' ); ?>
-                        </p>
-                    </td>
-                </tr>
-            </table>
+        <div id="ctc-settings-general" class="ctc-settings-panel active">
+            <div class="ctc-number-card">
+                <div class="ctc-number-header">
+                    <div class="ctc-number-title-section">
+                        <span class="ctc-number-icon dashicons dashicons-admin-settings"></span>
+                        <h3 class="ctc-number-title"><?php esc_html_e( 'Plugin Status', 'click-to-chat' ); ?></h3>
+                    </div>
+                </div>
+                <div class="ctc-number-body">
+                    <div class="ctc-form-group">
+                        <label>
+                            <input type="checkbox" name="ctc_plugin_enabled" id="ctc_plugin_enabled" value="1" <?php checked( isset( $settings['plugin_enabled'] ) ? $settings['plugin_enabled'] : true, true ); ?>>
+                            <?php esc_html_e( 'Enable Click to Chat plugin', 'click-to-chat' ); ?>
+                        </label>
+                        <p class="ctc-field-description"><?php esc_html_e( 'When disabled, no WhatsApp buttons will be displayed on your website.', 'click-to-chat' ); ?></p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="ctc-number-card">
+                <div class="ctc-number-header">
+                    <div class="ctc-number-title-section">
+                        <span class="ctc-number-icon dashicons dashicons-admin-links"></span>
+                        <h3 class="ctc-number-title"><?php esc_html_e( 'Quick Links', 'click-to-chat' ); ?></h3>
+                    </div>
+                </div>
+                <div class="ctc-number-body">
+                    <div class="ctc-button-group">
+                        <a href="<?php echo esc_url( admin_url( 'admin.php?page=click-to-chat-numbers' ) ); ?>" class="button button-secondary">
+                            <span class="dashicons dashicons-phone"></span>
+                            <?php esc_html_e( 'WhatsApp Numbers', 'click-to-chat' ); ?>
+                        </a>
+                        <a href="<?php echo esc_url( admin_url( 'admin.php?page=click-to-chat-templates' ) ); ?>" class="button button-secondary">
+                            <span class="dashicons dashicons-text"></span>
+                            <?php esc_html_e( 'Message Templates', 'click-to-chat' ); ?>
+                        </a>
+                    </div>
+                    <p class="ctc-field-description"><?php esc_html_e( 'Manage your WhatsApp numbers and message templates from these sections.', 'click-to-chat' ); ?></p>
+                </div>
+            </div>
         </div>
-        
+
         <!-- Button Settings Tab -->
-        <div id="ctc-tab-button" class="ctc-admin-tab-content ctc-admin-content">
-            <h2><?php esc_html_e( 'Button Settings', 'click-to-chat' ); ?></h2>
-            
-            <p><?php esc_html_e( 'Configure the appearance of the WhatsApp button.', 'click-to-chat' ); ?></p>
-            
-            <table class="form-table ctc-form-table">
-                <tr>
-                    <th scope="row">
+        <div id="ctc-settings-button" class="ctc-settings-panel">
+            <div class="ctc-number-card">
+                <div class="ctc-number-header">
+                    <div class="ctc-number-title-section">
+                        <span class="ctc-number-icon dashicons dashicons-button"></span>
+                        <h3 class="ctc-number-title"><?php esc_html_e( 'Button Appearance', 'click-to-chat' ); ?></h3>
+                    </div>
+                </div>
+                <div class="ctc-number-body">
+                    <div class="ctc-form-group">
                         <label for="ctc_button_text"><?php esc_html_e( 'Button Text', 'click-to-chat' ); ?></label>
-                    </th>
-                    <td>
                         <input type="text" name="ctc_button[text]" id="ctc_button_text" value="<?php echo esc_attr( isset( $settings['button_settings']['text'] ) ? $settings['button_settings']['text'] : esc_html__( 'Order via WhatsApp', 'click-to-chat' ) ); ?>" class="regular-text">
-                        <p class="description"><?php esc_html_e( 'The text to display on the WhatsApp button.', 'click-to-chat' ); ?></p>
-                    </td>
-                </tr>
-                
-                <tr>
-                    <th scope="row">
-                        <label for="ctc_button_icon"><?php esc_html_e( 'Display WhatsApp Icon', 'click-to-chat' ); ?></label>
-                    </th>
-                    <td>
-                        <fieldset>
-                            <label for="ctc_button_icon">
-                                <input type="checkbox" name="ctc_button[icon]" id="ctc_button_icon" value="1" <?php checked( isset( $settings['button_settings']['icon'] ) ? $settings['button_settings']['icon'] : true ); ?>>
-                                <?php esc_html_e( 'Show WhatsApp icon on the button', 'click-to-chat' ); ?>
-                            </label>
-                        </fieldset>
-                    </td>
-                </tr>
-                
-                <tr>
-                    <th scope="row">
-                        <label for="ctc_button_bg_color"><?php esc_html_e( 'Button Background Color', 'click-to-chat' ); ?></label>
-                    </th>
-                    <td>
+                        <p class="ctc-field-description"><?php esc_html_e( 'The text to display on the WhatsApp button.', 'click-to-chat' ); ?></p>
+                    </div>
+
+                    <div class="ctc-form-group">
+                        <label>
+                            <input type="checkbox" name="ctc_button[icon]" id="ctc_button_icon" value="1" <?php checked( isset( $settings['button_settings']['icon'] ) ? $settings['button_settings']['icon'] : true ); ?>>
+                            <?php esc_html_e( 'Show WhatsApp icon on the button', 'click-to-chat' ); ?>
+                        </label>
+                    </div>
+
+                    <div class="ctc-form-group">
+                        <label for="ctc_button_bg_color"><?php esc_html_e( 'Background Color', 'click-to-chat' ); ?></label>
                         <input type="text" name="ctc_button[bg_color]" id="ctc_button_bg_color" value="<?php echo esc_attr( isset( $settings['button_settings']['bg_color'] ) ? $settings['button_settings']['bg_color'] : '#25D366' ); ?>" class="ctc-color-field">
-                    </td>
-                </tr>
-                
-                <tr>
-                    <th scope="row">
-                        <label for="ctc_button_text_color"><?php esc_html_e( 'Button Text Color', 'click-to-chat' ); ?></label>
-                    </th>
-                    <td>
+                    </div>
+
+                    <div class="ctc-form-group">
+                        <label for="ctc_button_text_color"><?php esc_html_e( 'Text Color', 'click-to-chat' ); ?></label>
                         <input type="text" name="ctc_button[text_color]" id="ctc_button_text_color" value="<?php echo esc_attr( isset( $settings['button_settings']['text_color'] ) ? $settings['button_settings']['text_color'] : '#ffffff' ); ?>" class="ctc-color-field">
-                    </td>
-                </tr>
-                
-                <tr>
-                    <th scope="row">
+                    </div>
+
+                    <div class="ctc-form-group">
                         <label for="ctc_button_custom_css"><?php esc_html_e( 'Custom CSS', 'click-to-chat' ); ?></label>
-                    </th>
-                    <td>
-                        <textarea name="ctc_button[custom_css]" id="ctc_button_custom_css" rows="8" class="large-text code"><?php echo esc_textarea( isset( $settings['button_settings']['custom_css'] ) ? $settings['button_settings']['custom_css'] : '' ); ?></textarea>
-                        <p class="description"><?php esc_html_e( 'Add custom CSS for further customization of the button appearance.', 'click-to-chat' ); ?></p>
-                    </td>
-                </tr>
-            </table>
+                        <textarea name="ctc_button[custom_css]" id="ctc_button_custom_css" rows="6" class="large-text code"><?php echo esc_textarea( isset( $settings['button_settings']['custom_css'] ) ? $settings['button_settings']['custom_css'] : '' ); ?></textarea>
+                        <p class="ctc-field-description"><?php esc_html_e( 'Add custom CSS for advanced button styling.', 'click-to-chat' ); ?></p>
+                    </div>
+                </div>
+            </div>
         </div>
-        
+
         <!-- Display Settings Tab -->
-        <div id="ctc-tab-display" class="ctc-admin-tab-content ctc-admin-content">
-            <h2><?php esc_html_e( 'Display Settings', 'click-to-chat' ); ?></h2>
-            
-            <p><?php esc_html_e( 'Configure where the WhatsApp button should be displayed.', 'click-to-chat' ); ?></p>
-            
-            <h3><?php esc_html_e( 'Single Product Pages', 'click-to-chat' ); ?></h3>
-            <table class="form-table ctc-form-table">
-                <tr>
-                    <th scope="row">
-                        <label for="ctc_single_product_enabled"><?php esc_html_e( 'Display on Single Product Pages', 'click-to-chat' ); ?></label>
-                    </th>
-                    <td>
-                        <fieldset>
-                            <label for="ctc_single_product_enabled">
-                                <input type="checkbox" name="ctc_single_product[enabled]" id="ctc_single_product_enabled" value="1" <?php checked( isset( $settings['single_product']['enabled'] ) ? $settings['single_product']['enabled'] : true ); ?>>
-                                <?php esc_html_e( 'Show WhatsApp button on single product pages', 'click-to-chat' ); ?>
-                            </label>
-                        </fieldset>
-                    </td>
-                </tr>
-                
-                <tr>
-                    <th scope="row">
+        <div id="ctc-settings-display" class="ctc-settings-panel">
+            <!-- Single Product Pages -->
+            <div class="ctc-number-card">
+                <div class="ctc-number-header">
+                    <div class="ctc-number-title-section">
+                        <span class="ctc-number-icon dashicons dashicons-cart"></span>
+                        <h3 class="ctc-number-title"><?php esc_html_e( 'Single Product Pages', 'click-to-chat' ); ?></h3>
+                    </div>
+                </div>
+                <div class="ctc-number-body">
+                    <div class="ctc-form-group">
+                        <label>
+                            <input type="checkbox" name="ctc_single_product[enabled]" id="ctc_single_product_enabled" value="1" <?php checked( isset( $settings['single_product']['enabled'] ) ? $settings['single_product']['enabled'] : true ); ?>>
+                            <?php esc_html_e( 'Show WhatsApp button on single product pages', 'click-to-chat' ); ?>
+                        </label>
+                    </div>
+
+                    <div class="ctc-form-group">
                         <label for="ctc_single_product_position"><?php esc_html_e( 'Button Position', 'click-to-chat' ); ?></label>
-                    </th>
-                    <td>
-                        <select name="ctc_single_product[position]" id="ctc_single_product_position">
+                        <select name="ctc_single_product[position]" id="ctc_single_product_position" class="regular-text">
                             <?php foreach ( $product_positions as $value => $label ) : ?>
                                 <option value="<?php echo esc_attr( $value ); ?>" <?php selected( isset( $settings['single_product']['position'] ) ? $settings['single_product']['position'] : 'after_add_to_cart', $value ); ?>><?php echo esc_html( $label ); ?></option>
                             <?php endforeach; ?>
                         </select>
-                    </td>
-                </tr>
-            </table>
-            
-            <h3><?php esc_html_e( 'Shop Pages', 'click-to-chat' ); ?></h3>
-            <table class="form-table ctc-form-table">
-                <tr>
-                    <th scope="row">
-                        <label for="ctc_shop_page_enabled"><?php esc_html_e( 'Display on Shop Pages', 'click-to-chat' ); ?></label>
-                    </th>
-                    <td>
-                        <fieldset>
-                            <label for="ctc_shop_page_enabled">
-                                <input type="checkbox" name="ctc_shop_page[enabled]" id="ctc_shop_page_enabled" value="1" <?php checked( isset( $settings['shop_page']['enabled'] ) ? $settings['shop_page']['enabled'] : false ); ?>>
-                                <?php esc_html_e( 'Show WhatsApp button on shop/archive pages', 'click-to-chat' ); ?>
-                            </label>
-                        </fieldset>
-                    </td>
-                </tr>
-                
-                <tr>
-                    <th scope="row">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Shop Pages -->
+            <div class="ctc-number-card">
+                <div class="ctc-number-header">
+                    <div class="ctc-number-title-section">
+                        <span class="ctc-number-icon dashicons dashicons-store"></span>
+                        <h3 class="ctc-number-title"><?php esc_html_e( 'Shop Pages', 'click-to-chat' ); ?></h3>
+                    </div>
+                </div>
+                <div class="ctc-number-body">
+                    <div class="ctc-form-group">
+                        <label>
+                            <input type="checkbox" name="ctc_shop_page[enabled]" id="ctc_shop_page_enabled" value="1" <?php checked( isset( $settings['shop_page']['enabled'] ) ? $settings['shop_page']['enabled'] : false ); ?>>
+                            <?php esc_html_e( 'Show WhatsApp button on shop/archive pages', 'click-to-chat' ); ?>
+                        </label>
+                    </div>
+
+                    <div class="ctc-form-group">
                         <label for="ctc_shop_page_position"><?php esc_html_e( 'Button Position', 'click-to-chat' ); ?></label>
-                    </th>
-                    <td>
-                        <select name="ctc_shop_page[position]" id="ctc_shop_page_position">
+                        <select name="ctc_shop_page[position]" id="ctc_shop_page_position" class="regular-text">
                             <?php foreach ( $shop_positions as $value => $label ) : ?>
                                 <option value="<?php echo esc_attr( $value ); ?>" <?php selected( isset( $settings['shop_page']['position'] ) ? $settings['shop_page']['position'] : 'after_add_to_cart', $value ); ?>><?php echo esc_html( $label ); ?></option>
                             <?php endforeach; ?>
                         </select>
-                    </td>
-                </tr>
-            </table>
-            
-            <h3><?php esc_html_e( 'Cart & Checkout Pages', 'click-to-chat' ); ?></h3>
-            <table class="form-table ctc-form-table">
-                <tr>
-                    <th scope="row">
-                        <label for="ctc_cart_page_enabled"><?php esc_html_e( 'Display on Cart Page', 'click-to-chat' ); ?></label>
-                    </th>
-                    <td>
-                        <fieldset>
-                            <label for="ctc_cart_page_enabled">
-                                <input type="checkbox" name="ctc_cart_page[enabled]" id="ctc_cart_page_enabled" value="1" <?php checked( isset( $settings['cart_page']['enabled'] ) ? $settings['cart_page']['enabled'] : false ); ?>>
-                                <?php esc_html_e( 'Show WhatsApp button on the cart page', 'click-to-chat' ); ?>
-                            </label>
-                        </fieldset>
-                    </td>
-                </tr>
+                    </div>
+                </div>
+            </div>
 
-                <tr class="ctc-cart-position-row" <?php echo ( ! isset( $settings['cart_page']['enabled'] ) || ! $settings['cart_page']['enabled'] ) ? 'style="display:none;"' : ''; ?>>
-                    <th scope="row">
+            <!-- Cart & Checkout Pages -->
+            <div class="ctc-number-card">
+                <div class="ctc-number-header">
+                    <div class="ctc-number-title-section">
+                        <span class="ctc-number-icon dashicons dashicons-cart"></span>
+                        <h3 class="ctc-number-title"><?php esc_html_e( 'Cart & Checkout Pages', 'click-to-chat' ); ?></h3>
+                    </div>
+                </div>
+                <div class="ctc-number-body">
+                    <div class="ctc-form-group">
+                        <label>
+                            <input type="checkbox" name="ctc_cart_page[enabled]" id="ctc_cart_page_enabled" value="1" <?php checked( isset( $settings['cart_page']['enabled'] ) ? $settings['cart_page']['enabled'] : false ); ?>>
+                            <?php esc_html_e( 'Show WhatsApp button on the cart page', 'click-to-chat' ); ?>
+                        </label>
+                    </div>
+
+                    <div class="ctc-form-group ctc-cart-position-row" <?php echo ( ! isset( $settings['cart_page']['enabled'] ) || ! $settings['cart_page']['enabled'] ) ? 'style="display:none;"' : ''; ?>>
                         <label for="ctc_cart_page_position"><?php esc_html_e( 'Cart Button Position', 'click-to-chat' ); ?></label>
-                    </th>
-                    <td>
-                        <select name="ctc_cart_page[position]" id="ctc_cart_page_position">
+                        <select name="ctc_cart_page[position]" id="ctc_cart_page_position" class="regular-text">
                             <option value="after_cart_table" <?php selected( isset( $settings['cart_page']['position'] ) ? $settings['cart_page']['position'] : 'after_cart_table', 'after_cart_table' ); ?>><?php esc_html_e( 'After Cart Table', 'click-to-chat' ); ?></option>
                             <option value="before_cart_table" <?php selected( isset( $settings['cart_page']['position'] ) ? $settings['cart_page']['position'] : '', 'before_cart_table' ); ?>><?php esc_html_e( 'Before Cart Table', 'click-to-chat' ); ?></option>
                             <option value="proceed_to_checkout" <?php selected( isset( $settings['cart_page']['position'] ) ? $settings['cart_page']['position'] : '', 'proceed_to_checkout' ); ?>><?php esc_html_e( 'Next to Proceed to Checkout Button', 'click-to-chat' ); ?></option>
                             <option value="after_cart_totals" <?php selected( isset( $settings['cart_page']['position'] ) ? $settings['cart_page']['position'] : '', 'after_cart_totals' ); ?>><?php esc_html_e( 'After Cart Totals', 'click-to-chat' ); ?></option>
                             <option value="cart_actions" <?php selected( isset( $settings['cart_page']['position'] ) ? $settings['cart_page']['position'] : '', 'cart_actions' ); ?>><?php esc_html_e( 'In Cart Actions Area', 'click-to-chat' ); ?></option>
                         </select>
-                        <p class="description"><?php esc_html_e( 'Choose where to display the WhatsApp button on the cart page', 'click-to-chat' ); ?></p>
-                    </td>
-                </tr>
-                
-                <tr>
-                    <th scope="row">
-                        <label for="ctc_checkout_page_enabled"><?php esc_html_e( 'Display on Checkout Page', 'click-to-chat' ); ?></label>
-                    </th>
-                    <td>
-                        <fieldset>
-                            <label for="ctc_checkout_page_enabled">
-                                <input type="checkbox" name="ctc_checkout_page[enabled]" id="ctc_checkout_page_enabled" value="1" <?php checked( isset( $settings['checkout_page']['enabled'] ) ? $settings['checkout_page']['enabled'] : false ); ?>>
-                                <?php esc_html_e( 'Show WhatsApp button on the checkout page', 'click-to-chat' ); ?>
-                            </label>
-                        </fieldset>
-                    </td>
-                </tr>
+                    </div>
 
-                <tr class="ctc-checkout-position-row" <?php echo ( ! isset( $settings['checkout_page']['enabled'] ) || ! $settings['checkout_page']['enabled'] ) ? 'style="display:none;"' : ''; ?>>
-                    <th scope="row">
+                    <hr class="ctc-divider">
+
+                    <div class="ctc-form-group">
+                        <label>
+                            <input type="checkbox" name="ctc_checkout_page[enabled]" id="ctc_checkout_page_enabled" value="1" <?php checked( isset( $settings['checkout_page']['enabled'] ) ? $settings['checkout_page']['enabled'] : false ); ?>>
+                            <?php esc_html_e( 'Show WhatsApp button on the checkout page', 'click-to-chat' ); ?>
+                        </label>
+                    </div>
+
+                    <div class="ctc-form-group ctc-checkout-position-row" <?php echo ( ! isset( $settings['checkout_page']['enabled'] ) || ! $settings['checkout_page']['enabled'] ) ? 'style="display:none;"' : ''; ?>>
                         <label for="ctc_checkout_page_position"><?php esc_html_e( 'Checkout Button Position', 'click-to-chat' ); ?></label>
-                    </th>
-                    <td>
-                        <select name="ctc_checkout_page[position]" id="ctc_checkout_page_position">
+                        <select name="ctc_checkout_page[position]" id="ctc_checkout_page_position" class="regular-text">
                             <option value="after_payment" <?php selected( isset( $settings['checkout_page']['position'] ) ? $settings['checkout_page']['position'] : 'after_payment', 'after_payment' ); ?>><?php esc_html_e( 'After Payment Methods', 'click-to-chat' ); ?></option>
                             <option value="before_payment" <?php selected( isset( $settings['checkout_page']['position'] ) ? $settings['checkout_page']['position'] : '', 'before_payment' ); ?>><?php esc_html_e( 'Before Payment Methods', 'click-to-chat' ); ?></option>
                             <option value="after_order_review" <?php selected( isset( $settings['checkout_page']['position'] ) ? $settings['checkout_page']['position'] : '', 'after_order_review' ); ?>><?php esc_html_e( 'After Order Review', 'click-to-chat' ); ?></option>
                             <option value="before_order_review" <?php selected( isset( $settings['checkout_page']['position'] ) ? $settings['checkout_page']['position'] : '', 'before_order_review' ); ?>><?php esc_html_e( 'Before Order Review', 'click-to-chat' ); ?></option>
                             <option value="after_submit" <?php selected( isset( $settings['checkout_page']['position'] ) ? $settings['checkout_page']['position'] : '', 'after_submit' ); ?>><?php esc_html_e( 'After Place Order Button', 'click-to-chat' ); ?></option>
                         </select>
-                        <p class="description"><?php esc_html_e( 'Choose where to display the WhatsApp button on the checkout page', 'click-to-chat' ); ?></p>
-                    </td>
-                </tr>
-                
-                <tr>
-                    <th scope="row">
-                        <label for="ctc_thankyou_page_enabled"><?php esc_html_e( 'Display on Thank You Page', 'click-to-chat' ); ?></label>
-                    </th>
-                    <td>
-                        <fieldset>
-                            <label for="ctc_thankyou_page_enabled">
-                                <input type="checkbox" name="ctc_thankyou_page[enabled]" id="ctc_thankyou_page_enabled" value="1" <?php checked( isset( $settings['thankyou_page']['enabled'] ) ? $settings['thankyou_page']['enabled'] : false ); ?>>
-                                <?php esc_html_e( 'Show WhatsApp button on the thank you/order confirmation page', 'click-to-chat' ); ?>
-                            </label>
-                        </fieldset>
-                    </td>
-                </tr>
-            </table>
-            
-            <h3><?php esc_html_e( 'Floating Button', 'click-to-chat' ); ?></h3>
-            <table class="form-table ctc-form-table">
-                <tr>
-                    <th scope="row">
-                        <label for="ctc_floating_button_enabled"><?php esc_html_e( 'Display Floating Button', 'click-to-chat' ); ?></label>
-                    </th>
-                    <td>
-                        <fieldset>
-                            <label for="ctc_floating_button_enabled">
-                                <input type="checkbox" name="ctc_floating_button[enabled]" id="ctc_floating_button_enabled" value="1" <?php checked( isset( $settings['floating_button']['enabled'] ) ? $settings['floating_button']['enabled'] : false ); ?>>
-                                <?php esc_html_e( 'Show a floating WhatsApp button on all pages', 'click-to-chat' ); ?>
-                            </label>
-                        </fieldset>
-                    </td>
-                </tr>
-                
-                <tr>
-                    <th scope="row">
+                    </div>
+
+                    <hr class="ctc-divider">
+
+                    <div class="ctc-form-group">
+                        <label>
+                            <input type="checkbox" name="ctc_thankyou_page[enabled]" id="ctc_thankyou_page_enabled" value="1" <?php checked( isset( $settings['thankyou_page']['enabled'] ) ? $settings['thankyou_page']['enabled'] : false ); ?>>
+                            <?php esc_html_e( 'Show WhatsApp button on the thank you/order confirmation page', 'click-to-chat' ); ?>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Floating Button -->
+            <div class="ctc-number-card">
+                <div class="ctc-number-header">
+                    <div class="ctc-number-title-section">
+                        <span class="ctc-number-icon dashicons dashicons-admin-appearance"></span>
+                        <h3 class="ctc-number-title"><?php esc_html_e( 'Floating Button', 'click-to-chat' ); ?></h3>
+                    </div>
+                </div>
+                <div class="ctc-number-body">
+                    <div class="ctc-form-group">
+                        <label>
+                            <input type="checkbox" name="ctc_floating_button[enabled]" id="ctc_floating_button_enabled" value="1" <?php checked( isset( $settings['floating_button']['enabled'] ) ? $settings['floating_button']['enabled'] : false ); ?>>
+                            <?php esc_html_e( 'Show a floating WhatsApp button on all pages', 'click-to-chat' ); ?>
+                        </label>
+                    </div>
+
+                    <div class="ctc-form-group">
                         <label for="ctc_floating_button_position"><?php esc_html_e( 'Button Position', 'click-to-chat' ); ?></label>
-                    </th>
-                    <td>
-                        <select name="ctc_floating_button[position]" id="ctc_floating_button_position">
+                        <select name="ctc_floating_button[position]" id="ctc_floating_button_position" class="regular-text">
                             <?php foreach ( $floating_positions as $value => $label ) : ?>
                                 <option value="<?php echo esc_attr( $value ); ?>" <?php selected( isset( $settings['floating_button']['position'] ) ? $settings['floating_button']['position'] : 'bottom_right', $value ); ?>><?php echo esc_html( $label ); ?></option>
                             <?php endforeach; ?>
                         </select>
-                    </td>
-                </tr>
-            </table>
-
-            <h3><?php esc_html_e( 'Advanced Options', 'click-to-chat' ); ?></h3>
-            <div class="ctc-admin-notice ctc-admin-notice-warning">
-                <p><?php esc_html_e( 'Warning: The options below will hide WooCommerce purchase buttons. Only enable if you want to use WhatsApp as the primary contact method for orders.', 'click-to-chat' ); ?></p>
+                    </div>
+                </div>
             </div>
-            <table class="form-table ctc-form-table">
-                <tr>
-                    <th scope="row">
-                        <label><?php esc_html_e( 'Hide WooCommerce Buttons', 'click-to-chat' ); ?></label>
-                    </th>
-                    <td>
-                        <fieldset>
-                            <label for="ctc_hide_add_to_cart">
-                                <input type="checkbox" name="ctc_advanced[hide_add_to_cart]" id="ctc_hide_add_to_cart" value="1" <?php checked( isset( $settings['advanced']['hide_add_to_cart'] ) ? $settings['advanced']['hide_add_to_cart'] : false ); ?>>
-                                <?php esc_html_e( 'Hide "Add to Cart" buttons', 'click-to-chat' ); ?>
-                            </label>
-                            <p class="description"><?php esc_html_e( 'Hides Add to Cart buttons on shop and product pages', 'click-to-chat' ); ?></p>
-                            <br>
-                            <label for="ctc_hide_proceed_checkout">
-                                <input type="checkbox" name="ctc_advanced[hide_proceed_checkout]" id="ctc_hide_proceed_checkout" value="1" <?php checked( isset( $settings['advanced']['hide_proceed_checkout'] ) ? $settings['advanced']['hide_proceed_checkout'] : false ); ?>>
-                                <?php esc_html_e( 'Hide "Proceed to Checkout" button', 'click-to-chat' ); ?>
-                            </label>
-                            <p class="description"><?php esc_html_e( 'Hides the Proceed to Checkout button on the cart page', 'click-to-chat' ); ?></p>
-                            <br>
-                            <label for="ctc_hide_place_order">
-                                <input type="checkbox" name="ctc_advanced[hide_place_order]" id="ctc_hide_place_order" value="1" <?php checked( isset( $settings['advanced']['hide_place_order'] ) ? $settings['advanced']['hide_place_order'] : false ); ?>>
-                                <?php esc_html_e( 'Hide "Place Order" button', 'click-to-chat' ); ?>
-                            </label>
-                            <p class="description"><?php esc_html_e( 'Hides the Place Order button on the checkout page', 'click-to-chat' ); ?></p>
-                        </fieldset>
-                    </td>
-                </tr>
-                <tr>
-                    <th scope="row">
-                        <label for="ctc_catalog_mode"><?php esc_html_e( 'Catalog Mode', 'click-to-chat' ); ?></label>
-                    </th>
-                    <td>
-                        <fieldset>
-                            <label for="ctc_catalog_mode">
-                                <input type="checkbox" name="ctc_advanced[catalog_mode]" id="ctc_catalog_mode" value="1" <?php checked( isset( $settings['advanced']['catalog_mode'] ) ? $settings['advanced']['catalog_mode'] : false ); ?>>
-                                <?php esc_html_e( 'Enable catalog mode (hides all purchase buttons)', 'click-to-chat' ); ?>
-                            </label>
-                            <p class="description"><?php esc_html_e( 'Turns your store into a catalog where customers must contact via WhatsApp to purchase', 'click-to-chat' ); ?></p>
-                        </fieldset>
-                    </td>
-                </tr>
-            </table>
+
+            <!-- Advanced Options -->
+            <div class="ctc-number-card">
+                <div class="ctc-number-header">
+                    <div class="ctc-number-title-section">
+                        <span class="ctc-number-icon dashicons dashicons-warning"></span>
+                        <h3 class="ctc-number-title"><?php esc_html_e( 'Advanced Options', 'click-to-chat' ); ?></h3>
+                    </div>
+                </div>
+                <div class="ctc-number-body">
+                    <div class="ctc-admin-notice ctc-admin-notice-warning">
+                        <p><?php esc_html_e( 'Warning: The options below will hide WooCommerce purchase buttons. Only enable if you want to use WhatsApp as the primary contact method for orders.', 'click-to-chat' ); ?></p>
+                    </div>
+
+                    <div class="ctc-form-group">
+                        <label>
+                            <input type="checkbox" name="ctc_advanced[hide_add_to_cart]" id="ctc_hide_add_to_cart" value="1" <?php checked( isset( $settings['advanced']['hide_add_to_cart'] ) ? $settings['advanced']['hide_add_to_cart'] : false ); ?>>
+                            <?php esc_html_e( 'Hide "Add to Cart" buttons', 'click-to-chat' ); ?>
+                        </label>
+                        <p class="ctc-field-description"><?php esc_html_e( 'Hides Add to Cart buttons on shop and product pages', 'click-to-chat' ); ?></p>
+                    </div>
+
+                    <div class="ctc-form-group">
+                        <label>
+                            <input type="checkbox" name="ctc_advanced[hide_proceed_checkout]" id="ctc_hide_proceed_checkout" value="1" <?php checked( isset( $settings['advanced']['hide_proceed_checkout'] ) ? $settings['advanced']['hide_proceed_checkout'] : false ); ?>>
+                            <?php esc_html_e( 'Hide "Proceed to Checkout" button', 'click-to-chat' ); ?>
+                        </label>
+                        <p class="ctc-field-description"><?php esc_html_e( 'Hides the Proceed to Checkout button on the cart page', 'click-to-chat' ); ?></p>
+                    </div>
+
+                    <div class="ctc-form-group">
+                        <label>
+                            <input type="checkbox" name="ctc_advanced[hide_place_order]" id="ctc_hide_place_order" value="1" <?php checked( isset( $settings['advanced']['hide_place_order'] ) ? $settings['advanced']['hide_place_order'] : false ); ?>>
+                            <?php esc_html_e( 'Hide "Place Order" button', 'click-to-chat' ); ?>
+                        </label>
+                        <p class="ctc-field-description"><?php esc_html_e( 'Hides the Place Order button on the checkout page', 'click-to-chat' ); ?></p>
+                    </div>
+
+                    <hr class="ctc-divider">
+
+                    <div class="ctc-form-group">
+                        <label>
+                            <input type="checkbox" name="ctc_advanced[catalog_mode]" id="ctc_catalog_mode" value="1" <?php checked( isset( $settings['advanced']['catalog_mode'] ) ? $settings['advanced']['catalog_mode'] : false ); ?>>
+                            <?php esc_html_e( 'Enable catalog mode (hides all purchase buttons)', 'click-to-chat' ); ?>
+                        </label>
+                        <p class="ctc-field-description"><?php esc_html_e( 'Turns your store into a catalog where customers must contact via WhatsApp to purchase', 'click-to-chat' ); ?></p>
+                    </div>
+                </div>
+            </div>
         </div>
-        
+
         <!-- Exclusions Tab -->
-        <div id="ctc-tab-exclusions" class="ctc-admin-tab-content ctc-admin-content">
-            <h2><?php esc_html_e( 'Exclusions', 'click-to-chat' ); ?></h2>
-            
-            <p><?php esc_html_e( 'Configure where the WhatsApp button should NOT be displayed.', 'click-to-chat' ); ?></p>
-            
-            <table class="form-table ctc-form-table">
-                <tr>
-                    <th scope="row">
+        <div id="ctc-settings-exclusions" class="ctc-settings-panel">
+            <div class="ctc-number-card">
+                <div class="ctc-number-header">
+                    <div class="ctc-number-title-section">
+                        <span class="ctc-number-icon dashicons dashicons-no-alt"></span>
+                        <h3 class="ctc-number-title"><?php esc_html_e( 'Page & Post Exclusions', 'click-to-chat' ); ?></h3>
+                    </div>
+                </div>
+                <div class="ctc-number-body">
+                    <div class="ctc-form-group">
                         <label for="ctc_exclude_pages"><?php esc_html_e( 'Exclude Pages', 'click-to-chat' ); ?></label>
-                    </th>
-                    <td>
                         <select name="ctc_exclusions[pages][]" id="ctc_exclude_pages" class="ctc-page-select" multiple="multiple" style="width: 100%;">
                             <?php
-                            // Show selected pages
                             if ( isset( $settings['exclusions']['pages'] ) && is_array( $settings['exclusions']['pages'] ) ) {
                                 foreach ( $settings['exclusions']['pages'] as $page_id ) {
                                     $page_title = get_the_title( $page_id );
@@ -396,18 +376,13 @@ $floating_positions = $settings_helper->get_floating_position_options();
                             }
                             ?>
                         </select>
-                        <p class="description"><?php esc_html_e( 'Select pages where the WhatsApp button should not appear.', 'click-to-chat' ); ?></p>
-                    </td>
-                </tr>
-                
-                <tr>
-                    <th scope="row">
+                        <p class="ctc-field-description"><?php esc_html_e( 'Select pages where the WhatsApp button should not appear.', 'click-to-chat' ); ?></p>
+                    </div>
+
+                    <div class="ctc-form-group">
                         <label for="ctc_exclude_posts"><?php esc_html_e( 'Exclude Posts', 'click-to-chat' ); ?></label>
-                    </th>
-                    <td>
                         <select name="ctc_exclusions[posts][]" id="ctc_exclude_posts" class="ctc-post-select" multiple="multiple" style="width: 100%;">
                             <?php
-                            // Show selected posts
                             if ( isset( $settings['exclusions']['posts'] ) && is_array( $settings['exclusions']['posts'] ) ) {
                                 foreach ( $settings['exclusions']['posts'] as $post_id ) {
                                     $post_title = get_the_title( $post_id );
@@ -418,18 +393,23 @@ $floating_positions = $settings_helper->get_floating_position_options();
                             }
                             ?>
                         </select>
-                        <p class="description"><?php esc_html_e( 'Select posts where the WhatsApp button should not appear.', 'click-to-chat' ); ?></p>
-                    </td>
-                </tr>
-                
-                <tr>
-                    <th scope="row">
+                        <p class="ctc-field-description"><?php esc_html_e( 'Select posts where the WhatsApp button should not appear.', 'click-to-chat' ); ?></p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="ctc-number-card">
+                <div class="ctc-number-header">
+                    <div class="ctc-number-title-section">
+                        <span class="ctc-number-icon dashicons dashicons-products"></span>
+                        <h3 class="ctc-number-title"><?php esc_html_e( 'Product Exclusions', 'click-to-chat' ); ?></h3>
+                    </div>
+                </div>
+                <div class="ctc-number-body">
+                    <div class="ctc-form-group">
                         <label for="ctc_exclude_categories"><?php esc_html_e( 'Exclude Product Categories', 'click-to-chat' ); ?></label>
-                    </th>
-                    <td>
                         <select name="ctc_exclusions[categories][]" id="ctc_exclude_categories" class="ctc-category-select" multiple="multiple" style="width: 100%;">
                             <?php
-                            // Show selected categories
                             if ( isset( $settings['exclusions']['categories'] ) && is_array( $settings['exclusions']['categories'] ) ) {
                                 foreach ( $settings['exclusions']['categories'] as $term_id ) {
                                     $term = get_term( $term_id, 'product_cat' );
@@ -440,18 +420,13 @@ $floating_positions = $settings_helper->get_floating_position_options();
                             }
                             ?>
                         </select>
-                        <p class="description"><?php esc_html_e( 'Select product categories where the WhatsApp button should not appear.', 'click-to-chat' ); ?></p>
-                    </td>
-                </tr>
-                
-                <tr>
-                    <th scope="row">
+                        <p class="ctc-field-description"><?php esc_html_e( 'Select product categories where the WhatsApp button should not appear.', 'click-to-chat' ); ?></p>
+                    </div>
+
+                    <div class="ctc-form-group">
                         <label for="ctc_exclude_tags"><?php esc_html_e( 'Exclude Product Tags', 'click-to-chat' ); ?></label>
-                    </th>
-                    <td>
                         <select name="ctc_exclusions[tags][]" id="ctc_exclude_tags" class="ctc-tag-select" multiple="multiple" style="width: 100%;">
                             <?php
-                            // Show selected tags
                             if ( isset( $settings['exclusions']['tags'] ) && is_array( $settings['exclusions']['tags'] ) ) {
                                 foreach ( $settings['exclusions']['tags'] as $term_id ) {
                                     $term = get_term( $term_id, 'product_tag' );
@@ -462,18 +437,13 @@ $floating_positions = $settings_helper->get_floating_position_options();
                             }
                             ?>
                         </select>
-                        <p class="description"><?php esc_html_e( 'Select product tags where the WhatsApp button should not appear.', 'click-to-chat' ); ?></p>
-                    </td>
-                </tr>
+                        <p class="ctc-field-description"><?php esc_html_e( 'Select product tags where the WhatsApp button should not appear.', 'click-to-chat' ); ?></p>
+                    </div>
 
-                <tr>
-                    <th scope="row">
+                    <div class="ctc-form-group">
                         <label for="ctc_exclude_products"><?php esc_html_e( 'Exclude Products', 'click-to-chat' ); ?></label>
-                    </th>
-                    <td>
                         <select name="ctc_exclusions[products][]" id="ctc_exclude_products" class="ctc-product-select" multiple="multiple" style="width: 100%;">
                             <?php
-                            // Show selected products
                             if ( isset( $settings['exclusions']['products'] ) && is_array( $settings['exclusions']['products'] ) ) {
                                 foreach ( $settings['exclusions']['products'] as $product_id ) {
                                     $product_title = get_the_title( $product_id );
@@ -484,14 +454,356 @@ $floating_positions = $settings_helper->get_floating_position_options();
                             }
                             ?>
                         </select>
-                        <p class="description"><?php esc_html_e( 'Select specific products where the WhatsApp button should not appear.', 'click-to-chat' ); ?></p>
-                    </td>
-                </tr>
-            </table>
+                        <p class="ctc-field-description"><?php esc_html_e( 'Select specific products where the WhatsApp button should not appear.', 'click-to-chat' ); ?></p>
+                    </div>
+                </div>
+            </div>
         </div>
-        
-        <p class="submit">
-            <input type="submit" name="ctc_save_settings" class="button button-primary" value="<?php esc_attr_e( 'Save Settings', 'click-to-chat' ); ?>">
-        </p>
+
+        <div class="ctc-save-section">
+            <button type="submit" name="ctc_save_settings" class="ctc-btn ctc-btn-primary">
+                <span class="dashicons dashicons-saved"></span>
+                <?php esc_html_e( 'Save Settings', 'click-to-chat' ); ?>
+            </button>
+        </div>
     </form>
 </div>
+
+<style>
+/* Modern Settings Page Styles - Matching Numbers/Templates Pages */
+.ctc-admin-container {
+    max-width: 1200px;
+    margin: 20px auto;
+}
+
+.ctc-admin-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.ctc-admin-logo {
+    width: 32px;
+    height: 32px;
+    margin-right: 12px;
+    font-size: 32px;
+}
+
+.ctc-admin-heading {
+    margin: 0;
+    font-size: 24px;
+    font-weight: 600;
+    color: #2c3e50;
+}
+
+/* Instructions Banner */
+.ctc-instructions-banner {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 25px;
+    border-radius: 8px;
+    margin: 20px 0;
+}
+
+.ctc-instructions-banner h2 {
+    color: white;
+    margin: 0 0 10px 0;
+    font-size: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.ctc-instructions-banner h2 .dashicons {
+    font-size: 24px;
+    width: 24px;
+    height: 24px;
+}
+
+.ctc-instructions-banner p {
+    color: rgba(255,255,255,0.95);
+    margin: 0 0 15px 0;
+}
+
+.ctc-quick-steps {
+    display: flex;
+    gap: 30px;
+    margin-top: 15px;
+}
+
+.ctc-step {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.ctc-step-number {
+    background: rgba(255,255,255,0.2);
+    color: white;
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 12px;
+}
+
+.ctc-step span:last-child {
+    color: rgba(255,255,255,0.95);
+    font-size: 14px;
+}
+
+/* Tab Navigation */
+.ctc-settings-nav {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 30px;
+    border-bottom: 2px solid #e9ecef;
+    padding-bottom: 0;
+}
+
+.ctc-settings-nav-item {
+    background: transparent;
+    border: none;
+    padding: 12px 20px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #6c757d;
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    border-bottom: 3px solid transparent;
+    margin-bottom: -2px;
+}
+
+.ctc-settings-nav-item:hover {
+    color: #495057;
+    background: #f8f9fa;
+}
+
+.ctc-settings-nav-item.active {
+    color: #667eea;
+    border-bottom-color: #667eea;
+    background: transparent;
+}
+
+.ctc-settings-nav-item .dashicons {
+    font-size: 18px;
+    width: 18px;
+    height: 18px;
+}
+
+/* Panel Styles */
+.ctc-settings-panel {
+    display: none;
+}
+
+.ctc-settings-panel.active {
+    display: block;
+}
+
+/* Card Styles - Matching Numbers Page */
+.ctc-number-card {
+    background: white;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    overflow: hidden;
+    transition: box-shadow 0.2s;
+}
+
+.ctc-number-card:hover {
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.ctc-number-header {
+    background: linear-gradient(135deg, #f5f7fa 0%, #e9ecef 100%);
+    padding: 15px 20px;
+    border-bottom: 1px solid #dee2e6;
+}
+
+.ctc-number-title-section {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.ctc-number-icon {
+    font-size: 20px;
+    width: 20px;
+    height: 20px;
+    color: #25D366;
+}
+
+.ctc-number-title {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 600;
+    color: #333;
+}
+
+.ctc-number-body {
+    padding: 20px;
+}
+
+/* Form Styles */
+.ctc-form-group {
+    margin-bottom: 20px;
+}
+
+.ctc-form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+    font-size: 13px;
+    color: #333;
+}
+
+.ctc-form-group input[type="text"],
+.ctc-form-group input[type="number"],
+.ctc-form-group select,
+.ctc-form-group textarea {
+    width: 100%;
+    max-width: 400px;
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+    transition: border-color 0.2s;
+}
+
+.ctc-form-group input[type="text"]:focus,
+.ctc-form-group input[type="number"]:focus,
+.ctc-form-group select:focus,
+.ctc-form-group textarea:focus {
+    outline: none;
+    border-color: #25D366;
+    box-shadow: 0 0 0 3px rgba(37, 211, 102, 0.1);
+}
+
+.ctc-form-group input[type="checkbox"] {
+    margin-right: 8px;
+}
+
+.ctc-form-group label input[type="checkbox"] {
+    margin-right: 8px;
+    vertical-align: middle;
+}
+
+.ctc-field-description {
+    color: #666;
+    font-size: 12px;
+    margin-top: 5px;
+    line-height: 1.5;
+}
+
+/* Color Picker */
+.ctc-color-field {
+    width: 100px !important;
+}
+
+/* Button Groups */
+.ctc-button-group {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.ctc-button-group .button {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+/* Divider */
+.ctc-divider {
+    margin: 20px 0;
+    border: none;
+    border-top: 1px solid #e9ecef;
+}
+
+/* Admin Notice */
+.ctc-admin-notice {
+    padding: 12px 15px;
+    border-radius: 4px;
+    margin-bottom: 20px;
+}
+
+.ctc-admin-notice-warning {
+    background: #fff3cd;
+    border-left: 4px solid #ffc107;
+    color: #856404;
+}
+
+.ctc-admin-notice-warning p {
+    margin: 0;
+}
+
+/* Save Section */
+.ctc-save-section {
+    margin: 40px 0 20px;
+    text-align: center;
+    padding: 30px;
+    background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+    border-radius: 8px;
+    border: 1px solid #e0e0e0;
+}
+
+.ctc-btn {
+    background: #25D366;
+    color: white;
+    border: none;
+    padding: 12px 35px;
+    font-size: 15px;
+    font-weight: 600;
+    border-radius: 25px;
+    cursor: pointer;
+    transition: all 0.3s;
+    box-shadow: 0 2px 8px rgba(37, 211, 102, 0.3);
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.ctc-btn:hover {
+    background: #20bd5a;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(37, 211, 102, 0.4);
+}
+
+.ctc-btn .dashicons {
+    font-size: 18px;
+    width: 18px;
+    height: 18px;
+    line-height: 18px;
+}
+
+/* Conditional Field Visibility */
+.ctc-cart-position-row,
+.ctc-checkout-position-row {
+    transition: all 0.3s ease;
+}
+
+/* Responsive Design */
+@media (max-width: 900px) {
+    .ctc-quick-steps {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .ctc-settings-nav {
+        flex-wrap: wrap;
+    }
+
+    .ctc-form-group input[type="text"],
+    .ctc-form-group input[type="number"],
+    .ctc-form-group select,
+    .ctc-form-group textarea {
+        max-width: 100%;
+    }
+}
+</style>

@@ -40,35 +40,89 @@
      * Initialize tab navigation
      */
     function initTabs() {
-        $('.ctc-admin-tabs .nav-tab').on('click', function(e) {
+        // Settings page tab navigation (button style)
+        $('.ctc-settings-nav-item').on('click', function(e) {
             e.preventDefault();
-            
+
             // Get the target tab
             const targetTab = $(this).data('tab');
-            
+
             // Update active tab
-            $('.ctc-admin-tabs .nav-tab').removeClass('nav-tab-active');
-            $(this).addClass('nav-tab-active');
-            
+            $('.ctc-settings-nav-item').removeClass('active');
+            $(this).addClass('active');
+
             // Show the target tab content
-            $('.ctc-admin-tab-content').hide();
-            $('#' + targetTab).show();
-            
+            $('.ctc-settings-panel').removeClass('active').hide();
+            $('#ctc-settings-' + targetTab).addClass('active').show();
+
             // Update the tab parameter in the URL
             const url = new URL(window.location);
             url.searchParams.set('tab', targetTab);
             window.history.pushState({}, '', url);
         });
-        
+
+        // New settings page tabs (alternate style)
+        $('.ctc-tab-nav-item').on('click', function(e) {
+            e.preventDefault();
+
+            // Get the target tab
+            const targetTab = $(this).data('tab');
+
+            // Update active tab
+            $('.ctc-tab-nav-item').removeClass('active');
+            $(this).addClass('active');
+
+            // Show the target tab content
+            $('.ctc-settings-tab-content').removeClass('active').hide();
+            $('#' + targetTab).addClass('active').show();
+
+            // Update the tab parameter in the URL
+            const url = new URL(window.location);
+            url.searchParams.set('tab', targetTab);
+            window.history.pushState({}, '', url);
+        });
+
+        // Legacy tab support (for backwards compatibility)
+        $('.ctc-admin-tabs .nav-tab').on('click', function(e) {
+            e.preventDefault();
+
+            // Get the target tab
+            const targetTab = $(this).data('tab');
+
+            // Update active tab
+            $('.ctc-admin-tabs .nav-tab').removeClass('nav-tab-active');
+            $(this).addClass('nav-tab-active');
+
+            // Show the target tab content
+            $('.ctc-admin-tab-content').hide();
+            $('#' + targetTab).show();
+
+            // Update the tab parameter in the URL
+            const url = new URL(window.location);
+            url.searchParams.set('tab', targetTab);
+            window.history.pushState({}, '', url);
+        });
+
         // Show the active tab on page load
         const urlParams = new URLSearchParams(window.location.search);
         const activeTab = urlParams.get('tab');
-        
+
         if (activeTab) {
-            $('.ctc-admin-tabs .nav-tab[data-tab="' + activeTab + '"]').trigger('click');
+            // Try new tabs first
+            if ($('.ctc-tab-nav-item[data-tab="' + activeTab + '"]').length) {
+                $('.ctc-tab-nav-item[data-tab="' + activeTab + '"]').trigger('click');
+            }
+            // Fall back to legacy tabs
+            else if ($('.ctc-admin-tabs .nav-tab[data-tab="' + activeTab + '"]').length) {
+                $('.ctc-admin-tabs .nav-tab[data-tab="' + activeTab + '"]').trigger('click');
+            }
         } else {
             // Default to the first tab
-            $('.ctc-admin-tabs .nav-tab:first').trigger('click');
+            if ($('.ctc-tab-nav-item:first').length) {
+                $('.ctc-tab-nav-item:first').trigger('click');
+            } else if ($('.ctc-admin-tabs .nav-tab:first').length) {
+                $('.ctc-admin-tabs .nav-tab:first').trigger('click');
+            }
         }
     }
 

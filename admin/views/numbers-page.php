@@ -343,6 +343,13 @@ if ( ! empty( $whatsapp_numbers ) ) {
     margin: 20px auto;
 }
 
+.ctc-admin-logo {
+    width: 32px;
+    height: 32px;
+    margin-right: 12px;
+    font-size: 32px;
+}
+
 .ctc-instructions-banner {
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     color: white;
