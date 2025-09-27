@@ -91,23 +91,26 @@ class CTC_Shortcodes {
         
         // Determine the product ID to use
         $product_id = 0;
-        
-        // Use current product if requested and we're on a product page
-        if ( 'yes' === $atts['current'] && is_product() ) {
+
+        // First check if a specific product_id was provided in the shortcode
+        if ( ! empty( $atts['product_id'] ) && is_numeric( $atts['product_id'] ) ) {
+            // Use specified product ID if provided
+            $product_id = absint( $atts['product_id'] );
+        } elseif ( 'yes' === $atts['current'] && is_product() ) {
+            // Use current product if requested and we're on a product page
             global $product;
-            
+
             if ( $product ) {
                 $product_id = $product->get_id();
             }
-        } elseif ( ! empty( $atts['product_id'] ) && is_numeric( $atts['product_id'] ) ) {
-            // Use specified product ID if provided
-            $product_id = absint( $atts['product_id'] );
         }
-        
+
         // If no valid product ID, try to get current page/cart info based on type
         if ( ! $product_id && 'product' === $atts['type'] ) {
-            // For product type, we need a product ID
-            return '';
+            // For product type shortcode when not on a product page and no product_id specified,
+            // we cannot proceed as we need a valid product to generate the message
+            // Return a helpful comment for debugging (won't be visible in frontend)
+            return '<!-- CTC: Product shortcode requires product_id attribute when not on a product page -->';
         }
         
         // Get the appropriate WhatsApp URL based on the shortcode type

@@ -210,6 +210,57 @@ class CTC_WhatsApp_Link_Generator {
         return $this->build_whatsapp_url( $whatsapp_number, $message );
     }
 
+    /**
+     * Generate a WhatsApp URL for the shop/category pages
+     *
+     * @param int|null $category_id Optional category ID.
+     * @return string The generated WhatsApp URL.
+     */
+    public function get_shop_url( $category_id = null ) {
+        // Get the current page ID if we're on shop page
+        $page_id = null;
+        if ( function_exists( 'is_shop' ) && is_shop() ) {
+            $page_id = wc_get_page_id( 'shop' );
+        } elseif ( is_page() ) {
+            $page_id = get_the_ID();
+        }
+
+        // Get the WhatsApp number
+        $whatsapp_number = $this->get_whatsapp_number( null, $category_id, $page_id );
+
+        if ( empty( $whatsapp_number ) ) {
+            return '';
+        }
+
+        // Format the WhatsApp number
+        $whatsapp_number = preg_replace( '/[^0-9]/', '', $whatsapp_number );
+
+        // Get the message template for shop page
+        $message_template = isset( $this->settings['message_templates']['shop'] ) ?
+                           $this->settings['message_templates']['shop'] :
+                           'Hi, I\'m interested in your products.';
+
+        // Replace placeholders if any
+        $message = $message_template;
+
+        // Replace {current_page_url} placeholder
+        if ( strpos( $message, '{current_page_url}' ) !== false ) {
+            $current_url = ( isset( $_SERVER['HTTPS'] ) && $_SERVER['HTTPS'] === 'on' ? "https" : "http" ) .
+                          "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+            $message = str_replace( '{current_page_url}', $current_url, $message );
+        }
+
+        // Replace {category_name} placeholder if we have a category
+        if ( $category_id && strpos( $message, '{category_name}' ) !== false ) {
+            $category = get_term( $category_id, 'product_cat' );
+            if ( $category && ! is_wp_error( $category ) ) {
+                $message = str_replace( '{category_name}', $category->name, $message );
+            }
+        }
+
+        // Build and return the WhatsApp URL
+        return $this->build_whatsapp_url( $whatsapp_number, $message );
+    }
 
     /**
      * Generate a WhatsApp URL for the cart/checkout
