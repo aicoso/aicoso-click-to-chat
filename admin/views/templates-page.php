@@ -24,7 +24,6 @@ $message_templates = isset( $settings['message_templates'] ) ? $settings['messag
 if ( empty( $message_templates ) ) {
     $message_templates = array(
         'single_product' => "Hello! I'm interested in the product: *{product_name}*\nPrice: {price}\nURL: {product_url}\n\nDo you have this item in stock? I'd like to get more information.",
-        'shop_page'      => "Hello! I'm browsing your {category_name} products and have a question.\nI was looking at: {current_page_url}\n\nCould you help me with more information about your products in this category?",
         'cart_checkout'  => "Hello! I'd like to complete my purchase of:\n{cart_items_list}\n---------------------\nSubtotal: {cart_subtotal}\nTax: {tax_amount}\nShipping: {shipping_method} - {shipping_cost}\nTotal: {cart_total}\n\nI have a few questions before finalizing my order.",
         'thank_you'      => "Hello! I've just placed order #{order_number} on {order_date}.\nMy order includes:\n{ordered_items_list}\n---------------------\nApplied Coupon: {coupon_code}\nTotal: {order_total}\n\nI'd like to confirm when this will be shipped.",
         'floating'       => "Hello! I was browsing your website at {current_page_url} and have a question.",
@@ -99,33 +98,7 @@ $settings_helper = new CTC_Settings();
                     <div class="ctc-template-preview" style="display: none;"></div>
                 </div>
             </div>
-            
-            <!-- Shop Page Template -->
-            <div class="ctc-template-item">
-                <h3 class="ctc-template-header"><?php esc_html_e( 'Shop Page Template', 'click-to-chat' ); ?></h3>
-                <div class="ctc-template-content">
-                    <p class="description"><?php esc_html_e( 'This template is used for inquiries from shop/archive pages.', 'click-to-chat' ); ?></p>
-                    
-                    <div class="ctc-placeholders">
-                        <strong><?php esc_html_e( 'Available Placeholders:', 'click-to-chat' ); ?></strong><br>
-                        <?php
-                        $placeholders = $settings_helper->get_template_placeholders( 'shop_page' );
-                        foreach ( $placeholders as $placeholder => $description ) {
-                            echo '<span class="ctc-placeholder-tag" data-placeholder="' . esc_attr( $placeholder ) . '">' . esc_html( $placeholder ) . '</span>';
-                        }
-                        ?>
-                    </div>
-                    
-                    <textarea name="ctc_templates[shop_page]" class="ctc-template-textarea" rows="8"><?php echo esc_textarea( html_entity_decode( $message_templates['shop_page'] ?? '', ENT_QUOTES | ENT_HTML5, 'UTF-8' ) ); ?></textarea>
-                    
-                    <button type="button" class="button ctc-template-preview-button" data-template-type="shop_page">
-                        <?php esc_html_e( 'Preview', 'click-to-chat' ); ?>
-                    </button>
-                    
-                    <div class="ctc-template-preview" style="display: none;"></div>
-                </div>
-            </div>
-            
+
             <!-- Cart & Checkout Template -->
             <div class="ctc-template-item">
                 <h3 class="ctc-template-header"><?php esc_html_e( 'Cart & Checkout Template', 'click-to-chat' ); ?></h3>

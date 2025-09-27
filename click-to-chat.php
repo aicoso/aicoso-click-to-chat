@@ -195,7 +195,6 @@ function ctc_activate() {
         ),
         'message_templates' => array(
             'single_product' => esc_html__( "Hello! I'm interested in the product: *{product_name}*\nPrice: {price}\nURL: {product_url}\n\nDo you have this item in stock? I'd like to get more information.", 'click-to-chat' ),
-            'shop_page'      => esc_html__( "Hello! I'm browsing your {category_name} products and have a question.\nI was looking at: {current_page_url}\n\nCould you help me with more information about your products in this category?", 'click-to-chat' ),
             'cart_checkout'  => esc_html__( "Hello! I'd like to complete my purchase of:\n{cart_items_list}\n---------------------\nSubtotal: {cart_subtotal}\nTax: {tax_amount}\nShipping: {shipping_method} - {shipping_cost}\nTotal: {cart_total}\n\nI have a few questions before finalizing my order.", 'click-to-chat' ),
             'thank_you'      => esc_html__( "Hello! I've just placed order #{order_number} on {order_date}.\nMy order includes:\n{ordered_items_list}\n---------------------\nApplied Coupon: {coupon_code}\nTotal: {order_total}\n\nI'd like to confirm when this will be shipped.", 'click-to-chat' ),
             'floating'       => esc_html__( "Hello! I was browsing your website at {current_page_url} and have a question.", 'click-to-chat' ),

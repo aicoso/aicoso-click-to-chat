@@ -437,13 +437,6 @@ class CTC_Settings {
                 );
                 break;
 
-            case 'shop_page':
-                $replacements = array(
-                    '{category_name}'   => 'Sample Category',
-                    '{current_page_url}' => site_url( '/product-category/sample-category/' ),
-                );
-                break;
-                
             case 'cart_checkout':
                 // Decode all price entities
                 if ( function_exists( 'wc_price' ) ) {
@@ -591,13 +584,6 @@ class CTC_Settings {
                     '{variation_details}' => esc_html__( 'Selected variation details', 'click-to-chat' ),
                     '{variation_price}'   => esc_html__( 'Selected variation price', 'click-to-chat' ),
                     '{product_url}'       => esc_html__( 'Product URL', 'click-to-chat' ),
-                );
-                break;
-                
-            case 'shop_page':
-                $placeholders = array(
-                    '{category_name}'   => esc_html__( 'Current category name', 'click-to-chat' ),
-                    '{current_page_url}' => esc_html__( 'Current page URL', 'click-to-chat' ),
                 );
                 break;
                 
