@@ -341,10 +341,10 @@
      * Initialize message template previews
      */
     function initMessageTemplates() {
-        // Preview template
-        $('.ctc-template-preview-button').on('click', function() {
+        // Preview template - updated to work with both old and new class names
+        $('.ctc-template-preview-button, .ctc-preview-btn').on('click', function() {
             const $button = $(this);
-            const $container = $button.closest('.ctc-template-item');
+            const $container = $button.closest('.ctc-template-item, .ctc-template-card');
             const templateType = $button.data('template-type'); // Get from button, not container
             const templateContent = $container.find('.ctc-template-textarea').val();
             const $previewContainer = $container.find('.ctc-template-preview');
@@ -396,10 +396,10 @@
             return false;
         });
         
-        // Insert placeholder into textarea
+        // Insert placeholder into textarea - updated to work with both old and new class names
         $(document).on('click', '.ctc-placeholder-tag', function() {
             const placeholder = $(this).text();
-            const $textarea = $(this).closest('.ctc-template-item').find('.ctc-template-textarea');
+            const $textarea = $(this).closest('.ctc-template-item, .ctc-template-card').find('.ctc-template-textarea');
             
             insertAtCursor($textarea[0], placeholder);
             
