@@ -83,9 +83,10 @@
      * Initialize WhatsApp number management
      */
     function initNumbersManagement() {
-        // Handle expand/collapse functionality
+        // Handle expand/collapse functionality - updated for new classes
         $(document).on('click', '.ctc-number-toggle', function() {
-            const $content = $(this).closest('.ctc-number-item').find('.ctc-number-content');
+            const $card = $(this).closest('.ctc-number-item, .ctc-number-card');
+            const $content = $card.find('.ctc-number-content, .ctc-number-body');
             const $icon = $(this).find('.dashicons');
 
             $content.slideToggle(200, function() {
@@ -106,9 +107,9 @@
             }
         });
         
-        // Handle number deletion
+        // Handle number deletion - updated for new classes
         $(document).on('click', '.ctc-number-delete', function() {
-            const $item = $(this).closest('.ctc-number-item');
+            const $item = $(this).closest('.ctc-number-item, .ctc-number-card');
             const numberName = $item.find('.ctc-number-title').text().trim();
             const numberId = $item.data('id');
             
@@ -137,7 +138,7 @@
             
             // Get the next number ID and index
             const nextId = parseInt($('#ctc-next-number-id').val());
-            const nextIndex = $('.ctc-number-item').length;
+            const nextIndex = $('.ctc-number-item, .ctc-number-card').length;
             
             // Render the template
             const html = template({
@@ -154,9 +155,9 @@
             // Update the next ID
             $('#ctc-next-number-id').val(nextId + 1);
             
-            // Scroll to the new number
+            // Scroll to the new number - updated for new classes
             $('html, body').animate({
-                scrollTop: $('.ctc-number-item:last').offset().top - 50
+                scrollTop: $('.ctc-number-item:last, .ctc-number-card:last').offset().top - 50
             }, 500);
             
             return false;
@@ -186,15 +187,15 @@
             }
         });
         
-        // Ensure the first number is expanded by default
-        $('.ctc-number-item:first .ctc-number-content').show();
+        // Ensure the first number is expanded by default - updated for new classes
+        $('.ctc-number-item:first .ctc-number-content, .ctc-number-card:first .ctc-number-body').show();
         
         // Initialize select2 for existing selects
         initSelect2();
         
-        // Helper function to update indices for all numbers
+        // Helper function to update indices for all numbers - updated for new classes
         function updateNumberIndices() {
-            $('.ctc-number-item').each(function(index) {
+            $('.ctc-number-item, .ctc-number-card').each(function(index) {
                 const id = $(this).data('id');
                 
                 // Update all name attributes in this number item
@@ -310,7 +311,7 @@
             placeholder: 'Select tags...',
             allowClear: true
         });
-        
+
         // Product select
         $('.ctc-product-select').select2({
             ajax: {
