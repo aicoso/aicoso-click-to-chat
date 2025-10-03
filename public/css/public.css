@@ -384,3 +384,16 @@
 .ctc-checkout-button-container {
     margin: 20px 0;
 }
+
+/* Catalog Mode - Single Product Button */
+.ctc-catalog-mode-button {
+    margin: 20px 0 !important;
+    display: block !important;
+}
+
+.ctc-catalog-mode-button .ctc-whatsapp-button {
+    width: 100%;
+    max-width: 400px;
+    display: flex !important;
+    justify-content: center;
+}

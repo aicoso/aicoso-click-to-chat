@@ -451,15 +451,22 @@ class CTC_Public {
     public function hide_add_to_cart_css() {
         ?>
         <style type="text/css">
-            .single_add_to_cart_button,
-            .add_to_cart_button,
+            /* Hide WooCommerce Add to Cart buttons only, NOT WhatsApp buttons */
+            .single_add_to_cart_button:not(.ctc-whatsapp-button),
+            .add_to_cart_button:not(.ctc-whatsapp-button),
             .product_type_simple.add_to_cart_button,
             .product_type_variable.add_to_cart_button,
             .product_type_grouped.add_to_cart_button,
             .product_type_external.add_to_cart_button,
             .ajax_add_to_cart,
-            form.cart button.single_add_to_cart_button {
+            form.cart button.single_add_to_cart_button:not(.ctc-whatsapp-button) {
                 display: none !important;
+            }
+
+            /* Ensure WhatsApp buttons are visible */
+            .ctc-whatsapp-button,
+            a.ctc-whatsapp-button {
+                display: inline-flex !important;
             }
         </style>
         <?php
@@ -471,10 +478,17 @@ class CTC_Public {
     public function hide_proceed_checkout_css() {
         ?>
         <style type="text/css">
-            .wc-proceed-to-checkout a.checkout-button,
-            .wc-proceed-to-checkout .checkout-button,
+            /* Hide WooCommerce checkout button only, NOT WhatsApp buttons */
+            .wc-proceed-to-checkout a.checkout-button:not(.ctc-whatsapp-button),
+            .wc-proceed-to-checkout .checkout-button:not(.ctc-whatsapp-button),
             .wp-block-woocommerce-proceed-to-checkout-block {
                 display: none !important;
+            }
+
+            /* Ensure WhatsApp buttons are visible */
+            .ctc-whatsapp-button,
+            a.ctc-whatsapp-button {
+                display: inline-flex !important;
             }
         </style>
         <?php
@@ -486,10 +500,17 @@ class CTC_Public {
     public function hide_place_order_css() {
         ?>
         <style type="text/css">
-            #place_order,
-            .woocommerce-checkout-payment button#place_order,
-            .wp-block-woocommerce-checkout-actions-block button {
+            /* Hide WooCommerce place order button only, NOT WhatsApp buttons */
+            #place_order:not(.ctc-whatsapp-button),
+            .woocommerce-checkout-payment button#place_order:not(.ctc-whatsapp-button),
+            .wp-block-woocommerce-checkout-actions-block button:not(.ctc-whatsapp-button) {
                 display: none !important;
+            }
+
+            /* Ensure WhatsApp buttons are visible */
+            .ctc-whatsapp-button,
+            a.ctc-whatsapp-button {
+                display: inline-flex !important;
             }
         </style>
         <?php

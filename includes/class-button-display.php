@@ -114,8 +114,18 @@ class CTC_Button_Display {
         
         switch ( $position ) {
             case 'after_add_to_cart':
-                // Change this line to use a better hook
-                add_action( 'woocommerce_after_add_to_cart_form', array( $this, 'display_single_product_button' ) );
+            case 'below_add_to_cart':
+                // Check if add to cart is hidden (catalog mode)
+                $hide_add_to_cart = isset($this->settings['advanced']['hide_add_to_cart']) && $this->settings['advanced']['hide_add_to_cart'];
+                $catalog_mode = isset($this->settings['advanced']['catalog_mode']) && $this->settings['advanced']['catalog_mode'];
+
+                if ($hide_add_to_cart || $catalog_mode) {
+                    // If add to cart is hidden, hook to product summary instead (after price)
+                    add_action( 'woocommerce_single_product_summary', array( $this, 'display_single_product_button' ), 31 );
+                } else {
+                    // Normal case: after add to cart form
+                    add_action( 'woocommerce_after_add_to_cart_form', array( $this, 'display_single_product_button' ) );
+                }
                 break;
                 
             case 'before_add_to_cart':
@@ -255,6 +265,14 @@ class CTC_Button_Display {
         $position = isset($this->settings['single_product']['position']) ?
                     $this->settings['single_product']['position'] : 'below_add_to_cart';
         $position_class = 'ctc-position-' . str_replace('_', '-', $position);
+
+        // Check if catalog mode is active
+        $catalog_mode = isset($this->settings['advanced']['catalog_mode']) && $this->settings['advanced']['catalog_mode'];
+        $hide_add_to_cart = isset($this->settings['advanced']['hide_add_to_cart']) && $this->settings['advanced']['hide_add_to_cart'];
+
+        if ($catalog_mode || $hide_add_to_cart) {
+            $position_class .= ' ctc-catalog-mode-button';
+        }
 
         // Wrap button with position-specific container
         echo '<div class="' . esc_attr($position_class) . '">';
