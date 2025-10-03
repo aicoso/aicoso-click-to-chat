@@ -50,6 +50,42 @@ if ( ! empty( $whatsapp_numbers ) ) {
             </div>
         </div>
     </div>
+    
+    <?php
+    // Check if plugin is disabled or no numbers configured
+    $plugin_enabled = isset( $settings['plugin_enabled'] ) ? $settings['plugin_enabled'] : true;
+    $has_numbers = isset( $settings['whatsapp_numbers'] ) && ! empty( $settings['whatsapp_numbers'] );
+
+    if ( ! $plugin_enabled || ! $has_numbers ) :
+    ?>
+    <div class="ctc-admin-warning-box">
+        <?php if ( ! $plugin_enabled ) : ?>
+        <div class="ctc-warning-item">
+            <span class="ctc-warning-icon">⚠️</span>
+            <div class="ctc-warning-content">
+                <strong><?php esc_html_e( 'Warning:', 'click-to-chat' ); ?></strong>
+                <?php
+                printf(
+                    /* translators: %s: Link to Settings page */
+                    esc_html__( 'The plugin is currently disabled. WhatsApp buttons will not appear on your website. %s to activate the plugin.', 'click-to-chat' ),
+                    '<a href="' . esc_url( admin_url( 'admin.php?page=click-to-chat' ) ) . '">' . esc_html__( 'Go to Settings', 'click-to-chat' ) . '</a>'
+                );
+                ?>
+            </div>
+        </div>
+        <?php endif; ?>
+
+        <?php if ( ! $has_numbers ) : ?>
+        <div class="ctc-warning-item">
+            <span class="ctc-warning-icon">⚠️</span>
+            <div class="ctc-warning-content">
+                <strong><?php esc_html_e( 'Warning:', 'click-to-chat' ); ?></strong>
+                <?php esc_html_e( 'No WhatsApp number configured! Add at least one WhatsApp number below for the buttons to work on your website.', 'click-to-chat' ); ?>
+            </div>
+        </div>
+        <?php endif; ?>
+    </div>
+    <?php endif; ?>
 
     <div class="ctc-add-number-section">
         <button type="button" id="ctc-add-number" class="ctc-add-btn">
@@ -57,7 +93,7 @@ if ( ! empty( $whatsapp_numbers ) ) {
             <?php esc_html_e( 'Add New WhatsApp Number', 'click-to-chat' ); ?>
         </button>
     </div>
-    
+
     <form method="post" action="">
         <?php wp_nonce_field( 'ctc_numbers_nonce', 'ctc_numbers_nonce' ); ?>
         <input type="hidden" id="ctc-next-number-id" name="ctc_next_number_id" value="<?php echo esc_attr( $next_id ); ?>" />
@@ -171,43 +207,50 @@ if ( ! empty( $whatsapp_numbers ) ) {
                         
                         <div class="ctc-number-body">
                             <input type="hidden" name="ctc_numbers[<?php echo esc_attr( $index ); ?>][id]" value="<?php echo esc_attr( $number['id'] ); ?>" />
-                            
-                            <div class="ctc-field-row">
-                                <div class="ctc-field-col">
-                                    <label for="ctc_numbers_name_<?php echo esc_attr( $number['id'] ); ?>"><?php esc_html_e( 'Name:', 'click-to-chat' ); ?></label>
-                                    <input type="text" name="ctc_numbers[<?php echo esc_attr( $index ); ?>][name]" id="ctc_numbers_name_<?php echo esc_attr( $number['id'] ); ?>" value="<?php echo esc_attr( $number['name'] ); ?>" class="regular-text ctc-number-name" required />
-                                    <span class="description"><?php esc_html_e( 'A name to identify this number (for admin use only).', 'click-to-chat' ); ?></span>
+
+                            <div class="ctc-fields-grid">
+                                <div class="ctc-field-group">
+                                    <label class="ctc-field-label" for="ctc_numbers_name_<?php echo esc_attr( $number['id'] ); ?>"><?php esc_html_e( 'Display Name', 'click-to-chat' ); ?></label>
+                                    <input type="text" name="ctc_numbers[<?php echo esc_attr( $index ); ?>][name]" id="ctc_numbers_name_<?php echo esc_attr( $number['id'] ); ?>" value="<?php echo esc_attr( $number['name'] ); ?>" class="ctc-input ctc-number-name" required />
+                                    <span class="ctc-field-help"><?php esc_html_e( 'A name to identify this number (for admin use only)', 'click-to-chat' ); ?></span>
                                 </div>
-                                
-                                <div class="ctc-field-col">
-                                    <label for="ctc_numbers_<?php echo esc_attr( $number['id'] ); ?>"><?php esc_html_e( 'WhatsApp Number:', 'click-to-chat' ); ?></label>
-                                    <input type="text" name="ctc_numbers[<?php echo esc_attr( $index ); ?>][number]" id="ctc_numbers_<?php echo esc_attr( $number['id'] ); ?>" value="<?php echo esc_attr( $number['number'] ); ?>" class="regular-text" placeholder="123456789012" required />
-                                    <span class="description"><?php esc_html_e( 'Enter the WhatsApp number with country code, no spaces or special characters.', 'click-to-chat' ); ?></span>
+
+                                <div class="ctc-field-group">
+                                    <label class="ctc-field-label" for="ctc_numbers_<?php echo esc_attr( $number['id'] ); ?>"><?php esc_html_e( 'WhatsApp Number', 'click-to-chat' ); ?></label>
+                                    <input type="text" name="ctc_numbers[<?php echo esc_attr( $index ); ?>][number]" id="ctc_numbers_<?php echo esc_attr( $number['id'] ); ?>" value="<?php echo esc_attr( $number['number'] ); ?>" class="ctc-input" placeholder="+1234567890" required />
+                                    <span class="ctc-field-help"><?php esc_html_e( 'Include country code (e.g., +1 for USA)', 'click-to-chat' ); ?></span>
                                 </div>
                             </div>
-                            
-                            <p>
-                                <label for="ctc_numbers_description_<?php echo esc_attr( $number['id'] ); ?>"><?php esc_html_e( 'Description:', 'click-to-chat' ); ?></label>
-                                <textarea name="ctc_numbers[<?php echo esc_attr( $index ); ?>][description]" id="ctc_numbers_description_<?php echo esc_attr( $number['id'] ); ?>" rows="3" class="large-text"><?php echo esc_textarea( $number['description'] ); ?></textarea>
-                                <span class="description"><?php esc_html_e( 'Optional description or notes about this number.', 'click-to-chat' ); ?></span>
-                            </p>
+
+                            <div class="ctc-field-group ctc-full-width">
+                                <label class="ctc-field-label" for="ctc_numbers_description_<?php echo esc_attr( $number['id'] ); ?>"><?php esc_html_e( 'Description', 'click-to-chat' ); ?></label>
+                                <textarea name="ctc_numbers[<?php echo esc_attr( $index ); ?>][description]" id="ctc_numbers_description_<?php echo esc_attr( $number['id'] ); ?>" rows="3" class="ctc-textarea"><?php echo esc_textarea( isset( $number['description'] ) ? $number['description'] : '' ); ?></textarea>
+                                <span class="ctc-field-help"><?php esc_html_e( 'Optional notes about this number or the person/department it belongs to', 'click-to-chat' ); ?></span>
+                            </div>
 
                             <!-- Default Number Checkbox -->
-                            <p>
-                                <label for="ctc_numbers_default_<?php echo esc_attr( $number['id'] ); ?>">
+                            <div class="ctc-default-section">
+                                <label class="ctc-checkbox-option">
                                     <input type="checkbox" name="ctc_numbers[<?php echo esc_attr( $index ); ?>][is_default]" id="ctc_numbers_default_<?php echo esc_attr( $number['id'] ); ?>" value="1" <?php checked( ! empty( $number['is_default'] ) ); ?> class="ctc-default-checkbox" />
-                                    <?php esc_html_e( 'Use as Default Number', 'click-to-chat' ); ?>
+                                    <span><?php esc_html_e( 'Use as Default Number', 'click-to-chat' ); ?></span>
                                 </label>
-                                <span class="description"><?php esc_html_e( 'This number will be used as fallback for pages/products without specific assignments.', 'click-to-chat' ); ?></span>
-                            </p>
+                                <span class="ctc-field-help"><?php esc_html_e( 'This number will be used as fallback for pages/products without specific assignments', 'click-to-chat' ); ?></span>
+                            </div>
 
                             <!-- Assignments Section -->
                             <div class="ctc-assignments-section">
-                                <h4 class="ctc-assignments-heading"><?php esc_html_e( 'Assign this WhatsApp Number to:', 'click-to-chat' ); ?></h4>
-                                
-                                <div class="ctc-assignment-type">
-                                    <label class="ctc-assignment-label"><?php esc_html_e( 'Products:', 'click-to-chat' ); ?></label>
-                                    <select name="ctc_numbers[<?php echo esc_attr( $index ); ?>][assignments][products][]" class="ctc-product-select" multiple="multiple" data-placeholder="<?php esc_attr_e( 'Select products...', 'click-to-chat' ); ?>">
+                                <h4 class="ctc-section-title">
+                                    <span class="dashicons dashicons-admin-links"></span>
+                                    <?php esc_html_e( 'Number Assignments', 'click-to-chat' ); ?>
+                                </h4>
+
+                                <div class="ctc-assignments-grid">
+                                    <div class="ctc-field-group">
+                                        <label class="ctc-field-label">
+                                            <span class="dashicons dashicons-products"></span>
+                                            <?php esc_html_e( 'Products', 'click-to-chat' ); ?>
+                                        </label>
+                                        <select name="ctc_numbers[<?php echo esc_attr( $index ); ?>][assignments][products][]" class="ctc-product-select" multiple="multiple" data-placeholder="<?php esc_attr_e( 'Select products...', 'click-to-chat' ); ?>">
                                         <?php
                                         // Show selected products
                                         if ( isset( $number['assignments']['products'] ) && is_array( $number['assignments']['products'] ) ) {
@@ -219,12 +262,15 @@ if ( ! empty( $whatsapp_numbers ) ) {
                                             }
                                         }
                                         ?>
-                                    </select>
-                                </div>
-                                
-                                <div class="ctc-assignment-type">
-                                    <label class="ctc-assignment-label"><?php esc_html_e( 'Product Categories:', 'click-to-chat' ); ?></label>
-                                    <select name="ctc_numbers[<?php echo esc_attr( $index ); ?>][assignments][categories][]" class="ctc-category-select" multiple="multiple" data-placeholder="<?php esc_attr_e( 'Select categories...', 'click-to-chat' ); ?>">
+                                        </select>
+                                    </div>
+
+                                    <div class="ctc-field-group">
+                                        <label class="ctc-field-label">
+                                            <span class="dashicons dashicons-category"></span>
+                                            <?php esc_html_e( 'Categories', 'click-to-chat' ); ?>
+                                        </label>
+                                        <select name="ctc_numbers[<?php echo esc_attr( $index ); ?>][assignments][categories][]" class="ctc-category-select" multiple="multiple" data-placeholder="<?php esc_attr_e( 'Select categories...', 'click-to-chat' ); ?>">
                                         <?php
                                         // Show selected categories
                                         if ( isset( $number['assignments']['categories'] ) && is_array( $number['assignments']['categories'] ) ) {
@@ -236,12 +282,15 @@ if ( ! empty( $whatsapp_numbers ) ) {
                                             }
                                         }
                                         ?>
-                                    </select>
-                                </div>
-                                
-                                <div class="ctc-assignment-type">
-                                    <label class="ctc-assignment-label"><?php esc_html_e( 'Pages:', 'click-to-chat' ); ?></label>
-                                    <select name="ctc_numbers[<?php echo esc_attr( $index ); ?>][assignments][pages][]" class="ctc-page-select" multiple="multiple" data-placeholder="<?php esc_attr_e( 'Select pages...', 'click-to-chat' ); ?>">
+                                        </select>
+                                    </div>
+
+                                    <div class="ctc-field-group">
+                                        <label class="ctc-field-label">
+                                            <span class="dashicons dashicons-admin-page"></span>
+                                            <?php esc_html_e( 'Pages', 'click-to-chat' ); ?>
+                                        </label>
+                                        <select name="ctc_numbers[<?php echo esc_attr( $index ); ?>][assignments][pages][]" class="ctc-page-select" multiple="multiple" data-placeholder="<?php esc_attr_e( 'Select pages...', 'click-to-chat' ); ?>">
                                         <?php
                                         // Show selected pages
                                         if ( isset( $number['assignments']['pages'] ) && is_array( $number['assignments']['pages'] ) ) {
@@ -253,7 +302,8 @@ if ( ! empty( $whatsapp_numbers ) ) {
                                             }
                                         }
                                         ?>
-                                    </select>
+                                        </select>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -280,55 +330,78 @@ if ( ! empty( $whatsapp_numbers ) ) {
                     <h3 class="ctc-number-title"><?php esc_html_e( 'New WhatsApp Number', 'click-to-chat' ); ?></h3>
                 </div>
                 <div class="ctc-number-actions">
-                    <button type="button" class="ctc-number-toggle button-link" title="<?php esc_attr_e( 'Expand/Collapse', 'click-to-chat' ); ?>">
+                    <button type="button" class="ctc-number-toggle" title="<?php esc_attr_e( 'Expand/Collapse', 'click-to-chat' ); ?>">
                         <span class="dashicons dashicons-arrow-up-alt2"></span>
                     </button>
-                    <button type="button" class="ctc-number-delete button-link" title="<?php esc_attr_e( 'Delete Number', 'click-to-chat' ); ?>">
+                    <button type="button" class="ctc-number-delete" title="<?php esc_attr_e( 'Delete Number', 'click-to-chat' ); ?>">
                         <span class="dashicons dashicons-trash"></span>
                     </button>
                 </div>
             </div>
-            
+
             <div class="ctc-number-body">
                 <input type="hidden" name="ctc_numbers[{{ data.index }}][id]" value="{{ data.id }}" />
-                
-                <div class="ctc-field-row">
-                    <div class="ctc-field-col">
-                        <label for="ctc_numbers_name_{{ data.id }}"><?php esc_html_e( 'Name:', 'click-to-chat' ); ?></label>
-                        <input type="text" name="ctc_numbers[{{ data.index }}][name]" id="ctc_numbers_name_{{ data.id }}" value="" class="regular-text ctc-number-name" required />
-                        <span class="description"><?php esc_html_e( 'A name to identify this number (for admin use only).', 'click-to-chat' ); ?></span>
+
+                <div class="ctc-fields-grid">
+                    <div class="ctc-field-group">
+                        <label class="ctc-field-label" for="ctc_numbers_name_{{ data.id }}"><?php esc_html_e( 'Display Name', 'click-to-chat' ); ?></label>
+                        <input type="text" name="ctc_numbers[{{ data.index }}][name]" id="ctc_numbers_name_{{ data.id }}" value="" class="ctc-input ctc-number-name" required />
+                        <span class="ctc-field-help"><?php esc_html_e( 'A name to identify this number (for admin use only)', 'click-to-chat' ); ?></span>
                     </div>
-                    
-                    <div class="ctc-field-col">
-                        <label for="ctc_numbers_{{ data.id }}"><?php esc_html_e( 'WhatsApp Number:', 'click-to-chat' ); ?></label>
-                        <input type="text" name="ctc_numbers[{{ data.index }}][number]" id="ctc_numbers_{{ data.id }}" value="" class="regular-text" placeholder="123456789012" required />
-                        <span class="description"><?php esc_html_e( 'Enter the WhatsApp number with country code, no spaces or special characters.', 'click-to-chat' ); ?></span>
+
+                    <div class="ctc-field-group">
+                        <label class="ctc-field-label" for="ctc_numbers_{{ data.id }}"><?php esc_html_e( 'WhatsApp Number', 'click-to-chat' ); ?></label>
+                        <input type="text" name="ctc_numbers[{{ data.index }}][number]" id="ctc_numbers_{{ data.id }}" value="" class="ctc-input" placeholder="+1234567890" required />
+                        <span class="ctc-field-help"><?php esc_html_e( 'Include country code (e.g., +1 for USA)', 'click-to-chat' ); ?></span>
                     </div>
                 </div>
-                
-                <p>
-                    <label for="ctc_numbers_description_{{ data.id }}"><?php esc_html_e( 'Description:', 'click-to-chat' ); ?></label>
-                    <textarea name="ctc_numbers[{{ data.index }}][description]" id="ctc_numbers_description_{{ data.id }}" rows="3" class="large-text"></textarea>
-                    <span class="description"><?php esc_html_e( 'Optional description or notes about this number.', 'click-to-chat' ); ?></span>
-                </p>
-                
+
+                <div class="ctc-field-group ctc-full-width">
+                    <label class="ctc-field-label" for="ctc_numbers_description_{{ data.id }}"><?php esc_html_e( 'Description', 'click-to-chat' ); ?></label>
+                    <textarea name="ctc_numbers[{{ data.index }}][description]" id="ctc_numbers_description_{{ data.id }}" rows="3" class="ctc-textarea"></textarea>
+                    <span class="ctc-field-help"><?php esc_html_e( 'Optional notes about this number or the person/department it belongs to', 'click-to-chat' ); ?></span>
+                </div>
+
+                <!-- Default Number Checkbox -->
+                <div class="ctc-default-section">
+                    <label class="ctc-checkbox-option">
+                        <input type="checkbox" name="ctc_numbers[{{ data.index }}][is_default]" id="ctc_numbers_default_{{ data.id }}" value="1" class="ctc-default-checkbox" />
+                        <span><?php esc_html_e( 'Use as Default Number', 'click-to-chat' ); ?></span>
+                    </label>
+                    <span class="ctc-field-help"><?php esc_html_e( 'This number will be used as fallback for pages/products without specific assignments', 'click-to-chat' ); ?></span>
+                </div>
+
                 <!-- Assignments Section -->
                 <div class="ctc-assignments-section">
-                    <h4 class="ctc-assignments-heading"><?php esc_html_e( 'Assign this WhatsApp Number to:', 'click-to-chat' ); ?></h4>
-                    
-                    <div class="ctc-assignment-type">
-                        <label class="ctc-assignment-label"><?php esc_html_e( 'Products:', 'click-to-chat' ); ?></label>
-                        <select name="ctc_numbers[{{ data.index }}][assignments][products][]" class="ctc-product-select" multiple="multiple" data-placeholder="<?php esc_attr_e( 'Select products...', 'click-to-chat' ); ?>"></select>
-                    </div>
-                    
-                    <div class="ctc-assignment-type">
-                        <label class="ctc-assignment-label"><?php esc_html_e( 'Product Categories:', 'click-to-chat' ); ?></label>
-                        <select name="ctc_numbers[{{ data.index }}][assignments][categories][]" class="ctc-category-select" multiple="multiple" data-placeholder="<?php esc_attr_e( 'Select categories...', 'click-to-chat' ); ?>"></select>
-                    </div>
-                    
-                    <div class="ctc-assignment-type">
-                        <label class="ctc-assignment-label"><?php esc_html_e( 'Pages:', 'click-to-chat' ); ?></label>
-                        <select name="ctc_numbers[{{ data.index }}][assignments][pages][]" class="ctc-page-select" multiple="multiple" data-placeholder="<?php esc_attr_e( 'Select pages...', 'click-to-chat' ); ?>"></select>
+                    <h4 class="ctc-section-title">
+                        <span class="dashicons dashicons-admin-links"></span>
+                        <?php esc_html_e( 'Number Assignments', 'click-to-chat' ); ?>
+                    </h4>
+
+                    <div class="ctc-assignments-grid">
+                        <div class="ctc-field-group">
+                            <label class="ctc-field-label">
+                                <span class="dashicons dashicons-products"></span>
+                                <?php esc_html_e( 'Products', 'click-to-chat' ); ?>
+                            </label>
+                            <select name="ctc_numbers[{{ data.index }}][assignments][products][]" class="ctc-product-select" multiple="multiple" data-placeholder="<?php esc_attr_e( 'Select products...', 'click-to-chat' ); ?>"></select>
+                        </div>
+
+                        <div class="ctc-field-group">
+                            <label class="ctc-field-label">
+                                <span class="dashicons dashicons-category"></span>
+                                <?php esc_html_e( 'Categories', 'click-to-chat' ); ?>
+                            </label>
+                            <select name="ctc_numbers[{{ data.index }}][assignments][categories][]" class="ctc-category-select" multiple="multiple" data-placeholder="<?php esc_attr_e( 'Select categories...', 'click-to-chat' ); ?>"></select>
+                        </div>
+
+                        <div class="ctc-field-group">
+                            <label class="ctc-field-label">
+                                <span class="dashicons dashicons-admin-page"></span>
+                                <?php esc_html_e( 'Pages', 'click-to-chat' ); ?>
+                            </label>
+                            <select name="ctc_numbers[{{ data.index }}][assignments][pages][]" class="ctc-page-select" multiple="multiple" data-placeholder="<?php esc_attr_e( 'Select pages...', 'click-to-chat' ); ?>"></select>
+                        </div>
                     </div>
                 </div>
             </div>

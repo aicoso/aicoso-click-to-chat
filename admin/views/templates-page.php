@@ -60,7 +60,49 @@ $settings_helper = new CTC_Settings();
             </div>
         </div>
     </div>
-    
+
+    <?php
+    // Check if plugin is disabled or no numbers configured
+    $plugin_enabled = isset( $settings['plugin_enabled'] ) ? $settings['plugin_enabled'] : true;
+    $has_numbers = isset( $settings['whatsapp_numbers'] ) && ! empty( $settings['whatsapp_numbers'] );
+
+    if ( ! $plugin_enabled || ! $has_numbers ) :
+    ?>
+    <div class="ctc-admin-warning-box">
+        <?php if ( ! $plugin_enabled ) : ?>
+        <div class="ctc-warning-item">
+            <span class="ctc-warning-icon">⚠️</span>
+            <div class="ctc-warning-content">
+                <strong><?php esc_html_e( 'Warning:', 'click-to-chat' ); ?></strong>
+                <?php
+                printf(
+                    /* translators: %s: Link to Settings page */
+                    esc_html__( 'The plugin is currently disabled. WhatsApp buttons will not appear on your website. %s to activate the plugin.', 'click-to-chat' ),
+                    '<a href="' . esc_url( admin_url( 'admin.php?page=click-to-chat' ) ) . '">' . esc_html__( 'Go to Settings', 'click-to-chat' ) . '</a>'
+                );
+                ?>
+            </div>
+        </div>
+        <?php endif; ?>
+
+        <?php if ( ! $has_numbers ) : ?>
+        <div class="ctc-warning-item">
+            <span class="ctc-warning-icon">⚠️</span>
+            <div class="ctc-warning-content">
+                <strong><?php esc_html_e( 'Warning:', 'click-to-chat' ); ?></strong>
+                <?php
+                printf(
+                    /* translators: %s: Link to Numbers page */
+                    esc_html__( 'No WhatsApp number configured! You need to add at least one WhatsApp number for the buttons to work. %s', 'click-to-chat' ),
+                    '<a href="' . esc_url( admin_url( 'admin.php?page=click-to-chat-numbers' ) ) . '">' . esc_html__( 'Add a number now →', 'click-to-chat' ) . '</a>'
+                );
+                ?>
+            </div>
+        </div>
+        <?php endif; ?>
+    </div>
+    <?php endif; ?>
+
     <form method="post" action="">
         <?php wp_nonce_field( 'ctc_templates_nonce', 'ctc_templates_nonce' ); ?>
         
