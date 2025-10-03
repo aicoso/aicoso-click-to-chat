@@ -1,0 +1,60 @@
+name: Generate POT Translation File
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - '**.php'
+      - 'languages/**'
+  workflow_dispatch:
+
+jobs:
+  generate-pot:
+    name: Generate POT File
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.0'
+
+      - name: Install WP-CLI
+        run: |
+          curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
+          chmod +x wp-cli.phar
+          sudo mv wp-cli.phar /usr/local/bin/wp
+
+      - name: Install WP-CLI i18n command
+        run: |
+          wp package install wp-cli/i18n-command
+
+      - name: Create languages directory if not exists
+        run: |
+          mkdir -p languages
+
+      - name: Generate POT file
+        run: |
+          wp i18n make-pot . languages/click-to-chat.pot \
+            --domain="click-to-chat" \
+            --exclude="vendor,node_modules,.git,.github" \
+            --headers='{"Report-Msgid-Bugs-To":"https://github.com/YOUR_USERNAME/click-to-chat/issues","Last-Translator":"FULL NAME <email@example.com>","Language-Team":"LANGUAGE <LL@li.org>"}'
+
+      - name: Check for changes
+        id: git-check
+        run: |
+          git diff --exit-code languages/click-to-chat.pot || echo "changed=true" >> $GITHUB_OUTPUT
+
+      - name: Commit POT file
+        if: steps.git-check.outputs.changed == 'true'
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add languages/click-to-chat.pot
+          git commit -m "🌐 Update translation POT file [skip ci]"
+          git push
