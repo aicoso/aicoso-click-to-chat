@@ -233,7 +233,7 @@ $floating_positions = $settings_helper->get_floating_position_options();
                         </label>
                     </div>
 
-                    <div class="ctc-form-group ctc-cart-position-row" <?php echo ( ! isset( $settings['cart_page']['enabled'] ) || ! $settings['cart_page']['enabled'] ) ? 'style="display:none;"' : ''; ?>>
+                    <div class="ctc-form-group ctc-cart-position-row<?php echo ( ! isset( $settings['cart_page']['enabled'] ) || ! $settings['cart_page']['enabled'] ) ? ' ctc-hidden' : ''; ?>">
                         <label for="ctc_cart_page_position"><?php esc_html_e( 'Cart Button Position', 'click-to-chat' ); ?></label>
                         <select name="ctc_cart_page[position]" id="ctc_cart_page_position" class="regular-text">
                             <option value="after_cart_table" <?php selected( isset( $settings['cart_page']['position'] ) ? $settings['cart_page']['position'] : 'after_cart_table', 'after_cart_table' ); ?>><?php esc_html_e( 'After Cart Table', 'click-to-chat' ); ?></option>
@@ -253,7 +253,7 @@ $floating_positions = $settings_helper->get_floating_position_options();
                         </label>
                     </div>
 
-                    <div class="ctc-form-group ctc-checkout-position-row" <?php echo ( ! isset( $settings['checkout_page']['enabled'] ) || ! $settings['checkout_page']['enabled'] ) ? 'style="display:none;"' : ''; ?>>
+                    <div class="ctc-form-group ctc-checkout-position-row<?php echo ( ! isset( $settings['checkout_page']['enabled'] ) || ! $settings['checkout_page']['enabled'] ) ? ' ctc-hidden' : ''; ?>">
                         <label for="ctc_checkout_page_position"><?php esc_html_e( 'Checkout Button Position', 'click-to-chat' ); ?></label>
                         <select name="ctc_checkout_page[position]" id="ctc_checkout_page_position" class="regular-text">
                             <option value="after_payment" <?php selected( isset( $settings['checkout_page']['position'] ) ? $settings['checkout_page']['position'] : 'after_payment', 'after_payment' ); ?>><?php esc_html_e( 'After Payment Methods', 'click-to-chat' ); ?></option>
@@ -364,7 +364,7 @@ $floating_positions = $settings_helper->get_floating_position_options();
                 <div class="ctc-number-body">
                     <div class="ctc-form-group">
                         <label for="ctc_exclude_pages"><?php esc_html_e( 'Exclude Pages', 'click-to-chat' ); ?></label>
-                        <select name="ctc_exclusions[pages][]" id="ctc_exclude_pages" class="ctc-page-select" multiple="multiple" style="width: 100%;">
+                        <select name="ctc_exclusions[pages][]" id="ctc_exclude_pages" class="ctc-page-select" multiple="multiple">
                             <?php
                             if ( isset( $settings['exclusions']['pages'] ) && is_array( $settings['exclusions']['pages'] ) ) {
                                 foreach ( $settings['exclusions']['pages'] as $page_id ) {
@@ -381,7 +381,7 @@ $floating_positions = $settings_helper->get_floating_position_options();
 
                     <div class="ctc-form-group">
                         <label for="ctc_exclude_posts"><?php esc_html_e( 'Exclude Posts', 'click-to-chat' ); ?></label>
-                        <select name="ctc_exclusions[posts][]" id="ctc_exclude_posts" class="ctc-post-select" multiple="multiple" style="width: 100%;">
+                        <select name="ctc_exclusions[posts][]" id="ctc_exclude_posts" class="ctc-post-select" multiple="multiple">
                             <?php
                             if ( isset( $settings['exclusions']['posts'] ) && is_array( $settings['exclusions']['posts'] ) ) {
                                 foreach ( $settings['exclusions']['posts'] as $post_id ) {
@@ -408,7 +408,7 @@ $floating_positions = $settings_helper->get_floating_position_options();
                 <div class="ctc-number-body">
                     <div class="ctc-form-group">
                         <label for="ctc_exclude_categories"><?php esc_html_e( 'Exclude Product Categories', 'click-to-chat' ); ?></label>
-                        <select name="ctc_exclusions[categories][]" id="ctc_exclude_categories" class="ctc-category-select" multiple="multiple" style="width: 100%;">
+                        <select name="ctc_exclusions[categories][]" id="ctc_exclude_categories" class="ctc-category-select" multiple="multiple">
                             <?php
                             if ( isset( $settings['exclusions']['categories'] ) && is_array( $settings['exclusions']['categories'] ) ) {
                                 foreach ( $settings['exclusions']['categories'] as $term_id ) {
@@ -425,7 +425,7 @@ $floating_positions = $settings_helper->get_floating_position_options();
 
                     <div class="ctc-form-group">
                         <label for="ctc_exclude_tags"><?php esc_html_e( 'Exclude Product Tags', 'click-to-chat' ); ?></label>
-                        <select name="ctc_exclusions[tags][]" id="ctc_exclude_tags" class="ctc-tag-select" multiple="multiple" style="width: 100%;">
+                        <select name="ctc_exclusions[tags][]" id="ctc_exclude_tags" class="ctc-tag-select" multiple="multiple">
                             <?php
                             if ( isset( $settings['exclusions']['tags'] ) && is_array( $settings['exclusions']['tags'] ) ) {
                                 foreach ( $settings['exclusions']['tags'] as $term_id ) {
@@ -442,7 +442,7 @@ $floating_positions = $settings_helper->get_floating_position_options();
 
                     <div class="ctc-form-group">
                         <label for="ctc_exclude_products"><?php esc_html_e( 'Exclude Products', 'click-to-chat' ); ?></label>
-                        <select name="ctc_exclusions[products][]" id="ctc_exclude_products" class="ctc-product-select" multiple="multiple" style="width: 100%;">
+                        <select name="ctc_exclusions[products][]" id="ctc_exclude_products" class="ctc-product-select" multiple="multiple">
                             <?php
                             if ( isset( $settings['exclusions']['products'] ) && is_array( $settings['exclusions']['products'] ) ) {
                                 foreach ( $settings['exclusions']['products'] as $product_id ) {

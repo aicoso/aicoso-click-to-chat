@@ -1773,6 +1773,34 @@
     font-size: 13px;
 }
 
+/* Inline CSS replacements for admin views */
+.ctc-template-preview.ctc-hidden,
+.ctc-product-options.ctc-hidden,
+.ctc-product-id-field.ctc-hidden,
+.ctc-advanced-content.ctc-hidden,
+.ctc-copy-success.ctc-hidden,
+.ctc-cart-position-row.ctc-hidden,
+.ctc-checkout-position-row.ctc-hidden {
+    display: none;
+}
+
+.ctc-template-preview.ctc-visible,
+.ctc-product-options.ctc-visible,
+.ctc-product-id-field.ctc-visible,
+.ctc-advanced-content.ctc-visible,
+.ctc-copy-success.ctc-visible {
+    display: block;
+}
+
+/* Select2 full width */
+.ctc-page-select,
+.ctc-post-select,
+.ctc-category-select,
+.ctc-tag-select,
+.ctc-product-select {
+    width: 100%;
+}
+
 /* Responsive Design */
 @media (max-width: 900px) {
     .ctc-fields-grid {

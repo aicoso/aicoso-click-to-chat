@@ -427,10 +427,10 @@
                             return $('<div>').text(line).html();
                         }).join('<br>');
                         $previewContainer.html(formattedPreview);
-                        $previewContainer.show();
+                        $previewContainer.removeClass('ctc-hidden').addClass('ctc-visible');
                     } else {
                         $previewContainer.html('<p class="error">' + response.data.message + '</p>');
-                        $previewContainer.show();
+                        $previewContainer.removeClass('ctc-hidden').addClass('ctc-visible');
                     }
                 },
                 error: function(xhr, status, error) {
@@ -441,7 +441,7 @@
                         errorMessage = 'Error: ' + error;
                     }
                     $previewContainer.html('<p class="error">' + errorMessage + '</p>');
-                    $previewContainer.show();
+                    $previewContainer.removeClass('ctc-hidden').addClass('ctc-visible');
                 },
                 complete: function() {
                     $button.prop('disabled', false).text(ctc_admin.preview_text || 'Preview');
@@ -472,9 +472,9 @@
         $('input[name="button_type"]').on('change', function() {
             const type = $(this).val();
             if (type === 'product') {
-                $('.ctc-product-options').show();
+                $('.ctc-product-options').removeClass('ctc-hidden').addClass('ctc-visible');
             } else {
-                $('.ctc-product-options').hide();
+                $('.ctc-product-options').removeClass('ctc-visible').addClass('ctc-hidden');
             }
             generateImprovedShortcode();
             updateImprovedPreview();
@@ -483,9 +483,9 @@
         // Handle product source selection
         $('input[name="product_source"]').on('change', function() {
             if ($(this).val() === 'specific') {
-                $('.ctc-product-id-field').show();
+                $('.ctc-product-id-field').removeClass('ctc-hidden').addClass('ctc-visible');
             } else {
-                $('.ctc-product-id-field').hide();
+                $('.ctc-product-id-field').removeClass('ctc-visible').addClass('ctc-hidden');
             }
             generateImprovedShortcode();
         });
@@ -502,7 +502,10 @@
             copyToClipboard(shortcode);
 
             // Show success message
-            $('.ctc-copy-success').fadeIn().delay(2000).fadeOut();
+            $('.ctc-copy-success').removeClass('ctc-hidden').addClass('ctc-visible');
+            setTimeout(function() {
+                $('.ctc-copy-success').removeClass('ctc-visible').addClass('ctc-hidden');
+            }, 2000);
 
             // Change button text temporarily
             const $btnText = $(this).find('.ctc-copy-text');
@@ -786,35 +789,35 @@
         // Toggle cart position field
         $('#ctc_cart_page_enabled').on('change', function() {
             if ($(this).is(':checked')) {
-                $('.ctc-cart-position-row').show();
+                $('.ctc-cart-position-row').removeClass('ctc-hidden');
             } else {
-                $('.ctc-cart-position-row').hide();
+                $('.ctc-cart-position-row').addClass('ctc-hidden');
             }
         });
 
         // Toggle checkout position field
         $('#ctc_checkout_page_enabled').on('change', function() {
             if ($(this).is(':checked')) {
-                $('.ctc-checkout-position-row').show();
+                $('.ctc-checkout-position-row').removeClass('ctc-hidden');
             } else {
-                $('.ctc-checkout-position-row').hide();
+                $('.ctc-checkout-position-row').addClass('ctc-hidden');
             }
         });
 
         // Also handle single product and shop page position fields if they exist
         $('#ctc_single_product_enabled').on('change', function() {
             if ($(this).is(':checked')) {
-                $('.ctc-single-position-row').show();
+                $('.ctc-single-position-row').removeClass('ctc-hidden');
             } else {
-                $('.ctc-single-position-row').hide();
+                $('.ctc-single-position-row').addClass('ctc-hidden');
             }
         });
 
         $('#ctc_shop_page_enabled').on('change', function() {
             if ($(this).is(':checked')) {
-                $('.ctc-shop-position-row').show();
+                $('.ctc-shop-position-row').removeClass('ctc-hidden');
             } else {
-                $('.ctc-shop-position-row').hide();
+                $('.ctc-shop-position-row').addClass('ctc-hidden');
             }
         });
     }

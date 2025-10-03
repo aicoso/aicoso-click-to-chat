@@ -98,7 +98,7 @@ $settings_helper = new CTC_Settings();
                         </button>
                     </div>
 
-                    <div class="ctc-template-preview" style="display: none;"></div>
+                    <div class="ctc-template-preview ctc-hidden"></div>
                 </div>
             </div>
             
@@ -135,7 +135,7 @@ $settings_helper = new CTC_Settings();
                         </button>
                     </div>
 
-                    <div class="ctc-template-preview" style="display: none;"></div>
+                    <div class="ctc-template-preview ctc-hidden"></div>
                 </div>
             </div>
 
@@ -172,7 +172,7 @@ $settings_helper = new CTC_Settings();
                         </button>
                     </div>
 
-                    <div class="ctc-template-preview" style="display: none;"></div>
+                    <div class="ctc-template-preview ctc-hidden"></div>
                 </div>
             </div>
             
@@ -209,7 +209,7 @@ $settings_helper = new CTC_Settings();
                         </button>
                     </div>
 
-                    <div class="ctc-template-preview" style="display: none;"></div>
+                    <div class="ctc-template-preview ctc-hidden"></div>
                 </div>
             </div>
             
@@ -246,7 +246,7 @@ $settings_helper = new CTC_Settings();
                         </button>
                     </div>
 
-                    <div class="ctc-template-preview" style="display: none;"></div>
+                    <div class="ctc-template-preview ctc-hidden"></div>
                 </div>
             </div>
         </div>

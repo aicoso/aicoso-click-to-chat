@@ -378,3 +378,9 @@
     overflow: hidden;
     text-overflow: ellipsis;
 }
+
+/* Inline CSS replacements from PHP files */
+.ctc-cart-button-container,
+.ctc-checkout-button-container {
+    margin: 20px 0;
+}

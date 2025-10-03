@@ -99,7 +99,7 @@ $whatsapp_numbers = isset( $settings['whatsapp_numbers'] ) ? $settings['whatsapp
             </div>
 
             <!-- Product Selection (for product type) -->
-            <div class="ctc-field-section ctc-product-options" style="display: block;">
+            <div class="ctc-field-section ctc-product-options ctc-visible">
                 <h3><?php esc_html_e( 'Product Selection', 'click-to-chat' ); ?></h3>
                 <div class="ctc-field-group">
                     <label class="ctc-radio-option">
@@ -110,7 +110,7 @@ $whatsapp_numbers = isset( $settings['whatsapp_numbers'] ) ? $settings['whatsapp
                         <input type="radio" name="product_source" value="specific">
                         <span><?php esc_html_e( 'Specify product ID', 'click-to-chat' ); ?></span>
                     </label>
-                    <div class="ctc-product-id-field" style="display: none;">
+                    <div class="ctc-product-id-field ctc-hidden">
                         <input type="number" id="ctc_product_id" class="ctc-shortcode-param" data-param="product_id" placeholder="<?php esc_attr_e( 'Enter product ID', 'click-to-chat' ); ?>">
                     </div>
                 </div>
@@ -169,7 +169,7 @@ $whatsapp_numbers = isset( $settings['whatsapp_numbers'] ) ? $settings['whatsapp
                     <span class="dashicons dashicons-arrow-right-alt2"></span>
                     <?php esc_html_e( 'Advanced Options', 'click-to-chat' ); ?>
                 </h3>
-                <div class="ctc-advanced-content" style="display: none;">
+                <div class="ctc-advanced-content ctc-hidden">
                     <?php if ( ! empty( $whatsapp_numbers ) ) : ?>
                     <div class="ctc-field-group">
                         <label><?php esc_html_e( 'Specific Number', 'click-to-chat' ); ?></label>
@@ -219,7 +219,7 @@ $whatsapp_numbers = isset( $settings['whatsapp_numbers'] ) ? $settings['whatsapp
                         <span class="ctc-copy-text"><?php esc_html_e( 'Copy', 'click-to-chat' ); ?></span>
                     </button>
                 </div>
-                <div class="ctc-copy-success" style="display: none;">
+                <div class="ctc-copy-success ctc-hidden">
                     ✅ <?php esc_html_e( 'Copied to clipboard!', 'click-to-chat' ); ?>
                 </div>
             </div>

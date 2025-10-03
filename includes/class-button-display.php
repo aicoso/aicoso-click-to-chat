@@ -382,7 +382,7 @@ class CTC_Button_Display {
         }
 
         // Display the button with proper wrapper
-        echo '<div class="ctc-cart-button-container" style="margin: 20px 0;">';
+        echo '<div class="ctc-cart-button-container">';
         $this->render_button($whatsapp_url, 'cart');
         echo '</div>';
 
@@ -422,7 +422,7 @@ class CTC_Button_Display {
         }
 
         // Display the button with proper wrapper
-        echo '<div class="ctc-checkout-button-container" style="margin: 20px 0;">';
+        echo '<div class="ctc-checkout-button-container">';
         $this->render_button($whatsapp_url, 'checkout');
         echo '</div>';
 

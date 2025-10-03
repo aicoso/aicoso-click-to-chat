@@ -126,7 +126,7 @@ if ( ! empty( $whatsapp_numbers ) ) {
                                         <span class="ctc-assignment-icon dashicons dashicons-cart"></span>
                                         <?php esc_html_e( 'Products', 'click-to-chat' ); ?>
                                     </label>
-                                    <select name="ctc_numbers[0][assignments][products][]" class="ctc-product-select" multiple="multiple" style="width: 100%;" data-placeholder="<?php esc_attr_e( 'Select products...', 'click-to-chat' ); ?>">
+                                    <select name="ctc_numbers[0][assignments][products][]" class="ctc-product-select" multiple="multiple" data-placeholder="<?php esc_attr_e( 'Select products...', 'click-to-chat' ); ?>">
                                     </select>
                                 </div>
 
@@ -135,7 +135,7 @@ if ( ! empty( $whatsapp_numbers ) ) {
                                         <span class="ctc-assignment-icon dashicons dashicons-category"></span>
                                         <?php esc_html_e( 'Categories', 'click-to-chat' ); ?>
                                     </label>
-                                    <select name="ctc_numbers[0][assignments][categories][]" class="ctc-category-select" multiple="multiple" style="width: 100%;" data-placeholder="<?php esc_attr_e( 'Select categories...', 'click-to-chat' ); ?>">
+                                    <select name="ctc_numbers[0][assignments][categories][]" class="ctc-category-select" multiple="multiple" data-placeholder="<?php esc_attr_e( 'Select categories...', 'click-to-chat' ); ?>">
                                     </select>
                                 </div>
 
@@ -144,7 +144,7 @@ if ( ! empty( $whatsapp_numbers ) ) {
                                         <span class="ctc-assignment-icon dashicons dashicons-admin-page"></span>
                                         <?php esc_html_e( 'Pages', 'click-to-chat' ); ?>
                                     </label>
-                                    <select name="ctc_numbers[0][assignments][pages][]" class="ctc-page-select" multiple="multiple" style="width: 100%;" data-placeholder="<?php esc_attr_e( 'Select pages...', 'click-to-chat' ); ?>">
+                                    <select name="ctc_numbers[0][assignments][pages][]" class="ctc-page-select" multiple="multiple" data-placeholder="<?php esc_attr_e( 'Select pages...', 'click-to-chat' ); ?>">
                                     </select>
                                 </div>
                             </div>
@@ -207,7 +207,7 @@ if ( ! empty( $whatsapp_numbers ) ) {
                                 
                                 <div class="ctc-assignment-type">
                                     <label class="ctc-assignment-label"><?php esc_html_e( 'Products:', 'click-to-chat' ); ?></label>
-                                    <select name="ctc_numbers[<?php echo esc_attr( $index ); ?>][assignments][products][]" class="ctc-product-select" multiple="multiple" style="width: 100%;" data-placeholder="<?php esc_attr_e( 'Select products...', 'click-to-chat' ); ?>">
+                                    <select name="ctc_numbers[<?php echo esc_attr( $index ); ?>][assignments][products][]" class="ctc-product-select" multiple="multiple" data-placeholder="<?php esc_attr_e( 'Select products...', 'click-to-chat' ); ?>">
                                         <?php
                                         // Show selected products
                                         if ( isset( $number['assignments']['products'] ) && is_array( $number['assignments']['products'] ) ) {
@@ -224,7 +224,7 @@ if ( ! empty( $whatsapp_numbers ) ) {
                                 
                                 <div class="ctc-assignment-type">
                                     <label class="ctc-assignment-label"><?php esc_html_e( 'Product Categories:', 'click-to-chat' ); ?></label>
-                                    <select name="ctc_numbers[<?php echo esc_attr( $index ); ?>][assignments][categories][]" class="ctc-category-select" multiple="multiple" style="width: 100%;" data-placeholder="<?php esc_attr_e( 'Select categories...', 'click-to-chat' ); ?>">
+                                    <select name="ctc_numbers[<?php echo esc_attr( $index ); ?>][assignments][categories][]" class="ctc-category-select" multiple="multiple" data-placeholder="<?php esc_attr_e( 'Select categories...', 'click-to-chat' ); ?>">
                                         <?php
                                         // Show selected categories
                                         if ( isset( $number['assignments']['categories'] ) && is_array( $number['assignments']['categories'] ) ) {
@@ -241,7 +241,7 @@ if ( ! empty( $whatsapp_numbers ) ) {
                                 
                                 <div class="ctc-assignment-type">
                                     <label class="ctc-assignment-label"><?php esc_html_e( 'Pages:', 'click-to-chat' ); ?></label>
-                                    <select name="ctc_numbers[<?php echo esc_attr( $index ); ?>][assignments][pages][]" class="ctc-page-select" multiple="multiple" style="width: 100%;" data-placeholder="<?php esc_attr_e( 'Select pages...', 'click-to-chat' ); ?>">
+                                    <select name="ctc_numbers[<?php echo esc_attr( $index ); ?>][assignments][pages][]" class="ctc-page-select" multiple="multiple" data-placeholder="<?php esc_attr_e( 'Select pages...', 'click-to-chat' ); ?>">
                                         <?php
                                         // Show selected pages
                                         if ( isset( $number['assignments']['pages'] ) && is_array( $number['assignments']['pages'] ) ) {
@@ -318,17 +318,17 @@ if ( ! empty( $whatsapp_numbers ) ) {
                     
                     <div class="ctc-assignment-type">
                         <label class="ctc-assignment-label"><?php esc_html_e( 'Products:', 'click-to-chat' ); ?></label>
-                        <select name="ctc_numbers[{{ data.index }}][assignments][products][]" class="ctc-product-select" multiple="multiple" style="width: 100%;" data-placeholder="<?php esc_attr_e( 'Select products...', 'click-to-chat' ); ?>"></select>
+                        <select name="ctc_numbers[{{ data.index }}][assignments][products][]" class="ctc-product-select" multiple="multiple" data-placeholder="<?php esc_attr_e( 'Select products...', 'click-to-chat' ); ?>"></select>
                     </div>
                     
                     <div class="ctc-assignment-type">
                         <label class="ctc-assignment-label"><?php esc_html_e( 'Product Categories:', 'click-to-chat' ); ?></label>
-                        <select name="ctc_numbers[{{ data.index }}][assignments][categories][]" class="ctc-category-select" multiple="multiple" style="width: 100%;" data-placeholder="<?php esc_attr_e( 'Select categories...', 'click-to-chat' ); ?>"></select>
+                        <select name="ctc_numbers[{{ data.index }}][assignments][categories][]" class="ctc-category-select" multiple="multiple" data-placeholder="<?php esc_attr_e( 'Select categories...', 'click-to-chat' ); ?>"></select>
                     </div>
                     
                     <div class="ctc-assignment-type">
                         <label class="ctc-assignment-label"><?php esc_html_e( 'Pages:', 'click-to-chat' ); ?></label>
-                        <select name="ctc_numbers[{{ data.index }}][assignments][pages][]" class="ctc-page-select" multiple="multiple" style="width: 100%;" data-placeholder="<?php esc_attr_e( 'Select pages...', 'click-to-chat' ); ?>"></select>
+                        <select name="ctc_numbers[{{ data.index }}][assignments][pages][]" class="ctc-page-select" multiple="multiple" data-placeholder="<?php esc_attr_e( 'Select pages...', 'click-to-chat' ); ?>"></select>
                     </div>
                 </div>
             </div>
