@@ -19,7 +19,7 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: '8.1'
-          tools: composer, cs2pr
+          tools: composer
 
       - name: Install Composer dependencies
         run: |
@@ -38,24 +38,51 @@ jobs:
           phpcs --config-show installed_paths
           phpcs -i
 
-      - name: Run PHPCS with annotations
+      - name: Run PHPCS with clean organized output
         run: |
-          phpcs -v --standard=./phpcs.xml \
-            --warning-severity=0 \
-            --extensions=php \
-            --ignore=vendor/*,node_modules/*,build/* \
-            --report=checkstyle \
-            . | cs2pr
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+          echo "📋 PHPCS REPORT - WordPress & WooCommerce Coding Standards Check"
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 
-      - name: Generate detailed PHPCS report
-        if: failure()
-        run: |
+          # Run PHPCS and capture output
           phpcs --standard=./phpcs.xml \
             --warning-severity=0 \
             --extensions=php \
-            --ignore=vendor/*,node_modules/*,build/* \
+            --ignore=vendor/*,node_modules/*,build/*,.git/*,.github/* \
+            . > phpcs-output.txt 2>&1 || true
+
+          # Check if there are errors
+          if [ -s phpcs-output.txt ]; then
+            # Display the organized output
+            cat phpcs-output.txt
+
+            # Check if actual errors exist
+            if grep -q "ERROR" phpcs-output.txt; then
+              echo ""
+              echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+              echo "❌ PHPCS found coding standard violations. Please fix the errors above."
+              echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+              exit 1
+            fi
+          else
+            echo "✅ No coding standard violations found!"
+            echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+          fi
+
+      - name: Generate error summary
+        if: failure()
+        run: |
+          echo ""
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+          echo "📊 SUMMARY - Errors by file"
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+          phpcs --standard=./phpcs.xml \
+            --warning-severity=0 \
+            --extensions=php \
+            --ignore=vendor/*,node_modules/*,build/*,.git/*,.github/* \
             --report=summary \
-            .
+            . || true
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 
   generate-pot:
     name: Generate Translation Files
@@ -82,7 +109,7 @@ jobs:
       - name: Prepare languages directory
         run: |
           mkdir -p languages
-          # Backup existing translations if any
+          # Backup existing POT if exists
           if [ -f "languages/click-to-chat.pot" ]; then
             cp languages/click-to-chat.pot languages/click-to-chat.pot.bak
           fi
@@ -95,39 +122,38 @@ jobs:
             --exclude=vendor,node_modules,build,tests,.git,.github \
             --headers='{"Report-Msgid-Bugs-To":"https://github.com/YOUR_USERNAME/click-to-chat/issues","Language":"en_US"}'
 
-      - name: Verify POT file was generated
+      - name: Verify POT file and check changes
+        id: pot-check
         run: |
           if [ -f "languages/click-to-chat.pot" ]; then
             echo "✅ POT file generated successfully"
-            echo "📊 Statistics:"
-            wp i18n make-json languages/click-to-chat.pot --no-purge || true
+
+            # Check for changes
+            if [ -f "languages/click-to-chat.pot.bak" ]; then
+              if diff -q languages/click-to-chat.pot languages/click-to-chat.pot.bak > /dev/null; then
+                echo "No changes in POT file"
+                rm languages/click-to-chat.pot.bak
+                echo "changed=false" >> $GITHUB_OUTPUT
+              else
+                echo "POT file updated with new strings"
+                rm languages/click-to-chat.pot.bak
+                echo "changed=true" >> $GITHUB_OUTPUT
+              fi
+            else
+              echo "New POT file created"
+              echo "changed=true" >> $GITHUB_OUTPUT
+            fi
+
+            # Show statistics
+            echo "📊 Translation Statistics:"
             wc -l languages/click-to-chat.pot
           else
             echo "❌ POT file generation failed"
             exit 1
           fi
 
-      - name: Check for changes
-        id: git-check
-        run: |
-          # Remove backup if no changes
-          if [ -f "languages/click-to-chat.pot.bak" ]; then
-            if diff -q languages/click-to-chat.pot languages/click-to-chat.pot.bak > /dev/null; then
-              echo "No changes detected in POT file"
-              rm languages/click-to-chat.pot.bak
-              echo "changed=false" >> $GITHUB_OUTPUT
-            else
-              echo "Changes detected in POT file"
-              rm languages/click-to-chat.pot.bak
-              echo "changed=true" >> $GITHUB_OUTPUT
-            fi
-          else
-            echo "New POT file created"
-            echo "changed=true" >> $GITHUB_OUTPUT
-          fi
-
       - name: Commit and push language files
-        if: steps.git-check.outputs.changed == 'true'
+        if: steps.pot-check.outputs.changed == 'true'
         run: |
           git config --global user.name "GitHub Actions Bot"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
@@ -136,7 +162,9 @@ jobs:
           git push origin main
 
       - name: Summary
-        if: steps.git-check.outputs.changed == 'true'
+        if: steps.pot-check.outputs.changed == 'true'
         run: |
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
           echo "✅ Translation file updated and committed successfully!"
           echo "📝 File: languages/click-to-chat.pot"
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
