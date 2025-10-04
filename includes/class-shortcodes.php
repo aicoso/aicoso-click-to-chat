@@ -152,7 +152,7 @@ class CTC_Shortcodes {
 		// Override message template if provided.
 		if ( ! empty( $atts['message'] ) ) {
 			// Extract WhatsApp number from URL.
-			$url_parts = parse_url( $whatsapp_url );
+			$url_parts = wp_parse_url( $whatsapp_url );
 			$path_parts = explode( '/', $url_parts['path'] );
 			$whatsapp_number = end( $path_parts );
 

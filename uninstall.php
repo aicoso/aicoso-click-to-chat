@@ -21,6 +21,7 @@ delete_option( 'ctc_settings' );
 global $wpdb;
 
 // Delete the plugin-specific post meta for all products.
+// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- Uninstall routine requires direct database access to clean up all plugin data.
 $wpdb->query( "DELETE FROM {$wpdb->postmeta} WHERE meta_key LIKE '_ctc_%'" );
 
 // Clear any cached data.

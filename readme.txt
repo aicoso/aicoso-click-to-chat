@@ -1,9 +1,9 @@
 === Click to Chat ===
 Contributors: aicoso
 Donate link: https://aicoso.com/donate/
-Tags: whatsapp, woocommerce, ecommerce, chat, messaging, product inquiry, order, checkout
+Tags: whatsapp, woocommerce, chat, messaging, ecommerce
 Requires at least: 6.2
-Tested up to: 6.5
+Tested up to: 6.8
 Requires PHP: 7.4
 WC requires at least: 8.2
 WC tested up to: 8.5
@@ -11,7 +11,7 @@ Stable tag: 1.0.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-Enable customers to order products directly through WhatsApp with a single click. Add WhatsApp buttons to product pages, shop pages, cart, and checkout.
+Enable customers to order products directly through WhatsApp. Add WhatsApp buttons to product pages, shop, cart, and checkout.
 
 == Description ==
 

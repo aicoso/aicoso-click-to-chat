@@ -560,8 +560,7 @@ class CTC_WhatsApp_Link_Generator {
 						}
 					}
 				} catch ( Exception $e ) {
-					// Log error or handle exception if needed.
-					error_log( 'Click to Chat: Error finding variation - ' . $e->getMessage() );
+					// Silently fail - graceful degradation for variation detection.
 				}
 			}
 

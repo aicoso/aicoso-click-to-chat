@@ -82,9 +82,6 @@ class Click_To_Chat {
 	 * Initialize the plugin
 	 */
 	public function __construct() {
-		// Load plugin textdomain.
-		add_action( 'plugins_loaded', array( $this, 'load_textdomain' ) );
-
 		// Initialize plugin components if WooCommerce is active.
 		if ( ctc_check_woocommerce() ) {
 			$this->includes();
@@ -102,17 +99,6 @@ class Click_To_Chat {
 			self::$instance = new self();
 		}
 		return self::$instance;
-	}
-
-	/**
-	 * Load plugin textdomain
-	 */
-	public function load_textdomain() {
-		load_plugin_textdomain(
-			'click-to-chat',
-			false,
-			dirname( plugin_basename( __FILE__ ) ) . '/languages/'
-		);
 	}
 
 	/**
