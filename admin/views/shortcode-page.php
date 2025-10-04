@@ -53,9 +53,19 @@ $whatsapp_numbers = isset( $settings['whatsapp_numbers'] ) ? $settings['whatsapp
     <?php
     // Check if plugin is disabled or no numbers configured
     $plugin_enabled = isset( $settings['plugin_enabled'] ) ? $settings['plugin_enabled'] : true;
-    $has_numbers = isset( $settings['whatsapp_numbers'] ) && ! empty( $settings['whatsapp_numbers'] );
 
-    if ( ! $plugin_enabled || ! $has_numbers ) :
+    // Check if there are any numbers with actual phone numbers configured
+    $has_valid_numbers = false;
+    if ( isset( $settings['whatsapp_numbers'] ) && ! empty( $settings['whatsapp_numbers'] ) ) {
+        foreach ( $settings['whatsapp_numbers'] as $number ) {
+            if ( ! empty( $number['number'] ) ) {
+                $has_valid_numbers = true;
+                break;
+            }
+        }
+    }
+
+    if ( ! $plugin_enabled || ! $has_valid_numbers ) :
     ?>
     <div class="ctc-admin-warning-box">
         <?php if ( ! $plugin_enabled ) : ?>
@@ -74,7 +84,7 @@ $whatsapp_numbers = isset( $settings['whatsapp_numbers'] ) ? $settings['whatsapp
         </div>
         <?php endif; ?>
 
-        <?php if ( ! $has_numbers ) : ?>
+        <?php if ( ! $has_valid_numbers ) : ?>
         <div class="ctc-warning-item">
             <span class="ctc-warning-icon">⚠️</span>
             <div class="ctc-warning-content">

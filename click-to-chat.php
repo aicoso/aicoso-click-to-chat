@@ -154,15 +154,8 @@ add_action( 'plugins_loaded', 'ctc_plugin', 10 );
 function ctc_activate() {
     // Add default settings
     $default_settings = array(
-        'whatsapp_numbers' => array(
-            array(
-                'id'          => 1,
-                'name'        => esc_html__( 'Default Number', 'click-to-chat' ),
-                'number'      => '',
-                'description' => '',
-                'assignments' => array()
-            )
-        ),
+        'plugin_enabled' => true,
+        'whatsapp_numbers' => array(),
         'button_settings' => array(
             'text'        => esc_html__( 'Order via WhatsApp', 'click-to-chat' ),
             'icon'        => true,
