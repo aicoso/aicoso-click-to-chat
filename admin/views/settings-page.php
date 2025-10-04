@@ -475,9 +475,9 @@ $floating_positions = $settings_helper->get_floating_position_options();
 					        <?php
 					        if ( isset( $settings['exclusions']['tags'] ) && is_array( $settings['exclusions']['tags'] ) ) {
 					            foreach ( $settings['exclusions']['tags'] as $term_id ) {
-					                $tag = get_term( $term_id, 'product_tag' );
-					                if ( $tag && ! is_wp_error( $tag ) ) {
-					                    echo '<option value="' . esc_attr( $tag->term_id ) . '" selected>' . esc_html( $tag->name ) . '</option>';
+					                $product_tag = get_term( $term_id, 'product_tag' );
+					                if ( $product_tag && ! is_wp_error( $product_tag ) ) {
+					                    echo '<option value="' . esc_attr( $product_tag->term_id ) . '" selected>' . esc_html( $product_tag->name ) . '</option>';
 					                }
 					            }
 					        }

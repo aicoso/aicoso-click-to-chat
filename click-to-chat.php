@@ -40,12 +40,13 @@ add_action(
 	}
 );
 
+// phpcs:disable Universal.Files.SeparateFunctionsFromOO.Mixed -- Main plugin file requires both functions and class.
+
 /**
  * Check if WooCommerce is active
  *
  * @return bool True if WooCommerce is active, false otherwise.
  */
-// phpcs:disable Universal.Files.SeparateFunctionsFromOO.Mixed -- Main plugin file requires both functions and class.
 function ctc_check_woocommerce() {
 	if ( ! class_exists( 'WooCommerce' ) ) {
 		add_action( 'admin_notices', 'ctc_woocommerce_missing_notice' );
