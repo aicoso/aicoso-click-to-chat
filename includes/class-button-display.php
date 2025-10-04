@@ -101,7 +101,7 @@ class CTC_Button_Display {
 		if ( isset( $this->settings['floating_button']['enabled'] ) && $this->settings['floating_button']['enabled'] ) {
 			add_action( 'wp_footer', array( $this, 'display_floating_button' ) );
 		}
-		
+
 		$hooks_registered = true;
 	}
 

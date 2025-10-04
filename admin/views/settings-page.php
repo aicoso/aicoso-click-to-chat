@@ -69,7 +69,7 @@ $floating_positions = $settings_helper->get_floating_position_options();
 	}
 
 	if ( ! $plugin_enabled || ! $has_valid_numbers ) :
-	?>
+		?>
 	<div class="ctc-admin-warning-box">
 		<?php if ( ! $plugin_enabled ) : ?>
 		<div class="ctc-warning-item">
@@ -430,10 +430,10 @@ $floating_positions = $settings_helper->get_floating_position_options();
 					    <select name="ctc_exclusions[posts][]" id="ctc_exclude_posts" class="ctc-post-select" multiple="multiple">
 					        <?php
 					        if ( isset( $settings['exclusions']['posts'] ) && is_array( $settings['exclusions']['posts'] ) ) {
-					            foreach ( $settings['exclusions']['posts'] as $post_id ) {
-					                $post_title = get_the_title( $post_id );
+					            foreach ( $settings['exclusions']['posts'] as $excluded_post_id ) {
+					                $post_title = get_the_title( $excluded_post_id );
 					                if ( $post_title ) {
-					                    echo '<option value="' . esc_attr( $post_id ) . '" selected>' . esc_html( $post_title ) . '</option>';
+					                    echo '<option value="' . esc_attr( $excluded_post_id ) . '" selected>' . esc_html( $post_title ) . '</option>';
 					                }
 					            }
 					        }
@@ -458,9 +458,9 @@ $floating_positions = $settings_helper->get_floating_position_options();
 					        <?php
 					        if ( isset( $settings['exclusions']['categories'] ) && is_array( $settings['exclusions']['categories'] ) ) {
 					            foreach ( $settings['exclusions']['categories'] as $term_id ) {
-					                $term = get_term( $term_id, 'product_cat' );
-					                if ( $term && ! is_wp_error( $term ) ) {
-					                    echo '<option value="' . esc_attr( $term->term_id ) . '" selected>' . esc_html( $term->name ) . '</option>';
+					                $category = get_term( $term_id, 'product_cat' );
+					                if ( $category && ! is_wp_error( $category ) ) {
+					                    echo '<option value="' . esc_attr( $category->term_id ) . '" selected>' . esc_html( $category->name ) . '</option>';
 					                }
 					            }
 					        }
@@ -475,9 +475,9 @@ $floating_positions = $settings_helper->get_floating_position_options();
 					        <?php
 					        if ( isset( $settings['exclusions']['tags'] ) && is_array( $settings['exclusions']['tags'] ) ) {
 					            foreach ( $settings['exclusions']['tags'] as $term_id ) {
-					                $term = get_term( $term_id, 'product_tag' );
-					                if ( $term && ! is_wp_error( $term ) ) {
-					                    echo '<option value="' . esc_attr( $term->term_id ) . '" selected>' . esc_html( $term->name ) . '</option>';
+					                $tag = get_term( $term_id, 'product_tag' );
+					                if ( $tag && ! is_wp_error( $tag ) ) {
+					                    echo '<option value="' . esc_attr( $tag->term_id ) . '" selected>' . esc_html( $tag->name ) . '</option>';
 					                }
 					            }
 					        }

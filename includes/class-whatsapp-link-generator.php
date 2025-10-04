@@ -14,6 +14,8 @@ if ( ! defined( 'WPINC' ) ) {
 	die;
 }
 
+// phpcs:disable Generic.CodeAnalysis.EmptyStatement.DetectedCatch -- Empty catch blocks are intentional for graceful degradation.
+
 /**
  * WhatsApp Link Generator class.
  */
@@ -368,7 +370,7 @@ class CTC_WhatsApp_Link_Generator {
 			if ( $product && is_object( $product ) ) {
 				$product_id = $product->get_id();
 			}
-		// Check if we're on shop page.
+			// Check if we're on shop page.
 		} elseif ( function_exists( 'is_shop' ) && is_shop() ) {
 			$page_id = wc_get_page_id( 'shop' );
 		// Check if we're on a category page.
@@ -445,8 +447,8 @@ class CTC_WhatsApp_Link_Generator {
 
 		// Get the message template. with fallback.
 		$message_template = '';
-		if ( isset( $this->settings['message_templates'][$template_key] ) ) {
-			$message_template = $this->settings['message_templates'][$template_key];
+		if ( isset( $this->settings['message_templates'][ $template_key ] ) ) {
+			$message_template = $this->settings['message_templates'][ $template_key ];
 		}
 
 		// If no template is set, use default template.
@@ -762,7 +764,7 @@ class CTC_WhatsApp_Link_Generator {
 							    } elseif ( isset( $data['subtotal'] ) && is_numeric( $data['subtotal'] ) ) {
 							        $item_total = $data['subtotal'];
 							    }
-							// Only if that fails, try the direct method as a fallback.
+								// Only if that fails, try the direct method as a fallback.
 							} elseif ( method_exists( $item, 'get_total' ) && is_callable( array( $item, 'get_total' ) ) ) {
 							    $item_total = $item->get_total();
 							}
@@ -822,10 +824,10 @@ class CTC_WhatsApp_Link_Generator {
 				if ( is_array( $data ) && isset( $data['total'] ) ) {
 					$order_total = $data['total'];
 				}
-			// Only if that fails, try the direct method as a fallback.
+				// Only if that fails, try the direct method as a fallback.
 			} elseif ( method_exists( $order, 'get_total' ) && is_callable( array( $order, 'get_total' ) ) ) {
 				$order_total = $order->get_total();
-			// Direct property access as last resort.
+				// Direct property access as last resort.
 			} elseif ( is_object( $order ) && isset( $order->total ) ) {
 				$order_total = $order->total;
 			}

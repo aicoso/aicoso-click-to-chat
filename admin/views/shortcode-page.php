@@ -66,7 +66,7 @@ $whatsapp_numbers = isset( $settings['whatsapp_numbers'] ) ? $settings['whatsapp
 	}
 
 	if ( ! $plugin_enabled || ! $has_valid_numbers ) :
-	?>
+		?>
 	<div class="ctc-admin-warning-box">
 		<?php if ( ! $plugin_enabled ) : ?>
 		<div class="ctc-warning-item">

@@ -79,27 +79,33 @@ class CTC_Settings {
 	public function ajax_get_setting() {
 		// Check nonce.
 		if ( ! check_ajax_referer( 'ctc_admin_nonce', 'nonce', false ) ) {
-			wp_send_json_error( array(
-				'message' => esc_html__( 'Security check failed.', 'click-to-chat' ),
-			) );
+			wp_send_json_error(
+				array(
+					'message' => esc_html__( 'Security check failed.', 'click-to-chat' ),
+				)
+			);
 		}
 
 		// Check if key is set.
 		if ( empty( $_POST['key'] ) ) {
-			wp_send_json_error( array(
-				'message' => esc_html__( 'Setting key is required.', 'click-to-chat' ),
-			) );
+			wp_send_json_error(
+				array(
+					'message' => esc_html__( 'Setting key is required.', 'click-to-chat' ),
+				)
+			);
 		}
 
 		// Get the setting.
 		$key = sanitize_text_field( wp_unslash( $_POST['key'] ) );
-		$default = isset( $_POST['default'] ) ? wp_unslash( $_POST['default'] ) : false;
+		$default = isset( $_POST['default'] ) ? sanitize_text_field( wp_unslash( $_POST['default'] ) ) : false;
 
 		$value = $this->get_setting( $key, $default );
 
-		wp_send_json_success( array(
-			'value' => $value,
-		) );
+		wp_send_json_success(
+			array(
+				'value' => $value,
+			)
+		);
 	}
 
 	/**
@@ -108,9 +114,11 @@ class CTC_Settings {
 	public function ajax_search_products() {
 		// Check nonce.
 		if ( ! check_ajax_referer( 'ctc_admin_nonce', 'nonce', false ) ) {
-			wp_send_json_error( array(
-				'message' => esc_html__( 'Security check failed.', 'click-to-chat' ),
-			) );
+			wp_send_json_error(
+				array(
+					'message' => esc_html__( 'Security check failed.', 'click-to-chat' ),
+				)
+			);
 		}
 
 		// Check permissions.
@@ -145,9 +153,11 @@ class CTC_Settings {
 			);
 		}
 
-		wp_send_json_success( array(
-			'results' => $results,
-		) );
+		wp_send_json_success(
+			array(
+				'results' => $results,
+			)
+		);
 	}
 
 	/**
@@ -156,9 +166,11 @@ class CTC_Settings {
 	public function ajax_search_categories() {
 		// Check nonce.
 		if ( ! check_ajax_referer( 'ctc_admin_nonce', 'nonce', false ) ) {
-			wp_send_json_error( array(
-				'message' => esc_html__( 'Security check failed.', 'click-to-chat' ),
-			) );
+			wp_send_json_error(
+				array(
+					'message' => esc_html__( 'Security check failed.', 'click-to-chat' ),
+				)
+			);
 		}
 
 		// Check permissions.
@@ -195,9 +207,11 @@ class CTC_Settings {
 			}
 		}
 
-		wp_send_json_success( array(
-			'results' => $results,
-		) );
+		wp_send_json_success(
+			array(
+				'results' => $results,
+			)
+		);
 	}
 
 	/**
@@ -206,9 +220,11 @@ class CTC_Settings {
 	public function ajax_search_pages() {
 		// Check nonce.
 		if ( ! check_ajax_referer( 'ctc_admin_nonce', 'nonce', false ) ) {
-			wp_send_json_error( array(
-				'message' => esc_html__( 'Security check failed.', 'click-to-chat' ),
-			) );
+			wp_send_json_error(
+				array(
+					'message' => esc_html__( 'Security check failed.', 'click-to-chat' ),
+				)
+			);
 		}
 
 		// Check permissions.
@@ -243,9 +259,11 @@ class CTC_Settings {
 			);
 		}
 
-		wp_send_json_success( array(
-			'results' => $results,
-		) );
+		wp_send_json_success(
+			array(
+				'results' => $results,
+			)
+		);
 	}
 
 	/**
@@ -254,9 +272,11 @@ class CTC_Settings {
 	public function ajax_search_posts() {
 		// Check nonce.
 		if ( ! check_ajax_referer( 'ctc_admin_nonce', 'nonce', false ) ) {
-			wp_send_json_error( array(
-				'message' => esc_html__( 'Security check failed.', 'click-to-chat' ),
-			) );
+			wp_send_json_error(
+				array(
+					'message' => esc_html__( 'Security check failed.', 'click-to-chat' ),
+				)
+			);
 		}
 
 		// Check permissions.
@@ -291,9 +311,11 @@ class CTC_Settings {
 			);
 		}
 
-		wp_send_json_success( array(
-			'results' => $results,
-		) );
+		wp_send_json_success(
+			array(
+				'results' => $results,
+			)
+		);
 	}
 
 	/**
@@ -302,9 +324,11 @@ class CTC_Settings {
 	public function ajax_search_tags() {
 		// Check nonce.
 		if ( ! check_ajax_referer( 'ctc_admin_nonce', 'nonce', false ) ) {
-			wp_send_json_error( array(
-				'message' => esc_html__( 'Security check failed.', 'click-to-chat' ),
-			) );
+			wp_send_json_error(
+				array(
+					'message' => esc_html__( 'Security check failed.', 'click-to-chat' ),
+				)
+			);
 		}
 
 		// Check permissions.
@@ -341,9 +365,11 @@ class CTC_Settings {
 			}
 		}
 
-		wp_send_json_success( array(
-			'results' => $results,
-		) );
+		wp_send_json_success(
+			array(
+				'results' => $results,
+			)
+		);
 	}
 
 	/**
@@ -352,9 +378,11 @@ class CTC_Settings {
 	public function ajax_preview_message() {
 		// Check nonce.
 		if ( ! check_ajax_referer( 'ctc_admin_nonce', 'nonce', false ) ) {
-			wp_send_json_error( array(
-				'message' => esc_html__( 'Security check failed.', 'click-to-chat' ),
-			) );
+			wp_send_json_error(
+				array(
+					'message' => esc_html__( 'Security check failed.', 'click-to-chat' ),
+				)
+			);
 		}
 
 		// Check permissions.
@@ -367,15 +395,18 @@ class CTC_Settings {
 		// Get template type and content.
 		$template_type = isset( $_POST['template_type'] ) ? sanitize_text_field( wp_unslash( $_POST['template_type'] ) ) : '';
 		// Use wp_unslash to handle slashes and stripslashes_deep for arrays.
+		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Sanitized on next line with wp_check_invalid_utf8.
 		$template_content = isset( $_POST['template_content'] ) ? wp_unslash( $_POST['template_content'] ) : '';
 
 		// Basic sanitization without encoding entities.
 		$template_content = wp_check_invalid_utf8( $template_content );
 
 		if ( empty( $template_type ) || empty( $template_content ) ) {
-			wp_send_json_error( array(
-				'message' => esc_html__( 'Template type and content are required.', 'click-to-chat' ),
-			) );
+			wp_send_json_error(
+				array(
+					'message' => esc_html__( 'Template type and content are required.', 'click-to-chat' ),
+				)
+			);
 		}
 
 		// No need to decode since we're not encoding in the first place.
@@ -383,9 +414,11 @@ class CTC_Settings {
 		// Generate a preview with sample data based on template type.
 		$preview = $this->generate_template_preview( $template_type, $template_content );
 
-		wp_send_json_success( array(
-			'preview' => $preview,
-		) );
+		wp_send_json_success(
+			array(
+				'preview' => $preview,
+			)
+		);
 	}
 
 	/**

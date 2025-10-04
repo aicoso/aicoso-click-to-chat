@@ -36,7 +36,7 @@ class CTC_Admin {
 	 * Constructor.
 	 */
 	public function __construct() {
-		$this->settings = get_option( 'ctc_settings', array( ) );
+		$this->settings = get_option( 'ctc_settings', array() );
 
 		// Initialize hooks.
 		$this->init_hooks();
@@ -132,7 +132,7 @@ class CTC_Admin {
 		wp_enqueue_style(
 			'select2-css',
 			CTC_PLUGIN_URL . 'admin/lib/select2/select2.min.css',
-			array( ),
+			array(),
 			'4.0.13'
 		);
 
@@ -288,13 +288,16 @@ class CTC_Admin {
 	 */
 	private function save_settings() {
 		// Get existing settings.
-		$settings = get_option( 'ctc_settings', array( ) );
+		$settings = get_option( 'ctc_settings', array() );
 
+		// Nonce is verified in render_settings_page() before calling this method.
+		// phpcs:disable WordPress.Security.NonceVerification.Missing
 		// Save plugin enabled status.
 		$settings['plugin_enabled'] = isset( $_POST['ctc_plugin_enabled'] ) ? true : false;
 
 		// Sanitize and update button settings.
 		if ( isset( $_POST['ctc_button'] ) && is_array( $_POST['ctc_button'] ) ) {
+			// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Each field is sanitized individually below.
 			$ctc_button      = wp_unslash( $_POST['ctc_button'] );
 			$button_settings = array(
 				'text'       => isset( $ctc_button['text'] ) ? sanitize_text_field( $ctc_button['text'] ) : '',
@@ -309,6 +312,7 @@ class CTC_Admin {
 
 		// Sanitize and update single product settings.
 		if ( isset( $_POST['ctc_single_product'] ) && is_array( $_POST['ctc_single_product'] ) ) {
+			// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Each field is sanitized individually below.
 			$ctc_single_product = wp_unslash( $_POST['ctc_single_product'] );
 			$single_product     = array(
 				'enabled'  => isset( $_POST['ctc_single_product']['enabled'] ) ? true : false,
@@ -320,6 +324,7 @@ class CTC_Admin {
 
 		// Sanitize and update shop page settings.
 		if ( isset( $_POST['ctc_shop_page'] ) && is_array( $_POST['ctc_shop_page'] ) ) {
+			// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Each field is sanitized individually below.
 			$ctc_shop_page = wp_unslash( $_POST['ctc_shop_page'] );
 			$shop_page     = array(
 				'enabled'  => isset( $_POST['ctc_shop_page']['enabled'] ) ? true : false,
@@ -350,6 +355,7 @@ class CTC_Admin {
 
 		// Sanitize and update floating button settings.
 		if ( isset( $_POST['ctc_floating_button'] ) && is_array( $_POST['ctc_floating_button'] ) ) {
+			// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Each field is sanitized individually below.
 			$ctc_floating_button = wp_unslash( $_POST['ctc_floating_button'] );
 			$floating_button     = array(
 				'enabled'  => isset( $_POST['ctc_floating_button']['enabled'] ) ? true : false,
@@ -362,14 +368,15 @@ class CTC_Admin {
 		// Sanitize and update exclusions.
 		// Always reset exclusions to ensure removed items are cleared.
 		$exclusions = array(
-			'pages'      => array( ),
-			'posts'      => array( ),
-			'categories' => array( ),
-			'tags'       => array( ),
-			'products'   => array( ),
+			'pages'      => array(),
+			'posts'      => array(),
+			'categories' => array(),
+			'tags'       => array(),
+			'products'   => array(),
 		);
 
 		if ( isset( $_POST['ctc_exclusions'] ) && is_array( $_POST['ctc_exclusions'] ) ) {
+			// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Each field is sanitized individually below.
 			$ctc_exclusions = wp_unslash( $_POST['ctc_exclusions'] );
 
 			// Pages.
@@ -435,6 +442,7 @@ class CTC_Admin {
 
 		// Update settings.
 		update_option( 'ctc_settings', $settings );
+		// phpcs:enable WordPress.Security.NonceVerification.Missing
 
 		// Add success message.
 		add_settings_error(
@@ -449,24 +457,27 @@ class CTC_Admin {
 	 * Save WhatsApp numbers.
 	 */
 	private function save_numbers() {
+		// Nonce is verified in render_numbers_page() before calling this method.
+		// phpcs:disable WordPress.Security.NonceVerification.Missing
 		// Get existing settings.
-		$settings = get_option( 'ctc_settings', array( ) );
+		$settings = get_option( 'ctc_settings', array() );
 
 		// Initialize empty array for WhatsApp numbers.
-		$whatsapp_numbers = array( );
+		$whatsapp_numbers = array();
 
 		// Process deleted numbers.
-		$deleted_numbers = array( );
+		$deleted_numbers = array();
 		if ( isset( $_POST['ctc_deleted_numbers'] ) && ! empty( $_POST['ctc_deleted_numbers'] ) ) {
 			$deleted_numbers = array_map( 'absint', explode( ',', sanitize_text_field( wp_unslash( $_POST['ctc_deleted_numbers'] ) ) ) );
 		}
 
 		// Check for duplicate names.
-		$number_names  = array( );
+		$number_names  = array();
 		$has_duplicate = false;
 
 		// Process submitted numbers.
 		if ( isset( $_POST['ctc_numbers'] ) && is_array( $_POST['ctc_numbers'] ) ) {
+			// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Each field is sanitized individually below.
 			$ctc_numbers = wp_unslash( $_POST['ctc_numbers'] );
 			foreach ( $ctc_numbers as $number_data ) {
 				// Get the number ID.
@@ -491,9 +502,9 @@ class CTC_Admin {
 				}
 
 				$assignments = array(
-					'products'   => array( ),
-					'categories' => array( ),
-					'pages'      => array( ),
+					'products'   => array(),
+					'categories' => array(),
+					'pages'      => array(),
 				);
 
 				// Process product assignments.
@@ -551,17 +562,21 @@ class CTC_Admin {
 				'updated'
 			);
 		}
+		// phpcs:enable WordPress.Security.NonceVerification.Missing
 	}
 
 	/**
 	 * Save message templates.
 	 */
 	private function save_templates() {
+		// Nonce is verified in render_templates_page() before calling this method.
+		// phpcs:disable WordPress.Security.NonceVerification.Missing
 		// Get existing settings.
-		$settings = get_option( 'ctc_settings', array( ) );
+		$settings = get_option( 'ctc_settings', array() );
 
 		// Process submitted templates.
 		if ( isset( $_POST['ctc_templates'] ) && is_array( $_POST['ctc_templates'] ) ) {
+			// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Each field is sanitized individually below.
 			$ctc_templates     = wp_unslash( $_POST['ctc_templates'] );
 			$message_templates = array(
 				'single_product' => isset( $ctc_templates['single_product'] ) ? sanitize_textarea_field( $ctc_templates['single_product'] ) : '',
@@ -585,6 +600,7 @@ class CTC_Admin {
 				'updated'
 			);
 		}
+		// phpcs:enable WordPress.Security.NonceVerification.Missing
 	}
 
 	/**
@@ -616,7 +632,7 @@ class CTC_Admin {
 		$assigned_number = get_post_meta( $post->ID, '_ctc_assigned_number', true );
 
 		// Get available WhatsApp numbers.
-		$whatsapp_numbers = isset( $this->settings['whatsapp_numbers'] ) ? $this->settings['whatsapp_numbers'] : array( );
+		$whatsapp_numbers = isset( $this->settings['whatsapp_numbers'] ) ? $this->settings['whatsapp_numbers'] : array();
 
 		// Output the meta box HTML.
 		?>

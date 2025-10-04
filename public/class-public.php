@@ -343,22 +343,26 @@ class CTC_Public {
 		}
 
 		// Localize script with parameters.
-		wp_localize_script( 'ctc-cart-checkout-blocks', 'ctc_block_params', array(
-			'cart_enabled' => $cart_enabled ? '1' : '0',
-			'checkout_enabled' => $checkout_enabled ? '1' : '0',
-			'cart_position' => isset( $this->settings['cart_page']['position'] ) ?
-						      $this->settings['cart_page']['position'] : 'after_cart_table',
-			'checkout_position' => isset( $this->settings['checkout_page']['position'] ) ?
-						          $this->settings['checkout_page']['position'] : 'after_payment',
-			'button_text' => isset( $this->settings['button_settings']['text'] ) ?
-						    $this->settings['button_settings']['text'] : __( 'Order via WhatsApp', 'click-to-chat' ),
-			'bg_color' => isset( $this->settings['button_settings']['bg_color'] ) ?
-						 $this->settings['button_settings']['bg_color'] : '#25D366',
-			'text_color' => isset( $this->settings['button_settings']['text_color'] ) ?
-						   $this->settings['button_settings']['text_color'] : '#ffffff',
-			'show_icon' => isset( $this->settings['button_settings']['icon'] ) && $this->settings['button_settings']['icon'] ? '1' : '0',
-			'whatsapp_url' => $whatsapp_url,
-		) );
+		wp_localize_script(
+			'ctc-cart-checkout-blocks',
+			'ctc_block_params',
+			array(
+				'cart_enabled'      => $cart_enabled ? '1' : '0',
+				'checkout_enabled'  => $checkout_enabled ? '1' : '0',
+				'cart_position'     => isset( $this->settings['cart_page']['position'] ) ?
+					$this->settings['cart_page']['position'] : 'after_cart_table',
+				'checkout_position' => isset( $this->settings['checkout_page']['position'] ) ?
+					$this->settings['checkout_page']['position'] : 'after_payment',
+				'button_text'       => isset( $this->settings['button_settings']['text'] ) ?
+					$this->settings['button_settings']['text'] : __( 'Order via WhatsApp', 'click-to-chat' ),
+				'bg_color'          => isset( $this->settings['button_settings']['bg_color'] ) ?
+					$this->settings['button_settings']['bg_color'] : '#25D366',
+				'text_color'        => isset( $this->settings['button_settings']['text_color'] ) ?
+					$this->settings['button_settings']['text_color'] : '#ffffff',
+				'show_icon'         => isset( $this->settings['button_settings']['icon'] ) && $this->settings['button_settings']['icon'] ? '1' : '0',
+				'whatsapp_url'      => $whatsapp_url,
+			)
+		);
 	}
 
 	/**
@@ -582,6 +586,7 @@ class CTC_Public {
 	 */
 	public function ajax_get_variation_url() {
 		// Check nonce.
+		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Nonce is verified, not used as data.
 		if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( wp_unslash( $_POST['nonce'] ), 'ctc_public_nonce' ) ) {
 			wp_send_json_error( array( 'message' => __( 'Security check failed.', 'click-to-chat' ) ) );
 		}
