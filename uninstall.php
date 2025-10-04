@@ -11,17 +11,17 @@
 
 // If uninstall is not called from WordPress, exit.
 if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
-    exit;
+	exit;
 }
 
-// Delete plugin options
+// Delete plugin options.
 delete_option( 'ctc_settings' );
 
-// Delete product meta data from all products
+// Delete product meta data from all products.
 global $wpdb;
 
-// Delete the plugin-specific post meta for all products
+// Delete the plugin-specific post meta for all products.
 $wpdb->query( "DELETE FROM {$wpdb->postmeta} WHERE meta_key LIKE '_ctc_%'" );
 
-// Clear any cached data
+// Clear any cached data.
 wp_cache_flush();
