@@ -42,6 +42,8 @@ add_action(
 
 /**
  * Check if WooCommerce is active
+ *
+ * @return bool True if WooCommerce is active, false otherwise.
  */
 // phpcs:disable Universal.Files.SeparateFunctionsFromOO.Mixed -- Main plugin file requires both functions and class.
 function ctc_check_woocommerce() {

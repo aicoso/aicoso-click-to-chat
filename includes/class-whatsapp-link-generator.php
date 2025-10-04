@@ -373,19 +373,19 @@ class CTC_WhatsApp_Link_Generator {
 			// Check if we're on shop page.
 		} elseif ( function_exists( 'is_shop' ) && is_shop() ) {
 			$page_id = wc_get_page_id( 'shop' );
-		// Check if we're on a category page.
+			// Check if we're on a category page.
 		} elseif ( function_exists( 'is_product_category' ) && is_product_category() ) {
 			$category = get_queried_object();
 			if ( $category && isset( $category->term_id ) ) {
 				$category_id = $category->term_id;
 			}
-		// Check if we're on cart page.
+			// Check if we're on cart page.
 		} elseif ( function_exists( 'is_cart' ) && is_cart() ) {
 			$page_id = wc_get_page_id( 'cart' );
-		// Check if we're on checkout page.
+			// Check if we're on checkout page.
 		} elseif ( function_exists( 'is_checkout' ) && is_checkout() ) {
 			$page_id = wc_get_page_id( 'checkout' );
-		// Check if we're on any other page.
+			// Check if we're on any other page.
 		} elseif ( is_page() ) {
 			$page_id = get_the_ID();
 		}

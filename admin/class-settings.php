@@ -123,9 +123,11 @@ class CTC_Settings {
 
 		// Check permissions.
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error( array(
-				'message' => esc_html__( 'You do not have permission to perform this action.', 'click-to-chat' ),
-			) );
+			wp_send_json_error(
+				array(
+					'message' => esc_html__( 'You do not have permission to perform this action.', 'click-to-chat' ),
+				)
+			);
 		}
 
 		// Get search term.
@@ -175,9 +177,11 @@ class CTC_Settings {
 
 		// Check permissions.
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error( array(
-				'message' => esc_html__( 'You do not have permission to perform this action.', 'click-to-chat' ),
-			) );
+			wp_send_json_error(
+				array(
+					'message' => esc_html__( 'You do not have permission to perform this action.', 'click-to-chat' ),
+				)
+			);
 		}
 
 		// Get search term.
@@ -229,9 +233,11 @@ class CTC_Settings {
 
 		// Check permissions.
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error( array(
-				'message' => esc_html__( 'You do not have permission to perform this action.', 'click-to-chat' ),
-			) );
+			wp_send_json_error(
+				array(
+					'message' => esc_html__( 'You do not have permission to perform this action.', 'click-to-chat' ),
+				)
+			);
 		}
 
 		// Get search term.
@@ -281,9 +287,11 @@ class CTC_Settings {
 
 		// Check permissions.
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error( array(
-				'message' => esc_html__( 'You do not have permission to perform this action.', 'click-to-chat' ),
-			) );
+			wp_send_json_error(
+				array(
+					'message' => esc_html__( 'You do not have permission to perform this action.', 'click-to-chat' ),
+				)
+			);
 		}
 
 		// Get search term.
@@ -333,9 +341,11 @@ class CTC_Settings {
 
 		// Check permissions.
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error( array(
-				'message' => esc_html__( 'You do not have permission to perform this action.', 'click-to-chat' ),
-			) );
+			wp_send_json_error(
+				array(
+					'message' => esc_html__( 'You do not have permission to perform this action.', 'click-to-chat' ),
+				)
+			);
 		}
 
 		// Get search term.
@@ -387,9 +397,11 @@ class CTC_Settings {
 
 		// Check permissions.
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error( array(
-				'message' => esc_html__( 'You do not have permission to perform this action.', 'click-to-chat' ),
-			) );
+			wp_send_json_error(
+				array(
+					'message' => esc_html__( 'You do not have permission to perform this action.', 'click-to-chat' ),
+				)
+			);
 		}
 
 		// Get template type and content.
