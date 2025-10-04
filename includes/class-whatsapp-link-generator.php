@@ -77,7 +77,7 @@ class CTC_WhatsApp_Link_Generator {
 							// Convert all stored IDs to integers for comparison.
 							$assigned_categories = array_map( 'absint', $number_data['assignments']['categories'] );
 							if ( in_array( $term_id, $assigned_categories, true ) ) {
-							    return $number_data['number'];
+								return $number_data['number'];
 							}
 						}
 					}
@@ -639,8 +639,8 @@ class CTC_WhatsApp_Link_Generator {
 						$variation_details = array();
 						foreach ( $cart_item['variation'] as $attribute => $value ) {
 							if ( function_exists( 'wc_attribute_label' ) ) {
-							    $attribute_label = wc_attribute_label( str_replace( 'attribute_', '', $attribute ), $product );
-							    $variation_details[] = $attribute_label . ': ' . $value;
+								$attribute_label = wc_attribute_label( str_replace( 'attribute_', '', $attribute ), $product );
+								$variation_details[] = $attribute_label . ': ' . $value;
 							}
 						}
 
@@ -650,7 +650,7 @@ class CTC_WhatsApp_Link_Generator {
 					}
 
 					$cart_items_list .= $item_name . ' x ' . $item_quantity . ' - ' .
-							           wp_strip_all_tags( wc_price( $item_total ) ) . "\n";
+									   wp_strip_all_tags( wc_price( $item_total ) ) . "\n";
 				}
 			}
 		}
@@ -738,7 +738,7 @@ class CTC_WhatsApp_Link_Generator {
 						} elseif ( method_exists( $item, 'get_data' ) ) {
 							$data = $item->get_data();
 							if ( isset( $data['name'] ) ) {
-							    $item_name = $data['name'];
+								$item_name = $data['name'];
 							}
 						}
 
@@ -749,7 +749,7 @@ class CTC_WhatsApp_Link_Generator {
 						} elseif ( method_exists( $item, 'get_data' ) ) {
 							$data = $item->get_data();
 							if ( isset( $data['quantity'] ) ) {
-							    $item_quantity = $data['quantity'];
+								$item_quantity = $data['quantity'];
 							}
 						}
 
@@ -758,22 +758,22 @@ class CTC_WhatsApp_Link_Generator {
 						try {
 							// First try to get data using get_data which is more commonly available.
 							if ( method_exists( $item, 'get_data' ) ) {
-							    $data = $item->get_data();
-							    if ( isset( $data['total'] ) && is_numeric( $data['total'] ) ) {
-							        $item_total = $data['total'];
-							    } elseif ( isset( $data['subtotal'] ) && is_numeric( $data['subtotal'] ) ) {
-							        $item_total = $data['subtotal'];
-							    }
+								$data = $item->get_data();
+								if ( isset( $data['total'] ) && is_numeric( $data['total'] ) ) {
+									$item_total = $data['total'];
+								} elseif ( isset( $data['subtotal'] ) && is_numeric( $data['subtotal'] ) ) {
+									$item_total = $data['subtotal'];
+								}
 								// Only if that fails, try the direct method as a fallback.
 							} elseif ( method_exists( $item, 'get_total' ) && is_callable( array( $item, 'get_total' ) ) ) {
-							    $item_total = $item->get_total();
+								$item_total = $item->get_total();
 							}
 						} catch ( Exception $e ) {
 							// Silently handle any exceptions.
 						}
 
 						$ordered_items_list .= $item_name . ' x ' . $item_quantity . ' - ' .
-							                  wp_strip_all_tags( wc_price( $item_total ) ) . "\n";
+											  wp_strip_all_tags( wc_price( $item_total ) ) . "\n";
 					}
 				}
 			}

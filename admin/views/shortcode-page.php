@@ -113,39 +113,39 @@ $whatsapp_numbers = isset( $settings['whatsapp_numbers'] ) ? $settings['whatsapp
 				<h3><?php esc_html_e( 'Button Type', 'click-to-chat' ); ?></h3>
 				<div class="ctc-button-types">
 					<label class="ctc-type-card">
-					    <input type="radio" name="button_type" value="product" class="ctc-shortcode-param" data-param="type" checked>
-					    <div class="ctc-type-card-inner">
-					        <span class="ctc-type-icon">📦</span>
-					        <span class="ctc-type-label"><?php esc_html_e( 'Product', 'click-to-chat' ); ?></span>
-					        <small><?php esc_html_e( 'For product pages', 'click-to-chat' ); ?></small>
-					    </div>
+						<input type="radio" name="button_type" value="product" class="ctc-shortcode-param" data-param="type" checked>
+						<div class="ctc-type-card-inner">
+							<span class="ctc-type-icon">📦</span>
+							<span class="ctc-type-label"><?php esc_html_e( 'Product', 'click-to-chat' ); ?></span>
+							<small><?php esc_html_e( 'For product pages', 'click-to-chat' ); ?></small>
+						</div>
 					</label>
 
 					<label class="ctc-type-card">
-					    <input type="radio" name="button_type" value="cart" class="ctc-shortcode-param" data-param="type">
-					    <div class="ctc-type-card-inner">
-					        <span class="ctc-type-icon">🛒</span>
-					        <span class="ctc-type-label"><?php esc_html_e( 'Cart', 'click-to-chat' ); ?></span>
-					        <small><?php esc_html_e( 'Include cart items', 'click-to-chat' ); ?></small>
-					    </div>
+						<input type="radio" name="button_type" value="cart" class="ctc-shortcode-param" data-param="type">
+						<div class="ctc-type-card-inner">
+							<span class="ctc-type-icon">🛒</span>
+							<span class="ctc-type-label"><?php esc_html_e( 'Cart', 'click-to-chat' ); ?></span>
+							<small><?php esc_html_e( 'Include cart items', 'click-to-chat' ); ?></small>
+						</div>
 					</label>
 
 					<label class="ctc-type-card">
-					    <input type="radio" name="button_type" value="shop" class="ctc-shortcode-param" data-param="type">
-					    <div class="ctc-type-card-inner">
-					        <span class="ctc-type-icon">🏪</span>
-					        <span class="ctc-type-label"><?php esc_html_e( 'Shop', 'click-to-chat' ); ?></span>
-					        <small><?php esc_html_e( 'Shop/category pages', 'click-to-chat' ); ?></small>
-					    </div>
+						<input type="radio" name="button_type" value="shop" class="ctc-shortcode-param" data-param="type">
+						<div class="ctc-type-card-inner">
+							<span class="ctc-type-icon">🏪</span>
+							<span class="ctc-type-label"><?php esc_html_e( 'Shop', 'click-to-chat' ); ?></span>
+							<small><?php esc_html_e( 'Shop/category pages', 'click-to-chat' ); ?></small>
+						</div>
 					</label>
 
 					<label class="ctc-type-card">
-					    <input type="radio" name="button_type" value="floating" class="ctc-shortcode-param" data-param="type">
-					    <div class="ctc-type-card-inner">
-					        <span class="ctc-type-icon">💬</span>
-					        <span class="ctc-type-label"><?php esc_html_e( 'General', 'click-to-chat' ); ?></span>
-					        <small><?php esc_html_e( 'Simple contact', 'click-to-chat' ); ?></small>
-					    </div>
+						<input type="radio" name="button_type" value="floating" class="ctc-shortcode-param" data-param="type">
+						<div class="ctc-type-card-inner">
+							<span class="ctc-type-icon">💬</span>
+							<span class="ctc-type-label"><?php esc_html_e( 'General', 'click-to-chat' ); ?></span>
+							<small><?php esc_html_e( 'Simple contact', 'click-to-chat' ); ?></small>
+						</div>
 					</label>
 				</div>
 			</div>
@@ -155,15 +155,15 @@ $whatsapp_numbers = isset( $settings['whatsapp_numbers'] ) ? $settings['whatsapp
 				<h3><?php esc_html_e( 'Product Selection', 'click-to-chat' ); ?></h3>
 				<div class="ctc-field-group">
 					<label class="ctc-radio-option">
-					    <input type="radio" name="product_source" value="current" class="ctc-shortcode-param" data-param="current" checked>
-					    <span><?php esc_html_e( 'Use current product (auto-detect)', 'click-to-chat' ); ?></span>
+						<input type="radio" name="product_source" value="current" class="ctc-shortcode-param" data-param="current" checked>
+						<span><?php esc_html_e( 'Use current product (auto-detect)', 'click-to-chat' ); ?></span>
 					</label>
 					<label class="ctc-radio-option">
-					    <input type="radio" name="product_source" value="specific">
-					    <span><?php esc_html_e( 'Specify product ID', 'click-to-chat' ); ?></span>
+						<input type="radio" name="product_source" value="specific">
+						<span><?php esc_html_e( 'Specify product ID', 'click-to-chat' ); ?></span>
 					</label>
 					<div class="ctc-product-id-field ctc-hidden">
-					    <input type="number" id="ctc_product_id" class="ctc-shortcode-param" data-param="product_id" placeholder="<?php esc_attr_e( 'Enter product ID', 'click-to-chat' ); ?>">
+						<input type="number" id="ctc_product_id" class="ctc-shortcode-param" data-param="product_id" placeholder="<?php esc_attr_e( 'Enter product ID', 'click-to-chat' ); ?>">
 					</div>
 				</div>
 			</div>
@@ -179,38 +179,38 @@ $whatsapp_numbers = isset( $settings['whatsapp_numbers'] ) ? $settings['whatsapp
 
 				<div class="ctc-color-fields">
 					<div class="ctc-field-group">
-					    <label><?php esc_html_e( 'Background', 'click-to-chat' ); ?></label>
-					    <input type="text" id="ctc_bg_color" class="ctc-color-field ctc-shortcode-param" data-param="bg_color" value="<?php echo esc_attr( $default_bg_color ); ?>">
+						<label><?php esc_html_e( 'Background', 'click-to-chat' ); ?></label>
+						<input type="text" id="ctc_bg_color" class="ctc-color-field ctc-shortcode-param" data-param="bg_color" value="<?php echo esc_attr( $default_bg_color ); ?>">
 					</div>
 					<div class="ctc-field-group">
-					    <label><?php esc_html_e( 'Text Color', 'click-to-chat' ); ?></label>
-					    <input type="text" id="ctc_text_color" class="ctc-color-field ctc-shortcode-param" data-param="text_color" value="<?php echo esc_attr( $default_text_color ); ?>">
+						<label><?php esc_html_e( 'Text Color', 'click-to-chat' ); ?></label>
+						<input type="text" id="ctc_text_color" class="ctc-color-field ctc-shortcode-param" data-param="text_color" value="<?php echo esc_attr( $default_text_color ); ?>">
 					</div>
 				</div>
 
 				<div class="ctc-size-align-fields">
 					<div class="ctc-field-group">
-					    <label><?php esc_html_e( 'Size', 'click-to-chat' ); ?></label>
-					    <select class="ctc-shortcode-param" data-param="size">
-					        <option value="small"><?php esc_html_e( 'Small', 'click-to-chat' ); ?></option>
-					        <option value="normal" selected><?php esc_html_e( 'Normal', 'click-to-chat' ); ?></option>
-					        <option value="large"><?php esc_html_e( 'Large', 'click-to-chat' ); ?></option>
-					    </select>
+						<label><?php esc_html_e( 'Size', 'click-to-chat' ); ?></label>
+						<select class="ctc-shortcode-param" data-param="size">
+							<option value="small"><?php esc_html_e( 'Small', 'click-to-chat' ); ?></option>
+							<option value="normal" selected><?php esc_html_e( 'Normal', 'click-to-chat' ); ?></option>
+							<option value="large"><?php esc_html_e( 'Large', 'click-to-chat' ); ?></option>
+						</select>
 					</div>
 					<div class="ctc-field-group">
-					    <label><?php esc_html_e( 'Alignment', 'click-to-chat' ); ?></label>
-					    <select class="ctc-shortcode-param" data-param="align">
-					        <option value="left"><?php esc_html_e( 'Left', 'click-to-chat' ); ?></option>
-					        <option value="center" selected><?php esc_html_e( 'Center', 'click-to-chat' ); ?></option>
-					        <option value="right"><?php esc_html_e( 'Right', 'click-to-chat' ); ?></option>
-					    </select>
+						<label><?php esc_html_e( 'Alignment', 'click-to-chat' ); ?></label>
+						<select class="ctc-shortcode-param" data-param="align">
+							<option value="left"><?php esc_html_e( 'Left', 'click-to-chat' ); ?></option>
+							<option value="center" selected><?php esc_html_e( 'Center', 'click-to-chat' ); ?></option>
+							<option value="right"><?php esc_html_e( 'Right', 'click-to-chat' ); ?></option>
+						</select>
 					</div>
 				</div>
 
 				<div class="ctc-field-group">
 					<label class="ctc-checkbox-option">
-					    <input type="checkbox" class="ctc-shortcode-param" data-param="icon" checked>
-					    <span><?php esc_html_e( 'Show WhatsApp icon', 'click-to-chat' ); ?></span>
+						<input type="checkbox" class="ctc-shortcode-param" data-param="icon" checked>
+						<span><?php esc_html_e( 'Show WhatsApp icon', 'click-to-chat' ); ?></span>
 					</label>
 				</div>
 			</div>
@@ -224,26 +224,26 @@ $whatsapp_numbers = isset( $settings['whatsapp_numbers'] ) ? $settings['whatsapp
 				<div class="ctc-advanced-content ctc-hidden">
 					<?php if ( ! empty( $whatsapp_numbers ) ) : ?>
 					<div class="ctc-field-group">
-					    <label><?php esc_html_e( 'Specific Number', 'click-to-chat' ); ?></label>
-					    <select class="ctc-shortcode-param" data-param="show_number">
-					        <option value=""><?php esc_html_e( 'Use default', 'click-to-chat' ); ?></option>
-					        <?php foreach ( $whatsapp_numbers as $number ) : ?>
-					            <option value="<?php echo esc_attr( $number['id'] ); ?>">
-					                <?php echo esc_html( $number['name'] . ' (' . $number['number'] . ')' ); ?>
-					            </option>
-					        <?php endforeach; ?>
-					    </select>
+						<label><?php esc_html_e( 'Specific Number', 'click-to-chat' ); ?></label>
+						<select class="ctc-shortcode-param" data-param="show_number">
+							<option value=""><?php esc_html_e( 'Use default', 'click-to-chat' ); ?></option>
+							<?php foreach ( $whatsapp_numbers as $number ) : ?>
+								<option value="<?php echo esc_attr( $number['id'] ); ?>">
+									<?php echo esc_html( $number['name'] . ' (' . $number['number'] . ')' ); ?>
+								</option>
+							<?php endforeach; ?>
+						</select>
 					</div>
 					<?php endif; ?>
 
 					<div class="ctc-field-group">
-					    <label><?php esc_html_e( 'Custom Message', 'click-to-chat' ); ?></label>
-					    <textarea class="ctc-shortcode-param" data-param="message" rows="3" placeholder="<?php esc_attr_e( 'Optional custom message...', 'click-to-chat' ); ?>"></textarea>
+						<label><?php esc_html_e( 'Custom Message', 'click-to-chat' ); ?></label>
+						<textarea class="ctc-shortcode-param" data-param="message" rows="3" placeholder="<?php esc_attr_e( 'Optional custom message...', 'click-to-chat' ); ?>"></textarea>
 					</div>
 
 					<div class="ctc-field-group">
-					    <label><?php esc_html_e( 'CSS Class', 'click-to-chat' ); ?></label>
-					    <input type="text" class="ctc-shortcode-param" data-param="css_class" placeholder="<?php esc_attr_e( 'custom-class', 'click-to-chat' ); ?>">
+						<label><?php esc_html_e( 'CSS Class', 'click-to-chat' ); ?></label>
+						<input type="text" class="ctc-shortcode-param" data-param="css_class" placeholder="<?php esc_attr_e( 'custom-class', 'click-to-chat' ); ?>">
 					</div>
 				</div>
 			</div>
@@ -256,7 +256,7 @@ $whatsapp_numbers = isset( $settings['whatsapp_numbers'] ) ? $settings['whatsapp
 				<h3>👁️ <?php esc_html_e( 'Live Preview', 'click-to-chat' ); ?></h3>
 				<div class="ctc-preview-area">
 					<div id="ctc-button-preview">
-					    <!-- Preview will be generated here -->
+						<!-- Preview will be generated here -->
 					</div>
 				</div>
 			</div>
@@ -267,8 +267,8 @@ $whatsapp_numbers = isset( $settings['whatsapp_numbers'] ) ? $settings['whatsapp
 				<div class="ctc-shortcode-box">
 					<code id="ctc-generated-shortcode">[ctc_button]</code>
 					<button type="button" class="ctc-copy-btn" id="ctc-copy-shortcode">
-					    <span class="dashicons dashicons-clipboard"></span>
-					    <span class="ctc-copy-text"><?php esc_html_e( 'Copy', 'click-to-chat' ); ?></span>
+						<span class="dashicons dashicons-clipboard"></span>
+						<span class="ctc-copy-text"><?php esc_html_e( 'Copy', 'click-to-chat' ); ?></span>
 					</button>
 				</div>
 				<div class="ctc-copy-success ctc-hidden">
@@ -281,20 +281,20 @@ $whatsapp_numbers = isset( $settings['whatsapp_numbers'] ) ? $settings['whatsapp
 				<h3>💡 <?php esc_html_e( 'Quick Examples', 'click-to-chat' ); ?></h3>
 				<div class="ctc-example-list">
 					<div class="ctc-example">
-					    <strong><?php esc_html_e( 'Basic button:', 'click-to-chat' ); ?></strong>
-					    <code>[ctc_button]</code>
+						<strong><?php esc_html_e( 'Basic button:', 'click-to-chat' ); ?></strong>
+						<code>[ctc_button]</code>
 					</div>
 					<div class="ctc-example">
-					    <strong><?php esc_html_e( 'Specific product:', 'click-to-chat' ); ?></strong>
-					    <code>[ctc_button product_id="123"]</code>
+						<strong><?php esc_html_e( 'Specific product:', 'click-to-chat' ); ?></strong>
+						<code>[ctc_button product_id="123"]</code>
 					</div>
 					<div class="ctc-example">
-					    <strong><?php esc_html_e( 'Cart button:', 'click-to-chat' ); ?></strong>
-					    <code>[ctc_button type="cart"]</code>
+						<strong><?php esc_html_e( 'Cart button:', 'click-to-chat' ); ?></strong>
+						<code>[ctc_button type="cart"]</code>
 					</div>
 					<div class="ctc-example">
-					    <strong><?php esc_html_e( 'Custom text:', 'click-to-chat' ); ?></strong>
-					    <code>[ctc_button text="Contact Us"]</code>
+						<strong><?php esc_html_e( 'Custom text:', 'click-to-chat' ); ?></strong>
+						<code>[ctc_button text="Contact Us"]</code>
 					</div>
 				</div>
 			</div>

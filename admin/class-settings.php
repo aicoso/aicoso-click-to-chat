@@ -510,7 +510,7 @@ class CTC_Settings {
 
 				$replacements = array(
 					'{cart_items_list}' => 'Sample Product x 2 - ' . $price1 . "\n" .
-						                 'Another Product x 1 - ' . $price2,
+										 'Another Product x 1 - ' . $price2,
 					'{cart_subtotal}'   => $subtotal,
 					'{tax_amount}'      => $tax,
 					'{shipping_method}' => 'Flat rate',
@@ -541,7 +541,7 @@ class CTC_Settings {
 					'{order_number}'      => '12345',
 					'{order_date}'        => date_i18n( $date_format, time() ),
 					'{ordered_items_list}' => 'Sample Product x 2 - ' . $price1 . "\n" .
-						                    'Another Product x 1 - ' . $price2,
+											'Another Product x 1 - ' . $price2,
 					'{coupon_code}'       => 'SAMPLE10',
 					'{order_total}'       => $order_total,
 				);

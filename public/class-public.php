@@ -240,29 +240,29 @@ class CTC_Public {
 						// Store the selected variation details
 						var variationDetails = [];
 						$('.variations select').each(function() {
-						    var $select = $(this);
-						    var attributeName = $select.data('attribute_name') || $select.attr('name');
-						    var attributeValue = $select.val();
+							var $select = $(this);
+							var attributeName = $select.data('attribute_name') || $select.attr('name');
+							var attributeValue = $select.val();
 
-						    if (attributeValue) {
-						        // Get the attribute label
-						        var label = attributeName.replace('attribute_', '');
-						        label = label.replace('pa_', '');
-						        label = label.replace(/-/g, ' ');
-						        label = label.charAt(0).toUpperCase() + label.slice(1);
+							if (attributeValue) {
+								// Get the attribute label
+								var label = attributeName.replace('attribute_', '');
+								label = label.replace('pa_', '');
+								label = label.replace(/-/g, ' ');
+								label = label.charAt(0).toUpperCase() + label.slice(1);
 
-						        // Get the attribute value label
-						        var valueLabel = '';
-						        var $selectedOption = $select.find('option:selected');
+								// Get the attribute value label
+								var valueLabel = '';
+								var $selectedOption = $select.find('option:selected');
 
-						        if ($selectedOption.length) {
-						            valueLabel = $selectedOption.text();
-						        } else {
-						            valueLabel = attributeValue;
-						        }
+								if ($selectedOption.length) {
+									valueLabel = $selectedOption.text();
+								} else {
+									valueLabel = attributeValue;
+								}
 
-						        variationDetails.push(label + ': ' + valueLabel);
-						    }
+								variationDetails.push(label + ': ' + valueLabel);
+							}
 						});
 
 						// Create message with variation details
@@ -334,7 +334,7 @@ class CTC_Public {
 		// If no URL generated, create a basic one.
 		if ( empty( $whatsapp_url ) ) {
 			$whatsapp_number = isset( $this->settings['whatsapp_numbers'][0]['number'] ) ?
-						      $this->settings['whatsapp_numbers'][0]['number'] : '';
+							  $this->settings['whatsapp_numbers'][0]['number'] : '';
 			if ( ! empty( $whatsapp_number ) ) {
 				$whatsapp_number = preg_replace( '/[^0-9]/', '', $whatsapp_number );
 				$default_message = __( 'Hello! I need help with my order.', 'click-to-chat' );

@@ -132,7 +132,7 @@ $settings_helper = new CTC_Settings();
 							<?php
 							$placeholders = $settings_helper->get_template_placeholders( 'single_product' );
 							foreach ( $placeholders as $placeholder => $description ) {
-							    echo '<span class="ctc-placeholder-tag" data-placeholder="' . esc_attr( $placeholder ) . '" title="' . esc_attr( $description ) . '">' . esc_html( $placeholder ) . '</span>';
+								echo '<span class="ctc-placeholder-tag" data-placeholder="' . esc_attr( $placeholder ) . '" title="' . esc_attr( $description ) . '">' . esc_html( $placeholder ) . '</span>';
 							}
 							?>
 						</div>
@@ -169,7 +169,7 @@ $settings_helper = new CTC_Settings();
 							<?php
 							$placeholders = $settings_helper->get_template_placeholders( 'variations' );
 							foreach ( $placeholders as $placeholder => $description ) {
-							    echo '<span class="ctc-placeholder-tag" data-placeholder="' . esc_attr( $placeholder ) . '" title="' . esc_attr( $description ) . '">' . esc_html( $placeholder ) . '</span>';
+								echo '<span class="ctc-placeholder-tag" data-placeholder="' . esc_attr( $placeholder ) . '" title="' . esc_attr( $description ) . '">' . esc_html( $placeholder ) . '</span>';
 							}
 							?>
 						</div>
@@ -206,7 +206,7 @@ $settings_helper = new CTC_Settings();
 							<?php
 							$placeholders = $settings_helper->get_template_placeholders( 'cart_checkout' );
 							foreach ( $placeholders as $placeholder => $description ) {
-							    echo '<span class="ctc-placeholder-tag" data-placeholder="' . esc_attr( $placeholder ) . '" title="' . esc_attr( $description ) . '">' . esc_html( $placeholder ) . '</span>';
+								echo '<span class="ctc-placeholder-tag" data-placeholder="' . esc_attr( $placeholder ) . '" title="' . esc_attr( $description ) . '">' . esc_html( $placeholder ) . '</span>';
 							}
 							?>
 						</div>
@@ -243,7 +243,7 @@ $settings_helper = new CTC_Settings();
 							<?php
 							$placeholders = $settings_helper->get_template_placeholders( 'thank_you' );
 							foreach ( $placeholders as $placeholder => $description ) {
-							    echo '<span class="ctc-placeholder-tag" data-placeholder="' . esc_attr( $placeholder ) . '" title="' . esc_attr( $description ) . '">' . esc_html( $placeholder ) . '</span>';
+								echo '<span class="ctc-placeholder-tag" data-placeholder="' . esc_attr( $placeholder ) . '" title="' . esc_attr( $description ) . '">' . esc_html( $placeholder ) . '</span>';
 							}
 							?>
 						</div>
@@ -280,7 +280,7 @@ $settings_helper = new CTC_Settings();
 							<?php
 							$placeholders = $settings_helper->get_template_placeholders( 'floating' );
 							foreach ( $placeholders as $placeholder => $description ) {
-							    echo '<span class="ctc-placeholder-tag" data-placeholder="' . esc_attr( $placeholder ) . '" title="' . esc_attr( $description ) . '">' . esc_html( $placeholder ) . '</span>';
+								echo '<span class="ctc-placeholder-tag" data-placeholder="' . esc_attr( $placeholder ) . '" title="' . esc_attr( $description ) . '">' . esc_html( $placeholder ) . '</span>';
 							}
 							?>
 						</div>
