@@ -40,13 +40,18 @@
     </rule>
 
     <!-- WooCommerce Coding Standards (if applicable) -->
+    <!-- Commented out until WooCommerce-Core ruleset is installed -->
+    <!--
     <rule ref="WooCommerce-Core">
-        <!-- Exclude rules that conflict with WordPress standards -->
         <exclude name="WooCommerce.Functions.InternalInjectionMethod"/>
     </rule>
+    -->
 
     <!-- Check for PHP cross-version compatibility -->
+    <!-- Commented out until PHPCompatibilityWP ruleset is installed -->
+    <!--
     <rule ref="PHPCompatibilityWP"/>
+    -->
 
     <!-- Verify text domain -->
     <rule ref="WordPress.WP.I18n">
