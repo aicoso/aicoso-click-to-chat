@@ -28,6 +28,8 @@ jobs:
             dealerdirect/phpcodesniffer-composer-installer:^1.0 \
             wp-coding-standards/wpcs \
             phpcompatibility/phpcompatibility-wp \
+            phpcsstandards/phpcsutils \
+            phpcsstandards/phpcsextra \
             woocommerce/woocommerce-sniffs
 
       - name: Add Composer global bin to PATH

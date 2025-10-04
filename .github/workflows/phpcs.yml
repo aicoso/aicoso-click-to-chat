@@ -26,6 +26,8 @@ jobs:
           composer require --dev squizlabs/php_codesniffer
           composer require --dev wp-coding-standards/wpcs
           composer require --dev phpcompatibility/phpcompatibility-wp
+          composer require --dev phpcsstandards/phpcsutils
+          composer require --dev phpcsstandards/phpcsextra
           composer require --dev dealerdirect/phpcodesniffer-composer-installer
 
       - name: Configure PHPCS
