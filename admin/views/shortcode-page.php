@@ -32,7 +32,7 @@ $whatsapp_numbers = isset( $settings['whatsapp_numbers'] ) ? $settings['whatsapp
 
 	<!-- Quick Instructions -->
 	<div class="ctc-instructions-banner">
-		<h2>📚 <?php esc_html_e( 'How to Use Shortcodes', 'click-to-chat' ); ?></h2>
+		<h2><span class="dashicons dashicons-editor-code"></span> <?php esc_html_e( 'How to Use Shortcodes', 'click-to-chat' ); ?></h2>
 		<p><?php esc_html_e( 'Create custom WhatsApp buttons and place them anywhere on your site using shortcodes.', 'click-to-chat' ); ?></p>
 		<div class="ctc-quick-steps">
 			<div class="ctc-step">
@@ -70,7 +70,7 @@ $whatsapp_numbers = isset( $settings['whatsapp_numbers'] ) ? $settings['whatsapp
 	<div class="ctc-admin-warning-box">
 		<?php if ( ! $plugin_enabled ) : ?>
 		<div class="ctc-warning-item">
-			<span class="ctc-warning-icon">⚠️</span>
+			<span class="ctc-warning-icon dashicons dashicons-warning"></span>
 			<div class="ctc-warning-content">
 				<strong><?php esc_html_e( 'Warning:', 'click-to-chat' ); ?></strong>
 				<?php
@@ -86,7 +86,7 @@ $whatsapp_numbers = isset( $settings['whatsapp_numbers'] ) ? $settings['whatsapp
 
 		<?php if ( ! $has_valid_numbers ) : ?>
 		<div class="ctc-warning-item">
-			<span class="ctc-warning-icon">⚠️</span>
+			<span class="ctc-warning-icon dashicons dashicons-warning"></span>
 			<div class="ctc-warning-content">
 				<strong><?php esc_html_e( 'Warning:', 'click-to-chat' ); ?></strong>
 				<?php
@@ -106,7 +106,7 @@ $whatsapp_numbers = isset( $settings['whatsapp_numbers'] ) ? $settings['whatsapp
 	<div class="ctc-builder-wrapper">
 		<!-- Left Side: Configuration -->
 		<div class="ctc-config-panel">
-			<h2 class="ctc-panel-title">⚙️ <?php esc_html_e( 'Button Configuration', 'click-to-chat' ); ?></h2>
+			<h2 class="ctc-panel-title"><span class="dashicons dashicons-admin-generic"></span> <?php esc_html_e( 'Button Configuration', 'click-to-chat' ); ?></h2>
 
 			<!-- Button Type Selection -->
 			<div class="ctc-field-section">
@@ -115,7 +115,7 @@ $whatsapp_numbers = isset( $settings['whatsapp_numbers'] ) ? $settings['whatsapp
 					<label class="ctc-type-card">
 						<input type="radio" name="button_type" value="product" class="ctc-shortcode-param" data-param="type" checked>
 						<div class="ctc-type-card-inner">
-							<span class="ctc-type-icon">📦</span>
+							<span class="ctc-type-icon dashicons dashicons-products"></span>
 							<span class="ctc-type-label"><?php esc_html_e( 'Product', 'click-to-chat' ); ?></span>
 							<small><?php esc_html_e( 'For product pages', 'click-to-chat' ); ?></small>
 						</div>
@@ -124,7 +124,7 @@ $whatsapp_numbers = isset( $settings['whatsapp_numbers'] ) ? $settings['whatsapp
 					<label class="ctc-type-card">
 						<input type="radio" name="button_type" value="cart" class="ctc-shortcode-param" data-param="type">
 						<div class="ctc-type-card-inner">
-							<span class="ctc-type-icon">🛒</span>
+							<span class="ctc-type-icon dashicons dashicons-cart"></span>
 							<span class="ctc-type-label"><?php esc_html_e( 'Cart', 'click-to-chat' ); ?></span>
 							<small><?php esc_html_e( 'Include cart items', 'click-to-chat' ); ?></small>
 						</div>
@@ -133,7 +133,7 @@ $whatsapp_numbers = isset( $settings['whatsapp_numbers'] ) ? $settings['whatsapp
 					<label class="ctc-type-card">
 						<input type="radio" name="button_type" value="shop" class="ctc-shortcode-param" data-param="type">
 						<div class="ctc-type-card-inner">
-							<span class="ctc-type-icon">🏪</span>
+							<span class="ctc-type-icon dashicons dashicons-store"></span>
 							<span class="ctc-type-label"><?php esc_html_e( 'Shop', 'click-to-chat' ); ?></span>
 							<small><?php esc_html_e( 'Shop/category pages', 'click-to-chat' ); ?></small>
 						</div>
@@ -142,7 +142,7 @@ $whatsapp_numbers = isset( $settings['whatsapp_numbers'] ) ? $settings['whatsapp
 					<label class="ctc-type-card">
 						<input type="radio" name="button_type" value="floating" class="ctc-shortcode-param" data-param="type">
 						<div class="ctc-type-card-inner">
-							<span class="ctc-type-icon">💬</span>
+							<span class="ctc-type-icon dashicons dashicons-format-chat"></span>
 							<span class="ctc-type-label"><?php esc_html_e( 'General', 'click-to-chat' ); ?></span>
 							<small><?php esc_html_e( 'Simple contact', 'click-to-chat' ); ?></small>
 						</div>
@@ -253,7 +253,7 @@ $whatsapp_numbers = isset( $settings['whatsapp_numbers'] ) ? $settings['whatsapp
 		<div class="ctc-preview-panel">
 			<!-- Live Preview -->
 			<div class="ctc-preview-section">
-				<h3>👁️ <?php esc_html_e( 'Live Preview', 'click-to-chat' ); ?></h3>
+				<h3><span class="dashicons dashicons-visibility"></span> <?php esc_html_e( 'Live Preview', 'click-to-chat' ); ?></h3>
 				<div class="ctc-preview-area">
 					<div id="ctc-button-preview">
 						<!-- Preview will be generated here -->
@@ -263,7 +263,7 @@ $whatsapp_numbers = isset( $settings['whatsapp_numbers'] ) ? $settings['whatsapp
 
 			<!-- Generated Shortcode -->
 			<div class="ctc-shortcode-section">
-				<h3>📋 <?php esc_html_e( 'Your Shortcode', 'click-to-chat' ); ?></h3>
+				<h3><span class="dashicons dashicons-editor-code"></span> <?php esc_html_e( 'Your Shortcode', 'click-to-chat' ); ?></h3>
 				<div class="ctc-shortcode-box">
 					<code id="ctc-generated-shortcode">[ctc_button]</code>
 					<button type="button" class="ctc-copy-btn" id="ctc-copy-shortcode">
@@ -272,7 +272,7 @@ $whatsapp_numbers = isset( $settings['whatsapp_numbers'] ) ? $settings['whatsapp
 					</button>
 				</div>
 				<div class="ctc-copy-success ctc-hidden">
-					✅ <?php esc_html_e( 'Copied to clipboard!', 'click-to-chat' ); ?>
+					<span class="dashicons dashicons-yes"></span> <?php esc_html_e( 'Copied to clipboard!', 'click-to-chat' ); ?>
 				</div>
 			</div>
 
@@ -301,13 +301,13 @@ $whatsapp_numbers = isset( $settings['whatsapp_numbers'] ) ? $settings['whatsapp
 
 			<!-- Help Tips -->
 			<div class="ctc-help-section">
-				<h3>❓ <?php esc_html_e( 'Where to Use', 'click-to-chat' ); ?></h3>
+				<h3><span class="dashicons dashicons-info"></span> <?php esc_html_e( 'Where to Use', 'click-to-chat' ); ?></h3>
 				<ul class="ctc-help-list">
-					<li>✅ <?php esc_html_e( 'In any WordPress post or page content', 'click-to-chat' ); ?></li>
-					<li>✅ <?php esc_html_e( 'In text widgets', 'click-to-chat' ); ?></li>
-					<li>✅ <?php esc_html_e( 'In page builders (Elementor, Gutenberg, etc.)', 'click-to-chat' ); ?></li>
-					<li>✅ <?php esc_html_e( 'In product descriptions', 'click-to-chat' ); ?></li>
-					<li>✅ <?php esc_html_e( 'Multiple buttons on the same page', 'click-to-chat' ); ?></li>
+					<li><span class="dashicons dashicons-yes"></span> <?php esc_html_e( 'In any WordPress post or page content', 'click-to-chat' ); ?></li>
+					<li><span class="dashicons dashicons-yes"></span> <?php esc_html_e( 'In text widgets', 'click-to-chat' ); ?></li>
+					<li><span class="dashicons dashicons-yes"></span> <?php esc_html_e( 'In page builders (Elementor, Gutenberg, etc.)', 'click-to-chat' ); ?></li>
+					<li><span class="dashicons dashicons-yes"></span> <?php esc_html_e( 'In product descriptions', 'click-to-chat' ); ?></li>
+					<li><span class="dashicons dashicons-yes"></span> <?php esc_html_e( 'Multiple buttons on the same page', 'click-to-chat' ); ?></li>
 				</ul>
 			</div>
 		</div>

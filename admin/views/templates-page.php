@@ -43,7 +43,7 @@ $settings_helper = new CTC_Settings();
 
 	<!-- Instructions Banner -->
 	<div class="ctc-instructions-banner">
-		<h2>📝 <?php esc_html_e( 'Customize Your WhatsApp Messages', 'click-to-chat' ); ?></h2>
+		<h2><span class="dashicons dashicons-text"></span> <?php esc_html_e( 'Customize Your WhatsApp Messages', 'click-to-chat' ); ?></h2>
 		<p><?php esc_html_e( 'Configure message templates for different contexts. Use placeholders to automatically include product details, cart information, and order data.', 'click-to-chat' ); ?></p>
 		<div class="ctc-quick-steps">
 			<div class="ctc-step">
@@ -120,7 +120,7 @@ $settings_helper = new CTC_Settings();
 			<!-- Single Product Template -->
 			<div class="ctc-template-card">
 				<div class="ctc-template-header">
-					<span class="ctc-template-icon">📦</span>
+					<span class="ctc-template-icon dashicons dashicons-products"></span>
 					<h3 class="ctc-template-title"><?php esc_html_e( 'Single Product Template', 'click-to-chat' ); ?></h3>
 				</div>
 				<div class="ctc-template-body">
@@ -157,7 +157,7 @@ $settings_helper = new CTC_Settings();
 			<!-- Product Variations Template -->
 			<div class="ctc-template-card">
 				<div class="ctc-template-header">
-					<span class="ctc-template-icon">🎨</span>
+					<span class="ctc-template-icon dashicons dashicons-admin-settings"></span>
 					<h3 class="ctc-template-title"><?php esc_html_e( 'Product Variations Template', 'click-to-chat' ); ?></h3>
 				</div>
 				<div class="ctc-template-body">
@@ -194,7 +194,7 @@ $settings_helper = new CTC_Settings();
 			<!-- Cart & Checkout Template -->
 			<div class="ctc-template-card">
 				<div class="ctc-template-header">
-					<span class="ctc-template-icon">🛒</span>
+					<span class="ctc-template-icon dashicons dashicons-cart"></span>
 					<h3 class="ctc-template-title"><?php esc_html_e( 'Cart & Checkout Template', 'click-to-chat' ); ?></h3>
 				</div>
 				<div class="ctc-template-body">
@@ -231,7 +231,7 @@ $settings_helper = new CTC_Settings();
 			<!-- Thank You Page Template -->
 			<div class="ctc-template-card">
 				<div class="ctc-template-header">
-					<span class="ctc-template-icon">🎆</span>
+					<span class="ctc-template-icon dashicons dashicons-yes-alt"></span>
 					<h3 class="ctc-template-title"><?php esc_html_e( 'Thank You Page Template', 'click-to-chat' ); ?></h3>
 				</div>
 				<div class="ctc-template-body">
@@ -268,7 +268,7 @@ $settings_helper = new CTC_Settings();
 			<!-- Floating Button Template -->
 			<div class="ctc-template-card">
 				<div class="ctc-template-header">
-					<span class="ctc-template-icon">💬</span>
+					<span class="ctc-template-icon dashicons dashicons-format-chat"></span>
 					<h3 class="ctc-template-title"><?php esc_html_e( 'Floating Button Template', 'click-to-chat' ); ?></h3>
 				</div>
 				<div class="ctc-template-body">
