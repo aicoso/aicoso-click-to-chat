@@ -180,9 +180,19 @@
 .ctc-button-thankyou,
 .ctc-thankyou-button-container .ctc-whatsapp-button {
     width: auto;
-    max-width: 300px;
+    max-width: 350px;
+    min-width: 250px;
     margin: 20px auto;
     display: flex;
+    padding: 14px 28px;
+    font-size: 15px;
+    border-radius: 8px;
+    box-shadow: 0 3px 8px rgba(37, 211, 102, 0.3);
+}
+
+.ctc-thankyou-button-container .ctc-whatsapp-button:hover {
+    box-shadow: 0 5px 12px rgba(37, 211, 102, 0.4);
+    transform: translateY(-3px);
 }
 
 .ctc-cart-button-container,
@@ -190,7 +200,9 @@
 .ctc-thankyou-button-container {
     display: flex;
     justify-content: center;
-    margin: 20px 0;
+    align-items: center;
+    margin: 30px 0;
+    padding: 10px 0;
 }
 
 /* Floating Button Styles */
@@ -198,6 +210,7 @@
     position: fixed;
     z-index: 9999;
     display: flex;
+    transition: all 0.3s ease;
 }
 
 .ctc-floating-bottom_right {
@@ -226,6 +239,13 @@
     height: 60px;
     padding: 0;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+    transition: all 0.3s ease;
+}
+
+.ctc-floating-button-container .ctc-whatsapp-button:hover {
+    width: 64px;
+    height: 64px;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
 }
 
 .ctc-floating-button-container .ctc-whatsapp-icon {
@@ -309,6 +329,19 @@
     .ctc-whatsapp-button {
         padding: 8px 16px;
     }
+
+    /* Thank You Page - Mobile Adjustments */
+    .ctc-thankyou-button-container .ctc-whatsapp-button {
+        max-width: 90%;
+        min-width: 200px;
+        padding: 12px 20px;
+        font-size: 14px;
+    }
+
+    .ctc-thankyou-button-container {
+        margin: 20px 0;
+        padding: 5px 0;
+    }
 }
 
 @media screen and (max-width: 480px) {
@@ -321,6 +354,14 @@
     .ctc-whatsapp-icon svg {
         width: 16px;
         height: 16px;
+    }
+
+    /* Thank You Page - Extra small devices */
+    .ctc-thankyou-button-container .ctc-whatsapp-button {
+        max-width: 95%;
+        min-width: 180px;
+        padding: 11px 18px;
+        font-size: 13px;
     }
 }
 

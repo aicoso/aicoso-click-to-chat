@@ -79,6 +79,19 @@
     margin: 15px 0 !important;
 }
 
+/* Thank You Page - Ensure proper display */
+.woocommerce-order-received .ctc-thankyou-button-container {
+    clear: both;
+    width: 100%;
+    text-align: center;
+}
+
+.woocommerce-order-received .ctc-thankyou-button-container .ctc-whatsapp-button {
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
+}
+
 /* Mobile Responsive Fixes */
 @media screen and (max-width: 768px) {
     /* Stack buttons vertically on mobile */

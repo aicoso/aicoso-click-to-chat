@@ -343,8 +343,8 @@ class CTC_WhatsApp_Link_Generator {
 		$whatsapp_number = preg_replace( '/[^0-9]/', '', $whatsapp_number );
 
 		// Get the message template.
-		$message_template = isset( $this->settings['message_templates']['thankyou'] ) ?
-						   $this->settings['message_templates']['thankyou'] : '';
+		$message_template = isset( $this->settings['message_templates']['thank_you'] ) ?
+						   $this->settings['message_templates']['thank_you'] : '';
 
 		// Replace placeholders.
 		$message = $this->replace_order_placeholders( $message_template, $order );
