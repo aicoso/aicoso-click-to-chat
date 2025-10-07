@@ -29,6 +29,22 @@ $floating_positions = $settings_helper->get_floating_position_options();
 		<h1 class="ctc-admin-heading"><?php esc_html_e( 'Plugin Settings', 'click-to-chat' ); ?></h1>
 	</div>
 
+	<?php
+	// Check for success message from transient.
+	$message = get_transient( 'ctc_settings_message' );
+	if ( $message === 'success' ) {
+		delete_transient( 'ctc_settings_message' );
+		?>
+		<div class="notice notice-success is-dismissible">
+			<p><?php esc_html_e( 'Settings saved successfully.', 'click-to-chat' ); ?></p>
+		</div>
+		<?php
+	}
+
+	// Display settings errors/success messages.
+	settings_errors( 'ctc_settings' );
+	?>
+
 	<!-- Instructions Banner - Same style as Templates page -->
 	<div class="ctc-instructions-banner">
 		<h2><span class="dashicons dashicons-admin-generic"></span> <?php esc_html_e( 'Configure Your WhatsApp Integration', 'click-to-chat' ); ?></h2>
@@ -101,6 +117,11 @@ $floating_positions = $settings_helper->get_floating_position_options();
 
 	<form method="post" action="">
 		<?php wp_nonce_field( 'ctc_settings_nonce', 'ctc_settings_nonce' ); ?>
+		<?php
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Just reading the tab parameter for display purposes.
+		$current_tab = isset( $_GET['tab'] ) ? sanitize_text_field( wp_unslash( $_GET['tab'] ) ) : 'general';
+		?>
+		<input type="hidden" name="ctc_current_tab" id="ctc_current_tab" value="<?php echo esc_attr( $current_tab ); ?>">
 
 		<!-- Tab Navigation -->
 		<div class="ctc-settings-nav">

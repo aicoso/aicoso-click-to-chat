@@ -55,6 +55,9 @@
             $('.ctc-settings-panel').removeClass('active').hide();
             $('#ctc-settings-' + targetTab).addClass('active').show();
 
+            // Update the hidden field for form submission
+            $('#ctc_current_tab').val(targetTab);
+
             // Update the tab parameter in the URL
             const url = new URL(window.location);
             url.searchParams.set('tab', targetTab);
@@ -108,8 +111,12 @@
         const activeTab = urlParams.get('tab');
 
         if (activeTab) {
-            // Try new tabs first
-            if ($('.ctc-tab-nav-item[data-tab="' + activeTab + '"]').length) {
+            // Try settings page tabs first
+            if ($('.ctc-settings-nav-item[data-tab="' + activeTab + '"]').length) {
+                $('.ctc-settings-nav-item[data-tab="' + activeTab + '"]').trigger('click');
+            }
+            // Try new tabs
+            else if ($('.ctc-tab-nav-item[data-tab="' + activeTab + '"]').length) {
                 $('.ctc-tab-nav-item[data-tab="' + activeTab + '"]').trigger('click');
             }
             // Fall back to legacy tabs
@@ -118,11 +125,19 @@
             }
         } else {
             // Default to the first tab
-            if ($('.ctc-tab-nav-item:first').length) {
+            if ($('.ctc-settings-nav-item:first').length) {
+                $('.ctc-settings-nav-item:first').trigger('click');
+            } else if ($('.ctc-tab-nav-item:first').length) {
                 $('.ctc-tab-nav-item:first').trigger('click');
             } else if ($('.ctc-admin-tabs .nav-tab:first').length) {
                 $('.ctc-admin-tabs .nav-tab:first').trigger('click');
             }
+        }
+
+        // Initialize the hidden field with the current tab value
+        if ($('#ctc_current_tab').length && $('.ctc-settings-nav-item.active').length) {
+            const currentTab = $('.ctc-settings-nav-item.active').data('tab') || 'general';
+            $('#ctc_current_tab').val(currentTab);
         }
     }
 

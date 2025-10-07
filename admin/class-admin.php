@@ -290,6 +290,9 @@ class CTC_Admin {
 		// Get existing settings.
 		$settings = get_option( 'ctc_settings', array() );
 
+		// Get the current tab for redirect.
+		$current_tab = isset( $_POST['ctc_current_tab'] ) ? sanitize_text_field( wp_unslash( $_POST['ctc_current_tab'] ) ) : 'general';
+
 		// Nonce is verified in render_settings_page() before calling this method.
 		// phpcs:disable WordPress.Security.NonceVerification.Missing
 		// Save plugin enabled status.
@@ -444,13 +447,19 @@ class CTC_Admin {
 		update_option( 'ctc_settings', $settings );
 		// phpcs:enable WordPress.Security.NonceVerification.Missing
 
-		// Add success message.
-		add_settings_error(
-			'ctc_settings',
-			'ctc_settings_updated',
-			esc_html__( 'Settings saved successfully.', 'click-to-chat' ),
-			'updated'
+		// Store success message in transient (will be displayed after redirect).
+		set_transient( 'ctc_settings_message', 'success', 30 );
+
+		// Redirect to the same tab.
+		$redirect_url = add_query_arg(
+			array(
+				'page'              => 'click-to-chat',
+				'tab'               => $current_tab,
+			),
+			admin_url( 'admin.php' )
 		);
+		wp_safe_redirect( $redirect_url );
+		exit;
 	}
 
 	/**
