@@ -32,7 +32,7 @@ $floating_positions = $settings_helper->get_floating_position_options();
 	<?php
 	// Check for success message from transient.
 	$message = get_transient( 'ctc_settings_message' );
-	if ( $message === 'success' ) {
+	if ( 'success' === $message ) {
 		delete_transient( 'ctc_settings_message' );
 		?>
 		<div class="notice notice-success is-dismissible">

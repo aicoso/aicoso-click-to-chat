@@ -290,11 +290,12 @@ class CTC_Admin {
 		// Get existing settings.
 		$settings = get_option( 'ctc_settings', array() );
 
+		// Nonce is verified in render_settings_page() before calling this method.
+		// phpcs:disable WordPress.Security.NonceVerification.Missing
+
 		// Get the current tab for redirect.
 		$current_tab = isset( $_POST['ctc_current_tab'] ) ? sanitize_text_field( wp_unslash( $_POST['ctc_current_tab'] ) ) : 'general';
 
-		// Nonce is verified in render_settings_page() before calling this method.
-		// phpcs:disable WordPress.Security.NonceVerification.Missing
 		// Save plugin enabled status.
 		$settings['plugin_enabled'] = isset( $_POST['ctc_plugin_enabled'] ) ? true : false;
 
