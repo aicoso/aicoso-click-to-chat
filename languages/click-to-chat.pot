@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2025-10-07T09:55:50+00:00\n"
+"POT-Creation-Date: 2025-10-07T12:02:08+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: click-to-chat\n"
@@ -46,13 +46,13 @@ msgstr ""
 #: admin/class-admin.php:91
 #: admin/class-admin.php:92
 #: admin/views/numbers-page.php:31
-#: admin/views/settings-page.php:156
+#: admin/views/settings-page.php:177
 msgid "WhatsApp Numbers"
 msgstr ""
 
 #: admin/class-admin.php:100
 #: admin/class-admin.php:101
-#: admin/views/settings-page.php:160
+#: admin/views/settings-page.php:181
 #: admin/views/templates-page.php:41
 msgid "Message Templates"
 msgstr ""
@@ -128,43 +128,39 @@ msgstr ""
 msgid "Name is required."
 msgstr ""
 
-#: admin/class-admin.php:451
-msgid "Settings saved successfully."
-msgstr ""
-
-#: admin/class-admin.php:554
+#: admin/class-admin.php:563
 msgid "Some WhatsApp numbers were not saved because they had duplicate names. Each WhatsApp number must have a unique name."
 msgstr ""
 
-#: admin/class-admin.php:561
+#: admin/class-admin.php:570
 msgid "WhatsApp numbers saved successfully."
 msgstr ""
 
-#: admin/class-admin.php:599
+#: admin/class-admin.php:608
 msgid "Message templates saved successfully."
 msgstr ""
 
-#: admin/class-admin.php:612
+#: admin/class-admin.php:621
 msgid "WhatsApp Shopping Settings"
 msgstr ""
 
-#: admin/class-admin.php:642
+#: admin/class-admin.php:651
 msgid "Hide WhatsApp button on this product"
 msgstr ""
 
-#: admin/class-admin.php:647
+#: admin/class-admin.php:656
 msgid "Assign specific WhatsApp number:"
 msgstr ""
 
-#: admin/class-admin.php:649
+#: admin/class-admin.php:658
 msgid "Default (based on rules)"
 msgstr ""
 
-#: admin/class-admin.php:659
+#: admin/class-admin.php:668
 msgid "Custom message template (overrides default):"
 msgstr ""
 
-#: admin/class-admin.php:662
+#: admin/class-admin.php:671
 msgid "Available placeholders: {product_name}, {price}, {product_url}"
 msgstr ""
 
@@ -328,8 +324,8 @@ msgstr ""
 
 #: admin/views/numbers-page.php:76
 #: admin/views/numbers-page.php:92
-#: admin/views/settings-page.php:78
-#: admin/views/settings-page.php:88
+#: admin/views/settings-page.php:94
+#: admin/views/settings-page.php:104
 #: admin/views/shortcode-page.php:75
 #: admin/views/shortcode-page.php:91
 #: admin/views/templates-page.php:86
@@ -464,95 +460,99 @@ msgstr ""
 msgid "Plugin Settings"
 msgstr ""
 
-#: admin/views/settings-page.php:34
+#: admin/views/settings-page.php:39
+msgid "Settings saved successfully."
+msgstr ""
+
+#: admin/views/settings-page.php:50
 msgid "Configure Your WhatsApp Integration"
 msgstr ""
 
-#: admin/views/settings-page.php:35
+#: admin/views/settings-page.php:51
 msgid "Customize how the WhatsApp button appears and behaves across your WooCommerce store."
 msgstr ""
 
-#: admin/views/settings-page.php:39
+#: admin/views/settings-page.php:55
 msgid "General settings"
 msgstr ""
 
-#: admin/views/settings-page.php:43
+#: admin/views/settings-page.php:59
 msgid "Button appearance"
 msgstr ""
 
-#: admin/views/settings-page.php:47
+#: admin/views/settings-page.php:63
 msgid "Display locations"
 msgstr ""
 
-#: admin/views/settings-page.php:51
+#: admin/views/settings-page.php:67
 msgid "Save your settings"
 msgstr ""
 
-#: admin/views/settings-page.php:79
+#: admin/views/settings-page.php:95
 msgid "The plugin is currently disabled. WhatsApp buttons will not appear on your website. Enable the plugin below to activate it."
 msgstr ""
 
 #. translators: %s: Link to Numbers page
-#: admin/views/settings-page.php:92
+#: admin/views/settings-page.php:108
 #: admin/views/shortcode-page.php:95
 #: admin/views/templates-page.php:106
 #, php-format
 msgid "No WhatsApp number configured! You need to add at least one WhatsApp number for the buttons to work. %s"
 msgstr ""
 
-#: admin/views/settings-page.php:93
+#: admin/views/settings-page.php:109
 #: admin/views/shortcode-page.php:96
 #: admin/views/templates-page.php:107
 msgid "Add a number now →"
 msgstr ""
 
-#: admin/views/settings-page.php:109
+#: admin/views/settings-page.php:130
 #: admin/views/shortcode-page.php:146
 msgid "General"
 msgstr ""
 
-#: admin/views/settings-page.php:113
+#: admin/views/settings-page.php:134
 msgid "Button Style"
 msgstr ""
 
-#: admin/views/settings-page.php:117
+#: admin/views/settings-page.php:138
 msgid "Display"
 msgstr ""
 
-#: admin/views/settings-page.php:121
+#: admin/views/settings-page.php:142
 msgid "Exclusions"
 msgstr ""
 
-#: admin/views/settings-page.php:131
+#: admin/views/settings-page.php:152
 msgid "Plugin Status"
 msgstr ""
 
-#: admin/views/settings-page.php:138
+#: admin/views/settings-page.php:159
 msgid "Enable Click to Chat plugin"
 msgstr ""
 
-#: admin/views/settings-page.php:140
+#: admin/views/settings-page.php:161
 msgid "When disabled, no WhatsApp buttons will be displayed on your website."
 msgstr ""
 
-#: admin/views/settings-page.php:149
+#: admin/views/settings-page.php:170
 msgid "Quick Links"
 msgstr ""
 
-#: admin/views/settings-page.php:163
+#: admin/views/settings-page.php:184
 msgid "Manage your WhatsApp numbers and message templates from these sections."
 msgstr ""
 
-#: admin/views/settings-page.php:174
+#: admin/views/settings-page.php:195
 msgid "Button Appearance"
 msgstr ""
 
-#: admin/views/settings-page.php:179
+#: admin/views/settings-page.php:200
 #: admin/views/shortcode-page.php:176
 msgid "Button Text"
 msgstr ""
 
-#: admin/views/settings-page.php:180
+#: admin/views/settings-page.php:201
 #: admin/views/shortcode-page.php:19
 #: click-to-chat.php:153
 #: includes/class-button-display.php:529
@@ -561,215 +561,215 @@ msgstr ""
 msgid "Order via WhatsApp"
 msgstr ""
 
-#: admin/views/settings-page.php:181
+#: admin/views/settings-page.php:202
 msgid "The text to display on the WhatsApp button."
 msgstr ""
 
-#: admin/views/settings-page.php:187
+#: admin/views/settings-page.php:208
 msgid "Show WhatsApp icon on the button"
 msgstr ""
 
-#: admin/views/settings-page.php:192
+#: admin/views/settings-page.php:213
 msgid "Background Color"
 msgstr ""
 
-#: admin/views/settings-page.php:197
+#: admin/views/settings-page.php:218
 #: admin/views/shortcode-page.php:186
 msgid "Text Color"
 msgstr ""
 
-#: admin/views/settings-page.php:202
+#: admin/views/settings-page.php:223
 msgid "Custom CSS"
 msgstr ""
 
-#: admin/views/settings-page.php:204
+#: admin/views/settings-page.php:225
 msgid "Add custom CSS for advanced button styling."
 msgstr ""
 
-#: admin/views/settings-page.php:217
+#: admin/views/settings-page.php:238
 msgid "Single Product Pages"
 msgstr ""
 
-#: admin/views/settings-page.php:224
+#: admin/views/settings-page.php:245
 msgid "Show WhatsApp button on single product pages"
 msgstr ""
 
-#: admin/views/settings-page.php:229
-#: admin/views/settings-page.php:256
-#: admin/views/settings-page.php:341
+#: admin/views/settings-page.php:250
+#: admin/views/settings-page.php:277
+#: admin/views/settings-page.php:362
 msgid "Button Position"
 msgstr ""
 
-#: admin/views/settings-page.php:244
+#: admin/views/settings-page.php:265
 msgid "Shop Pages"
 msgstr ""
 
-#: admin/views/settings-page.php:251
+#: admin/views/settings-page.php:272
 msgid "Show WhatsApp button on shop/archive pages"
 msgstr ""
 
-#: admin/views/settings-page.php:271
+#: admin/views/settings-page.php:292
 msgid "Cart & Checkout Pages"
 msgstr ""
 
-#: admin/views/settings-page.php:278
+#: admin/views/settings-page.php:299
 msgid "Show WhatsApp button on the cart page"
 msgstr ""
 
-#: admin/views/settings-page.php:283
+#: admin/views/settings-page.php:304
 msgid "Cart Button Position"
 msgstr ""
 
-#: admin/views/settings-page.php:285
+#: admin/views/settings-page.php:306
 msgid "After Cart Table"
 msgstr ""
 
-#: admin/views/settings-page.php:286
+#: admin/views/settings-page.php:307
 msgid "Before Cart Table"
 msgstr ""
 
-#: admin/views/settings-page.php:287
+#: admin/views/settings-page.php:308
 msgid "Next to Proceed to Checkout Button"
 msgstr ""
 
-#: admin/views/settings-page.php:288
+#: admin/views/settings-page.php:309
 msgid "After Cart Totals"
 msgstr ""
 
-#: admin/views/settings-page.php:289
+#: admin/views/settings-page.php:310
 msgid "In Cart Actions Area"
 msgstr ""
 
-#: admin/views/settings-page.php:298
+#: admin/views/settings-page.php:319
 msgid "Show WhatsApp button on the checkout page"
 msgstr ""
 
-#: admin/views/settings-page.php:303
+#: admin/views/settings-page.php:324
 msgid "Checkout Button Position"
 msgstr ""
 
-#: admin/views/settings-page.php:305
+#: admin/views/settings-page.php:326
 msgid "After Payment Methods"
 msgstr ""
 
-#: admin/views/settings-page.php:306
+#: admin/views/settings-page.php:327
 msgid "Before Payment Methods"
 msgstr ""
 
-#: admin/views/settings-page.php:307
+#: admin/views/settings-page.php:328
 msgid "After Order Review"
 msgstr ""
 
-#: admin/views/settings-page.php:308
+#: admin/views/settings-page.php:329
 msgid "Before Order Review"
 msgstr ""
 
-#: admin/views/settings-page.php:309
+#: admin/views/settings-page.php:330
 msgid "After Place Order Button"
 msgstr ""
 
-#: admin/views/settings-page.php:318
+#: admin/views/settings-page.php:339
 msgid "Show WhatsApp button on the thank you/order confirmation page"
 msgstr ""
 
-#: admin/views/settings-page.php:329
+#: admin/views/settings-page.php:350
 msgid "Floating Button"
 msgstr ""
 
-#: admin/views/settings-page.php:336
+#: admin/views/settings-page.php:357
 msgid "Show a floating WhatsApp button on all pages"
 msgstr ""
 
-#: admin/views/settings-page.php:356
+#: admin/views/settings-page.php:377
 #: admin/views/shortcode-page.php:222
 msgid "Advanced Options"
 msgstr ""
 
-#: admin/views/settings-page.php:361
+#: admin/views/settings-page.php:382
 msgid "Warning: The options below will hide WooCommerce purchase buttons. Only enable if you want to use WhatsApp as the primary contact method for orders."
 msgstr ""
 
-#: admin/views/settings-page.php:367
+#: admin/views/settings-page.php:388
 msgid "Hide \"Add to Cart\" buttons"
 msgstr ""
 
-#: admin/views/settings-page.php:369
+#: admin/views/settings-page.php:390
 msgid "Hides Add to Cart buttons on shop and product pages"
 msgstr ""
 
-#: admin/views/settings-page.php:375
+#: admin/views/settings-page.php:396
 msgid "Hide \"Proceed to Checkout\" button"
 msgstr ""
 
-#: admin/views/settings-page.php:377
+#: admin/views/settings-page.php:398
 msgid "Hides the Proceed to Checkout button on the cart page"
 msgstr ""
 
-#: admin/views/settings-page.php:383
+#: admin/views/settings-page.php:404
 msgid "Hide \"Place Order\" button"
 msgstr ""
 
-#: admin/views/settings-page.php:385
+#: admin/views/settings-page.php:406
 msgid "Hides the Place Order button on the checkout page"
 msgstr ""
 
-#: admin/views/settings-page.php:393
+#: admin/views/settings-page.php:414
 msgid "Enable catalog mode (hides all purchase buttons)"
 msgstr ""
 
-#: admin/views/settings-page.php:395
+#: admin/views/settings-page.php:416
 msgid "Turns your store into a catalog where customers must contact via WhatsApp to purchase"
 msgstr ""
 
-#: admin/views/settings-page.php:407
+#: admin/views/settings-page.php:428
 msgid "Page & Post Exclusions"
 msgstr ""
 
-#: admin/views/settings-page.php:412
+#: admin/views/settings-page.php:433
 msgid "Exclude Pages"
 msgstr ""
 
-#: admin/views/settings-page.php:425
+#: admin/views/settings-page.php:446
 msgid "Select pages where the WhatsApp button should not appear."
 msgstr ""
 
-#: admin/views/settings-page.php:429
+#: admin/views/settings-page.php:450
 msgid "Exclude Posts"
 msgstr ""
 
-#: admin/views/settings-page.php:442
+#: admin/views/settings-page.php:463
 msgid "Select posts where the WhatsApp button should not appear."
 msgstr ""
 
-#: admin/views/settings-page.php:451
+#: admin/views/settings-page.php:472
 msgid "Product Exclusions"
 msgstr ""
 
-#: admin/views/settings-page.php:456
+#: admin/views/settings-page.php:477
 msgid "Exclude Product Categories"
 msgstr ""
 
-#: admin/views/settings-page.php:469
+#: admin/views/settings-page.php:490
 msgid "Select product categories where the WhatsApp button should not appear."
 msgstr ""
 
-#: admin/views/settings-page.php:473
+#: admin/views/settings-page.php:494
 msgid "Exclude Product Tags"
 msgstr ""
 
-#: admin/views/settings-page.php:486
+#: admin/views/settings-page.php:507
 msgid "Select product tags where the WhatsApp button should not appear."
 msgstr ""
 
-#: admin/views/settings-page.php:490
+#: admin/views/settings-page.php:511
 msgid "Exclude Products"
 msgstr ""
 
-#: admin/views/settings-page.php:503
+#: admin/views/settings-page.php:524
 msgid "Select specific products where the WhatsApp button should not appear."
 msgstr ""
 
-#: admin/views/settings-page.php:512
+#: admin/views/settings-page.php:533
 msgid "Save Settings"
 msgstr ""
 
