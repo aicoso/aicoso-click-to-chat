@@ -1,0 +1,1142 @@
+# Copyright (C) 2025 AICOSO
+# This file is distributed under the GPL v2 or later.
+msgid ""
+msgstr ""
+"Project-Id-Version: Click to Chat 1.0.0\n"
+"Report-Msgid-Bugs-To: https://github.com/YOUR_USERNAME/click-to-chat/issues\n"
+"Last-Translator: FULL NAME <email@example.com>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2025-10-07T12:31:02+00:00\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"X-Generator: WP-CLI 2.12.0\n"
+"X-Domain: click-to-chat\n"
+
+#. Plugin Name of the plugin
+#: click-to-chat.php
+#: admin/class-admin.php:70
+#: admin/class-admin.php:71
+msgid "Click to Chat"
+msgstr ""
+
+#. Plugin URI of the plugin
+#. Author URI of the plugin
+#: click-to-chat.php
+msgid "https://aicoso.com/"
+msgstr ""
+
+#. Description of the plugin
+#: click-to-chat.php
+msgid "Enable customers to order products directly through WhatsApp with a single click. Add WhatsApp buttons to product pages, shop pages, cart, and checkout."
+msgstr ""
+
+#. Author of the plugin
+#: click-to-chat.php
+msgid "AICOSO"
+msgstr ""
+
+#: admin/class-admin.php:82
+#: admin/class-admin.php:83
+#: admin/class-admin.php:205
+msgid "Settings"
+msgstr ""
+
+#: admin/class-admin.php:91
+#: admin/class-admin.php:92
+#: admin/views/numbers-page.php:31
+#: admin/views/settings-page.php:177
+msgid "WhatsApp Numbers"
+msgstr ""
+
+#: admin/class-admin.php:100
+#: admin/class-admin.php:101
+#: admin/views/settings-page.php:181
+#: admin/views/templates-page.php:41
+msgid "Message Templates"
+msgstr ""
+
+#: admin/class-admin.php:109
+#: admin/class-admin.php:110
+msgid "Shortcode Generator"
+msgstr ""
+
+#: admin/class-admin.php:175
+#: admin/class-admin.php:186
+msgid "Are you sure you want to delete this WhatsApp number?"
+msgstr ""
+
+#: admin/class-admin.php:176
+msgid "This name is already being used. Please choose a different name."
+msgstr ""
+
+#: admin/class-admin.php:177
+msgid "Loading..."
+msgstr ""
+
+#: admin/class-admin.php:178
+#: admin/views/templates-page.php:149
+#: admin/views/templates-page.php:186
+#: admin/views/templates-page.php:223
+#: admin/views/templates-page.php:260
+#: admin/views/templates-page.php:297
+msgid "Preview"
+msgstr ""
+
+#: admin/class-admin.php:179
+msgid "Chat with us"
+msgstr ""
+
+#: admin/class-admin.php:180
+msgid "Shortcode copied to clipboard!"
+msgstr ""
+
+#: admin/class-admin.php:181
+msgid "Failed to copy shortcode. Please select and copy manually."
+msgstr ""
+
+#: admin/class-admin.php:182
+#: admin/class-admin.php:189
+#: admin/views/numbers-page.php:175
+#: admin/views/numbers-page.php:263
+#: admin/views/numbers-page.php:397
+msgid "Select products..."
+msgstr ""
+
+#: admin/class-admin.php:183
+#: admin/class-admin.php:190
+#: admin/views/numbers-page.php:184
+#: admin/views/numbers-page.php:283
+#: admin/views/numbers-page.php:405
+msgid "Select categories..."
+msgstr ""
+
+#: admin/class-admin.php:184
+#: admin/class-admin.php:191
+#: admin/views/numbers-page.php:193
+#: admin/views/numbers-page.php:303
+#: admin/views/numbers-page.php:413
+msgid "Select pages..."
+msgstr ""
+
+#: admin/class-admin.php:187
+msgid "WhatsApp number is required."
+msgstr ""
+
+#: admin/class-admin.php:188
+msgid "Name is required."
+msgstr ""
+
+#: admin/class-admin.php:564
+msgid "Some WhatsApp numbers were not saved because they had duplicate names. Each WhatsApp number must have a unique name."
+msgstr ""
+
+#: admin/class-admin.php:571
+msgid "WhatsApp numbers saved successfully."
+msgstr ""
+
+#: admin/class-admin.php:609
+msgid "Message templates saved successfully."
+msgstr ""
+
+#: admin/class-admin.php:622
+msgid "WhatsApp Shopping Settings"
+msgstr ""
+
+#: admin/class-admin.php:652
+msgid "Hide WhatsApp button on this product"
+msgstr ""
+
+#: admin/class-admin.php:657
+msgid "Assign specific WhatsApp number:"
+msgstr ""
+
+#: admin/class-admin.php:659
+msgid "Default (based on rules)"
+msgstr ""
+
+#: admin/class-admin.php:669
+msgid "Custom message template (overrides default):"
+msgstr ""
+
+#: admin/class-admin.php:672
+msgid "Available placeholders: {product_name}, {price}, {product_url}"
+msgstr ""
+
+#: admin/class-settings.php:84
+#: admin/class-settings.php:119
+#: admin/class-settings.php:173
+#: admin/class-settings.php:229
+#: admin/class-settings.php:283
+#: admin/class-settings.php:337
+#: admin/class-settings.php:393
+#: public/class-public.php:591
+msgid "Security check failed."
+msgstr ""
+
+#: admin/class-settings.php:93
+msgid "Setting key is required."
+msgstr ""
+
+#: admin/class-settings.php:128
+#: admin/class-settings.php:182
+#: admin/class-settings.php:238
+#: admin/class-settings.php:292
+#: admin/class-settings.php:346
+#: admin/class-settings.php:402
+msgid "You do not have permission to perform this action."
+msgstr ""
+
+#: admin/class-settings.php:419
+msgid "Template type and content are required."
+msgstr ""
+
+#: admin/class-settings.php:572
+#: admin/class-settings.php:587
+msgid "Below add to cart button"
+msgstr ""
+
+#: admin/class-settings.php:573
+#: admin/class-settings.php:588
+msgid "Above add to cart button"
+msgstr ""
+
+#: admin/class-settings.php:574
+#: admin/class-settings.php:589
+msgid "Below price"
+msgstr ""
+
+#: admin/class-settings.php:575
+#: admin/class-settings.php:590
+msgid "Above title"
+msgstr ""
+
+#: admin/class-settings.php:576
+msgid "Below short description"
+msgstr ""
+
+#: admin/class-settings.php:601
+msgid "Bottom Right"
+msgstr ""
+
+#: admin/class-settings.php:602
+msgid "Bottom Left"
+msgstr ""
+
+#: admin/class-settings.php:603
+msgid "Top Right"
+msgstr ""
+
+#: admin/class-settings.php:604
+msgid "Top Left"
+msgstr ""
+
+#: admin/class-settings.php:620
+#: admin/class-settings.php:628
+msgid "Product name"
+msgstr ""
+
+#: admin/class-settings.php:621
+msgid "Product price"
+msgstr ""
+
+#: admin/class-settings.php:622
+#: admin/class-settings.php:631
+msgid "Product URL"
+msgstr ""
+
+#: admin/class-settings.php:629
+msgid "Selected variation details"
+msgstr ""
+
+#: admin/class-settings.php:630
+msgid "Selected variation price"
+msgstr ""
+
+#: admin/class-settings.php:637
+msgid "List of items in cart"
+msgstr ""
+
+#: admin/class-settings.php:638
+msgid "Cart subtotal"
+msgstr ""
+
+#: admin/class-settings.php:639
+msgid "Tax amount"
+msgstr ""
+
+#: admin/class-settings.php:640
+msgid "Selected shipping method"
+msgstr ""
+
+#: admin/class-settings.php:641
+msgid "Shipping cost"
+msgstr ""
+
+#: admin/class-settings.php:642
+msgid "Cart total"
+msgstr ""
+
+#: admin/class-settings.php:648
+msgid "Order number"
+msgstr ""
+
+#: admin/class-settings.php:649
+msgid "Order date"
+msgstr ""
+
+#: admin/class-settings.php:650
+msgid "List of ordered items"
+msgstr ""
+
+#: admin/class-settings.php:651
+msgid "Applied coupon code"
+msgstr ""
+
+#: admin/class-settings.php:652
+msgid "Order total"
+msgstr ""
+
+#: admin/class-settings.php:658
+msgid "Current page URL"
+msgstr ""
+
+#: admin/views/numbers-page.php:36
+msgid "Manage Your WhatsApp Support Team"
+msgstr ""
+
+#: admin/views/numbers-page.php:37
+msgid "Add multiple WhatsApp numbers and assign them to specific products, categories, or pages for targeted customer support."
+msgstr ""
+
+#: admin/views/numbers-page.php:41
+msgid "Add WhatsApp numbers"
+msgstr ""
+
+#: admin/views/numbers-page.php:45
+msgid "Assign to products/categories"
+msgstr ""
+
+#: admin/views/numbers-page.php:49
+msgid "Set a default fallback number"
+msgstr ""
+
+#: admin/views/numbers-page.php:76
+#: admin/views/numbers-page.php:92
+#: admin/views/settings-page.php:94
+#: admin/views/settings-page.php:104
+#: admin/views/shortcode-page.php:75
+#: admin/views/shortcode-page.php:91
+#: admin/views/templates-page.php:86
+#: admin/views/templates-page.php:102
+msgid "Warning:"
+msgstr ""
+
+#. translators: %s: Link to Settings page
+#: admin/views/numbers-page.php:80
+#: admin/views/shortcode-page.php:79
+#: admin/views/templates-page.php:90
+#, php-format
+msgid "The plugin is currently disabled. WhatsApp buttons will not appear on your website. %s to activate the plugin."
+msgstr ""
+
+#: admin/views/numbers-page.php:81
+#: admin/views/shortcode-page.php:80
+#: admin/views/templates-page.php:91
+msgid "Go to Settings"
+msgstr ""
+
+#: admin/views/numbers-page.php:93
+msgid "No WhatsApp number configured! Add at least one WhatsApp number below for the buttons to work on your website."
+msgstr ""
+
+#: admin/views/numbers-page.php:103
+msgid "Add New WhatsApp Number"
+msgstr ""
+
+#: admin/views/numbers-page.php:118
+#: admin/views/numbers-page.php:136
+msgid "Default Number"
+msgstr ""
+
+#: admin/views/numbers-page.php:121
+#: admin/views/numbers-page.php:209
+#: admin/views/numbers-page.php:343
+msgid "Expand/Collapse"
+msgstr ""
+
+#: admin/views/numbers-page.php:124
+#: admin/views/numbers-page.php:212
+#: admin/views/numbers-page.php:346
+msgid "Delete Number"
+msgstr ""
+
+#: admin/views/numbers-page.php:135
+#: admin/views/numbers-page.php:223
+#: admin/views/numbers-page.php:357
+msgid "Display Name"
+msgstr ""
+
+#: admin/views/numbers-page.php:137
+#: admin/views/numbers-page.php:225
+#: admin/views/numbers-page.php:359
+msgid "A name to identify this number (for admin use only)"
+msgstr ""
+
+#: admin/views/numbers-page.php:141
+#: admin/views/numbers-page.php:229
+#: admin/views/numbers-page.php:363
+msgid "WhatsApp Number"
+msgstr ""
+
+#: admin/views/numbers-page.php:143
+#: admin/views/numbers-page.php:231
+#: admin/views/numbers-page.php:365
+msgid "Include country code (e.g., +1 for USA)"
+msgstr ""
+
+#: admin/views/numbers-page.php:148
+#: admin/views/numbers-page.php:236
+#: admin/views/numbers-page.php:370
+msgid "Description"
+msgstr ""
+
+#: admin/views/numbers-page.php:150
+#: admin/views/numbers-page.php:238
+#: admin/views/numbers-page.php:372
+msgid "Optional notes about this number or the person/department it belongs to"
+msgstr ""
+
+#: admin/views/numbers-page.php:157
+#: admin/views/numbers-page.php:245
+#: admin/views/numbers-page.php:379
+msgid "Use as Default Number"
+msgstr ""
+
+#: admin/views/numbers-page.php:159
+#: admin/views/numbers-page.php:247
+#: admin/views/numbers-page.php:381
+msgid "This number will be used as fallback for pages/products without specific assignments"
+msgstr ""
+
+#: admin/views/numbers-page.php:166
+#: admin/views/numbers-page.php:254
+#: admin/views/numbers-page.php:388
+msgid "Number Assignments"
+msgstr ""
+
+#: admin/views/numbers-page.php:173
+#: admin/views/numbers-page.php:261
+#: admin/views/numbers-page.php:395
+msgid "Products"
+msgstr ""
+
+#: admin/views/numbers-page.php:182
+#: admin/views/numbers-page.php:281
+#: admin/views/numbers-page.php:403
+msgid "Categories"
+msgstr ""
+
+#: admin/views/numbers-page.php:191
+#: admin/views/numbers-page.php:301
+#: admin/views/numbers-page.php:411
+msgid "Pages"
+msgstr ""
+
+#: admin/views/numbers-page.php:328
+msgid "Save All Numbers"
+msgstr ""
+
+#: admin/views/numbers-page.php:330
+msgid "Your WhatsApp numbers and assignments will be saved"
+msgstr ""
+
+#: admin/views/numbers-page.php:340
+msgid "New WhatsApp Number"
+msgstr ""
+
+#: admin/views/settings-page.php:29
+msgid "Plugin Settings"
+msgstr ""
+
+#: admin/views/settings-page.php:39
+msgid "Settings saved successfully."
+msgstr ""
+
+#: admin/views/settings-page.php:50
+msgid "Configure Your WhatsApp Integration"
+msgstr ""
+
+#: admin/views/settings-page.php:51
+msgid "Customize how the WhatsApp button appears and behaves across your WooCommerce store."
+msgstr ""
+
+#: admin/views/settings-page.php:55
+msgid "General settings"
+msgstr ""
+
+#: admin/views/settings-page.php:59
+msgid "Button appearance"
+msgstr ""
+
+#: admin/views/settings-page.php:63
+msgid "Display locations"
+msgstr ""
+
+#: admin/views/settings-page.php:67
+msgid "Save your settings"
+msgstr ""
+
+#: admin/views/settings-page.php:95
+msgid "The plugin is currently disabled. WhatsApp buttons will not appear on your website. Enable the plugin below to activate it."
+msgstr ""
+
+#. translators: %s: Link to Numbers page
+#: admin/views/settings-page.php:108
+#: admin/views/shortcode-page.php:95
+#: admin/views/templates-page.php:106
+#, php-format
+msgid "No WhatsApp number configured! You need to add at least one WhatsApp number for the buttons to work. %s"
+msgstr ""
+
+#: admin/views/settings-page.php:109
+#: admin/views/shortcode-page.php:96
+#: admin/views/templates-page.php:107
+msgid "Add a number now →"
+msgstr ""
+
+#: admin/views/settings-page.php:130
+#: admin/views/shortcode-page.php:146
+msgid "General"
+msgstr ""
+
+#: admin/views/settings-page.php:134
+msgid "Button Style"
+msgstr ""
+
+#: admin/views/settings-page.php:138
+msgid "Display"
+msgstr ""
+
+#: admin/views/settings-page.php:142
+msgid "Exclusions"
+msgstr ""
+
+#: admin/views/settings-page.php:152
+msgid "Plugin Status"
+msgstr ""
+
+#: admin/views/settings-page.php:159
+msgid "Enable Click to Chat plugin"
+msgstr ""
+
+#: admin/views/settings-page.php:161
+msgid "When disabled, no WhatsApp buttons will be displayed on your website."
+msgstr ""
+
+#: admin/views/settings-page.php:170
+msgid "Quick Links"
+msgstr ""
+
+#: admin/views/settings-page.php:184
+msgid "Manage your WhatsApp numbers and message templates from these sections."
+msgstr ""
+
+#: admin/views/settings-page.php:195
+msgid "Button Appearance"
+msgstr ""
+
+#: admin/views/settings-page.php:200
+#: admin/views/shortcode-page.php:176
+msgid "Button Text"
+msgstr ""
+
+#: admin/views/settings-page.php:201
+#: admin/views/shortcode-page.php:19
+#: click-to-chat.php:153
+#: includes/class-button-display.php:529
+#: includes/class-shortcodes.php:167
+#: public/class-public.php:357
+msgid "Order via WhatsApp"
+msgstr ""
+
+#: admin/views/settings-page.php:202
+msgid "The text to display on the WhatsApp button."
+msgstr ""
+
+#: admin/views/settings-page.php:208
+msgid "Show WhatsApp icon on the button"
+msgstr ""
+
+#: admin/views/settings-page.php:213
+msgid "Background Color"
+msgstr ""
+
+#: admin/views/settings-page.php:218
+#: admin/views/shortcode-page.php:186
+msgid "Text Color"
+msgstr ""
+
+#: admin/views/settings-page.php:223
+msgid "Custom CSS"
+msgstr ""
+
+#: admin/views/settings-page.php:225
+msgid "Add custom CSS for advanced button styling."
+msgstr ""
+
+#: admin/views/settings-page.php:238
+msgid "Single Product Pages"
+msgstr ""
+
+#: admin/views/settings-page.php:245
+msgid "Show WhatsApp button on single product pages"
+msgstr ""
+
+#: admin/views/settings-page.php:250
+#: admin/views/settings-page.php:277
+#: admin/views/settings-page.php:362
+msgid "Button Position"
+msgstr ""
+
+#: admin/views/settings-page.php:265
+msgid "Shop Pages"
+msgstr ""
+
+#: admin/views/settings-page.php:272
+msgid "Show WhatsApp button on shop/archive pages"
+msgstr ""
+
+#: admin/views/settings-page.php:292
+msgid "Cart & Checkout Pages"
+msgstr ""
+
+#: admin/views/settings-page.php:299
+msgid "Show WhatsApp button on the cart page"
+msgstr ""
+
+#: admin/views/settings-page.php:304
+msgid "Cart Button Position"
+msgstr ""
+
+#: admin/views/settings-page.php:306
+msgid "After Cart Table"
+msgstr ""
+
+#: admin/views/settings-page.php:307
+msgid "Before Cart Table"
+msgstr ""
+
+#: admin/views/settings-page.php:308
+msgid "Next to Proceed to Checkout Button"
+msgstr ""
+
+#: admin/views/settings-page.php:309
+msgid "After Cart Totals"
+msgstr ""
+
+#: admin/views/settings-page.php:310
+msgid "In Cart Actions Area"
+msgstr ""
+
+#: admin/views/settings-page.php:319
+msgid "Show WhatsApp button on the checkout page"
+msgstr ""
+
+#: admin/views/settings-page.php:324
+msgid "Checkout Button Position"
+msgstr ""
+
+#: admin/views/settings-page.php:326
+msgid "After Payment Methods"
+msgstr ""
+
+#: admin/views/settings-page.php:327
+msgid "Before Payment Methods"
+msgstr ""
+
+#: admin/views/settings-page.php:328
+msgid "After Order Review"
+msgstr ""
+
+#: admin/views/settings-page.php:329
+msgid "Before Order Review"
+msgstr ""
+
+#: admin/views/settings-page.php:330
+msgid "After Place Order Button"
+msgstr ""
+
+#: admin/views/settings-page.php:339
+msgid "Show WhatsApp button on the thank you/order confirmation page"
+msgstr ""
+
+#: admin/views/settings-page.php:350
+msgid "Floating Button"
+msgstr ""
+
+#: admin/views/settings-page.php:357
+msgid "Show a floating WhatsApp button on all pages"
+msgstr ""
+
+#: admin/views/settings-page.php:377
+#: admin/views/shortcode-page.php:222
+msgid "Advanced Options"
+msgstr ""
+
+#: admin/views/settings-page.php:382
+msgid "Warning: The options below will hide WooCommerce purchase buttons. Only enable if you want to use WhatsApp as the primary contact method for orders."
+msgstr ""
+
+#: admin/views/settings-page.php:388
+msgid "Hide \"Add to Cart\" buttons"
+msgstr ""
+
+#: admin/views/settings-page.php:390
+msgid "Hides Add to Cart buttons on shop and product pages"
+msgstr ""
+
+#: admin/views/settings-page.php:396
+msgid "Hide \"Proceed to Checkout\" button"
+msgstr ""
+
+#: admin/views/settings-page.php:398
+msgid "Hides the Proceed to Checkout button on the cart page"
+msgstr ""
+
+#: admin/views/settings-page.php:404
+msgid "Hide \"Place Order\" button"
+msgstr ""
+
+#: admin/views/settings-page.php:406
+msgid "Hides the Place Order button on the checkout page"
+msgstr ""
+
+#: admin/views/settings-page.php:414
+msgid "Enable catalog mode (hides all purchase buttons)"
+msgstr ""
+
+#: admin/views/settings-page.php:416
+msgid "Turns your store into a catalog where customers must contact via WhatsApp to purchase"
+msgstr ""
+
+#: admin/views/settings-page.php:428
+msgid "Page & Post Exclusions"
+msgstr ""
+
+#: admin/views/settings-page.php:433
+msgid "Exclude Pages"
+msgstr ""
+
+#: admin/views/settings-page.php:446
+msgid "Select pages where the WhatsApp button should not appear."
+msgstr ""
+
+#: admin/views/settings-page.php:450
+msgid "Exclude Posts"
+msgstr ""
+
+#: admin/views/settings-page.php:463
+msgid "Select posts where the WhatsApp button should not appear."
+msgstr ""
+
+#: admin/views/settings-page.php:472
+msgid "Product Exclusions"
+msgstr ""
+
+#: admin/views/settings-page.php:477
+msgid "Exclude Product Categories"
+msgstr ""
+
+#: admin/views/settings-page.php:490
+msgid "Select product categories where the WhatsApp button should not appear."
+msgstr ""
+
+#: admin/views/settings-page.php:494
+msgid "Exclude Product Tags"
+msgstr ""
+
+#: admin/views/settings-page.php:507
+msgid "Select product tags where the WhatsApp button should not appear."
+msgstr ""
+
+#: admin/views/settings-page.php:511
+msgid "Exclude Products"
+msgstr ""
+
+#: admin/views/settings-page.php:524
+msgid "Select specific products where the WhatsApp button should not appear."
+msgstr ""
+
+#: admin/views/settings-page.php:533
+msgid "Save Settings"
+msgstr ""
+
+#: admin/views/shortcode-page.php:30
+msgid "WhatsApp Button Shortcode Builder"
+msgstr ""
+
+#: admin/views/shortcode-page.php:35
+msgid "How to Use Shortcodes"
+msgstr ""
+
+#: admin/views/shortcode-page.php:36
+msgid "Create custom WhatsApp buttons and place them anywhere on your site using shortcodes."
+msgstr ""
+
+#: admin/views/shortcode-page.php:40
+msgid "Configure your button below"
+msgstr ""
+
+#: admin/views/shortcode-page.php:44
+msgid "Copy the generated shortcode"
+msgstr ""
+
+#: admin/views/shortcode-page.php:48
+msgid "Paste it in any post, page, or widget"
+msgstr ""
+
+#: admin/views/shortcode-page.php:109
+msgid "Button Configuration"
+msgstr ""
+
+#: admin/views/shortcode-page.php:113
+msgid "Button Type"
+msgstr ""
+
+#: admin/views/shortcode-page.php:119
+msgid "Product"
+msgstr ""
+
+#: admin/views/shortcode-page.php:120
+msgid "For product pages"
+msgstr ""
+
+#: admin/views/shortcode-page.php:128
+msgid "Cart"
+msgstr ""
+
+#: admin/views/shortcode-page.php:129
+msgid "Include cart items"
+msgstr ""
+
+#: admin/views/shortcode-page.php:137
+msgid "Shop"
+msgstr ""
+
+#: admin/views/shortcode-page.php:138
+msgid "Shop/category pages"
+msgstr ""
+
+#: admin/views/shortcode-page.php:147
+msgid "Simple contact"
+msgstr ""
+
+#: admin/views/shortcode-page.php:155
+msgid "Product Selection"
+msgstr ""
+
+#: admin/views/shortcode-page.php:159
+msgid "Use current product (auto-detect)"
+msgstr ""
+
+#: admin/views/shortcode-page.php:163
+msgid "Specify product ID"
+msgstr ""
+
+#: admin/views/shortcode-page.php:166
+msgid "Enter product ID"
+msgstr ""
+
+#: admin/views/shortcode-page.php:173
+msgid "Appearance"
+msgstr ""
+
+#: admin/views/shortcode-page.php:182
+msgid "Background"
+msgstr ""
+
+#: admin/views/shortcode-page.php:193
+msgid "Size"
+msgstr ""
+
+#: admin/views/shortcode-page.php:195
+msgid "Small"
+msgstr ""
+
+#: admin/views/shortcode-page.php:196
+msgid "Normal"
+msgstr ""
+
+#: admin/views/shortcode-page.php:197
+msgid "Large"
+msgstr ""
+
+#: admin/views/shortcode-page.php:201
+msgid "Alignment"
+msgstr ""
+
+#: admin/views/shortcode-page.php:203
+msgid "Left"
+msgstr ""
+
+#: admin/views/shortcode-page.php:204
+msgid "Center"
+msgstr ""
+
+#: admin/views/shortcode-page.php:205
+msgid "Right"
+msgstr ""
+
+#: admin/views/shortcode-page.php:213
+msgid "Show WhatsApp icon"
+msgstr ""
+
+#: admin/views/shortcode-page.php:227
+msgid "Specific Number"
+msgstr ""
+
+#: admin/views/shortcode-page.php:229
+msgid "Use default"
+msgstr ""
+
+#: admin/views/shortcode-page.php:240
+msgid "Custom Message"
+msgstr ""
+
+#: admin/views/shortcode-page.php:241
+msgid "Optional custom message..."
+msgstr ""
+
+#: admin/views/shortcode-page.php:245
+msgid "CSS Class"
+msgstr ""
+
+#: admin/views/shortcode-page.php:246
+msgid "custom-class"
+msgstr ""
+
+#: admin/views/shortcode-page.php:256
+msgid "Live Preview"
+msgstr ""
+
+#: admin/views/shortcode-page.php:266
+msgid "Your Shortcode"
+msgstr ""
+
+#: admin/views/shortcode-page.php:271
+msgid "Copy"
+msgstr ""
+
+#: admin/views/shortcode-page.php:275
+msgid "Copied to clipboard!"
+msgstr ""
+
+#: admin/views/shortcode-page.php:281
+msgid "Quick Examples"
+msgstr ""
+
+#: admin/views/shortcode-page.php:284
+msgid "Basic button:"
+msgstr ""
+
+#: admin/views/shortcode-page.php:288
+msgid "Specific product:"
+msgstr ""
+
+#: admin/views/shortcode-page.php:292
+msgid "Cart button:"
+msgstr ""
+
+#: admin/views/shortcode-page.php:296
+msgid "Custom text:"
+msgstr ""
+
+#: admin/views/shortcode-page.php:304
+msgid "Where to Use"
+msgstr ""
+
+#: admin/views/shortcode-page.php:306
+msgid "In any WordPress post or page content"
+msgstr ""
+
+#: admin/views/shortcode-page.php:307
+msgid "In text widgets"
+msgstr ""
+
+#: admin/views/shortcode-page.php:308
+msgid "In page builders (Elementor, Gutenberg, etc.)"
+msgstr ""
+
+#: admin/views/shortcode-page.php:309
+msgid "In product descriptions"
+msgstr ""
+
+#: admin/views/shortcode-page.php:310
+msgid "Multiple buttons on the same page"
+msgstr ""
+
+#: admin/views/templates-page.php:46
+msgid "Customize Your WhatsApp Messages"
+msgstr ""
+
+#: admin/views/templates-page.php:47
+msgid "Configure message templates for different contexts. Use placeholders to automatically include product details, cart information, and order data."
+msgstr ""
+
+#: admin/views/templates-page.php:51
+msgid "Choose a template below"
+msgstr ""
+
+#: admin/views/templates-page.php:55
+msgid "Click placeholders to insert them"
+msgstr ""
+
+#: admin/views/templates-page.php:59
+msgid "Preview and save your changes"
+msgstr ""
+
+#: admin/views/templates-page.php:124
+msgid "Single Product Template"
+msgstr ""
+
+#: admin/views/templates-page.php:127
+msgid "This template is used for inquiries about a specific product."
+msgstr ""
+
+#: admin/views/templates-page.php:130
+#: admin/views/templates-page.php:167
+#: admin/views/templates-page.php:204
+#: admin/views/templates-page.php:241
+#: admin/views/templates-page.php:278
+msgid "Available Placeholders:"
+msgstr ""
+
+#: admin/views/templates-page.php:142
+#: admin/views/templates-page.php:179
+#: admin/views/templates-page.php:216
+#: admin/views/templates-page.php:253
+#: admin/views/templates-page.php:290
+msgid "Message Template"
+msgstr ""
+
+#: admin/views/templates-page.php:161
+msgid "Product Variations Template"
+msgstr ""
+
+#: admin/views/templates-page.php:164
+msgid "This template is used for variable products when specific variations are selected."
+msgstr ""
+
+#: admin/views/templates-page.php:198
+msgid "Cart & Checkout Template"
+msgstr ""
+
+#: admin/views/templates-page.php:201
+msgid "This template is used for inquiries from the cart or checkout pages."
+msgstr ""
+
+#: admin/views/templates-page.php:235
+msgid "Thank You Page Template"
+msgstr ""
+
+#: admin/views/templates-page.php:238
+msgid "This template is used for inquiries from the order confirmation/thank you page."
+msgstr ""
+
+#: admin/views/templates-page.php:272
+msgid "Floating Button Template"
+msgstr ""
+
+#: admin/views/templates-page.php:275
+msgid "This template is used for the floating WhatsApp button."
+msgstr ""
+
+#: admin/views/templates-page.php:309
+msgid "Save All Templates"
+msgstr ""
+
+#: admin/views/templates-page.php:311
+msgid "Your changes will be applied to all WhatsApp messages"
+msgstr ""
+
+#: click-to-chat.php:64
+msgid "Click to Chat requires WooCommerce to be installed and active."
+msgstr ""
+
+#: click-to-chat.php:183
+msgid ""
+"Hello! I'm interested in the product: *{product_name}*\n"
+"Price: {price}\n"
+"URL: {product_url}\n"
+"\n"
+"Do you have this item in stock? I'd like to get more information."
+msgstr ""
+
+#: click-to-chat.php:184
+msgid ""
+"Hello! I'd like to complete my purchase of:\n"
+"{cart_items_list}\n"
+"---------------------\n"
+"Subtotal: {cart_subtotal}\n"
+"Tax: {tax_amount}\n"
+"Shipping: {shipping_method} - {shipping_cost}\n"
+"Total: {cart_total}\n"
+"\n"
+"I have a few questions before finalizing my order."
+msgstr ""
+
+#: click-to-chat.php:185
+msgid ""
+"Hello! I've just placed order #{order_number} on {order_date}.\n"
+"My order includes:\n"
+"{ordered_items_list}\n"
+"---------------------\n"
+"Applied Coupon: {coupon_code}\n"
+"Total: {order_total}\n"
+"\n"
+"I'd like to confirm when this will be shipped."
+msgstr ""
+
+#: click-to-chat.php:186
+msgid "Hello! I was browsing your website at {current_page_url} and have a question."
+msgstr ""
+
+#: click-to-chat.php:187
+msgid ""
+"Hello! I'm interested in the product: *{product_name}*\n"
+"Selected options: {variation_details}\n"
+"Price: {variation_price}\n"
+"URL: {product_url}\n"
+"\n"
+"Is this combination available for immediate shipping?"
+msgstr ""
+
+#: includes/class-button-display.php:393
+msgid "Hello! I need help with my cart on your website."
+msgstr ""
+
+#: includes/class-button-display.php:433
+msgid "Hello! I need help with my checkout on your website."
+msgstr ""
+
+#: includes/class-whatsapp-link-generator.php:660
+msgid "Not calculated"
+msgstr ""
+
+#: includes/class-whatsapp-link-generator.php:782
+msgid "None"
+msgstr ""
+
+#: public/class-public.php:340
+msgid "Hello! I need help with my order."
+msgstr ""
+
+#: public/class-public.php:599
+msgid "Invalid product ID."
+msgstr ""
+
+#: public/class-public.php:609
+msgid "Could not generate WhatsApp URL."
+msgstr ""
