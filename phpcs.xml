@@ -37,6 +37,11 @@
 
         <!-- Allow camelCase for variables -->
         <exclude name="WordPress.NamingConventions.ValidVariableName"/>
+
+        <!-- Exclude alignment warnings (cosmetic only) -->
+        <exclude name="Generic.Formatting.MultipleStatementAlignment"/>
+        <exclude name="WordPress.Arrays.MultipleStatementAlignment"/>
+        <exclude name="WordPress.WhiteSpace.PrecisionAlignment"/>
     </rule>
 
     <!-- WooCommerce Coding Standards (if applicable) -->
