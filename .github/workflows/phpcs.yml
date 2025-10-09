@@ -35,7 +35,7 @@ jobs:
 
       - name: Run PHPCS
         run: |
-          vendor/bin/phpcs --standard=WordPress --extensions=php --ignore=*/vendor/*,*/node_modules/* . --report=checkstyle | cs2pr
+          vendor/bin/phpcs --standard=./phpcs.xml --report=checkstyle | cs2pr
 
       - name: Check PHP compatibility
         run: |
