@@ -1,0 +1,23 @@
+{
+  "name": "click-to-chat",
+  "version": "1.0.0",
+  "description": "WordPress plugin for WhatsApp integration with WooCommerce",
+  "main": "click-to-chat.php",
+  "scripts": {
+    "grunt": "grunt",
+    "makepot": "wpi18n makepot --domain=click-to-chat --main-file=click-to-chat.php --exclude=node_modules,vendor,.git,.github,build,tests"
+  },
+  "keywords": [
+    "wordpress",
+    "woocommerce",
+    "whatsapp",
+    "plugin"
+  ],
+  "author": "AICOSO",
+  "license": "GPL-3.0-or-later",
+  "devDependencies": {
+    "@wordpress/i18n": "^5.9.0",
+    "grunt": "^1.6.1",
+    "grunt-wp-i18n": "^1.0.3"
+  }
+}
