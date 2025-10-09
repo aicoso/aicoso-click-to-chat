@@ -106,16 +106,16 @@ class Click_To_Chat {
 	 */
 	private function includes() {
 		// Admin.
-		require_once CTC_PLUGIN_DIR . 'admin/class-admin.php';
-		require_once CTC_PLUGIN_DIR . 'admin/class-settings.php';
+		require_once CTC_PLUGIN_DIR . 'admin/class-ctc-admin.php';
+		require_once CTC_PLUGIN_DIR . 'admin/class-ctc-settings.php';
 
 		// Core functionality.
-		require_once CTC_PLUGIN_DIR . 'includes/class-whatsapp-link-generator.php';
-		require_once CTC_PLUGIN_DIR . 'includes/class-button-display.php';
-		require_once CTC_PLUGIN_DIR . 'includes/class-shortcodes.php';
+		require_once CTC_PLUGIN_DIR . 'includes/class-ctc-whatsapp-link-generator.php';
+		require_once CTC_PLUGIN_DIR . 'includes/class-ctc-button-display.php';
+		require_once CTC_PLUGIN_DIR . 'includes/class-ctc-shortcodes.php';
 
 		// Public facing.
-		require_once CTC_PLUGIN_DIR . 'public/class-public.php';
+		require_once CTC_PLUGIN_DIR . 'public/class-ctc-public.php';
 	}
 
 	/**

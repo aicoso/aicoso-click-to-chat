@@ -391,7 +391,7 @@ class CTC_Button_Display {
 			if ( ! empty( $whatsapp_number ) ) {
 				$whatsapp_number = preg_replace( '/[^0-9]/', '', $whatsapp_number );
 				$default_message = esc_html__( 'Hello! I need help with my cart on your website.', 'click-to-chat' );
-				$whatsapp_url = 'https://wa.me/' . $whatsapp_number . '?text=' . urlencode( $default_message );
+				$whatsapp_url = 'https://wa.me/' . $whatsapp_number . '?text=' . rawurlencode( $default_message );
 			}
 		}
 
@@ -431,7 +431,7 @@ class CTC_Button_Display {
 			if ( ! empty( $whatsapp_number ) ) {
 				$whatsapp_number = preg_replace( '/[^0-9]/', '', $whatsapp_number );
 				$default_message = esc_html__( 'Hello! I need help with my checkout on your website.', 'click-to-chat' );
-				$whatsapp_url = 'https://wa.me/' . $whatsapp_number . '?text=' . urlencode( $default_message );
+				$whatsapp_url = 'https://wa.me/' . $whatsapp_number . '?text=' . rawurlencode( $default_message );
 			}
 		}
 

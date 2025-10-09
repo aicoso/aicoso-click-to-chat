@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Click to Chat 1.0.0\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/click-to-chat\n"
-"POT-Creation-Date: 2025-10-09 08:54:11+00:00\n"
+"POT-Creation-Date: 2025-10-09 10:02:00+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -12,242 +12,243 @@ msgstr ""
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 
-#: admin/class-admin.php:70 admin/class-admin.php:71
+#: admin/class-ctc-admin.php:70 admin/class-ctc-admin.php:71
 msgid "Click to Chat"
 msgstr ""
 
-#: admin/class-admin.php:82 admin/class-admin.php:83 admin/class-admin.php:205
+#: admin/class-ctc-admin.php:82 admin/class-ctc-admin.php:83
+#: admin/class-ctc-admin.php:205
 msgid "Settings"
 msgstr ""
 
-#: admin/class-admin.php:91 admin/class-admin.php:92
+#: admin/class-ctc-admin.php:91 admin/class-ctc-admin.php:92
 #: admin/views/numbers-page.php:31 admin/views/settings-page.php:177
 msgid "WhatsApp Numbers"
 msgstr ""
 
-#: admin/class-admin.php:100 admin/class-admin.php:101
+#: admin/class-ctc-admin.php:100 admin/class-ctc-admin.php:101
 #: admin/views/settings-page.php:181 admin/views/templates-page.php:41
 msgid "Message Templates"
 msgstr ""
 
-#: admin/class-admin.php:109 admin/class-admin.php:110
+#: admin/class-ctc-admin.php:109 admin/class-ctc-admin.php:110
 msgid "Shortcode Generator"
 msgstr ""
 
-#: admin/class-admin.php:175 admin/class-admin.php:186
+#: admin/class-ctc-admin.php:175 admin/class-ctc-admin.php:186
 msgid "Are you sure you want to delete this WhatsApp number?"
 msgstr ""
 
-#: admin/class-admin.php:176
+#: admin/class-ctc-admin.php:176
 msgid "This name is already being used. Please choose a different name."
 msgstr ""
 
-#: admin/class-admin.php:177
+#: admin/class-ctc-admin.php:177
 msgid "Loading..."
 msgstr ""
 
-#: admin/class-admin.php:178 admin/views/templates-page.php:149
+#: admin/class-ctc-admin.php:178 admin/views/templates-page.php:149
 #: admin/views/templates-page.php:186 admin/views/templates-page.php:223
 #: admin/views/templates-page.php:260 admin/views/templates-page.php:297
 msgid "Preview"
 msgstr ""
 
-#: admin/class-admin.php:179
+#: admin/class-ctc-admin.php:179
 msgid "Chat with us"
 msgstr ""
 
-#: admin/class-admin.php:180
+#: admin/class-ctc-admin.php:180
 msgid "Shortcode copied to clipboard!"
 msgstr ""
 
-#: admin/class-admin.php:181
+#: admin/class-ctc-admin.php:181
 msgid "Failed to copy shortcode. Please select and copy manually."
 msgstr ""
 
-#: admin/class-admin.php:182 admin/class-admin.php:189
+#: admin/class-ctc-admin.php:182 admin/class-ctc-admin.php:189
 #: admin/views/numbers-page.php:175 admin/views/numbers-page.php:263
 #: admin/views/numbers-page.php:397
 msgid "Select products..."
 msgstr ""
 
-#: admin/class-admin.php:183 admin/class-admin.php:190
+#: admin/class-ctc-admin.php:183 admin/class-ctc-admin.php:190
 #: admin/views/numbers-page.php:184 admin/views/numbers-page.php:283
 #: admin/views/numbers-page.php:405
 msgid "Select categories..."
 msgstr ""
 
-#: admin/class-admin.php:184 admin/class-admin.php:191
+#: admin/class-ctc-admin.php:184 admin/class-ctc-admin.php:191
 #: admin/views/numbers-page.php:193 admin/views/numbers-page.php:303
 #: admin/views/numbers-page.php:413
 msgid "Select pages..."
 msgstr ""
 
-#: admin/class-admin.php:187
+#: admin/class-ctc-admin.php:187
 msgid "WhatsApp number is required."
 msgstr ""
 
-#: admin/class-admin.php:188
+#: admin/class-ctc-admin.php:188
 msgid "Name is required."
 msgstr ""
 
-#: admin/class-admin.php:564
+#: admin/class-ctc-admin.php:564
 msgid "Some WhatsApp numbers were not saved because they had duplicate names. Each WhatsApp number must have a unique name."
 msgstr ""
 
-#: admin/class-admin.php:571
+#: admin/class-ctc-admin.php:571
 msgid "WhatsApp numbers saved successfully."
 msgstr ""
 
-#: admin/class-admin.php:609
+#: admin/class-ctc-admin.php:609
 msgid "Message templates saved successfully."
 msgstr ""
 
-#: admin/class-admin.php:622
+#: admin/class-ctc-admin.php:622
 msgid "WhatsApp Shopping Settings"
 msgstr ""
 
-#: admin/class-admin.php:652
+#: admin/class-ctc-admin.php:652
 msgid "Hide WhatsApp button on this product"
 msgstr ""
 
-#: admin/class-admin.php:657
+#: admin/class-ctc-admin.php:657
 msgid "Assign specific WhatsApp number:"
 msgstr ""
 
-#: admin/class-admin.php:659
+#: admin/class-ctc-admin.php:659
 msgid "Default (based on rules)"
 msgstr ""
 
-#: admin/class-admin.php:669
+#: admin/class-ctc-admin.php:669
 msgid "Custom message template (overrides default):"
 msgstr ""
 
-#: admin/class-admin.php:672
+#: admin/class-ctc-admin.php:672
 msgid "Available placeholders: {product_name}, {price}, {product_url}"
 msgstr ""
 
-#: admin/class-settings.php:84 admin/class-settings.php:119
-#: admin/class-settings.php:173 admin/class-settings.php:229
-#: admin/class-settings.php:283 admin/class-settings.php:337
-#: admin/class-settings.php:393 public/class-public.php:591
+#: admin/class-ctc-settings.php:84 admin/class-ctc-settings.php:119
+#: admin/class-ctc-settings.php:173 admin/class-ctc-settings.php:229
+#: admin/class-ctc-settings.php:283 admin/class-ctc-settings.php:337
+#: admin/class-ctc-settings.php:393 public/class-ctc-public.php:591
 msgid "Security check failed."
 msgstr ""
 
-#: admin/class-settings.php:93
+#: admin/class-ctc-settings.php:93
 msgid "Setting key is required."
 msgstr ""
 
-#: admin/class-settings.php:128 admin/class-settings.php:182
-#: admin/class-settings.php:238 admin/class-settings.php:292
-#: admin/class-settings.php:346 admin/class-settings.php:402
+#: admin/class-ctc-settings.php:128 admin/class-ctc-settings.php:182
+#: admin/class-ctc-settings.php:238 admin/class-ctc-settings.php:292
+#: admin/class-ctc-settings.php:346 admin/class-ctc-settings.php:402
 msgid "You do not have permission to perform this action."
 msgstr ""
 
-#: admin/class-settings.php:419
+#: admin/class-ctc-settings.php:419
 msgid "Template type and content are required."
 msgstr ""
 
-#: admin/class-settings.php:572 admin/class-settings.php:587
+#: admin/class-ctc-settings.php:572 admin/class-ctc-settings.php:587
 msgid "Below add to cart button"
 msgstr ""
 
-#: admin/class-settings.php:573 admin/class-settings.php:588
+#: admin/class-ctc-settings.php:573 admin/class-ctc-settings.php:588
 msgid "Above add to cart button"
 msgstr ""
 
-#: admin/class-settings.php:574 admin/class-settings.php:589
+#: admin/class-ctc-settings.php:574 admin/class-ctc-settings.php:589
 msgid "Below price"
 msgstr ""
 
-#: admin/class-settings.php:575 admin/class-settings.php:590
+#: admin/class-ctc-settings.php:575 admin/class-ctc-settings.php:590
 msgid "Above title"
 msgstr ""
 
-#: admin/class-settings.php:576
+#: admin/class-ctc-settings.php:576
 msgid "Below short description"
 msgstr ""
 
-#: admin/class-settings.php:601
+#: admin/class-ctc-settings.php:601
 msgid "Bottom Right"
 msgstr ""
 
-#: admin/class-settings.php:602
+#: admin/class-ctc-settings.php:602
 msgid "Bottom Left"
 msgstr ""
 
-#: admin/class-settings.php:603
+#: admin/class-ctc-settings.php:603
 msgid "Top Right"
 msgstr ""
 
-#: admin/class-settings.php:604
+#: admin/class-ctc-settings.php:604
 msgid "Top Left"
 msgstr ""
 
-#: admin/class-settings.php:620 admin/class-settings.php:628
+#: admin/class-ctc-settings.php:620 admin/class-ctc-settings.php:628
 msgid "Product name"
 msgstr ""
 
-#: admin/class-settings.php:621
+#: admin/class-ctc-settings.php:621
 msgid "Product price"
 msgstr ""
 
-#: admin/class-settings.php:622 admin/class-settings.php:631
+#: admin/class-ctc-settings.php:622 admin/class-ctc-settings.php:631
 msgid "Product URL"
 msgstr ""
 
-#: admin/class-settings.php:629
+#: admin/class-ctc-settings.php:629
 msgid "Selected variation details"
 msgstr ""
 
-#: admin/class-settings.php:630
+#: admin/class-ctc-settings.php:630
 msgid "Selected variation price"
 msgstr ""
 
-#: admin/class-settings.php:637
+#: admin/class-ctc-settings.php:637
 msgid "List of items in cart"
 msgstr ""
 
-#: admin/class-settings.php:638
+#: admin/class-ctc-settings.php:638
 msgid "Cart subtotal"
 msgstr ""
 
-#: admin/class-settings.php:639
+#: admin/class-ctc-settings.php:639
 msgid "Tax amount"
 msgstr ""
 
-#: admin/class-settings.php:640
+#: admin/class-ctc-settings.php:640
 msgid "Selected shipping method"
 msgstr ""
 
-#: admin/class-settings.php:641
+#: admin/class-ctc-settings.php:641
 msgid "Shipping cost"
 msgstr ""
 
-#: admin/class-settings.php:642
+#: admin/class-ctc-settings.php:642
 msgid "Cart total"
 msgstr ""
 
-#: admin/class-settings.php:648
+#: admin/class-ctc-settings.php:648
 msgid "Order number"
 msgstr ""
 
-#: admin/class-settings.php:649
+#: admin/class-ctc-settings.php:649
 msgid "Order date"
 msgstr ""
 
-#: admin/class-settings.php:650
+#: admin/class-ctc-settings.php:650
 msgid "List of ordered items"
 msgstr ""
 
-#: admin/class-settings.php:651
+#: admin/class-ctc-settings.php:651
 msgid "Applied coupon code"
 msgstr ""
 
-#: admin/class-settings.php:652
+#: admin/class-ctc-settings.php:652
 msgid "Order total"
 msgstr ""
 
-#: admin/class-settings.php:658
+#: admin/class-ctc-settings.php:658
 msgid "Current page URL"
 msgstr ""
 
@@ -477,8 +478,8 @@ msgid "Button Text"
 msgstr ""
 
 #: admin/views/settings-page.php:201 admin/views/shortcode-page.php:19
-#: click-to-chat.php:153 includes/class-button-display.php:529
-#: includes/class-shortcodes.php:167 public/class-public.php:357
+#: click-to-chat.php:153 includes/class-ctc-button-display.php:529
+#: includes/class-ctc-shortcodes.php:167 public/class-ctc-public.php:357
 msgid "Order via WhatsApp"
 msgstr ""
 
@@ -1027,31 +1028,31 @@ msgid ""
 "Is this combination available for immediate shipping?"
 msgstr ""
 
-#: includes/class-button-display.php:393
+#: includes/class-ctc-button-display.php:393
 msgid "Hello! I need help with my cart on your website."
 msgstr ""
 
-#: includes/class-button-display.php:433
+#: includes/class-ctc-button-display.php:433
 msgid "Hello! I need help with my checkout on your website."
 msgstr ""
 
-#: includes/class-whatsapp-link-generator.php:660
+#: includes/class-ctc-whatsapp-link-generator.php:660
 msgid "Not calculated"
 msgstr ""
 
-#: includes/class-whatsapp-link-generator.php:782
+#: includes/class-ctc-whatsapp-link-generator.php:782
 msgid "None"
 msgstr ""
 
-#: public/class-public.php:340
+#: public/class-ctc-public.php:340
 msgid "Hello! I need help with my order."
 msgstr ""
 
-#: public/class-public.php:599
+#: public/class-ctc-public.php:599
 msgid "Invalid product ID."
 msgstr ""
 
-#: public/class-public.php:609
+#: public/class-ctc-public.php:609
 msgid "Could not generate WhatsApp URL."
 msgstr ""
 #. Plugin Name of the plugin/theme
@@ -1059,7 +1060,7 @@ msgid "Click to Chat"
 msgstr ""
 
 #. Plugin URI of the plugin/theme
-msgid "https://aicoso.com/"
+msgid "https://wordpress.org/plugins/click-to-chat/"
 msgstr ""
 
 #. Description of the plugin/theme

@@ -338,7 +338,7 @@ class CTC_Public {
 			if ( ! empty( $whatsapp_number ) ) {
 				$whatsapp_number = preg_replace( '/[^0-9]/', '', $whatsapp_number );
 				$default_message = __( 'Hello! I need help with my order.', 'click-to-chat' );
-				$whatsapp_url = 'https://wa.me/' . $whatsapp_number . '?text=' . urlencode( $default_message );
+				$whatsapp_url = 'https://wa.me/' . $whatsapp_number . '?text=' . rawurlencode( $default_message );
 			}
 		}
 
