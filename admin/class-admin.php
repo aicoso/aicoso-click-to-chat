@@ -130,7 +130,7 @@ class CTC_Admin {
 
 		// Enqueue Select2 from local files.
 		wp_enqueue_style(
-			'select2-css',
+			'ctc-select2',
 			CTC_PLUGIN_URL . 'admin/lib/select2/select2.min.css',
 			array(),
 			'4.0.13'
@@ -139,14 +139,14 @@ class CTC_Admin {
 		wp_enqueue_style(
 			'ctc-admin-styles',
 			CTC_PLUGIN_URL . 'admin/css/admin.css',
-			array( 'wp-color-picker', 'select2-css' ),
+			array( 'wp-color-picker', 'ctc-select2' ),
 			CTC_VERSION
 		);
 
 		// JavaScript.
 		// Enqueue Select2 from local files.
 		wp_enqueue_script(
-			'select2-js',
+			'ctc-select2-js',
 			CTC_PLUGIN_URL . 'admin/lib/select2/select2.min.js',
 			array( 'jquery' ),
 			'4.0.13',
@@ -159,7 +159,7 @@ class CTC_Admin {
 		wp_enqueue_script(
 			'ctc-admin-js',
 			CTC_PLUGIN_URL . 'admin/js/admin.js',
-			array( 'jquery', 'wp-color-picker', 'select2-js', 'jquery-ui-sortable' ),
+			array( 'jquery', 'wp-color-picker', 'ctc-select2-js', 'jquery-ui-sortable' ),
 			CTC_VERSION,
 			true
 		);
