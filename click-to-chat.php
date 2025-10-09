@@ -1,7 +1,7 @@
 <?php
 /**
  * Plugin Name: Click to Chat
- * Plugin URI: https://aicoso.com/
+ * Plugin URI:  https://wordpress.org/plugins/click-to-chat/
  * Description: Enable customers to order products directly through WhatsApp with a single click. Add WhatsApp buttons to product pages, shop pages, cart, and checkout.
  * Version: 1.0.0
  * Author: AICOSO
