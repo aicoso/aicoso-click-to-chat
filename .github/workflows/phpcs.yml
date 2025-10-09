@@ -24,9 +24,9 @@ jobs:
       - name: Install Composer dependencies
         run: |
           composer require --dev squizlabs/php_codesniffer:"^3.7"
-          composer require --dev wp-coding-standards/wpcs:"^3.0"
+          composer require --dev wp-coding-standards/wpcs:"^2.3"
           composer require --dev phpcompatibility/phpcompatibility-wp:"^2.1"
-          composer require --dev dealerdirect/phpcodesniffer-composer-installer:"^1.0"
+          composer require --dev dealerdirect/phpcodesniffer-composer-installer:"^0.7"
 
       - name: Configure PHPCS
         run: |
