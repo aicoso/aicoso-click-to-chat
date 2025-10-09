@@ -454,8 +454,8 @@ class CTC_Admin {
 		// Redirect to the same tab.
 		$redirect_url = add_query_arg(
 			array(
-				'page'              => 'click-to-chat',
-				'tab'               => $current_tab,
+				'page' => 'click-to-chat',
+				'tab'  => $current_tab,
 			),
 			admin_url( 'admin.php' )
 		);
