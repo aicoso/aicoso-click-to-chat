@@ -12,7 +12,7 @@ if ( ! defined( 'WPINC' ) ) {
 }
 
 // Include settings class.
-require_once plugin_dir_path( __DIR__ ) . 'class-settings.php';
+require_once plugin_dir_path( __DIR__ ) . 'class-ctc-settings.php';
 
 // Get plugin settings.
 $settings = get_option( 'ctc_settings', array() );
