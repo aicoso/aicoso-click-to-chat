@@ -43,6 +43,11 @@
         <exclude name="WordPress.Arrays.MultipleStatementAlignment"/>
     </rule>
 
+    <!-- Main plugin file is allowed to have mixed structure (functions + class) -->
+    <rule ref="WordPress.Files.FileName">
+        <exclude-pattern>click-to-chat\.php</exclude-pattern>
+    </rule>
+
     <!-- WooCommerce Coding Standards (if applicable) -->
     <!-- Commented out until WooCommerce-Core ruleset is installed -->
     <!--
