@@ -16,12 +16,16 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 /**
  * The core plugin class
+ *
+ * @since 1.0.0
+ * @package ClickToChat
  */
-class Click_To_Chat {
+class CTCHAT_Core {
 
 	/**
 	 * Instance of this class
 	 *
+	 * @since 1.0.0
 	 * @var object
 	 */
 	protected static $instance = null;

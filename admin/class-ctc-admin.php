@@ -15,12 +15,16 @@ if ( ! defined( 'WPINC' ) ) {
 
 /**
  * Admin class.
+ *
+ * @since 1.0.0
+ * @package ClickToChat
  */
 class CTC_Admin {
 
 	/**
 	 * Plugin settings.
 	 *
+	 * @since 1.0.0
 	 * @var array
 	 */
 	private $settings;

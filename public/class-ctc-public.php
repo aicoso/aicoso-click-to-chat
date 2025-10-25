@@ -15,12 +15,16 @@ if ( ! defined( 'WPINC' ) ) {
 
 /**
  * Public class.
+ *
+ * @since 1.0.0
+ * @package ClickToChat
  */
 class CTC_Public {
 
 	/**
 	 * Plugin settings
 	 *
+	 * @since 1.0.0
 	 * @var array
 	 */
 	private $settings;
@@ -55,12 +59,15 @@ class CTC_Public {
 		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_block_scripts' ) );
 
 		// AJAX handlers for variation URLs.
-		add_action( 'wp_ajax_ctc_get_variation_url', array( $this, 'ajax_get_variation_url' ) );
-		add_action( 'wp_ajax_nopriv_ctc_get_variation_url', array( $this, 'ajax_get_variation_url' ) );
+		add_action( 'wp_ajax_ctchat_get_variation_url', array( $this, 'ajax_get_variation_url' ) );
+		add_action( 'wp_ajax_nopriv_ctchat_get_variation_url', array( $this, 'ajax_get_variation_url' ) );
 	}
 
 	/**
 	 * Enqueue public scripts and styles
+	 *
+	 * @since 1.0.0
+	 * @return void
 	 */
 	public function enqueue_assets() {
 		// Only enqueue assets when needed.
@@ -70,7 +77,7 @@ class CTC_Public {
 
 		// Register and enqueue CSS.
 		wp_enqueue_style(
-			'ctc-public-styles',
+			'ctchat-public-styles',
 			CTC_PLUGIN_URL . 'public/css/public.css',
 			array(),
 			CTC_VERSION
@@ -586,8 +593,7 @@ class CTC_Public {
 	 */
 	public function ajax_get_variation_url() {
 		// Check nonce.
-		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Nonce is verified, not used as data.
-		if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( wp_unslash( $_POST['nonce'] ), 'ctc_public_nonce' ) ) {
+		if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['nonce'] ) ), 'ctchat_public_nonce' ) ) {
 			wp_send_json_error( array( 'message' => __( 'Security check failed.', 'click-to-chat' ) ) );
 		}
 

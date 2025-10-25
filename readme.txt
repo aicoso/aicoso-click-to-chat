@@ -1,6 +1,6 @@
 === Click to Chat ===
 Contributors: aicoso
-Donate link: https://aicoso.com/donate/
+Donate link: https://aicoso.com/support/
 Tags: whatsapp, woocommerce, chat, messaging, ecommerce
 Requires at least: 6.2
 Tested up to: 6.8
