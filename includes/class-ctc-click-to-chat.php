@@ -20,7 +20,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @since 1.0.0
  * @package ClickToChat
  */
-class CTCHAT_Core {
+class Click_To_Chat {
 
 	/**
 	 * Instance of this class

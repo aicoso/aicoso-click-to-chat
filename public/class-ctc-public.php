@@ -77,7 +77,7 @@ class CTC_Public {
 
 		// Register and enqueue CSS.
 		wp_enqueue_style(
-			'ctchat-public-styles',
+			'ctc-public-styles',
 			CTC_PLUGIN_URL . 'public/css/public.css',
 			array(),
 			CTC_VERSION
@@ -182,10 +182,8 @@ class CTC_Public {
 			return;
 		}
 
-		// Output the custom CSS.
-		echo '<style type="text/css">' . "\n";
-		echo esc_html( $custom_css ) . "\n";
-		echo '</style>' . "\n";
+		// Add custom CSS inline.
+		wp_add_inline_style( 'ctc-public-styles', wp_strip_all_tags( $custom_css ) );
 	}
 
 	/**
@@ -593,7 +591,7 @@ class CTC_Public {
 	 */
 	public function ajax_get_variation_url() {
 		// Check nonce.
-		if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['nonce'] ) ), 'ctchat_public_nonce' ) ) {
+		if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['nonce'] ) ), 'ctc_public_nonce' ) ) {
 			wp_send_json_error( array( 'message' => __( 'Security check failed.', 'click-to-chat' ) ) );
 		}
 
