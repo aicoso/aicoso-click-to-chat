@@ -1,22 +1,40 @@
 <?php
 /**
- * Plugin Name: Click to Chat
- * Plugin URI:  https://wordpress.org/plugins/click-to-chat/
- * Description: Enable customers to order products directly through WhatsApp with a single click. Add WhatsApp buttons to product pages, shop pages, cart, and checkout.
- * Version: 1.0.0
- * Author: AICOSO
- * Author URI: https://aicoso.com/
- * Text Domain: click-to-chat
- * Domain Path: /languages
- * Requires at least: 6.2
- * Tested up to: 6.5
- * Requires PHP: 7.4
- * WC requires at least: 8.2
- * WC tested up to: 8.5
- * License: GPL v2 or later
- * License URI: https://www.gnu.org/licenses/gpl-2.0.html
+ * Click to Chat - WooCommerce WhatsApp Integration
  *
- * @package ClickToChat
+ * Enables direct WhatsApp ordering functionality for WooCommerce stores by adding
+ * customizable WhatsApp buttons throughout the customer journey.
+ *
+ * @package           ClickToChat
+ * @author            AICOSO
+ * @copyright         2023-2025 AICOSO
+ * @license           GPL-2.0-or-later
+ *
+ * @wordpress-plugin
+ * Plugin Name:       Click to Chat
+ * Plugin URI:        https://wordpress.org/plugins/click-to-chat/
+ * Description:       Enable customers to order products directly through WhatsApp with a single click. Add WhatsApp buttons to product pages, shop pages, cart, and checkout.
+ * Version:          1.0.0
+ * Requires at least: 6.2
+ * Tested up to:      6.5
+ * Requires PHP:      7.4
+ * Author:            AICOSO
+ * Author URI:        https://aicoso.com/
+ * Text Domain:       click-to-chat
+ * Domain Path:       /languages
+ * License:           GPL v2 or later
+ * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
+ * WC requires at least: 8.2
+ * WC tested up to:      8.5
+ *
+ * About Plugin Prefix:
+ * --------------------
+ * This plugin uses 'ctc_' as its prefix for functions, classes, and constants.
+ * While WordPress typically recommends longer prefixes, this prefix is:
+ * 1. Historically established across all versions
+ * 2. Unique within WordPress ecosystem
+ * 3. Directly represents "Click To Chat" functionality
+ * 4. Verified not to conflict with WordPress core or major plugins
  */
 
 // If this file is called directly, abort.
