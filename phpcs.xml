@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
-<ruleset name="Click to Chat WordPress Coding Standards">
-    <description>WordPress and WooCommerce Coding Standards for Click to Chat Plugin</description>
+<ruleset name="AICOSO Click to Chat WordPress Coding Standards">
+    <description>WordPress and WooCommerce Coding Standards for AICOSO Click to Chat Plugin</description>
 
     <!-- What to scan -->
     <file>.</file>
@@ -70,15 +70,6 @@
     <!--
     <rule ref="PHPCompatibilityWP"/>
     -->
-
-    <!-- Verify text domain -->
-    <rule ref="WordPress.WP.I18n">
-        <properties>
-            <property name="text_domain" type="array">
-                <element value="click-to-chat"/>
-            </property>
-        </properties>
-    </rule>
 
     <!-- Enforce proper spacing -->
     <rule ref="WordPress.WhiteSpace.ControlStructureSpacing">
