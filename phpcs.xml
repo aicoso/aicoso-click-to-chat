@@ -45,7 +45,16 @@
 
     <!-- Main plugin file is allowed to have mixed structure (functions + class) -->
     <rule ref="WordPress.Files.FileName">
-        <exclude-pattern>click-to-chat\.php</exclude-pattern>
+        <exclude-pattern>aicoso-click-to-chat\.php</exclude-pattern>
+    </rule>
+
+    <!-- Set the text domain for i18n checks -->
+    <rule ref="WordPress.WP.I18n">
+        <properties>
+            <property name="text_domain" type="array">
+                <element value="aicoso-click-to-chat"/>
+            </property>
+        </properties>
     </rule>
 
     <!-- WooCommerce Coding Standards (if applicable) -->
