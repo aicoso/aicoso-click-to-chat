@@ -1,4 +1,4 @@
-=== Click to Chat ===
+=== AICOSO - Click to Chat ===
 Contributors: aicoso
 Tags: whatsapp, woocommerce, chat, messaging, ecommerce
 Requires at least: 6.2

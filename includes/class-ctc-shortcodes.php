@@ -164,7 +164,7 @@ class CTC_Shortcodes {
 		$button_text = ! empty( $atts['text'] ) ? $atts['text'] :
 					  ( isset( $this->settings['button_settings']['text'] ) ?
 						$this->settings['button_settings']['text'] :
-						esc_html__( 'Order via WhatsApp', 'click-to-chat' ) );
+						esc_html__( 'Order via WhatsApp', 'aicoso-click-to-chat' ) );
 
 		$show_icon = 'yes' === $atts['icon'];
 

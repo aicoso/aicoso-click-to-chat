@@ -657,7 +657,7 @@ class CTC_WhatsApp_Link_Generator {
 		// Get cart totals safely.
 		$cart_subtotal = 0;
 		$tax_amount = 0;
-		$shipping_method = esc_html__( 'Not calculated', 'click-to-chat' );
+		$shipping_method = esc_html__( 'Not calculated', 'aicoso-click-to-chat' );
 		$shipping_cost = '';
 		$cart_total = 0;
 
@@ -779,7 +779,7 @@ class CTC_WhatsApp_Link_Generator {
 		}
 
 		// Get coupon info safely.
-		$coupon_code = esc_html__( 'None', 'click-to-chat' );
+		$coupon_code = esc_html__( 'None', 'aicoso-click-to-chat' );
 		try {
 			if ( method_exists( $order, 'get_coupon_codes' ) ) {
 				$coupons = $order->get_coupon_codes();

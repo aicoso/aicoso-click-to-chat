@@ -38,25 +38,25 @@ $settings_helper = new CTC_Settings();
 <div class="wrap ctc-admin-container">
 	<div class="ctc-admin-header">
 		<span class="ctc-admin-logo dashicons dashicons-whatsapp"></span>
-		<h1 class="ctc-admin-heading"><?php esc_html_e( 'Message Templates', 'click-to-chat' ); ?></h1>
+		<h1 class="ctc-admin-heading"><?php esc_html_e( 'Message Templates', 'aicoso-click-to-chat' ); ?></h1>
 	</div>
 
 	<!-- Instructions Banner -->
 	<div class="ctc-instructions-banner">
-		<h2><span class="dashicons dashicons-text"></span> <?php esc_html_e( 'Customize Your WhatsApp Messages', 'click-to-chat' ); ?></h2>
-		<p><?php esc_html_e( 'Configure message templates for different contexts. Use placeholders to automatically include product details, cart information, and order data.', 'click-to-chat' ); ?></p>
+		<h2><span class="dashicons dashicons-text"></span> <?php esc_html_e( 'Customize Your WhatsApp Messages', 'aicoso-click-to-chat' ); ?></h2>
+		<p><?php esc_html_e( 'Configure message templates for different contexts. Use placeholders to automatically include product details, cart information, and order data.', 'aicoso-click-to-chat' ); ?></p>
 		<div class="ctc-quick-steps">
 			<div class="ctc-step">
 				<span class="ctc-step-number">1</span>
-				<span><?php esc_html_e( 'Choose a template below', 'click-to-chat' ); ?></span>
+				<span><?php esc_html_e( 'Choose a template below', 'aicoso-click-to-chat' ); ?></span>
 			</div>
 			<div class="ctc-step">
 				<span class="ctc-step-number">2</span>
-				<span><?php esc_html_e( 'Click placeholders to insert them', 'click-to-chat' ); ?></span>
+				<span><?php esc_html_e( 'Click placeholders to insert them', 'aicoso-click-to-chat' ); ?></span>
 			</div>
 			<div class="ctc-step">
 				<span class="ctc-step-number">3</span>
-				<span><?php esc_html_e( 'Preview and save your changes', 'click-to-chat' ); ?></span>
+				<span><?php esc_html_e( 'Preview and save your changes', 'aicoso-click-to-chat' ); ?></span>
 			</div>
 		</div>
 	</div>
@@ -83,12 +83,12 @@ $settings_helper = new CTC_Settings();
 		<div class="ctc-warning-item">
 			<span class="ctc-warning-icon">⚠️</span>
 			<div class="ctc-warning-content">
-				<strong><?php esc_html_e( 'Warning:', 'click-to-chat' ); ?></strong>
+				<strong><?php esc_html_e( 'Warning:', 'aicoso-click-to-chat' ); ?></strong>
 				<?php
 				printf(
 					/* translators: %s: Link to Settings page */
-					esc_html__( 'The plugin is currently disabled. WhatsApp buttons will not appear on your website. %s to activate the plugin.', 'click-to-chat' ),
-					'<a href="' . esc_url( admin_url( 'admin.php?page=click-to-chat' ) ) . '">' . esc_html__( 'Go to Settings', 'click-to-chat' ) . '</a>'
+					esc_html__( 'The plugin is currently disabled. WhatsApp buttons will not appear on your website. %s to activate the plugin.', 'aicoso-click-to-chat' ),
+					'<a href="' . esc_url( admin_url( 'admin.php?page=aicoso-click-to-chat' ) ) . '">' . esc_html__( 'Go to Settings', 'aicoso-click-to-chat' ) . '</a>'
 				);
 				?>
 			</div>
@@ -99,12 +99,12 @@ $settings_helper = new CTC_Settings();
 		<div class="ctc-warning-item">
 			<span class="ctc-warning-icon">⚠️</span>
 			<div class="ctc-warning-content">
-				<strong><?php esc_html_e( 'Warning:', 'click-to-chat' ); ?></strong>
+				<strong><?php esc_html_e( 'Warning:', 'aicoso-click-to-chat' ); ?></strong>
 				<?php
 				printf(
 					/* translators: %s: Link to Numbers page */
-					esc_html__( 'No WhatsApp number configured! You need to add at least one WhatsApp number for the buttons to work. %s', 'click-to-chat' ),
-					'<a href="' . esc_url( admin_url( 'admin.php?page=click-to-chat-numbers' ) ) . '">' . esc_html__( 'Add a number now →', 'click-to-chat' ) . '</a>'
+					esc_html__( 'No WhatsApp number configured! You need to add at least one WhatsApp number for the buttons to work. %s', 'aicoso-click-to-chat' ),
+					'<a href="' . esc_url( admin_url( 'admin.php?page=aicoso-click-to-chat-numbers' ) ) . '">' . esc_html__( 'Add a number now →', 'aicoso-click-to-chat' ) . '</a>'
 				);
 				?>
 			</div>
@@ -121,13 +121,13 @@ $settings_helper = new CTC_Settings();
 			<div class="ctc-template-card">
 				<div class="ctc-template-header">
 					<span class="ctc-template-icon dashicons dashicons-products"></span>
-					<h3 class="ctc-template-title"><?php esc_html_e( 'Single Product Template', 'click-to-chat' ); ?></h3>
+					<h3 class="ctc-template-title"><?php esc_html_e( 'Single Product Template', 'aicoso-click-to-chat' ); ?></h3>
 				</div>
 				<div class="ctc-template-body">
-					<p class="ctc-template-description"><?php esc_html_e( 'This template is used for inquiries about a specific product.', 'click-to-chat' ); ?></p>
+					<p class="ctc-template-description"><?php esc_html_e( 'This template is used for inquiries about a specific product.', 'aicoso-click-to-chat' ); ?></p>
 
 					<div class="ctc-placeholders-section">
-						<label class="ctc-field-label"><?php esc_html_e( 'Available Placeholders:', 'click-to-chat' ); ?></label>
+						<label class="ctc-field-label"><?php esc_html_e( 'Available Placeholders:', 'aicoso-click-to-chat' ); ?></label>
 						<div class="ctc-placeholders-grid">
 							<?php
 							$placeholders = $settings_helper->get_template_placeholders( 'single_product' );
@@ -139,14 +139,14 @@ $settings_helper = new CTC_Settings();
 					</div>
 
 					<div class="ctc-field-group">
-						<label class="ctc-field-label"><?php esc_html_e( 'Message Template', 'click-to-chat' ); ?></label>
+						<label class="ctc-field-label"><?php esc_html_e( 'Message Template', 'aicoso-click-to-chat' ); ?></label>
 						<textarea name="ctc_templates[single_product]" class="ctc-template-textarea" rows="8"><?php echo esc_textarea( html_entity_decode( $message_templates['single_product'] ?? '', ENT_QUOTES | ENT_HTML5, 'UTF-8' ) ); ?></textarea>
 					</div>
 
 					<div class="ctc-template-actions">
 						<button type="button" class="ctc-preview-btn" data-template-type="single_product">
 							<span class="dashicons dashicons-visibility"></span>
-							<?php esc_html_e( 'Preview', 'click-to-chat' ); ?>
+							<?php esc_html_e( 'Preview', 'aicoso-click-to-chat' ); ?>
 						</button>
 					</div>
 
@@ -158,13 +158,13 @@ $settings_helper = new CTC_Settings();
 			<div class="ctc-template-card">
 				<div class="ctc-template-header">
 					<span class="ctc-template-icon dashicons dashicons-admin-settings"></span>
-					<h3 class="ctc-template-title"><?php esc_html_e( 'Product Variations Template', 'click-to-chat' ); ?></h3>
+					<h3 class="ctc-template-title"><?php esc_html_e( 'Product Variations Template', 'aicoso-click-to-chat' ); ?></h3>
 				</div>
 				<div class="ctc-template-body">
-					<p class="ctc-template-description"><?php esc_html_e( 'This template is used for variable products when specific variations are selected.', 'click-to-chat' ); ?></p>
+					<p class="ctc-template-description"><?php esc_html_e( 'This template is used for variable products when specific variations are selected.', 'aicoso-click-to-chat' ); ?></p>
 
 					<div class="ctc-placeholders-section">
-						<label class="ctc-field-label"><?php esc_html_e( 'Available Placeholders:', 'click-to-chat' ); ?></label>
+						<label class="ctc-field-label"><?php esc_html_e( 'Available Placeholders:', 'aicoso-click-to-chat' ); ?></label>
 						<div class="ctc-placeholders-grid">
 							<?php
 							$placeholders = $settings_helper->get_template_placeholders( 'variations' );
@@ -176,14 +176,14 @@ $settings_helper = new CTC_Settings();
 					</div>
 
 					<div class="ctc-field-group">
-						<label class="ctc-field-label"><?php esc_html_e( 'Message Template', 'click-to-chat' ); ?></label>
+						<label class="ctc-field-label"><?php esc_html_e( 'Message Template', 'aicoso-click-to-chat' ); ?></label>
 						<textarea name="ctc_templates[variations]" class="ctc-template-textarea" rows="8"><?php echo esc_textarea( html_entity_decode( $message_templates['variations'] ?? '', ENT_QUOTES | ENT_HTML5, 'UTF-8' ) ); ?></textarea>
 					</div>
 
 					<div class="ctc-template-actions">
 						<button type="button" class="ctc-preview-btn" data-template-type="variations">
 							<span class="dashicons dashicons-visibility"></span>
-							<?php esc_html_e( 'Preview', 'click-to-chat' ); ?>
+							<?php esc_html_e( 'Preview', 'aicoso-click-to-chat' ); ?>
 						</button>
 					</div>
 
@@ -195,13 +195,13 @@ $settings_helper = new CTC_Settings();
 			<div class="ctc-template-card">
 				<div class="ctc-template-header">
 					<span class="ctc-template-icon dashicons dashicons-cart"></span>
-					<h3 class="ctc-template-title"><?php esc_html_e( 'Cart & Checkout Template', 'click-to-chat' ); ?></h3>
+					<h3 class="ctc-template-title"><?php esc_html_e( 'Cart & Checkout Template', 'aicoso-click-to-chat' ); ?></h3>
 				</div>
 				<div class="ctc-template-body">
-					<p class="ctc-template-description"><?php esc_html_e( 'This template is used for inquiries from the cart or checkout pages.', 'click-to-chat' ); ?></p>
+					<p class="ctc-template-description"><?php esc_html_e( 'This template is used for inquiries from the cart or checkout pages.', 'aicoso-click-to-chat' ); ?></p>
 
 					<div class="ctc-placeholders-section">
-						<label class="ctc-field-label"><?php esc_html_e( 'Available Placeholders:', 'click-to-chat' ); ?></label>
+						<label class="ctc-field-label"><?php esc_html_e( 'Available Placeholders:', 'aicoso-click-to-chat' ); ?></label>
 						<div class="ctc-placeholders-grid">
 							<?php
 							$placeholders = $settings_helper->get_template_placeholders( 'cart_checkout' );
@@ -213,14 +213,14 @@ $settings_helper = new CTC_Settings();
 					</div>
 
 					<div class="ctc-field-group">
-						<label class="ctc-field-label"><?php esc_html_e( 'Message Template', 'click-to-chat' ); ?></label>
+						<label class="ctc-field-label"><?php esc_html_e( 'Message Template', 'aicoso-click-to-chat' ); ?></label>
 						<textarea name="ctc_templates[cart_checkout]" class="ctc-template-textarea" rows="8"><?php echo esc_textarea( html_entity_decode( $message_templates['cart_checkout'] ?? '', ENT_QUOTES | ENT_HTML5, 'UTF-8' ) ); ?></textarea>
 					</div>
 
 					<div class="ctc-template-actions">
 						<button type="button" class="ctc-preview-btn" data-template-type="cart_checkout">
 							<span class="dashicons dashicons-visibility"></span>
-							<?php esc_html_e( 'Preview', 'click-to-chat' ); ?>
+							<?php esc_html_e( 'Preview', 'aicoso-click-to-chat' ); ?>
 						</button>
 					</div>
 
@@ -232,13 +232,13 @@ $settings_helper = new CTC_Settings();
 			<div class="ctc-template-card">
 				<div class="ctc-template-header">
 					<span class="ctc-template-icon dashicons dashicons-yes-alt"></span>
-					<h3 class="ctc-template-title"><?php esc_html_e( 'Thank You Page Template', 'click-to-chat' ); ?></h3>
+					<h3 class="ctc-template-title"><?php esc_html_e( 'Thank You Page Template', 'aicoso-click-to-chat' ); ?></h3>
 				</div>
 				<div class="ctc-template-body">
-					<p class="ctc-template-description"><?php esc_html_e( 'This template is used for inquiries from the order confirmation/thank you page.', 'click-to-chat' ); ?></p>
+					<p class="ctc-template-description"><?php esc_html_e( 'This template is used for inquiries from the order confirmation/thank you page.', 'aicoso-click-to-chat' ); ?></p>
 
 					<div class="ctc-placeholders-section">
-						<label class="ctc-field-label"><?php esc_html_e( 'Available Placeholders:', 'click-to-chat' ); ?></label>
+						<label class="ctc-field-label"><?php esc_html_e( 'Available Placeholders:', 'aicoso-click-to-chat' ); ?></label>
 						<div class="ctc-placeholders-grid">
 							<?php
 							$placeholders = $settings_helper->get_template_placeholders( 'thank_you' );
@@ -250,14 +250,14 @@ $settings_helper = new CTC_Settings();
 					</div>
 
 					<div class="ctc-field-group">
-						<label class="ctc-field-label"><?php esc_html_e( 'Message Template', 'click-to-chat' ); ?></label>
+						<label class="ctc-field-label"><?php esc_html_e( 'Message Template', 'aicoso-click-to-chat' ); ?></label>
 						<textarea name="ctc_templates[thank_you]" class="ctc-template-textarea" rows="8"><?php echo esc_textarea( html_entity_decode( $message_templates['thank_you'] ?? '', ENT_QUOTES | ENT_HTML5, 'UTF-8' ) ); ?></textarea>
 					</div>
 
 					<div class="ctc-template-actions">
 						<button type="button" class="ctc-preview-btn" data-template-type="thank_you">
 							<span class="dashicons dashicons-visibility"></span>
-							<?php esc_html_e( 'Preview', 'click-to-chat' ); ?>
+							<?php esc_html_e( 'Preview', 'aicoso-click-to-chat' ); ?>
 						</button>
 					</div>
 
@@ -269,13 +269,13 @@ $settings_helper = new CTC_Settings();
 			<div class="ctc-template-card">
 				<div class="ctc-template-header">
 					<span class="ctc-template-icon dashicons dashicons-format-chat"></span>
-					<h3 class="ctc-template-title"><?php esc_html_e( 'Floating Button Template', 'click-to-chat' ); ?></h3>
+					<h3 class="ctc-template-title"><?php esc_html_e( 'Floating Button Template', 'aicoso-click-to-chat' ); ?></h3>
 				</div>
 				<div class="ctc-template-body">
-					<p class="ctc-template-description"><?php esc_html_e( 'This template is used for the floating WhatsApp button.', 'click-to-chat' ); ?></p>
+					<p class="ctc-template-description"><?php esc_html_e( 'This template is used for the floating WhatsApp button.', 'aicoso-click-to-chat' ); ?></p>
 
 					<div class="ctc-placeholders-section">
-						<label class="ctc-field-label"><?php esc_html_e( 'Available Placeholders:', 'click-to-chat' ); ?></label>
+						<label class="ctc-field-label"><?php esc_html_e( 'Available Placeholders:', 'aicoso-click-to-chat' ); ?></label>
 						<div class="ctc-placeholders-grid">
 							<?php
 							$placeholders = $settings_helper->get_template_placeholders( 'floating' );
@@ -287,14 +287,14 @@ $settings_helper = new CTC_Settings();
 					</div>
 
 					<div class="ctc-field-group">
-						<label class="ctc-field-label"><?php esc_html_e( 'Message Template', 'click-to-chat' ); ?></label>
+						<label class="ctc-field-label"><?php esc_html_e( 'Message Template', 'aicoso-click-to-chat' ); ?></label>
 						<textarea name="ctc_templates[floating]" class="ctc-template-textarea" rows="8"><?php echo esc_textarea( html_entity_decode( $message_templates['floating'] ?? '', ENT_QUOTES | ENT_HTML5, 'UTF-8' ) ); ?></textarea>
 					</div>
 
 					<div class="ctc-template-actions">
 						<button type="button" class="ctc-preview-btn" data-template-type="floating">
 							<span class="dashicons dashicons-visibility"></span>
-							<?php esc_html_e( 'Preview', 'click-to-chat' ); ?>
+							<?php esc_html_e( 'Preview', 'aicoso-click-to-chat' ); ?>
 						</button>
 					</div>
 
@@ -306,9 +306,9 @@ $settings_helper = new CTC_Settings();
 		<div class="ctc-save-section">
 			<button type="submit" name="ctc_save_templates" class="ctc-save-btn">
 				<span class="dashicons dashicons-saved"></span>
-				<?php esc_html_e( 'Save All Templates', 'click-to-chat' ); ?>
+				<?php esc_html_e( 'Save All Templates', 'aicoso-click-to-chat' ); ?>
 			</button>
-			<p class="ctc-save-note"><?php esc_html_e( 'Your changes will be applied to all WhatsApp messages', 'click-to-chat' ); ?></p>
+			<p class="ctc-save-note"><?php esc_html_e( 'Your changes will be applied to all WhatsApp messages', 'aicoso-click-to-chat' ); ?></p>
 		</div>
 	</form>
 </div>

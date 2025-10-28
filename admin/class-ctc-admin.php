@@ -71,8 +71,8 @@ class CTC_Admin {
 	 */
 	public function add_admin_menu() {
 		add_menu_page(
-			esc_html__( 'Click to Chat', 'click-to-chat' ),
-			esc_html__( 'Click to Chat', 'click-to-chat' ),
+			esc_html__( 'Click to Chat', 'aicoso-click-to-chat' ),
+			esc_html__( 'Click to Chat', 'aicoso-click-to-chat' ),
 			'manage_options',
 			'click-to-chat',
 			array( $this, 'render_settings_page' ),
@@ -83,8 +83,8 @@ class CTC_Admin {
 		// Add submenus.
 		add_submenu_page(
 			'click-to-chat',
-			esc_html__( 'Settings', 'click-to-chat' ),
-			esc_html__( 'Settings', 'click-to-chat' ),
+			esc_html__( 'Settings', 'aicoso-click-to-chat' ),
+			esc_html__( 'Settings', 'aicoso-click-to-chat' ),
 			'manage_options',
 			'click-to-chat',
 			array( $this, 'render_settings_page' )
@@ -92,8 +92,8 @@ class CTC_Admin {
 
 		add_submenu_page(
 			'click-to-chat',
-			esc_html__( 'WhatsApp Numbers', 'click-to-chat' ),
-			esc_html__( 'WhatsApp Numbers', 'click-to-chat' ),
+			esc_html__( 'WhatsApp Numbers', 'aicoso-click-to-chat' ),
+			esc_html__( 'WhatsApp Numbers', 'aicoso-click-to-chat' ),
 			'manage_options',
 			'click-to-chat-numbers',
 			array( $this, 'render_numbers_page' )
@@ -101,8 +101,8 @@ class CTC_Admin {
 
 		add_submenu_page(
 			'click-to-chat',
-			esc_html__( 'Message Templates', 'click-to-chat' ),
-			esc_html__( 'Message Templates', 'click-to-chat' ),
+			esc_html__( 'Message Templates', 'aicoso-click-to-chat' ),
+			esc_html__( 'Message Templates', 'aicoso-click-to-chat' ),
 			'manage_options',
 			'click-to-chat-templates',
 			array( $this, 'render_templates_page' )
@@ -110,8 +110,8 @@ class CTC_Admin {
 
 		add_submenu_page(
 			'click-to-chat',
-			esc_html__( 'Shortcode Generator', 'click-to-chat' ),
-			esc_html__( 'Shortcode Generator', 'click-to-chat' ),
+			esc_html__( 'Shortcode Generator', 'aicoso-click-to-chat' ),
+			esc_html__( 'Shortcode Generator', 'aicoso-click-to-chat' ),
 			'manage_options',
 			'click-to-chat-shortcodes',
 			array( $this, 'render_shortcode_page' )
@@ -176,23 +176,23 @@ class CTC_Admin {
 				'ajaxurl'                => admin_url( 'admin-ajax.php' ),
 				'ajax_url'               => admin_url( 'admin-ajax.php' ),
 				'nonce'                  => wp_create_nonce( 'ctc_admin_nonce' ),
-				'delete_number_confirm'  => esc_html__( 'Are you sure you want to delete this WhatsApp number?', 'click-to-chat' ),
-				'duplicate_name_error'   => esc_html__( 'This name is already being used. Please choose a different name.', 'click-to-chat' ),
-				'loading_text'           => esc_html__( 'Loading...', 'click-to-chat' ),
-				'preview_text'           => esc_html__( 'Preview', 'click-to-chat' ),
-				'default_button_text'    => esc_html__( 'Chat with us', 'click-to-chat' ),
-				'copy_success'           => esc_html__( 'Shortcode copied to clipboard!', 'click-to-chat' ),
-				'copy_error'             => esc_html__( 'Failed to copy shortcode. Please select and copy manually.', 'click-to-chat' ),
-				'select_products_text'   => esc_html__( 'Select products...', 'click-to-chat' ),
-				'select_categories_text' => esc_html__( 'Select categories...', 'click-to-chat' ),
-				'select_pages_text'      => esc_html__( 'Select pages...', 'click-to-chat' ),
+				'delete_number_confirm'  => esc_html__( 'Are you sure you want to delete this WhatsApp number?', 'aicoso-click-to-chat' ),
+				'duplicate_name_error'   => esc_html__( 'This name is already being used. Please choose a different name.', 'aicoso-click-to-chat' ),
+				'loading_text'           => esc_html__( 'Loading...', 'aicoso-click-to-chat' ),
+				'preview_text'           => esc_html__( 'Preview', 'aicoso-click-to-chat' ),
+				'default_button_text'    => esc_html__( 'Chat with us', 'aicoso-click-to-chat' ),
+				'copy_success'           => esc_html__( 'Shortcode copied to clipboard!', 'aicoso-click-to-chat' ),
+				'copy_error'             => esc_html__( 'Failed to copy shortcode. Please select and copy manually.', 'aicoso-click-to-chat' ),
+				'select_products_text'   => esc_html__( 'Select products...', 'aicoso-click-to-chat' ),
+				'select_categories_text' => esc_html__( 'Select categories...', 'aicoso-click-to-chat' ),
+				'select_pages_text'      => esc_html__( 'Select pages...', 'aicoso-click-to-chat' ),
 				'i18n'                   => array(
-					'confirm_delete'    => esc_html__( 'Are you sure you want to delete this WhatsApp number?', 'click-to-chat' ),
-					'number_required'   => esc_html__( 'WhatsApp number is required.', 'click-to-chat' ),
-					'name_required'     => esc_html__( 'Name is required.', 'click-to-chat' ),
-					'select_products'   => esc_html__( 'Select products...', 'click-to-chat' ),
-					'select_categories' => esc_html__( 'Select categories...', 'click-to-chat' ),
-					'select_pages'      => esc_html__( 'Select pages...', 'click-to-chat' ),
+					'confirm_delete'    => esc_html__( 'Are you sure you want to delete this WhatsApp number?', 'aicoso-click-to-chat' ),
+					'number_required'   => esc_html__( 'WhatsApp number is required.', 'aicoso-click-to-chat' ),
+					'name_required'     => esc_html__( 'Name is required.', 'aicoso-click-to-chat' ),
+					'select_products'   => esc_html__( 'Select products...', 'aicoso-click-to-chat' ),
+					'select_categories' => esc_html__( 'Select categories...', 'aicoso-click-to-chat' ),
+					'select_pages'      => esc_html__( 'Select pages...', 'aicoso-click-to-chat' ),
 				),
 			)
 		);
@@ -206,7 +206,7 @@ class CTC_Admin {
 	 */
 	public function add_action_links( $links ) {
 		$plugin_links = array(
-			'<a href="' . admin_url( 'admin.php?page=click-to-chat' ) . '">' . esc_html__( 'Settings', 'click-to-chat' ) . '</a>',
+			'<a href="' . admin_url( 'admin.php?page=click-to-chat' ) . '">' . esc_html__( 'Settings', 'aicoso-click-to-chat' ) . '</a>',
 		);
 
 		return array_merge( $plugin_links, $links );
@@ -565,14 +565,14 @@ class CTC_Admin {
 			add_settings_error(
 				'ctc_numbers',
 				'ctc_numbers_duplicates',
-				esc_html__( 'Some WhatsApp numbers were not saved because they had duplicate names. Each WhatsApp number must have a unique name.', 'click-to-chat' ),
+				esc_html__( 'Some WhatsApp numbers were not saved because they had duplicate names. Each WhatsApp number must have a unique name.', 'aicoso-click-to-chat' ),
 				'error'
 			);
 		} else {
 			add_settings_error(
 				'ctc_numbers',
 				'ctc_numbers_updated',
-				esc_html__( 'WhatsApp numbers saved successfully.', 'click-to-chat' ),
+				esc_html__( 'WhatsApp numbers saved successfully.', 'aicoso-click-to-chat' ),
 				'updated'
 			);
 		}
@@ -610,7 +610,7 @@ class CTC_Admin {
 			add_settings_error(
 				'ctc_templates',
 				'ctc_templates_updated',
-				esc_html__( 'Message templates saved successfully.', 'click-to-chat' ),
+				esc_html__( 'Message templates saved successfully.', 'aicoso-click-to-chat' ),
 				'updated'
 			);
 		}
@@ -623,7 +623,7 @@ class CTC_Admin {
 	public function add_product_meta_boxes() {
 		add_meta_box(
 			'ctc_product_settings',
-			esc_html__( 'WhatsApp Shopping Settings', 'click-to-chat' ),
+			esc_html__( 'WhatsApp Shopping Settings', 'aicoso-click-to-chat' ),
 			array( $this, 'render_product_meta_box' ),
 			'product',
 			'side',
@@ -651,16 +651,16 @@ class CTC_Admin {
 		// Output the meta box HTML.
 		?>
 		<p>
-			<label>
+				<label>
 				<input type="checkbox" name="ctc_hide_button" value="1" <?php checked( $hide_button, '1' ); ?> />
-				<?php esc_html_e( 'Hide WhatsApp button on this product', 'click-to-chat' ); ?>
+				<?php esc_html_e( 'Hide WhatsApp button on this product', 'aicoso-click-to-chat' ); ?>
 			</label>
 		</p>
 
 		<p>
-			<label for="ctc_assigned_number"><?php esc_html_e( 'Assign specific WhatsApp number:', 'click-to-chat' ); ?></label>
+			<label for="ctc_assigned_number"><?php esc_html_e( 'Assign specific WhatsApp number:', 'aicoso-click-to-chat' ); ?></label>
 			<select name="ctc_assigned_number" id="ctc_assigned_number">
-				<option value=""><?php esc_html_e( 'Default (based on rules)', 'click-to-chat' ); ?></option>
+				<option value=""><?php esc_html_e( 'Default (based on rules)', 'aicoso-click-to-chat' ); ?></option>
 				<?php foreach ( $whatsapp_numbers as $number ) : ?>
 					<option value="<?php echo esc_attr( $number['id'] ); ?>" <?php selected( $assigned_number, $number['id'] ); ?>>
 						<?php echo esc_html( $number['name'] . ' (' . $number['number'] . ')' ); ?>
@@ -670,10 +670,10 @@ class CTC_Admin {
 		</p>
 
 		<p>
-			<label for="ctc_custom_message"><?php esc_html_e( 'Custom message template (overrides default):', 'click-to-chat' ); ?></label>
+			<label for="ctc_custom_message"><?php esc_html_e( 'Custom message template (overrides default):', 'aicoso-click-to-chat' ); ?></label>
 			<textarea name="ctc_custom_message" id="ctc_custom_message" rows="4" class="widefat"><?php echo esc_textarea( $custom_message ); ?></textarea>
 			<span class="description">
-				<?php esc_html_e( 'Available placeholders: {product_name}, {price}, {product_url}', 'click-to-chat' ); ?>
+				<?php esc_html_e( 'Available placeholders: {product_name}, {price}, {product_url}', 'aicoso-click-to-chat' ); ?>
 			</span>
 		</p>
 		<?php

@@ -342,7 +342,7 @@ class CTC_Public {
 							  $this->settings['whatsapp_numbers'][0]['number'] : '';
 			if ( ! empty( $whatsapp_number ) ) {
 				$whatsapp_number = preg_replace( '/[^0-9]/', '', $whatsapp_number );
-				$default_message = __( 'Hello! I need help with my order.', 'click-to-chat' );
+				$default_message = __( 'Hello! I need help with my order.', 'aicoso-click-to-chat' );
 				$whatsapp_url = 'https://wa.me/' . $whatsapp_number . '?text=' . rawurlencode( $default_message );
 			}
 		}
@@ -359,7 +359,7 @@ class CTC_Public {
 				'checkout_position' => isset( $this->settings['checkout_page']['position'] ) ?
 					$this->settings['checkout_page']['position'] : 'after_payment',
 				'button_text'       => isset( $this->settings['button_settings']['text'] ) ?
-					$this->settings['button_settings']['text'] : __( 'Order via WhatsApp', 'click-to-chat' ),
+					$this->settings['button_settings']['text'] : __( 'Order via WhatsApp', 'aicoso-click-to-chat' ),
 				'bg_color'          => isset( $this->settings['button_settings']['bg_color'] ) ?
 					$this->settings['button_settings']['bg_color'] : '#25D366',
 				'text_color'        => isset( $this->settings['button_settings']['text_color'] ) ?
@@ -592,7 +592,7 @@ class CTC_Public {
 	public function ajax_get_variation_url() {
 		// Check nonce.
 		if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['nonce'] ) ), 'ctc_public_nonce' ) ) {
-			wp_send_json_error( array( 'message' => __( 'Security check failed.', 'click-to-chat' ) ) );
+			wp_send_json_error( array( 'message' => __( 'Security check failed.', 'aicoso-click-to-chat' ) ) );
 		}
 
 		// Get product ID and variations.
@@ -600,7 +600,7 @@ class CTC_Public {
 		$variations = isset( $_POST['variations'] ) ? array_map( 'sanitize_text_field', wp_unslash( $_POST['variations'] ) ) : array();
 
 		if ( ! $product_id ) {
-			wp_send_json_error( array( 'message' => __( 'Invalid product ID.', 'click-to-chat' ) ) );
+			wp_send_json_error( array( 'message' => __( 'Invalid product ID.', 'aicoso-click-to-chat' ) ) );
 		}
 
 		// Initialize link generator.
@@ -610,7 +610,7 @@ class CTC_Public {
 		$whatsapp_url = $link_generator->get_product_url( $product_id, $variations );
 
 		if ( empty( $whatsapp_url ) ) {
-			wp_send_json_error( array( 'message' => __( 'Could not generate WhatsApp URL.', 'click-to-chat' ) ) );
+			wp_send_json_error( array( 'message' => __( 'Could not generate WhatsApp URL.', 'aicoso-click-to-chat' ) ) );
 		}
 
 		wp_send_json_success( array( 'url' => $whatsapp_url ) );

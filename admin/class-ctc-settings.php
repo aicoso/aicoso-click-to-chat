@@ -81,7 +81,7 @@ class CTC_Settings {
 		if ( ! check_ajax_referer( 'ctc_admin_nonce', 'nonce', false ) ) {
 			wp_send_json_error(
 				array(
-					'message' => esc_html__( 'Security check failed.', 'click-to-chat' ),
+					'message' => esc_html__( 'Security check failed.', 'aicoso-click-to-chat' ),
 				)
 			);
 		}
@@ -90,7 +90,7 @@ class CTC_Settings {
 		if ( empty( $_POST['key'] ) ) {
 			wp_send_json_error(
 				array(
-					'message' => esc_html__( 'Setting key is required.', 'click-to-chat' ),
+					'message' => esc_html__( 'Setting key is required.', 'aicoso-click-to-chat' ),
 				)
 			);
 		}
@@ -116,7 +116,7 @@ class CTC_Settings {
 		if ( ! check_ajax_referer( 'ctc_admin_nonce', 'nonce', false ) ) {
 			wp_send_json_error(
 				array(
-					'message' => esc_html__( 'Security check failed.', 'click-to-chat' ),
+					'message' => esc_html__( 'Security check failed.', 'aicoso-click-to-chat' ),
 				)
 			);
 		}
@@ -125,7 +125,7 @@ class CTC_Settings {
 		if ( ! current_user_can( 'manage_options' ) ) {
 			wp_send_json_error(
 				array(
-					'message' => esc_html__( 'You do not have permission to perform this action.', 'click-to-chat' ),
+					'message' => esc_html__( 'You do not have permission to perform this action.', 'aicoso-click-to-chat' ),
 				)
 			);
 		}
@@ -170,7 +170,7 @@ class CTC_Settings {
 		if ( ! check_ajax_referer( 'ctc_admin_nonce', 'nonce', false ) ) {
 			wp_send_json_error(
 				array(
-					'message' => esc_html__( 'Security check failed.', 'click-to-chat' ),
+					'message' => esc_html__( 'Security check failed.', 'aicoso-click-to-chat' ),
 				)
 			);
 		}
@@ -179,7 +179,7 @@ class CTC_Settings {
 		if ( ! current_user_can( 'manage_options' ) ) {
 			wp_send_json_error(
 				array(
-					'message' => esc_html__( 'You do not have permission to perform this action.', 'click-to-chat' ),
+					'message' => esc_html__( 'You do not have permission to perform this action.', 'aicoso-click-to-chat' ),
 				)
 			);
 		}
@@ -226,7 +226,7 @@ class CTC_Settings {
 		if ( ! check_ajax_referer( 'ctc_admin_nonce', 'nonce', false ) ) {
 			wp_send_json_error(
 				array(
-					'message' => esc_html__( 'Security check failed.', 'click-to-chat' ),
+					'message' => esc_html__( 'Security check failed.', 'aicoso-click-to-chat' ),
 				)
 			);
 		}
@@ -235,7 +235,7 @@ class CTC_Settings {
 		if ( ! current_user_can( 'manage_options' ) ) {
 			wp_send_json_error(
 				array(
-					'message' => esc_html__( 'You do not have permission to perform this action.', 'click-to-chat' ),
+					'message' => esc_html__( 'You do not have permission to perform this action.', 'aicoso-click-to-chat' ),
 				)
 			);
 		}
@@ -280,7 +280,7 @@ class CTC_Settings {
 		if ( ! check_ajax_referer( 'ctc_admin_nonce', 'nonce', false ) ) {
 			wp_send_json_error(
 				array(
-					'message' => esc_html__( 'Security check failed.', 'click-to-chat' ),
+					'message' => esc_html__( 'Security check failed.', 'aicoso-click-to-chat' ),
 				)
 			);
 		}
@@ -289,7 +289,7 @@ class CTC_Settings {
 		if ( ! current_user_can( 'manage_options' ) ) {
 			wp_send_json_error(
 				array(
-					'message' => esc_html__( 'You do not have permission to perform this action.', 'click-to-chat' ),
+					'message' => esc_html__( 'You do not have permission to perform this action.', 'aicoso-click-to-chat' ),
 				)
 			);
 		}
@@ -334,7 +334,7 @@ class CTC_Settings {
 		if ( ! check_ajax_referer( 'ctc_admin_nonce', 'nonce', false ) ) {
 			wp_send_json_error(
 				array(
-					'message' => esc_html__( 'Security check failed.', 'click-to-chat' ),
+					'message' => esc_html__( 'Security check failed.', 'aicoso-click-to-chat' ),
 				)
 			);
 		}
@@ -343,7 +343,7 @@ class CTC_Settings {
 		if ( ! current_user_can( 'manage_options' ) ) {
 			wp_send_json_error(
 				array(
-					'message' => esc_html__( 'You do not have permission to perform this action.', 'click-to-chat' ),
+					'message' => esc_html__( 'You do not have permission to perform this action.', 'aicoso-click-to-chat' ),
 				)
 			);
 		}
@@ -390,7 +390,7 @@ class CTC_Settings {
 		if ( ! check_ajax_referer( 'ctc_admin_nonce', 'nonce', false ) ) {
 			wp_send_json_error(
 				array(
-					'message' => esc_html__( 'Security check failed.', 'click-to-chat' ),
+					'message' => esc_html__( 'Security check failed.', 'aicoso-click-to-chat' ),
 				)
 			);
 		}
@@ -399,7 +399,7 @@ class CTC_Settings {
 		if ( ! current_user_can( 'manage_options' ) ) {
 			wp_send_json_error(
 				array(
-					'message' => esc_html__( 'You do not have permission to perform this action.', 'click-to-chat' ),
+					'message' => esc_html__( 'You do not have permission to perform this action.', 'aicoso-click-to-chat' ),
 				)
 			);
 		}
@@ -416,7 +416,7 @@ class CTC_Settings {
 		if ( empty( $template_type ) || empty( $template_content ) ) {
 			wp_send_json_error(
 				array(
-					'message' => esc_html__( 'Template type and content are required.', 'click-to-chat' ),
+					'message' => esc_html__( 'Template type and content are required.', 'aicoso-click-to-chat' ),
 				)
 			);
 		}
@@ -569,11 +569,11 @@ class CTC_Settings {
 	 */
 	public function get_product_position_options() {
 		return array(
-			'after_add_to_cart'     => esc_html__( 'Below add to cart button', 'click-to-chat' ),
-			'before_add_to_cart'    => esc_html__( 'Above add to cart button', 'click-to-chat' ),
-			'after_price'           => esc_html__( 'Below price', 'click-to-chat' ),
-			'before_title'          => esc_html__( 'Above title', 'click-to-chat' ),
-			'after_short_description' => esc_html__( 'Below short description', 'click-to-chat' ),
+			'after_add_to_cart'     => esc_html__( 'Below add to cart button', 'aicoso-click-to-chat' ),
+			'before_add_to_cart'    => esc_html__( 'Above add to cart button', 'aicoso-click-to-chat' ),
+			'after_price'           => esc_html__( 'Below price', 'aicoso-click-to-chat' ),
+			'before_title'          => esc_html__( 'Above title', 'aicoso-click-to-chat' ),
+			'after_short_description' => esc_html__( 'Below short description', 'aicoso-click-to-chat' ),
 		);
 	}
 
@@ -584,10 +584,10 @@ class CTC_Settings {
 	 */
 	public function get_shop_position_options() {
 		return array(
-			'after_add_to_cart'  => esc_html__( 'Below add to cart button', 'click-to-chat' ),
-			'before_add_to_cart' => esc_html__( 'Above add to cart button', 'click-to-chat' ),
-			'after_price'        => esc_html__( 'Below price', 'click-to-chat' ),
-			'before_title'       => esc_html__( 'Above title', 'click-to-chat' ),
+			'after_add_to_cart'  => esc_html__( 'Below add to cart button', 'aicoso-click-to-chat' ),
+			'before_add_to_cart' => esc_html__( 'Above add to cart button', 'aicoso-click-to-chat' ),
+			'after_price'        => esc_html__( 'Below price', 'aicoso-click-to-chat' ),
+			'before_title'       => esc_html__( 'Above title', 'aicoso-click-to-chat' ),
 		);
 	}
 
@@ -598,10 +598,10 @@ class CTC_Settings {
 	 */
 	public function get_floating_position_options() {
 		return array(
-			'bottom_right' => esc_html__( 'Bottom Right', 'click-to-chat' ),
-			'bottom_left'  => esc_html__( 'Bottom Left', 'click-to-chat' ),
-			'top_right'    => esc_html__( 'Top Right', 'click-to-chat' ),
-			'top_left'     => esc_html__( 'Top Left', 'click-to-chat' ),
+			'bottom_right' => esc_html__( 'Bottom Right', 'aicoso-click-to-chat' ),
+			'bottom_left'  => esc_html__( 'Bottom Left', 'aicoso-click-to-chat' ),
+			'top_right'    => esc_html__( 'Top Right', 'aicoso-click-to-chat' ),
+			'top_left'     => esc_html__( 'Top Left', 'aicoso-click-to-chat' ),
 		);
 	}
 
@@ -617,45 +617,45 @@ class CTC_Settings {
 		switch ( $template_type ) {
 			case 'single_product':
 				$placeholders = array(
-					'{product_name}' => esc_html__( 'Product name', 'click-to-chat' ),
-					'{price}'        => esc_html__( 'Product price', 'click-to-chat' ),
-					'{product_url}'  => esc_html__( 'Product URL', 'click-to-chat' ),
+					'{product_name}' => esc_html__( 'Product name', 'aicoso-click-to-chat' ),
+					'{price}'        => esc_html__( 'Product price', 'aicoso-click-to-chat' ),
+					'{product_url}'  => esc_html__( 'Product URL', 'aicoso-click-to-chat' ),
 				);
 				break;
 
 			case 'variations':
 				$placeholders = array(
-					'{product_name}'      => esc_html__( 'Product name', 'click-to-chat' ),
-					'{variation_details}' => esc_html__( 'Selected variation details', 'click-to-chat' ),
-					'{variation_price}'   => esc_html__( 'Selected variation price', 'click-to-chat' ),
-					'{product_url}'       => esc_html__( 'Product URL', 'click-to-chat' ),
+					'{product_name}'      => esc_html__( 'Product name', 'aicoso-click-to-chat' ),
+					'{variation_details}' => esc_html__( 'Selected variation details', 'aicoso-click-to-chat' ),
+					'{variation_price}'   => esc_html__( 'Selected variation price', 'aicoso-click-to-chat' ),
+					'{product_url}'       => esc_html__( 'Product URL', 'aicoso-click-to-chat' ),
 				);
 				break;
 
 			case 'cart_checkout':
 				$placeholders = array(
-					'{cart_items_list}' => esc_html__( 'List of items in cart', 'click-to-chat' ),
-					'{cart_subtotal}'   => esc_html__( 'Cart subtotal', 'click-to-chat' ),
-					'{tax_amount}'      => esc_html__( 'Tax amount', 'click-to-chat' ),
-					'{shipping_method}' => esc_html__( 'Selected shipping method', 'click-to-chat' ),
-					'{shipping_cost}'   => esc_html__( 'Shipping cost', 'click-to-chat' ),
-					'{cart_total}'      => esc_html__( 'Cart total', 'click-to-chat' ),
+					'{cart_items_list}' => esc_html__( 'List of items in cart', 'aicoso-click-to-chat' ),
+					'{cart_subtotal}'   => esc_html__( 'Cart subtotal', 'aicoso-click-to-chat' ),
+					'{tax_amount}'      => esc_html__( 'Tax amount', 'aicoso-click-to-chat' ),
+					'{shipping_method}' => esc_html__( 'Selected shipping method', 'aicoso-click-to-chat' ),
+					'{shipping_cost}'   => esc_html__( 'Shipping cost', 'aicoso-click-to-chat' ),
+					'{cart_total}'      => esc_html__( 'Cart total', 'aicoso-click-to-chat' ),
 				);
 				break;
 
 			case 'thank_you':
 				$placeholders = array(
-					'{order_number}'      => esc_html__( 'Order number', 'click-to-chat' ),
-					'{order_date}'        => esc_html__( 'Order date', 'click-to-chat' ),
-					'{ordered_items_list}' => esc_html__( 'List of ordered items', 'click-to-chat' ),
-					'{coupon_code}'       => esc_html__( 'Applied coupon code', 'click-to-chat' ),
-					'{order_total}'       => esc_html__( 'Order total', 'click-to-chat' ),
+					'{order_number}'      => esc_html__( 'Order number', 'aicoso-click-to-chat' ),
+					'{order_date}'        => esc_html__( 'Order date', 'aicoso-click-to-chat' ),
+					'{ordered_items_list}' => esc_html__( 'List of ordered items', 'aicoso-click-to-chat' ),
+					'{coupon_code}'       => esc_html__( 'Applied coupon code', 'aicoso-click-to-chat' ),
+					'{order_total}'       => esc_html__( 'Order total', 'aicoso-click-to-chat' ),
 				);
 				break;
 
 			case 'floating':
 				$placeholders = array(
-					'{current_page_url}' => esc_html__( 'Current page URL', 'click-to-chat' ),
+					'{current_page_url}' => esc_html__( 'Current page URL', 'aicoso-click-to-chat' ),
 				);
 				break;
 		}

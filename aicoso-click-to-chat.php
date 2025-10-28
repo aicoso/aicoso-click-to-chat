@@ -11,30 +11,21 @@
  * @license           GPL-2.0-or-later
  *
  * @wordpress-plugin
- * Plugin Name:       Click to Chat
- * Plugin URI:        https://wordpress.org/plugins/click-to-chat/
+ * Plugin Name:       AICOSO - Click to Chat
+ * Plugin URI:        https://wordpress.org/plugins/aicoso-click-to-chat/
  * Description:       Enable customers to order products directly through WhatsApp with a single click. Add WhatsApp buttons to product pages, shop pages, cart, and checkout.
- * Version:          1.0.0
+ * Version:           1.0.0
  * Requires at least: 6.2
  * Tested up to:      6.5
  * Requires PHP:      7.4
  * Author:            AICOSO
  * Author URI:        https://aicoso.com/
- * Text Domain:       click-to-chat
+ * Text Domain:       aicoso-click-to-chat
  * Domain Path:       /languages
  * License:           GPL v2 or later
  * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
  * WC requires at least: 8.2
  * WC tested up to:      8.5
- *
- * About Plugin Prefix:
- * --------------------
- * This plugin uses 'ctc_' as its prefix for functions, classes, and constants.
- * While WordPress typically recommends longer prefixes, this prefix is:
- * 1. Historically established across all versions
- * 2. Unique within WordPress ecosystem
- * 3. Directly represents "Click To Chat" functionality
- * 4. Verified not to conflict with WordPress core or major plugins
  */
 
 // If this file is called directly, abort.
@@ -77,7 +68,7 @@ function ctc_check_woocommerce() {
 function ctc_woocommerce_missing_notice() {
 	?>
 	<div class="error">
-		<p><?php esc_html_e( 'Click to Chat requires WooCommerce to be installed and active.', 'click-to-chat' ); ?></p>
+		<p><?php esc_html_e( 'Click to Chat requires WooCommerce to be installed and active.', 'aicoso-click-to-chat' ); ?></p>
 	</div>
 	<?php
 }
@@ -106,7 +97,7 @@ function ctc_activate() {
 		'plugin_enabled'    => true,
 		'whatsapp_numbers'  => array(),
 		'button_settings'   => array(
-			'text'       => esc_html__( 'Order via WhatsApp', 'click-to-chat' ),
+			'text'       => esc_html__( 'Order via WhatsApp', 'aicoso-click-to-chat' ),
 			'icon'       => true,
 			'bg_color'   => '#25D366',
 			'text_color' => '#ffffff',
@@ -136,11 +127,11 @@ function ctc_activate() {
 			'position' => 'bottom_right',
 		),
 		'message_templates' => array(
-			'single_product' => esc_html__( "Hello! I'm interested in the product: *{product_name}*\nPrice: {price}\nURL: {product_url}\n\nDo you have this item in stock? I'd like to get more information.", 'click-to-chat' ),
-			'cart_checkout'  => esc_html__( "Hello! I'd like to complete my purchase of:\n{cart_items_list}\n---------------------\nSubtotal: {cart_subtotal}\nTax: {tax_amount}\nShipping: {shipping_method} - {shipping_cost}\nTotal: {cart_total}\n\nI have a few questions before finalizing my order.", 'click-to-chat' ),
-			'thank_you'      => esc_html__( "Hello! I've just placed order #{order_number} on {order_date}.\nMy order includes:\n{ordered_items_list}\n---------------------\nApplied Coupon: {coupon_code}\nTotal: {order_total}\n\nI'd like to confirm when this will be shipped.", 'click-to-chat' ),
-			'floating'       => esc_html__( 'Hello! I was browsing your website at {current_page_url} and have a question.', 'click-to-chat' ),
-			'variations'     => esc_html__( "Hello! I'm interested in the product: *{product_name}*\nSelected options: {variation_details}\nPrice: {variation_price}\nURL: {product_url}\n\nIs this combination available for immediate shipping?", 'click-to-chat' ),
+			'single_product' => esc_html__( "Hello! I'm interested in the product: *{product_name}*\nPrice: {price}\nURL: {product_url}\n\nDo you have this item in stock? I'd like to get more information.", 'aicoso-click-to-chat' ),
+			'cart_checkout'  => esc_html__( "Hello! I'd like to complete my purchase of:\n{cart_items_list}\n---------------------\nSubtotal: {cart_subtotal}\nTax: {tax_amount}\nShipping: {shipping_method} - {shipping_cost}\nTotal: {cart_total}\n\nI have a few questions before finalizing my order.", 'aicoso-click-to-chat' ),
+			'thank_you'      => esc_html__( "Hello! I've just placed order #{order_number} on {order_date}.\nMy order includes:\n{ordered_items_list}\n---------------------\nApplied Coupon: {coupon_code}\nTotal: {order_total}\n\nI'd like to confirm when this will be shipped.", 'aicoso-click-to-chat' ),
+			'floating'       => esc_html__( 'Hello! I was browsing your website at {current_page_url} and have a question.', 'aicoso-click-to-chat' ),
+			'variations'     => esc_html__( "Hello! I'm interested in the product: *{product_name}*\nSelected options: {variation_details}\nPrice: {variation_price}\nURL: {product_url}\n\nIs this combination available for immediate shipping?", 'aicoso-click-to-chat' ),
 		),
 		'exclusions'        => array(
 			'pages'      => array(),

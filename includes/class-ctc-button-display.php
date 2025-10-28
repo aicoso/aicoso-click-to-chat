@@ -390,7 +390,7 @@ class CTC_Button_Display {
 			$whatsapp_number = $this->link_generator->get_whatsapp_number();
 			if ( ! empty( $whatsapp_number ) ) {
 				$whatsapp_number = preg_replace( '/[^0-9]/', '', $whatsapp_number );
-				$default_message = esc_html__( 'Hello! I need help with my cart on your website.', 'click-to-chat' );
+				$default_message = esc_html__( 'Hello! I need help with my cart on your website.', 'aicoso-click-to-chat' );
 				$whatsapp_url = 'https://wa.me/' . $whatsapp_number . '?text=' . rawurlencode( $default_message );
 			}
 		}
@@ -430,7 +430,7 @@ class CTC_Button_Display {
 			$whatsapp_number = $this->link_generator->get_whatsapp_number();
 			if ( ! empty( $whatsapp_number ) ) {
 				$whatsapp_number = preg_replace( '/[^0-9]/', '', $whatsapp_number );
-				$default_message = esc_html__( 'Hello! I need help with my checkout on your website.', 'click-to-chat' );
+				$default_message = esc_html__( 'Hello! I need help with my checkout on your website.', 'aicoso-click-to-chat' );
 				$whatsapp_url = 'https://wa.me/' . $whatsapp_number . '?text=' . rawurlencode( $default_message );
 			}
 		}
@@ -526,7 +526,7 @@ class CTC_Button_Display {
 	private function render_button( $url, $type = 'default' ) {
 		// Get button settings.
 		$button_text = isset( $this->settings['button_settings']['text'] ) ?
-					  $this->settings['button_settings']['text'] : esc_html__( 'Order via WhatsApp', 'click-to-chat' );
+					  $this->settings['button_settings']['text'] : esc_html__( 'Order via WhatsApp', 'aicoso-click-to-chat' );
 
 		$show_icon = isset( $this->settings['button_settings']['icon'] ) ?
 					$this->settings['button_settings']['icon'] : true;
