@@ -91,7 +91,7 @@ $floating_positions = $settings_helper->get_floating_position_options();
 		<div class="ctc-warning-item">
 			<span class="ctc-warning-icon">⚠️</span>
 			<div class="ctc-warning-content">
-				<strong><?php esc_html_e( 'Warning:', 'click-to-chat' ); ?></strong>
+				<strong><?php esc_html_e( 'Warning:', 'aicoso-click-to-chat' ); ?></strong>
 				<?php esc_html_e( 'The plugin is currently disabled. WhatsApp buttons will not appear on your website. Enable the plugin below to activate it.', 'aicoso-click-to-chat' ); ?>
 			</div>
 		</div>
