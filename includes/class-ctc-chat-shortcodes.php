@@ -113,7 +113,7 @@ class CTC_Chat_Shortcodes {
 
 		switch ( $atts['type'] ) {
 			case 'product':
-				// For product type, if no product_id and not on product page, use floating URL as fallback
+				// For product type, if no product_id and not on product page, use floating URL as fallback.
 				if ( ! $product_id ) {
 					$whatsapp_url = $this->link_generator->get_floating_url();
 				} else {

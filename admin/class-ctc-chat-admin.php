@@ -622,12 +622,12 @@ class CTC_Chat_Admin {
 	 */
 	public function add_product_meta_boxes() {
 		add_meta_box(
-		    'ctc_chat_product_settings',
-		    esc_html__( 'WhatsApp Shopping Settings', 'aicoso-click-to-chat' ),
-		    array( $this, 'render_product_meta_box' ),
-		    'product',
-		    'side',
-		    'default'
+			'ctc_chat_product_settings',
+			esc_html__( 'WhatsApp Shopping Settings', 'aicoso-click-to-chat' ),
+			array( $this, 'render_product_meta_box' ),
+			'product',
+			'side',
+			'default'
 		);
 	}
 
@@ -708,23 +708,23 @@ class CTC_Chat_Admin {
 
 		// Update hide button setting.
 		if ( isset( $_POST['ctc_chat_hide_button'] ) ) {
-		    update_post_meta( $post_id, '_ctc_chat_hide_button', '1' );
+			update_post_meta( $post_id, '_ctc_chat_hide_button', '1' );
 		} else {
-		    delete_post_meta( $post_id, '_ctc_chat_hide_button' );
+			delete_post_meta( $post_id, '_ctc_chat_hide_button' );
 		}
 
 		// Update assigned number.
 		if ( isset( $_POST['ctc_chat_assigned_number'] ) && ! empty( $_POST['ctc_chat_assigned_number'] ) ) {
-		    update_post_meta( $post_id, '_ctc_chat_assigned_number', sanitize_text_field( wp_unslash( $_POST['ctc_chat_assigned_number'] ) ) );
+			update_post_meta( $post_id, '_ctc_chat_assigned_number', sanitize_text_field( wp_unslash( $_POST['ctc_chat_assigned_number'] ) ) );
 		} else {
-		    delete_post_meta( $post_id, '_ctc_chat_assigned_number' );
+			delete_post_meta( $post_id, '_ctc_chat_assigned_number' );
 		}
 
 		// Update custom message.
 		if ( isset( $_POST['ctc_chat_custom_message'] ) && ! empty( $_POST['ctc_chat_custom_message'] ) ) {
-		    update_post_meta( $post_id, '_ctc_chat_custom_message', sanitize_textarea_field( wp_unslash( $_POST['ctc_chat_custom_message'] ) ) );
+			update_post_meta( $post_id, '_ctc_chat_custom_message', sanitize_textarea_field( wp_unslash( $_POST['ctc_chat_custom_message'] ) ) );
 		} else {
-		    delete_post_meta( $post_id, '_ctc_chat_custom_message' );
+			delete_post_meta( $post_id, '_ctc_chat_custom_message' );
 		}
 	}
 }
