@@ -88,7 +88,7 @@ $settings_helper = new CTC_Settings();
 				printf(
 					/* translators: %s: Link to Settings page */
 					esc_html__( 'The plugin is currently disabled. WhatsApp buttons will not appear on your website. %s to activate the plugin.', 'aicoso-click-to-chat' ),
-					'<a href="' . esc_url( admin_url( 'admin.php?page=aicoso-click-to-chat' ) ) . '">' . esc_html__( 'Go to Settings', 'aicoso-click-to-chat' ) . '</a>'
+					'<a href="' . esc_url( admin_url( 'admin.php?page=click-to-chat' ) ) . '">' . esc_html__( 'Go to Settings', 'aicoso-click-to-chat' ) . '</a>'
 				);
 				?>
 			</div>
@@ -104,7 +104,7 @@ $settings_helper = new CTC_Settings();
 				printf(
 					/* translators: %s: Link to Numbers page */
 					esc_html__( 'No WhatsApp number configured! You need to add at least one WhatsApp number for the buttons to work. %s', 'aicoso-click-to-chat' ),
-					'<a href="' . esc_url( admin_url( 'admin.php?page=aicoso-click-to-chat-numbers' ) ) . '">' . esc_html__( 'Add a number now →', 'aicoso-click-to-chat' ) . '</a>'
+					'<a href="' . esc_url( admin_url( 'admin.php?page=click-to-chat-numbers' ) ) . '">' . esc_html__( 'Add a number now →', 'aicoso-click-to-chat' ) . '</a>'
 				);
 				?>
 			</div>

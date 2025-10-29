@@ -91,7 +91,7 @@ $floating_positions = $settings_helper->get_floating_position_options();
 		<div class="ctc-warning-item">
 			<span class="ctc-warning-icon">⚠️</span>
 			<div class="ctc-warning-content">
-				<strong><?php esc_html_e( 'Warning:', 'aicoso-click-to-chat' ); ?></strong>
+				<strong><?php esc_html_e( 'Warning:', 'click-to-chat' ); ?></strong>
 				<?php esc_html_e( 'The plugin is currently disabled. WhatsApp buttons will not appear on your website. Enable the plugin below to activate it.', 'aicoso-click-to-chat' ); ?>
 			</div>
 		</div>
@@ -106,7 +106,7 @@ $floating_positions = $settings_helper->get_floating_position_options();
 				printf(
 					/* translators: %s: Link to Numbers page */
 					esc_html__( 'No WhatsApp number configured! You need to add at least one WhatsApp number for the buttons to work. %s', 'aicoso-click-to-chat' ),
-					'<a href="' . esc_url( admin_url( 'admin.php?page=aicoso-click-to-chat-numbers' ) ) . '">' . esc_html__( 'Add a number now →', 'aicoso-click-to-chat' ) . '</a>'
+					'<a href="' . esc_url( admin_url( 'admin.php?page=click-to-chat-numbers' ) ) . '">' . esc_html__( 'Add a number now →', 'aicoso-click-to-chat' ) . '</a>'
 				);
 				?>
 			</div>
@@ -172,11 +172,11 @@ $floating_positions = $settings_helper->get_floating_position_options();
 				</div>
 				<div class="ctc-number-body">
 					<div class="ctc-button-group">
-						<a href="<?php echo esc_url( admin_url( 'admin.php?page=aicoso-click-to-chat-numbers' ) ); ?>" class="button button-secondary">
+						<a href="<?php echo esc_url( admin_url( 'admin.php?page=click-to-chat-numbers' ) ); ?>" class="button button-secondary">
 							<span class="dashicons dashicons-phone"></span>
 							<?php esc_html_e( 'WhatsApp Numbers', 'aicoso-click-to-chat' ); ?>
 						</a>
-						<a href="<?php echo esc_url( admin_url( 'admin.php?page=aicoso-click-to-chat-templates' ) ); ?>" class="button button-secondary">
+						<a href="<?php echo esc_url( admin_url( 'admin.php?page=click-to-chat-templates' ) ); ?>" class="button button-secondary">
 							<span class="dashicons dashicons-text"></span>
 							<?php esc_html_e( 'Message Templates', 'aicoso-click-to-chat' ); ?>
 						</a>
