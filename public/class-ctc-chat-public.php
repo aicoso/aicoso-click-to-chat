@@ -17,9 +17,9 @@ if ( ! defined( 'WPINC' ) ) {
  * Public class.
  *
  * @since 1.0.0
- * @package ClickToChat
+ * @package CTC_Chat
  */
-class CTC_Public {
+class CTC_Chat_Public {
 
 	/**
 	 * Plugin settings
@@ -33,7 +33,7 @@ class CTC_Public {
 	 * Constructor
 	 */
 	public function __construct() {
-		$this->settings = get_option( 'ctc_settings', array() );
+		$this->settings = get_option( 'ctc_chat_settings', array() );
 
 		// Initialize hooks.
 		$this->init_hooks();
@@ -59,8 +59,8 @@ class CTC_Public {
 		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_block_scripts' ) );
 
 		// AJAX handlers for variation URLs.
-		add_action( 'wp_ajax_ctchat_get_variation_url', array( $this, 'ajax_get_variation_url' ) );
-		add_action( 'wp_ajax_nopriv_ctchat_get_variation_url', array( $this, 'ajax_get_variation_url' ) );
+		add_action( 'wp_ajax_ctc_chat_get_variation_url', array( $this, 'ajax_get_variation_url' ) );
+		add_action( 'wp_ajax_nopriv_ctc_chat_get_variation_url', array( $this, 'ajax_get_variation_url' ) );
 	}
 
 	/**
@@ -77,36 +77,36 @@ class CTC_Public {
 
 		// Register and enqueue CSS.
 		wp_enqueue_style(
-			'ctc-public-styles',
-			CTC_PLUGIN_URL . 'public/css/public.css',
+			'ctc-chat-public-styles',
+			CTC_CHAT_PLUGIN_URL . 'public/css/public.css',
 			array(),
-			CTC_VERSION
+			CTC_CHAT_VERSION
 		);
 
 		// Enqueue additional layout fixes CSS with higher priority.
 		wp_enqueue_style(
-			'ctc-layout-fixes',
-			CTC_PLUGIN_URL . 'public/css/button-layout-fixes.css',
-			array( 'ctc-public-styles' ),
-			CTC_VERSION
+			'ctc-chat-layout-fixes',
+			CTC_CHAT_PLUGIN_URL . 'public/css/button-layout-fixes.css',
+			array( 'ctc-chat-public-styles' ),
+			CTC_CHAT_VERSION
 		);
 
 		// Register and enqueue JavaScript.
 		wp_enqueue_script(
-			'ctc-public-script',
-			CTC_PLUGIN_URL . 'public/js/public.js',
+			'ctc-chat-public-script',
+			CTC_CHAT_PLUGIN_URL . 'public/js/public.js',
 			array( 'jquery' ),
-			CTC_VERSION,
+			CTC_CHAT_VERSION,
 			true
 		);
 
 		// Localize script with data.
 		$localize_data = array(
 			'ajaxurl' => admin_url( 'admin-ajax.php' ),
-			'nonce'   => wp_create_nonce( 'ctc_public_nonce' ),
+			'nonce'   => wp_create_nonce( 'ctc_chat_public_nonce' ),
 		);
 
-		wp_localize_script( 'ctc-public-script', 'ctc_public', $localize_data );
+		wp_localize_script( 'ctc-chat-public-script', 'ctc_chat_public', $localize_data );
 	}
 
 	/**
@@ -157,7 +157,7 @@ class CTC_Public {
 
 		// Check if any shortcodes are used.
 		global $post;
-		if ( $post && ( has_shortcode( $post->post_content, 'whatsapp_button' ) || has_shortcode( $post->post_content, 'ctc_button' ) ) ) {
+		if ( $post && ( has_shortcode( $post->post_content, 'whatsapp_button' ) || has_shortcode( $post->post_content, 'ctc_chat_button' ) ) ) {
 			return true;
 		}
 
@@ -183,7 +183,7 @@ class CTC_Public {
 		}
 
 		// Add custom CSS inline.
-		wp_add_inline_style( 'ctc-public-styles', wp_strip_all_tags( $custom_css ) );
+		wp_add_inline_style( 'ctc-chat-public-styles', wp_strip_all_tags( $custom_css ) );
 	}
 
 	/**
@@ -203,7 +203,7 @@ class CTC_Public {
 		}
 
 		// Prepare the WhatsApp URL base.
-		$link_generator = new CTC_WhatsApp_Link_Generator();
+		$link_generator = new CTC_Chat_WhatsApp_Link_Generator();
 		$whatsapp_number = $link_generator->get_whatsapp_number( $product->get_id() );
 
 		// If no number, return.
@@ -219,7 +219,7 @@ class CTC_Public {
 						   $this->settings['message_templates']['variations'] : '';
 
 		// Check for product-specific custom message.
-		$custom_message = get_post_meta( $product->get_id(), '_ctc_custom_message', true );
+		$custom_message = get_post_meta( $product->get_id(), '_ctc_chat_custom_message', true );
 		if ( ! empty( $custom_message ) ) {
 			$message_template = $custom_message;
 		}
@@ -319,15 +319,15 @@ class CTC_Public {
 
 		// Enqueue the block support script.
 		wp_enqueue_script(
-			'ctc-cart-checkout-blocks',
-			CTC_PLUGIN_URL . 'public/js/cart-checkout-blocks.js',
+			'ctc-chat-cart-checkout-blocks',
+			CTC_CHAT_PLUGIN_URL . 'public/js/cart-checkout-blocks.js',
 			array(),
-			CTC_VERSION,
+			CTC_CHAT_VERSION,
 			true
 		);
 
 		// Get WhatsApp URL.
-		$link_generator = new CTC_WhatsApp_Link_Generator();
+		$link_generator = new CTC_Chat_WhatsApp_Link_Generator();
 		$whatsapp_url = '';
 
 		if ( is_cart() ) {
@@ -349,8 +349,8 @@ class CTC_Public {
 
 		// Localize script with parameters.
 		wp_localize_script(
-			'ctc-cart-checkout-blocks',
-			'ctc_block_params',
+			'ctc-chat-cart-checkout-blocks',
+			'ctc_chat_block_params',
 			array(
 				'cart_enabled'      => $cart_enabled ? '1' : '0',
 				'checkout_enabled'  => $checkout_enabled ? '1' : '0',
@@ -591,7 +591,7 @@ class CTC_Public {
 	 */
 	public function ajax_get_variation_url() {
 		// Check nonce.
-		if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['nonce'] ) ), 'ctc_public_nonce' ) ) {
+		if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['nonce'] ) ), 'ctc_chat_public_nonce' ) ) {
 			wp_send_json_error( array( 'message' => __( 'Security check failed.', 'aicoso-click-to-chat' ) ) );
 		}
 
@@ -604,7 +604,7 @@ class CTC_Public {
 		}
 
 		// Initialize link generator.
-		$link_generator = new CTC_WhatsApp_Link_Generator();
+		$link_generator = new CTC_Chat_WhatsApp_Link_Generator();
 
 		// Generate WhatsApp URL with variations.
 		$whatsapp_url = $link_generator->get_product_url( $product_id, $variations );
@@ -618,4 +618,4 @@ class CTC_Public {
 }
 
 // Initialize the class.
-new CTC_Public();
+new CTC_Chat_Public();

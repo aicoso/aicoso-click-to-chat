@@ -5,7 +5,8 @@
  */
 
 /* General Button Styles */
-.ctc-whatsapp-button {
+.ctc-whatsapp-button,
+.ctc-chat-whatsapp-button {
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -24,7 +25,7 @@
     color: white;
 }
 
-.ctc-whatsapp-button:hover {
+.ctc-chat-whatsapp-button:hover {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.25);
     transform: translateY(-2px);
     opacity: 0.95;
@@ -32,72 +33,77 @@
     color: white;
 }
 
-.ctc-whatsapp-button:focus {
+.ctc-chat-whatsapp-button:focus {
     outline: none;
     text-decoration: none;
 }
 
 /* WhatsApp Icon Styles */
-.ctc-whatsapp-icon {
+.ctc-whatsapp-icon,
+.ctc-chat-whatsapp-icon {
     display: inline-flex;
     margin-right: 8px;
     align-items: center;
 }
 
-.ctc-whatsapp-icon svg {
+.ctc-chat-whatsapp-icon svg {
     width: 18px;
     height: 18px;
     fill: currentColor;
 }
 
 /* Button Size Variations */
-.ctc-button-size-small {
+.ctc-button-size-small,
+.ctc-chat-button-size-small {
     padding: 6px 12px;
     font-size: 12px;
 }
 
-.ctc-button-size-small .ctc-whatsapp-icon svg {
+.ctc-chat-button-size-small .ctc-chat-whatsapp-icon svg {
     width: 14px;
     height: 14px;
 }
 
-.ctc-button-size-normal {
+.ctc-button-size-normal,
+.ctc-chat-button-size-normal {
     padding: 10px 20px;
     font-size: 14px;
 }
 
-.ctc-button-size-large {
+.ctc-button-size-large,
+.ctc-chat-button-size-large {
     padding: 12px 24px;
     font-size: 16px;
 }
 
-.ctc-button-size-large .ctc-whatsapp-icon svg {
+.ctc-chat-button-size-large .ctc-chat-whatsapp-icon svg {
     width: 20px;
     height: 20px;
 }
 
 /* Button Alignment */
-.ctc-shortcode-container {
+.ctc-shortcode-container,
+.ctc-chat-shortcode-container {
     display: block;
     width: 100%;
     margin: 15px 0;
 }
 
-.ctc-align-left {
+.ctc-chat-align-left {
     text-align: left;
 }
 
-.ctc-align-center {
+.ctc-chat-align-center {
     text-align: center;
 }
 
-.ctc-align-right {
+.ctc-chat-align-right {
     text-align: right;
 }
 
 /* Shop Page Product Grid Buttons */
-.woocommerce ul.products li.product .ctc-whatsapp-button,
-.woocommerce-page ul.products li.product .ctc-whatsapp-button {
+.woocommerce ul.products li.product .ctc-chat-whatsapp-button,
+.woocommerce-page ul.products li.product .ctc-chat-whatsapp-button {
     width: 100%;
     margin: 8px 0;
     box-sizing: border-box;
@@ -110,8 +116,8 @@
 }
 
 /* Single Product Page Buttons */
-.woocommerce div.product form.cart .ctc-whatsapp-button,
-.woocommerce div.product .summary .ctc-whatsapp-button {
+.woocommerce div.product form.cart .ctc-chat-whatsapp-button,
+.woocommerce div.product .summary .ctc-chat-whatsapp-button {
     margin: 15px 0;
     display: inline-flex;
     vertical-align: middle;
@@ -141,13 +147,13 @@
     gap: 10px;
 }
 
-.woocommerce div.product form.variations_form .ctc-whatsapp-button {
+.woocommerce div.product form.variations_form .ctc-chat-whatsapp-button {
     flex: 0 0 auto;
 }
 
 /* Cart Page Button */
-.woocommerce-cart .ctc-whatsapp-button,
-.ctc-button-cart {
+.woocommerce-cart .ctc-chat-whatsapp-button,
+.ctc-chat-button-cart {
     width: 100%;
     max-width: none;
     margin: 15px 0;
@@ -160,25 +166,25 @@
     gap: 10px;
 }
 
-.woocommerce-cart .wc-proceed-to-checkout .ctc-whatsapp-button {
+.woocommerce-cart .wc-proceed-to-checkout .ctc-chat-whatsapp-button {
     order: 1;
 }
 
 /* Checkout Page Button */
-.woocommerce-checkout .ctc-whatsapp-button,
-.ctc-button-checkout {
+.woocommerce-checkout .ctc-chat-whatsapp-button,
+.ctc-chat-button-checkout {
     width: 100%;
     margin: 15px 0;
     display: flex;
 }
 
-.woocommerce-checkout #payment .ctc-whatsapp-button {
+.woocommerce-checkout #payment .ctc-chat-whatsapp-button {
     margin-bottom: 15px;
 }
 
 /* Thank You Page Button */
-.ctc-button-thankyou,
-.ctc-thankyou-button-container .ctc-whatsapp-button {
+.ctc-chat-button-thankyou,
+.ctc-chat-thankyou-button-container .ctc-chat-whatsapp-button {
     width: auto;
     max-width: 350px;
     min-width: 250px;
@@ -190,14 +196,14 @@
     box-shadow: 0 3px 8px rgba(37, 211, 102, 0.3);
 }
 
-.ctc-thankyou-button-container .ctc-whatsapp-button:hover {
+.ctc-chat-thankyou-button-container .ctc-chat-whatsapp-button:hover {
     box-shadow: 0 5px 12px rgba(37, 211, 102, 0.4);
     transform: translateY(-3px);
 }
 
-.ctc-cart-button-container,
-.ctc-checkout-button-container,
-.ctc-thankyou-button-container {
+.ctc-chat-cart-button-container,
+.ctc-chat-checkout-button-container,
+.ctc-chat-thankyou-button-container {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -206,34 +212,34 @@
 }
 
 /* Floating Button Styles */
-.ctc-floating-button-container {
+.ctc-chat-floating-button-container {
     position: fixed;
     z-index: 9999;
     display: flex;
     transition: all 0.3s ease;
 }
 
-.ctc-floating-bottom_right {
+.ctc-chat-floating-bottom_right {
     bottom: 20px;
     right: 20px;
 }
 
-.ctc-floating-bottom_left {
+.ctc-chat-floating-bottom_left {
     bottom: 20px;
     left: 20px;
 }
 
-.ctc-floating-top_right {
+.ctc-chat-floating-top_right {
     top: 20px;
     right: 20px;
 }
 
-.ctc-floating-top_left {
+.ctc-chat-floating-top_left {
     top: 20px;
     left: 20px;
 }
 
-.ctc-floating-button-container .ctc-whatsapp-button {
+.ctc-chat-floating-button-container .ctc-chat-whatsapp-button {
     border-radius: 50%;
     width: 60px;
     height: 60px;
@@ -242,51 +248,52 @@
     transition: all 0.3s ease;
 }
 
-.ctc-floating-button-container .ctc-whatsapp-button:hover {
+.ctc-chat-floating-button-container .ctc-chat-whatsapp-button:hover {
     width: 64px;
     height: 64px;
     box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
 }
 
-.ctc-floating-button-container .ctc-whatsapp-icon {
+.ctc-chat-floating-button-container .ctc-chat-whatsapp-icon {
     margin: 0;
 }
 
-.ctc-floating-button-container .ctc-whatsapp-icon svg {
+.ctc-chat-floating-button-container .ctc-chat-whatsapp-icon svg {
     width: 30px;
     height: 30px;
 }
 
-.ctc-floating-button-container .ctc-button-text {
+.ctc-floating-button-container .ctc-button-text,
+.ctc-chat-floating-button-container .ctc-chat-button-text {
     display: none;
 }
 
 /* Button Position Specific Adjustments */
 /* Below Add to Cart Button */
-.ctc-position-below-add-to-cart {
+.ctc-chat-position-below-add-to-cart {
     display: block;
     width: 100%;
     margin-top: 15px;
 }
 
-.ctc-position-below-add-to-cart .ctc-whatsapp-button {
+.ctc-chat-position-below-add-to-cart .ctc-chat-whatsapp-button {
     width: auto;
     display: inline-flex;
 }
 
 /* After Add to Cart Button (inline) */
-.ctc-position-after-add-to-cart {
+.ctc-chat-position-after-add-to-cart {
     display: inline-block;
     margin-left: 10px;
 }
 
 /* Before Add to Cart */
-.ctc-position-before-add-to-cart {
+.ctc-chat-position-before-add-to-cart {
     display: block;
     margin-bottom: 15px;
 }
 
-.ctc-position-before-add-to-cart .ctc-whatsapp-button {
+.ctc-chat-position-before-add-to-cart .ctc-chat-whatsapp-button {
     width: auto;
     display: inline-flex;
 }
@@ -299,46 +306,46 @@
         align-items: stretch;
     }
 
-    .woocommerce div.product form.cart .ctc-whatsapp-button,
+    .woocommerce div.product form.cart .ctc-chat-whatsapp-button,
     .woocommerce div.product form.cart .single_add_to_cart_button {
         width: 100%;
         margin: 5px 0;
     }
 
-    .ctc-position-after-add-to-cart {
+    .ctc-chat-position-after-add-to-cart {
         display: block;
         margin-left: 0;
         margin-top: 10px;
     }
 
-    .ctc-position-after-add-to-cart .ctc-whatsapp-button {
+    .ctc-chat-position-after-add-to-cart .ctc-chat-whatsapp-button {
         width: 100%;
     }
 
-    .ctc-floating-button-container .ctc-whatsapp-button {
+    .ctc-chat-floating-button-container .ctc-chat-whatsapp-button {
         width: 50px;
         height: 50px;
     }
 
-    .ctc-floating-button-container .ctc-whatsapp-icon svg {
+    .ctc-chat-floating-button-container .ctc-chat-whatsapp-icon svg {
         width: 25px;
         height: 25px;
     }
 
     /* Smaller padding on mobile */
-    .ctc-whatsapp-button {
+    .ctc-chat-whatsapp-button {
         padding: 8px 16px;
     }
 
     /* Thank You Page - Mobile Adjustments */
-    .ctc-thankyou-button-container .ctc-whatsapp-button {
+    .ctc-chat-thankyou-button-container .ctc-chat-whatsapp-button {
         max-width: 90%;
         min-width: 200px;
         padding: 12px 20px;
         font-size: 14px;
     }
 
-    .ctc-thankyou-button-container {
+    .ctc-chat-thankyou-button-container {
         margin: 20px 0;
         padding: 5px 0;
     }
@@ -346,18 +353,18 @@
 
 @media screen and (max-width: 480px) {
     /* Extra small devices */
-    .ctc-whatsapp-button {
+    .ctc-chat-whatsapp-button {
         font-size: 13px;
         padding: 8px 14px;
     }
 
-    .ctc-whatsapp-icon svg {
+    .ctc-chat-whatsapp-icon svg {
         width: 16px;
         height: 16px;
     }
 
     /* Thank You Page - Extra small devices */
-    .ctc-thankyou-button-container .ctc-whatsapp-button {
+    .ctc-chat-thankyou-button-container .ctc-chat-whatsapp-button {
         max-width: 95%;
         min-width: 180px;
         padding: 11px 18px;
@@ -366,7 +373,7 @@
 }
 
 /* WooCommerce Blocks Compatibility */
-.wc-block-grid__products .wc-block-grid__product .ctc-whatsapp-button {
+.wc-block-grid__products .wc-block-grid__product .ctc-chat-whatsapp-button {
     width: 100%;
     margin-top: 10px;
 }
@@ -378,61 +385,61 @@
 }
 
 /* RTL Support */
-.rtl .ctc-whatsapp-icon {
+.rtl .ctc-chat-whatsapp-icon {
     margin-right: 0;
     margin-left: 8px;
 }
 
-.rtl .ctc-position-after-add-to-cart {
+.rtl .ctc-chat-position-after-add-to-cart {
     margin-left: 0;
     margin-right: 10px;
 }
 
-.rtl .ctc-floating-bottom_right {
+.rtl .ctc-chat-floating-bottom_right {
     right: auto;
     left: 20px;
 }
 
-.rtl .ctc-floating-bottom_left {
+.rtl .ctc-chat-floating-bottom_left {
     left: auto;
     right: 20px;
 }
 
-.rtl .ctc-floating-top_right {
+.rtl .ctc-chat-floating-top_right {
     right: auto;
     left: 20px;
 }
 
-.rtl .ctc-floating-top_left {
+.rtl .ctc-chat-floating-top_left {
     left: auto;
     right: 20px;
 }
 
 /* Fix for Twenty Twenty-One and similar themes */
-.wp-block-buttons .ctc-whatsapp-button {
+.wp-block-buttons .ctc-chat-whatsapp-button {
     margin: 0;
 }
 
 /* Ensure button doesn't break layouts */
-.ctc-whatsapp-button {
+.ctc-chat-whatsapp-button {
     max-width: 100%;
     overflow: hidden;
     text-overflow: ellipsis;
 }
 
 /* Inline CSS replacements from PHP files */
-.ctc-cart-button-container,
-.ctc-checkout-button-container {
+.ctc-chat-cart-button-container,
+.ctc-chat-checkout-button-container {
     margin: 20px 0;
 }
 
 /* Catalog Mode - Single Product Button */
-.ctc-catalog-mode-button {
+.ctc-chat-catalog-mode-button {
     margin: 20px 0 !important;
     display: block !important;
 }
 
-.ctc-catalog-mode-button .ctc-whatsapp-button {
+.ctc-chat-catalog-mode-button .ctc-chat-whatsapp-button {
     width: 100%;
     max-width: 400px;
     display: flex !important;

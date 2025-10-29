@@ -17,9 +17,9 @@ if ( ! defined( 'WPINC' ) ) {
  * Admin class.
  *
  * @since 1.0.0
- * @package ClickToChat
+ * @package CTC_Chat
  */
-class CTC_Admin {
+class CTC_Chat_Admin {
 
 	/**
 	 * Plugin settings.
@@ -40,7 +40,7 @@ class CTC_Admin {
 	 * Constructor.
 	 */
 	public function __construct() {
-		$this->settings = get_option( 'ctc_settings', array() );
+		$this->settings = get_option( 'ctc_chat_settings', array() );
 
 		// Initialize hooks.
 		$this->init_hooks();
@@ -57,7 +57,7 @@ class CTC_Admin {
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_admin_assets' ) );
 
 		// Add plugin action links.
-		add_filter( 'plugin_action_links_' . CTC_PLUGIN_BASENAME, array( $this, 'add_action_links' ) );
+		add_filter( 'plugin_action_links_' . CTC_CHAT_PLUGIN_BASENAME, array( $this, 'add_action_links' ) );
 
 		// Add meta box to product edit screen.
 		add_action( 'add_meta_boxes', array( $this, 'add_product_meta_boxes' ) );
@@ -134,24 +134,24 @@ class CTC_Admin {
 
 		// Enqueue Select2 from local files.
 		wp_enqueue_style(
-			'ctc-select2',
-			CTC_PLUGIN_URL . 'admin/lib/select2/select2.min.css',
+			'ctc-chat-select2',
+			CTC_CHAT_PLUGIN_URL . 'admin/lib/select2/select2.min.css',
 			array(),
 			'4.0.13'
 		);
 
 		wp_enqueue_style(
-			'ctc-admin-styles',
-			CTC_PLUGIN_URL . 'admin/css/admin.css',
-			array( 'wp-color-picker', 'ctc-select2' ),
-			CTC_VERSION
+			'ctc-chat-admin-styles',
+			CTC_CHAT_PLUGIN_URL . 'admin/css/admin.css',
+			array( 'wp-color-picker', 'ctc-chat-select2' ),
+			CTC_CHAT_VERSION
 		);
 
 		// JavaScript.
 		// Enqueue Select2 from local files.
 		wp_enqueue_script(
-			'ctc-select2-js',
-			CTC_PLUGIN_URL . 'admin/lib/select2/select2.min.js',
+			'ctc-chat-select2-js',
+			CTC_CHAT_PLUGIN_URL . 'admin/lib/select2/select2.min.js',
 			array( 'jquery' ),
 			'4.0.13',
 			true
@@ -161,21 +161,21 @@ class CTC_Admin {
 		wp_enqueue_script( 'jquery-ui-sortable' );
 
 		wp_enqueue_script(
-			'ctc-admin-js',
-			CTC_PLUGIN_URL . 'admin/js/admin.js',
-			array( 'jquery', 'wp-color-picker', 'ctc-select2-js', 'jquery-ui-sortable' ),
-			CTC_VERSION,
+			'ctc-chat-admin-js',
+			CTC_CHAT_PLUGIN_URL . 'admin/js/admin.js',
+			array( 'jquery', 'wp-color-picker', 'ctc-chat-select2-js', 'jquery-ui-sortable' ),
+			CTC_CHAT_VERSION,
 			true
 		);
 
 		// Pass variables to JavaScript.
 		wp_localize_script(
-			'ctc-admin-js',
-			'ctc_admin',
+			'ctc-chat-admin-js',
+			'ctc_chat_admin',
 			array(
 				'ajaxurl'                => admin_url( 'admin-ajax.php' ),
 				'ajax_url'               => admin_url( 'admin-ajax.php' ),
-				'nonce'                  => wp_create_nonce( 'ctc_admin_nonce' ),
+				'nonce'                  => wp_create_nonce( 'ctc_chat_admin_nonce' ),
 				'delete_number_confirm'  => esc_html__( 'Are you sure you want to delete this WhatsApp number?', 'aicoso-click-to-chat' ),
 				'duplicate_name_error'   => esc_html__( 'This name is already being used. Please choose a different name.', 'aicoso-click-to-chat' ),
 				'loading_text'           => esc_html__( 'Loading...', 'aicoso-click-to-chat' ),
@@ -230,12 +230,12 @@ class CTC_Admin {
 		self::$settings_page_rendered = true;
 
 		// Handle form submission.
-		if ( isset( $_POST['ctc_save_settings'] ) && check_admin_referer( 'ctc_settings_nonce', 'ctc_settings_nonce' ) ) {
+		if ( isset( $_POST['ctc_chat_save_settings'] ) && check_admin_referer( 'ctc_chat_settings_nonce', 'ctc_chat_settings_nonce' ) ) {
 			$this->save_settings();
 		}
 
 		// Include the view file.
-		include CTC_PLUGIN_DIR . 'admin/views/settings-page.php';
+		include CTC_CHAT_PLUGIN_DIR . 'admin/views/settings-page.php';
 	}
 
 	/**
@@ -248,12 +248,12 @@ class CTC_Admin {
 		}
 
 		// Handle form submission.
-		if ( isset( $_POST['ctc_save_numbers'] ) && check_admin_referer( 'ctc_numbers_nonce', 'ctc_numbers_nonce' ) ) {
+		if ( isset( $_POST['ctc_chat_save_numbers'] ) && check_admin_referer( 'ctc_chat_numbers_nonce', 'ctc_chat_numbers_nonce' ) ) {
 			$this->save_numbers();
 		}
 
 		// Include the view file.
-		include CTC_PLUGIN_DIR . 'admin/views/numbers-page.php';
+		include CTC_CHAT_PLUGIN_DIR . 'admin/views/numbers-page.php';
 	}
 
 	/**
@@ -266,12 +266,12 @@ class CTC_Admin {
 		}
 
 		// Handle form submission.
-		if ( isset( $_POST['ctc_save_templates'] ) && check_admin_referer( 'ctc_templates_nonce', 'ctc_templates_nonce' ) ) {
+		if ( isset( $_POST['ctc_chat_save_templates'] ) && check_admin_referer( 'ctc_chat_templates_nonce', 'ctc_chat_templates_nonce' ) ) {
 			$this->save_templates();
 		}
 
 		// Include the view file.
-		include CTC_PLUGIN_DIR . 'admin/views/templates-page.php';
+		include CTC_CHAT_PLUGIN_DIR . 'admin/views/templates-page.php';
 	}
 
 	/**
@@ -284,7 +284,7 @@ class CTC_Admin {
 		}
 
 		// Include the view file.
-		include CTC_PLUGIN_DIR . 'admin/views/shortcode-page.php';
+		include CTC_CHAT_PLUGIN_DIR . 'admin/views/shortcode-page.php';
 	}
 
 	/**
@@ -292,24 +292,24 @@ class CTC_Admin {
 	 */
 	private function save_settings() {
 		// Get existing settings.
-		$settings = get_option( 'ctc_settings', array() );
+		$settings = get_option( 'ctc_chat_settings', array() );
 
 		// Nonce is verified in render_settings_page() before calling this method.
 		// phpcs:disable WordPress.Security.NonceVerification.Missing
 
 		// Get the current tab for redirect.
-		$current_tab = isset( $_POST['ctc_current_tab'] ) ? sanitize_text_field( wp_unslash( $_POST['ctc_current_tab'] ) ) : 'general';
+		$current_tab = isset( $_POST['ctc_chat_current_tab'] ) ? sanitize_text_field( wp_unslash( $_POST['ctc_chat_current_tab'] ) ) : 'general';
 
 		// Save plugin enabled status.
-		$settings['plugin_enabled'] = isset( $_POST['ctc_plugin_enabled'] ) ? true : false;
+		$settings['plugin_enabled'] = isset( $_POST['ctc_chat_plugin_enabled'] ) ? true : false;
 
 		// Sanitize and update button settings.
-		if ( isset( $_POST['ctc_button'] ) && is_array( $_POST['ctc_button'] ) ) {
+		if ( isset( $_POST['ctc_chat_button'] ) && is_array( $_POST['ctc_chat_button'] ) ) {
 			// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Each field is sanitized individually below.
-			$ctc_button      = wp_unslash( $_POST['ctc_button'] );
+			$ctc_button      = wp_unslash( $_POST['ctc_chat_button'] );
 			$button_settings = array(
 				'text'       => isset( $ctc_button['text'] ) ? sanitize_text_field( $ctc_button['text'] ) : '',
-				'icon'       => isset( $_POST['ctc_button']['icon'] ) ? true : false,
+				'icon'       => isset( $_POST['ctc_chat_button']['icon'] ) ? true : false,
 				'bg_color'   => isset( $ctc_button['bg_color'] ) ? sanitize_hex_color( $ctc_button['bg_color'] ) : '#25D366',
 				'text_color' => isset( $ctc_button['text_color'] ) ? sanitize_hex_color( $ctc_button['text_color'] ) : '#ffffff',
 				'custom_css' => isset( $ctc_button['custom_css'] ) ? sanitize_textarea_field( $ctc_button['custom_css'] ) : '',
@@ -319,11 +319,11 @@ class CTC_Admin {
 		}
 
 		// Sanitize and update single product settings.
-		if ( isset( $_POST['ctc_single_product'] ) && is_array( $_POST['ctc_single_product'] ) ) {
+		if ( isset( $_POST['ctc_chat_single_product'] ) && is_array( $_POST['ctc_chat_single_product'] ) ) {
 			// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Each field is sanitized individually below.
-			$ctc_single_product = wp_unslash( $_POST['ctc_single_product'] );
+			$ctc_single_product = wp_unslash( $_POST['ctc_chat_single_product'] );
 			$single_product     = array(
-				'enabled'  => isset( $_POST['ctc_single_product']['enabled'] ) ? true : false,
+				'enabled'  => isset( $_POST['ctc_chat_single_product']['enabled'] ) ? true : false,
 				'position' => isset( $ctc_single_product['position'] ) ? sanitize_text_field( $ctc_single_product['position'] ) : 'after_add_to_cart',
 			);
 
@@ -331,11 +331,11 @@ class CTC_Admin {
 		}
 
 		// Sanitize and update shop page settings.
-		if ( isset( $_POST['ctc_shop_page'] ) && is_array( $_POST['ctc_shop_page'] ) ) {
+		if ( isset( $_POST['ctc_chat_shop_page'] ) && is_array( $_POST['ctc_chat_shop_page'] ) ) {
 			// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Each field is sanitized individually below.
-			$ctc_shop_page = wp_unslash( $_POST['ctc_shop_page'] );
+			$ctc_shop_page = wp_unslash( $_POST['ctc_chat_shop_page'] );
 			$shop_page     = array(
-				'enabled'  => isset( $_POST['ctc_shop_page']['enabled'] ) ? true : false,
+				'enabled'  => isset( $_POST['ctc_chat_shop_page']['enabled'] ) ? true : false,
 				'position' => isset( $ctc_shop_page['position'] ) ? sanitize_text_field( $ctc_shop_page['position'] ) : 'after_add_to_cart',
 			);
 
@@ -343,30 +343,30 @@ class CTC_Admin {
 		}
 
 		// Sanitize and update cart page settings.
-		$ctc_cart_page_position = isset( $_POST['ctc_cart_page']['position'] ) ? sanitize_text_field( wp_unslash( $_POST['ctc_cart_page']['position'] ) ) : 'after_cart_table';
+		$ctc_cart_page_position = isset( $_POST['ctc_chat_cart_page']['position'] ) ? sanitize_text_field( wp_unslash( $_POST['ctc_chat_cart_page']['position'] ) ) : 'after_cart_table';
 		$settings['cart_page']  = array(
-			'enabled'  => isset( $_POST['ctc_cart_page']['enabled'] ) ? true : false,
+			'enabled'  => isset( $_POST['ctc_chat_cart_page']['enabled'] ) ? true : false,
 			'position' => $ctc_cart_page_position,
 		);
 
 		// Sanitize and update checkout page settings.
-		$ctc_checkout_page_position = isset( $_POST['ctc_checkout_page']['position'] ) ? sanitize_text_field( wp_unslash( $_POST['ctc_checkout_page']['position'] ) ) : 'after_payment';
+		$ctc_checkout_page_position = isset( $_POST['ctc_chat_checkout_page']['position'] ) ? sanitize_text_field( wp_unslash( $_POST['ctc_chat_checkout_page']['position'] ) ) : 'after_payment';
 		$settings['checkout_page']  = array(
-			'enabled'  => isset( $_POST['ctc_checkout_page']['enabled'] ) ? true : false,
+			'enabled'  => isset( $_POST['ctc_chat_checkout_page']['enabled'] ) ? true : false,
 			'position' => $ctc_checkout_page_position,
 		);
 
 		// Sanitize and update thank you page settings.
 		$settings['thankyou_page'] = array(
-			'enabled' => isset( $_POST['ctc_thankyou_page']['enabled'] ) ? true : false,
+			'enabled' => isset( $_POST['ctc_chat_thankyou_page']['enabled'] ) ? true : false,
 		);
 
 		// Sanitize and update floating button settings.
-		if ( isset( $_POST['ctc_floating_button'] ) && is_array( $_POST['ctc_floating_button'] ) ) {
+		if ( isset( $_POST['ctc_chat_floating_button'] ) && is_array( $_POST['ctc_chat_floating_button'] ) ) {
 			// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Each field is sanitized individually below.
-			$ctc_floating_button = wp_unslash( $_POST['ctc_floating_button'] );
+			$ctc_floating_button = wp_unslash( $_POST['ctc_chat_floating_button'] );
 			$floating_button     = array(
-				'enabled'  => isset( $_POST['ctc_floating_button']['enabled'] ) ? true : false,
+				'enabled'  => isset( $_POST['ctc_chat_floating_button']['enabled'] ) ? true : false,
 				'position' => isset( $ctc_floating_button['position'] ) ? sanitize_text_field( $ctc_floating_button['position'] ) : 'bottom_right',
 			);
 
@@ -383,9 +383,9 @@ class CTC_Admin {
 			'products'   => array(),
 		);
 
-		if ( isset( $_POST['ctc_exclusions'] ) && is_array( $_POST['ctc_exclusions'] ) ) {
+		if ( isset( $_POST['ctc_chat_exclusions'] ) && is_array( $_POST['ctc_chat_exclusions'] ) ) {
 			// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Each field is sanitized individually below.
-			$ctc_exclusions = wp_unslash( $_POST['ctc_exclusions'] );
+			$ctc_exclusions = wp_unslash( $_POST['ctc_chat_exclusions'] );
 
 			// Pages.
 			if ( isset( $ctc_exclusions['pages'] ) && is_array( $ctc_exclusions['pages'] ) ) {
@@ -426,7 +426,7 @@ class CTC_Admin {
 		$settings['exclusions'] = $exclusions;
 
 		// Sanitize and update advanced settings.
-		$catalog_mode = isset( $_POST['ctc_advanced']['catalog_mode'] ) ? true : false;
+		$catalog_mode = isset( $_POST['ctc_chat_advanced']['catalog_mode'] ) ? true : false;
 
 		// If catalog mode is enabled, force all hide options to be true.
 		if ( $catalog_mode ) {
@@ -439,9 +439,9 @@ class CTC_Admin {
 		} else {
 			// Otherwise, check individual options.
 			$advanced = array(
-				'hide_add_to_cart'      => isset( $_POST['ctc_advanced']['hide_add_to_cart'] ) ? true : false,
-				'hide_proceed_checkout' => isset( $_POST['ctc_advanced']['hide_proceed_checkout'] ) ? true : false,
-				'hide_place_order'      => isset( $_POST['ctc_advanced']['hide_place_order'] ) ? true : false,
+				'hide_add_to_cart'      => isset( $_POST['ctc_chat_advanced']['hide_add_to_cart'] ) ? true : false,
+				'hide_proceed_checkout' => isset( $_POST['ctc_chat_advanced']['hide_proceed_checkout'] ) ? true : false,
+				'hide_place_order'      => isset( $_POST['ctc_chat_advanced']['hide_place_order'] ) ? true : false,
 				'catalog_mode'          => false,
 			);
 		}
@@ -449,11 +449,11 @@ class CTC_Admin {
 		$settings['advanced'] = $advanced;
 
 		// Update settings.
-		update_option( 'ctc_settings', $settings );
+		update_option( 'ctc_chat_settings', $settings );
 		// phpcs:enable WordPress.Security.NonceVerification.Missing
 
 		// Store success message in transient (will be displayed after redirect).
-		set_transient( 'ctc_settings_message', 'success', 30 );
+		set_transient( 'ctc_chat_settings_message', 'success', 30 );
 
 		// Redirect to the same tab.
 		$redirect_url = add_query_arg(
@@ -474,15 +474,15 @@ class CTC_Admin {
 		// Nonce is verified in render_numbers_page() before calling this method.
 		// phpcs:disable WordPress.Security.NonceVerification.Missing
 		// Get existing settings.
-		$settings = get_option( 'ctc_settings', array() );
+		$settings = get_option( 'ctc_chat_settings', array() );
 
 		// Initialize empty array for WhatsApp numbers.
 		$whatsapp_numbers = array();
 
 		// Process deleted numbers.
 		$deleted_numbers = array();
-		if ( isset( $_POST['ctc_deleted_numbers'] ) && ! empty( $_POST['ctc_deleted_numbers'] ) ) {
-			$deleted_numbers = array_map( 'absint', explode( ',', sanitize_text_field( wp_unslash( $_POST['ctc_deleted_numbers'] ) ) ) );
+		if ( isset( $_POST['ctc_chat_deleted_numbers'] ) && ! empty( $_POST['ctc_chat_deleted_numbers'] ) ) {
+			$deleted_numbers = array_map( 'absint', explode( ',', sanitize_text_field( wp_unslash( $_POST['ctc_chat_deleted_numbers'] ) ) ) );
 		}
 
 		// Check for duplicate names.
@@ -558,7 +558,7 @@ class CTC_Admin {
 		$settings['whatsapp_numbers'] = $whatsapp_numbers;
 
 		// Update settings.
-		update_option( 'ctc_settings', $settings );
+		update_option( 'ctc_chat_settings', $settings );
 
 		// Add message based on whether we found duplicates.
 		if ( $has_duplicate ) {
@@ -586,12 +586,12 @@ class CTC_Admin {
 		// Nonce is verified in render_templates_page() before calling this method.
 		// phpcs:disable WordPress.Security.NonceVerification.Missing
 		// Get existing settings.
-		$settings = get_option( 'ctc_settings', array() );
+		$settings = get_option( 'ctc_chat_settings', array() );
 
 		// Process submitted templates.
-		if ( isset( $_POST['ctc_templates'] ) && is_array( $_POST['ctc_templates'] ) ) {
+		if ( isset( $_POST['ctc_chat_templates'] ) && is_array( $_POST['ctc_chat_templates'] ) ) {
 			// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Each field is sanitized individually below.
-			$ctc_templates     = wp_unslash( $_POST['ctc_templates'] );
+			$ctc_templates     = wp_unslash( $_POST['ctc_chat_templates'] );
 			$message_templates = array(
 				'single_product' => isset( $ctc_templates['single_product'] ) ? sanitize_textarea_field( $ctc_templates['single_product'] ) : '',
 				'cart_checkout'  => isset( $ctc_templates['cart_checkout'] ) ? sanitize_textarea_field( $ctc_templates['cart_checkout'] ) : '',
@@ -604,7 +604,7 @@ class CTC_Admin {
 			$settings['message_templates'] = $message_templates;
 
 			// Update settings.
-			update_option( 'ctc_settings', $settings );
+			update_option( 'ctc_chat_settings', $settings );
 
 			// Add success message.
 			add_settings_error(
@@ -622,12 +622,12 @@ class CTC_Admin {
 	 */
 	public function add_product_meta_boxes() {
 		add_meta_box(
-			'ctc_product_settings',
-			esc_html__( 'WhatsApp Shopping Settings', 'aicoso-click-to-chat' ),
-			array( $this, 'render_product_meta_box' ),
-			'product',
-			'side',
-			'default'
+		    'ctc_chat_product_settings',
+		    esc_html__( 'WhatsApp Shopping Settings', 'aicoso-click-to-chat' ),
+		    array( $this, 'render_product_meta_box' ),
+		    'product',
+		    'side',
+		    'default'
 		);
 	}
 
@@ -638,12 +638,12 @@ class CTC_Admin {
 	 */
 	public function render_product_meta_box( $post ) {
 		// Add nonce for security.
-		wp_nonce_field( 'ctc_product_meta_nonce', 'ctc_product_meta_nonce' );
+		wp_nonce_field( 'ctc_chat_product_meta_nonce', 'ctc_chat_product_meta_nonce' );
 
 		// Get current values.
-		$hide_button     = get_post_meta( $post->ID, '_ctc_hide_button', true );
-		$custom_message  = get_post_meta( $post->ID, '_ctc_custom_message', true );
-		$assigned_number = get_post_meta( $post->ID, '_ctc_assigned_number', true );
+		$hide_button     = get_post_meta( $post->ID, '_ctc_chat_hide_button', true );
+		$custom_message  = get_post_meta( $post->ID, '_ctc_chat_custom_message', true );
+		$assigned_number = get_post_meta( $post->ID, '_ctc_chat_assigned_number', true );
 
 		// Get available WhatsApp numbers.
 		$whatsapp_numbers = isset( $this->settings['whatsapp_numbers'] ) ? $this->settings['whatsapp_numbers'] : array();
@@ -652,14 +652,14 @@ class CTC_Admin {
 		?>
 		<p>
 				<label>
-				<input type="checkbox" name="ctc_hide_button" value="1" <?php checked( $hide_button, '1' ); ?> />
+				<input type="checkbox" name="ctc_chat_hide_button" value="1" <?php checked( $hide_button, '1' ); ?> />
 				<?php esc_html_e( 'Hide WhatsApp button on this product', 'aicoso-click-to-chat' ); ?>
 			</label>
 		</p>
 
 		<p>
 			<label for="ctc_assigned_number"><?php esc_html_e( 'Assign specific WhatsApp number:', 'aicoso-click-to-chat' ); ?></label>
-			<select name="ctc_assigned_number" id="ctc_assigned_number">
+			<select name="ctc_chat_assigned_number" id="ctc_chat_assigned_number">
 				<option value=""><?php esc_html_e( 'Default (based on rules)', 'aicoso-click-to-chat' ); ?></option>
 				<?php foreach ( $whatsapp_numbers as $number ) : ?>
 					<option value="<?php echo esc_attr( $number['id'] ); ?>" <?php selected( $assigned_number, $number['id'] ); ?>>
@@ -671,7 +671,7 @@ class CTC_Admin {
 
 		<p>
 			<label for="ctc_custom_message"><?php esc_html_e( 'Custom message template (overrides default):', 'aicoso-click-to-chat' ); ?></label>
-			<textarea name="ctc_custom_message" id="ctc_custom_message" rows="4" class="widefat"><?php echo esc_textarea( $custom_message ); ?></textarea>
+			<textarea name="ctc_chat_custom_message" id="ctc_chat_custom_message" rows="4" class="widefat"><?php echo esc_textarea( $custom_message ); ?></textarea>
 			<span class="description">
 				<?php esc_html_e( 'Available placeholders: {product_name}, {price}, {product_url}', 'aicoso-click-to-chat' ); ?>
 			</span>
@@ -687,7 +687,7 @@ class CTC_Admin {
 	 */
 	public function save_product_meta( $post_id, $post ) {
 		// Check if nonce is valid.
-		if ( ! isset( $_POST['ctc_product_meta_nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['ctc_product_meta_nonce'] ) ), 'ctc_product_meta_nonce' ) ) {
+		if ( ! isset( $_POST['ctc_chat_product_meta_nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['ctc_chat_product_meta_nonce'] ) ), 'ctc_chat_product_meta_nonce' ) ) {
 			return;
 		}
 
@@ -707,24 +707,24 @@ class CTC_Admin {
 		}
 
 		// Update hide button setting.
-		if ( isset( $_POST['ctc_hide_button'] ) ) {
-			update_post_meta( $post_id, '_ctc_hide_button', '1' );
+		if ( isset( $_POST['ctc_chat_hide_button'] ) ) {
+		    update_post_meta( $post_id, '_ctc_chat_hide_button', '1' );
 		} else {
-			delete_post_meta( $post_id, '_ctc_hide_button' );
+		    delete_post_meta( $post_id, '_ctc_chat_hide_button' );
 		}
 
 		// Update assigned number.
-		if ( isset( $_POST['ctc_assigned_number'] ) && ! empty( $_POST['ctc_assigned_number'] ) ) {
-			update_post_meta( $post_id, '_ctc_assigned_number', sanitize_text_field( wp_unslash( $_POST['ctc_assigned_number'] ) ) );
+		if ( isset( $_POST['ctc_chat_assigned_number'] ) && ! empty( $_POST['ctc_chat_assigned_number'] ) ) {
+		    update_post_meta( $post_id, '_ctc_chat_assigned_number', sanitize_text_field( wp_unslash( $_POST['ctc_chat_assigned_number'] ) ) );
 		} else {
-			delete_post_meta( $post_id, '_ctc_assigned_number' );
+		    delete_post_meta( $post_id, '_ctc_chat_assigned_number' );
 		}
 
 		// Update custom message.
-		if ( isset( $_POST['ctc_custom_message'] ) && ! empty( $_POST['ctc_custom_message'] ) ) {
-			update_post_meta( $post_id, '_ctc_custom_message', sanitize_textarea_field( wp_unslash( $_POST['ctc_custom_message'] ) ) );
+		if ( isset( $_POST['ctc_chat_custom_message'] ) && ! empty( $_POST['ctc_chat_custom_message'] ) ) {
+		    update_post_meta( $post_id, '_ctc_chat_custom_message', sanitize_textarea_field( wp_unslash( $_POST['ctc_chat_custom_message'] ) ) );
 		} else {
-			delete_post_meta( $post_id, '_ctc_custom_message' );
+		    delete_post_meta( $post_id, '_ctc_chat_custom_message' );
 		}
 	}
 }

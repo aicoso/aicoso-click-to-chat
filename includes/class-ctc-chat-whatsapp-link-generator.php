@@ -19,7 +19,7 @@ if ( ! defined( 'WPINC' ) ) {
 /**
  * WhatsApp Link Generator class.
  */
-class CTC_WhatsApp_Link_Generator {
+class CTC_Chat_WhatsApp_Link_Generator {
 
 	/**
 	 * Plugin settings.
@@ -32,7 +32,7 @@ class CTC_WhatsApp_Link_Generator {
 	 * Constructor.
 	 */
 	public function __construct() {
-		$this->settings = get_option( 'ctc_settings', array() );
+		$this->settings = get_option( 'ctc_chat_settings', array() );
 	}
 
 	/**
@@ -875,4 +875,4 @@ class CTC_WhatsApp_Link_Generator {
 }
 
 // Initialize the class.
-new CTC_WhatsApp_Link_Generator();
+new CTC_Chat_WhatsApp_Link_Generator();

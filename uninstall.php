@@ -15,14 +15,14 @@ if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
 }
 
 // Delete plugin options.
-delete_option( 'ctc_settings' );
+delete_option( 'ctc_chat_settings' );
 
 // Delete product meta data from all products.
 global $wpdb;
 
 // Delete the plugin-specific post meta for all products.
 // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- Uninstall routine requires direct database access to clean up all plugin data.
-$wpdb->query( "DELETE FROM {$wpdb->postmeta} WHERE meta_key LIKE '_ctc_%'" );
+$wpdb->query( "DELETE FROM {$wpdb->postmeta} WHERE meta_key LIKE '_ctc_chat_chat_%'" );
 
 // Clear any cached data.
 wp_cache_flush();

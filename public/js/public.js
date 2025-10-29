@@ -22,7 +22,7 @@
      * Initialize floating button behavior
      */
     function initFloatingButton() {
-        const $floatingButton = $('.ctc-floating-button-container');
+        const $floatingButton = $('.ctc-chat-floating-button-container');
         
         if (!$floatingButton.length) {
             return;
@@ -49,12 +49,12 @@
             
             // Show/hide button based on scroll position
             if (scrollTop > 300) {
-                if (!$floatingButton.hasClass('ctc-button-visible')) {
-                    $floatingButton.addClass('ctc-button-visible');
+                if (!$floatingButton.hasClass('ctc-chat-button-visible')) {
+                    $floatingButton.addClass('ctc-chat-button-visible');
                 }
             } else {
-                if ($floatingButton.hasClass('ctc-button-visible')) {
-                    $floatingButton.removeClass('ctc-button-visible');
+                if ($floatingButton.hasClass('ctc-chat-button-visible')) {
+                    $floatingButton.removeClass('ctc-chat-button-visible');
                 }
             }
         });
@@ -80,10 +80,10 @@
         }
 
         // Store the original URL and message template
-        let $productButton = $('.ctc-whatsapp-button.ctc-button-product');
+        let $productButton = $('.ctc-chat-whatsapp-button.ctc-chat-button-product');
         if (!$productButton.length) {
             // Try alternative selector
-            $productButton = $('.ctc-button-product a');
+            $productButton = $('.ctc-chat-button-product a');
             if (!$productButton.length) {
                 return;
             }
@@ -105,13 +105,13 @@
 
             // Make AJAX request to get updated WhatsApp URL
             $.ajax({
-                url: ctc_public.ajaxurl,
+                url: ctc_chat_public.ajaxurl,
                 type: 'POST',
                 data: {
                     action: 'ctc_get_variation_url',
                     product_id: variation.variation_id || $('input[name="product_id"]').val(),
                     variations: variationData,
-                    nonce: ctc_public.nonce
+                    nonce: ctc_chat_public.nonce
                 },
                 success: function(response) {
                     if (response.success && response.data.url) {
@@ -131,14 +131,14 @@
      * Handle button click tracking (optional)
      */
     function trackButtonClicks() {
-        $('.ctc-whatsapp-button').on('click', function(e) {
+        $('.ctc-chat-whatsapp-button').on('click', function(e) {
             // Get button data
             const $button = $(this);
-            const buttonType = $button.hasClass('ctc-button-product') ? 'product' : 
-                              ($button.hasClass('ctc-button-shop') ? 'shop' : 
-                               ($button.hasClass('ctc-button-cart') ? 'cart' : 
-                                ($button.hasClass('ctc-button-checkout') ? 'checkout' : 
-                                 ($button.hasClass('ctc-button-floating') ? 'floating' : 'unknown'))));
+            const buttonType = $button.hasClass('ctc-chat-button-product') ? 'product' : 
+                              ($button.hasClass('ctc-chat-button-shop') ? 'shop' : 
+                               ($button.hasClass('ctc-chat-button-cart') ? 'cart' : 
+                                ($button.hasClass('ctc-chat-button-checkout') ? 'checkout' : 
+                                 ($button.hasClass('ctc-chat-button-floating') ? 'floating' : 'unknown'))));
 
             // If WooCommerce analytics is active and we want to hook into it
             if (typeof wc_ga_pro !== 'undefined' && buttonType === 'product') {
@@ -171,7 +171,7 @@
         initClickToChat();
         
         // Initialize click tracking if supported
-        if ($('.ctc-whatsapp-button').length) {
+        if ($('.ctc-chat-whatsapp-button').length) {
             trackButtonClicks();
         }
     });

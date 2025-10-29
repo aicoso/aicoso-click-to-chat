@@ -18,9 +18,9 @@ if ( ! defined( 'ABSPATH' ) ) {
  * The core plugin class
  *
  * @since 1.0.0
- * @package ClickToChat
+ * @package CTC_Chat
  */
-class Click_To_Chat {
+class CTC_Chat_Click_To_Chat {
 
 	/**
 	 * Instance of this class
@@ -35,7 +35,7 @@ class Click_To_Chat {
 	 */
 	public function __construct() {
 		// Initialize plugin components if WooCommerce is active.
-		if ( ctc_check_woocommerce() ) {
+		if ( ctc_chat_check_woocommerce() ) {
 			$this->includes();
 			$this->init_hooks();
 		}
@@ -58,16 +58,16 @@ class Click_To_Chat {
 	 */
 	private function includes() {
 		// Admin.
-		require_once CTC_PLUGIN_DIR . 'admin/class-ctc-admin.php';
-		require_once CTC_PLUGIN_DIR . 'admin/class-ctc-settings.php';
+		require_once CTC_CHAT_PLUGIN_DIR . 'admin/class-ctc-chat-admin.php';
+		require_once CTC_CHAT_PLUGIN_DIR . 'admin/class-ctc-chat-settings.php';
 
 		// Core functionality.
-		require_once CTC_PLUGIN_DIR . 'includes/class-ctc-whatsapp-link-generator.php';
-		require_once CTC_PLUGIN_DIR . 'includes/class-ctc-button-display.php';
-		require_once CTC_PLUGIN_DIR . 'includes/class-ctc-shortcodes.php';
+		require_once CTC_CHAT_PLUGIN_DIR . 'includes/class-ctc-chat-whatsapp-link-generator.php';
+		require_once CTC_CHAT_PLUGIN_DIR . 'includes/class-ctc-chat-button-display.php';
+		require_once CTC_CHAT_PLUGIN_DIR . 'includes/class-ctc-chat-shortcodes.php';
 
 		// Public facing.
-		require_once CTC_PLUGIN_DIR . 'public/class-ctc-public.php';
+		require_once CTC_CHAT_PLUGIN_DIR . 'public/class-ctc-chat-public.php';
 	}
 
 	/**
@@ -75,10 +75,10 @@ class Click_To_Chat {
 	 */
 	private function init_hooks() {
 		// Initialize classes.
-		new CTC_Admin();
-		new CTC_Settings();
-		new CTC_Button_Display();
-		new CTC_Shortcodes();
-		new CTC_Public();
+		new CTC_Chat_Admin();
+		new CTC_Chat_Settings();
+		new CTC_Chat_Button_Display();
+		new CTC_Chat_Shortcodes();
+		new CTC_Chat_Public();
 	}
 }

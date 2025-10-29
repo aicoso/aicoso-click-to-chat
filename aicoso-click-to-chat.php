@@ -34,10 +34,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 // Define plugin constants.
-define( 'CTC_VERSION', '1.0.0' );
-define( 'CTC_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
-define( 'CTC_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
-define( 'CTC_PLUGIN_BASENAME', plugin_basename( __FILE__ ) );
+define( 'CTC_CHAT_VERSION', '1.0.0' );
+define( 'CTC_CHAT_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
+define( 'CTC_CHAT_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
+define( 'CTC_CHAT_PLUGIN_BASENAME', plugin_basename( __FILE__ ) );
 
 // Declare HPOS compatibility.
 add_action(
@@ -54,9 +54,9 @@ add_action(
  *
  * @return bool True if WooCommerce is active, false otherwise.
  */
-function ctc_check_woocommerce() {
+function ctc_chat_check_woocommerce() {
 	if ( ! class_exists( 'WooCommerce' ) ) {
-		add_action( 'admin_notices', 'ctc_woocommerce_missing_notice' );
+		add_action( 'admin_notices', 'ctc_chat_woocommerce_missing_notice' );
 		return false;
 	}
 	return true;
@@ -65,7 +65,7 @@ function ctc_check_woocommerce() {
 /**
  * Admin notice for missing WooCommerce
  */
-function ctc_woocommerce_missing_notice() {
+function ctc_chat_woocommerce_missing_notice() {
 	?>
 	<div class="error">
 		<p><?php esc_html_e( 'Click to Chat requires WooCommerce to be installed and active.', 'aicoso-click-to-chat' ); ?></p>
@@ -74,24 +74,24 @@ function ctc_woocommerce_missing_notice() {
 }
 
 // Load the core plugin class.
-require_once CTC_PLUGIN_DIR . 'includes/class-ctc-click-to-chat.php';
+require_once CTC_CHAT_PLUGIN_DIR . 'includes/class-ctc-chat-click-to-chat.php';
 
 /**
  * Main function to instantiate the plugin
  *
- * @return Click_To_Chat
+ * @return CTC_Chat_Click_To_Chat
  */
-function ctc_plugin() {
-	return Click_To_Chat::get_instance();
+function ctc_chat_plugin() {
+	return CTC_Chat_Click_To_Chat::get_instance();
 }
 
 // Initialize the plugin.
-add_action( 'plugins_loaded', 'ctc_plugin', 10 );
+add_action( 'plugins_loaded', 'ctc_chat_plugin', 10 );
 
 /**
  * Register activation hook
  */
-function ctc_activate() {
+function ctc_chat_activate() {
 	// Add default settings.
 	$default_settings = array(
 		'plugin_enabled'    => true,
@@ -141,14 +141,14 @@ function ctc_activate() {
 		),
 	);
 
-	update_option( 'ctc_settings', $default_settings );
+	update_option( 'ctc_chat_settings', $default_settings );
 }
-register_activation_hook( __FILE__, 'ctc_activate' );
+register_activation_hook( __FILE__, 'ctc_chat_activate' );
 
 /**
  * Register deactivation hook
  */
-function ctc_deactivate() {
+function ctc_chat_deactivate() {
 	// Nothing to do here yet.
 }
-register_deactivation_hook( __FILE__, 'ctc_deactivate' );
+register_deactivation_hook( __FILE__, 'ctc_chat_deactivate' );

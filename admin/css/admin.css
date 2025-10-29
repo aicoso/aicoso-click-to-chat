@@ -7,25 +7,25 @@
    BASE LAYOUT
    ============================================ */
 
-.ctc-admin-container {
+.ctc-chat-admin-container {
     max-width: 1200px;
     margin: 20px auto;
 }
 
-.ctc-admin-header {
+.ctc-chat-admin-header {
     display: flex;
     align-items: center;
     margin-bottom: 20px;
 }
 
-.ctc-admin-logo {
+.ctc-chat-admin-logo {
     width: 32px;
     height: 32px;
     margin-right: 12px;
     font-size: 32px;
 }
 
-.ctc-admin-heading {
+.ctc-chat-admin-heading {
     margin: 0;
     font-size: 24px;
     font-weight: 600;
@@ -36,7 +36,7 @@
    INSTRUCTIONS BANNER
    ============================================ */
 
-.ctc-instructions-banner {
+.ctc-chat-instructions-banner {
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     color: white;
     padding: 25px;
@@ -44,7 +44,7 @@
     margin: 20px 0;
 }
 
-.ctc-instructions-banner h2 {
+.ctc-chat-instructions-banner h2 {
     color: white;
     margin: 0 0 10px 0;
     font-size: 20px;
@@ -53,30 +53,30 @@
     gap: 10px;
 }
 
-.ctc-instructions-banner h2 .dashicons {
+.ctc-chat-instructions-banner h2 .dashicons {
     font-size: 24px;
     width: 24px;
     height: 24px;
 }
 
-.ctc-instructions-banner p {
+.ctc-chat-instructions-banner p {
     color: rgba(255,255,255,0.95);
     margin: 0 0 15px 0;
 }
 
-.ctc-quick-steps {
+.ctc-chat-quick-steps {
     display: flex;
     gap: 30px;
     margin-top: 15px;
 }
 
-.ctc-step {
+.ctc-chat-step {
     display: flex;
     align-items: center;
     gap: 10px;
 }
 
-.ctc-step-number {
+.ctc-chat-step-number {
     background: rgba(255,255,255,0.2);
     color: white;
     width: 25px;
@@ -89,7 +89,7 @@
     font-size: 12px;
 }
 
-.ctc-step span:last-child {
+.ctc-chat-step span:last-child {
     color: rgba(255,255,255,0.95);
     font-size: 14px;
 }
@@ -98,7 +98,7 @@
    WARNING BOX
    ============================================ */
 
-.ctc-admin-warning-box {
+.ctc-chat-admin-warning-box {
     background: #fff8e5;
     border-left: 4px solid #f0ad4e;
     padding: 15px 20px;
@@ -106,42 +106,42 @@
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
-.ctc-warning-item {
+.ctc-chat-warning-item {
     display: flex;
     align-items: flex-start;
     gap: 12px;
     margin-bottom: 12px;
 }
 
-.ctc-warning-item:last-child {
+.ctc-chat-warning-item:last-child {
     margin-bottom: 0;
 }
 
-.ctc-warning-icon {
+.ctc-chat-warning-icon {
     font-size: 20px;
     flex-shrink: 0;
     line-height: 1;
 }
 
-.ctc-warning-content {
+.ctc-chat-warning-content {
     flex: 1;
     color: #856404;
     font-size: 14px;
     line-height: 1.6;
 }
 
-.ctc-warning-content strong {
+.ctc-chat-warning-content strong {
     color: #856404;
     font-weight: 600;
 }
 
-.ctc-warning-content a {
+.ctc-chat-warning-content a {
     color: #d9534f;
     text-decoration: none;
     font-weight: 500;
 }
 
-.ctc-warning-content a:hover {
+.ctc-chat-warning-content a:hover {
     text-decoration: underline;
 }
 
@@ -149,8 +149,8 @@
    CARD SYSTEM (Numbers, Templates, etc.)
    ============================================ */
 
-.ctc-number-card,
-.ctc-template-card {
+.ctc-chat-number-card,
+.ctc-chat-template-card {
     background: white;
     border: 1px solid #e0e0e0;
     border-radius: 8px;
@@ -159,13 +159,13 @@
     transition: box-shadow 0.2s;
 }
 
-.ctc-number-card:hover,
-.ctc-template-card:hover {
+.ctc-chat-number-card:hover,
+.ctc-chat-template-card:hover {
     box-shadow: 0 2px 8px rgba(0,0,0,0.1);
 }
 
-.ctc-number-header,
-.ctc-template-header {
+.ctc-chat-number-header,
+.ctc-chat-template-header {
     background: linear-gradient(135deg, #f5f7fa 0%, #e9ecef 100%);
     padding: 15px 20px;
     border-bottom: 1px solid #dee2e6;
@@ -174,36 +174,36 @@
     align-items: center;
 }
 
-.ctc-number-title-section {
+.ctc-chat-number-title-section {
     display: flex;
     align-items: center;
     gap: 12px;
     flex: 1;
 }
 
-.ctc-number-icon,
-.ctc-template-icon {
+.ctc-chat-number-icon,
+.ctc-chat-template-icon {
     font-size: 20px;
     width: 20px;
     height: 20px;
     color: #25D366;
 }
 
-.ctc-number-title,
-.ctc-template-title {
+.ctc-chat-number-title,
+.ctc-chat-template-title {
     margin: 0;
     font-size: 16px;
     font-weight: 600;
     color: #333;
 }
 
-.ctc-number-actions {
+.ctc-chat-number-actions {
     display: flex;
     gap: 10px;
 }
 
-.ctc-number-toggle,
-.ctc-number-delete {
+.ctc-chat-number-toggle,
+.ctc-chat-number-delete {
     background: none;
     border: none;
     cursor: pointer;
@@ -214,31 +214,31 @@
     align-items: center;
 }
 
-.ctc-number-toggle:hover {
+.ctc-chat-number-toggle:hover {
     color: #25D366;
 }
 
-.ctc-number-delete:hover {
+.ctc-chat-number-delete:hover {
     color: #dc3232;
 }
 
-.ctc-number-actions .dashicons {
+.ctc-chat-number-actions .dashicons {
     font-size: 18px;
     width: 18px;
     height: 18px;
 }
 
-.ctc-number-body,
-.ctc-template-body {
+.ctc-chat-number-body,
+.ctc-chat-template-body {
     padding: 20px;
     display: block;
 }
 
-.ctc-number-card.collapsed .ctc-number-body {
+.ctc-chat-number-card.collapsed .ctc-chat-number-body {
     display: none;
 }
 
-.ctc-number-card.collapsed .ctc-number-toggle .dashicons:before {
+.ctc-chat-number-card.collapsed .ctc-chat-number-toggle .dashicons:before {
     content: "\f140";
 }
 
@@ -246,22 +246,22 @@
    FORM FIELDS SYSTEM
    ============================================ */
 
-.ctc-fields-grid {
+.ctc-chat-fields-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 20px;
     margin-bottom: 20px;
 }
 
-.ctc-field-group {
+.ctc-chat-field-group {
     margin-bottom: 20px;
 }
 
-.ctc-field-group.ctc-full-width {
+.ctc-chat-field-group.ctc-chat-full-width {
     grid-column: span 2;
 }
 
-.ctc-field-label {
+.ctc-chat-field-label {
     display: block;
     margin-bottom: 8px;
     font-weight: 500;
@@ -269,7 +269,7 @@
     color: #333;
 }
 
-.ctc-field-label .dashicons {
+.ctc-chat-field-label .dashicons {
     font-size: 16px;
     width: 16px;
     height: 16px;
@@ -278,12 +278,12 @@
     color: #25D366;
 }
 
-.ctc-input,
-.ctc-textarea,
-.ctc-field-group input[type="text"],
-.ctc-field-group input[type="number"],
-.ctc-field-group select,
-.ctc-field-group textarea {
+.ctc-chat-input,
+.ctc-chat-textarea,
+.ctc-chat-field-group input[type="text"],
+.ctc-chat-field-group input[type="number"],
+.ctc-chat-field-group select,
+.ctc-chat-field-group textarea {
     width: 100%;
     padding: 8px 12px;
     border: 1px solid #ddd;
@@ -292,24 +292,24 @@
     transition: border-color 0.2s;
 }
 
-.ctc-input:focus,
-.ctc-textarea:focus,
-.ctc-field-group input[type="text"]:focus,
-.ctc-field-group input[type="number"]:focus,
-.ctc-field-group select:focus,
-.ctc-field-group textarea:focus {
+.ctc-chat-input:focus,
+.ctc-chat-textarea:focus,
+.ctc-chat-field-group input[type="text"]:focus,
+.ctc-chat-field-group input[type="number"]:focus,
+.ctc-chat-field-group select:focus,
+.ctc-chat-field-group textarea:focus {
     outline: none;
     border-color: #25D366;
     box-shadow: 0 0 0 3px rgba(37, 211, 102, 0.1);
 }
 
-.ctc-textarea {
+.ctc-chat-textarea {
     resize: vertical;
     font-family: inherit;
     min-height: 80px;
 }
 
-.ctc-field-help {
+.ctc-chat-field-help {
     display: block;
     margin-top: 5px;
     font-size: 12px;
@@ -321,8 +321,8 @@
    CHECKBOX & RADIO OPTIONS
    ============================================ */
 
-.ctc-checkbox-option,
-.ctc-radio-option {
+.ctc-chat-checkbox-option,
+.ctc-chat-radio-option {
     display: flex;
     align-items: center;
     gap: 8px;
@@ -330,17 +330,17 @@
     margin-bottom: 8px;
 }
 
-.ctc-checkbox-option input[type="checkbox"],
-.ctc-radio-option input[type="radio"] {
+.ctc-chat-checkbox-option input[type="checkbox"],
+.ctc-chat-radio-option input[type="radio"] {
     margin: 0;
 }
 
-.ctc-checkbox-option span,
-.ctc-radio-option span {
+.ctc-chat-checkbox-option span,
+.ctc-chat-radio-option span {
     font-weight: 500;
 }
 
-.ctc-default-section {
+.ctc-chat-default-section {
     background: #f8f9fa;
     padding: 15px;
     border-radius: 6px;
@@ -351,13 +351,13 @@
    ASSIGNMENTS SECTION
    ============================================ */
 
-.ctc-assignments-section {
+.ctc-chat-assignments-section {
     margin-top: 30px;
     padding-top: 30px;
     border-top: 2px solid #f0f0f0;
 }
 
-.ctc-section-title {
+.ctc-chat-section-title {
     display: flex;
     align-items: center;
     gap: 8px;
@@ -367,14 +367,14 @@
     color: #333;
 }
 
-.ctc-section-title .dashicons {
+.ctc-chat-section-title .dashicons {
     color: #25D366;
     font-size: 18px;
     width: 18px;
     height: 18px;
 }
 
-.ctc-assignments-grid {
+.ctc-chat-assignments-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 20px;
@@ -384,12 +384,12 @@
    BUTTONS
    ============================================ */
 
-.ctc-add-number-section {
+.ctc-chat-add-number-section {
     margin: 20px 0;
     text-align: center;
 }
 
-.ctc-add-btn {
+.ctc-chat-add-btn {
     background: #25D366;
     color: white;
     border: none;
@@ -405,19 +405,19 @@
     gap: 8px;
 }
 
-.ctc-add-btn:hover {
+.ctc-chat-add-btn:hover {
     background: #20bd5a;
     transform: translateY(-2px);
     box-shadow: 0 4px 8px rgba(37, 211, 102, 0.4);
 }
 
-.ctc-add-btn .dashicons {
+.ctc-chat-add-btn .dashicons {
     font-size: 18px;
     width: 18px;
     height: 18px;
 }
 
-.ctc-preview-btn {
+.ctc-chat-preview-btn {
     background: #f8f9fa;
     color: #333;
     border: 1px solid #dee2e6;
@@ -431,12 +431,12 @@
     font-size: 13px;
 }
 
-.ctc-preview-btn:hover {
+.ctc-chat-preview-btn:hover {
     background: #e9ecef;
     border-color: #adb5bd;
 }
 
-.ctc-preview-btn .dashicons {
+.ctc-chat-preview-btn .dashicons {
     font-size: 16px;
     width: 16px;
     height: 16px;
@@ -446,7 +446,7 @@
    SAVE SECTION
    ============================================ */
 
-.ctc-save-section {
+.ctc-chat-save-section {
     margin: 40px 0 20px;
     text-align: center;
     padding: 30px;
@@ -455,8 +455,8 @@
     border: 1px solid #e0e0e0;
 }
 
-.ctc-save-btn,
-.ctc-btn {
+.ctc-chat-save-btn,
+.ctc-chat-btn {
     background: #25D366;
     color: white;
     border: none;
@@ -472,22 +472,22 @@
     gap: 8px;
 }
 
-.ctc-save-btn:hover,
-.ctc-btn:hover {
+.ctc-chat-save-btn:hover,
+.ctc-chat-btn:hover {
     background: #20bd5a;
     transform: translateY(-2px);
     box-shadow: 0 4px 12px rgba(37, 211, 102, 0.4);
 }
 
-.ctc-save-btn .dashicons,
-.ctc-btn .dashicons {
+.ctc-chat-save-btn .dashicons,
+.ctc-chat-btn .dashicons {
     font-size: 18px;
     width: 18px;
     height: 18px;
     line-height: 18px;
 }
 
-.ctc-save-note {
+.ctc-chat-save-note {
     margin: 12px 0 0;
     color: #666;
     font-size: 13px;
@@ -497,29 +497,29 @@
    TEMPLATES PAGE
    ============================================ */
 
-.ctc-templates-wrapper {
+.ctc-chat-templates-wrapper {
     display: grid;
     gap: 20px;
     margin: 20px 0;
 }
 
-.ctc-template-description {
+.ctc-chat-template-description {
     color: #666;
     margin: 0 0 20px 0;
     font-size: 13px;
 }
 
-.ctc-placeholders-section {
+.ctc-chat-placeholders-section {
     margin-bottom: 20px;
 }
 
-.ctc-placeholders-grid {
+.ctc-chat-placeholders-grid {
     display: flex;
     flex-wrap: wrap;
     gap: 8px;
 }
 
-.ctc-placeholder-tag {
+.ctc-chat-placeholder-tag {
     background: #e8f5e9;
     color: #2e7d32;
     padding: 4px 10px;
@@ -531,14 +531,14 @@
     border: 1px solid #c8e6c9;
 }
 
-.ctc-placeholder-tag:hover {
+.ctc-chat-placeholder-tag:hover {
     background: #25D366;
     color: white;
     border-color: #25D366;
     transform: translateY(-1px);
 }
 
-.ctc-template-textarea {
+.ctc-chat-template-textarea {
     width: 100%;
     padding: 12px;
     border: 1px solid #ddd;
@@ -551,18 +551,18 @@
     transition: border-color 0.2s;
 }
 
-.ctc-template-textarea:focus {
+.ctc-chat-template-textarea:focus {
     outline: none;
     border-color: #25D366;
     box-shadow: 0 0 0 3px rgba(37, 211, 102, 0.1);
 }
 
-.ctc-template-actions {
+.ctc-chat-template-actions {
     display: flex;
     gap: 10px;
 }
 
-.ctc-template-preview {
+.ctc-chat-template-preview {
     margin-top: 15px;
     padding: 15px;
     background: #f8f9fa;
@@ -574,7 +574,7 @@
     line-height: 1.5;
 }
 
-.ctc-template-preview.error {
+.ctc-chat-template-preview.error {
     background: #ffebee;
     border-color: #ffcdd2;
     color: #c62828;
@@ -584,7 +584,7 @@
    SETTINGS PAGE
    ============================================ */
 
-.ctc-settings-nav {
+.ctc-chat-settings-nav {
     display: flex;
     gap: 10px;
     margin-bottom: 30px;
@@ -592,7 +592,7 @@
     padding-bottom: 0;
 }
 
-.ctc-settings-nav-item {
+.ctc-chat-settings-nav-item {
     background: transparent;
     border: none;
     padding: 12px 20px;
@@ -608,36 +608,36 @@
     margin-bottom: -2px;
 }
 
-.ctc-settings-nav-item:hover {
+.ctc-chat-settings-nav-item:hover {
     color: #495057;
     background: #f8f9fa;
 }
 
-.ctc-settings-nav-item.active {
+.ctc-chat-settings-nav-item.active {
     color: #667eea;
     border-bottom-color: #667eea;
     background: transparent;
 }
 
-.ctc-settings-nav-item .dashicons {
+.ctc-chat-settings-nav-item .dashicons {
     font-size: 18px;
     width: 18px;
     height: 18px;
 }
 
-.ctc-settings-panel {
+.ctc-chat-settings-panel {
     display: none;
 }
 
-.ctc-settings-panel.active {
+.ctc-chat-settings-panel.active {
     display: block;
 }
 
-.ctc-form-group {
+.ctc-chat-form-group {
     margin-bottom: 20px;
 }
 
-.ctc-form-group label {
+.ctc-chat-form-group label {
     display: block;
     margin-bottom: 8px;
     font-weight: 500;
@@ -645,19 +645,19 @@
     color: #333;
 }
 
-.ctc-form-group input[type="checkbox"] {
+.ctc-chat-form-group input[type="checkbox"] {
     margin-right: 8px;
     vertical-align: middle;
 }
 
-.ctc-field-description {
+.ctc-chat-field-description {
     color: #666;
     font-size: 12px;
     margin-top: 5px;
     line-height: 1.5;
 }
 
-.ctc-color-field {
+.ctc-chat-color-field {
     width: 100px !important;
 }
 
@@ -665,54 +665,54 @@
    SHORTCODE PAGE
    ============================================ */
 
-.ctc-builder-wrapper {
+.ctc-chat-builder-wrapper {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 20px;
 }
 
-.ctc-config-panel,
-.ctc-preview-panel {
+.ctc-chat-config-panel,
+.ctc-chat-preview-panel {
     background: white;
     border: 1px solid #e0e0e0;
     border-radius: 8px;
     padding: 20px;
 }
 
-.ctc-panel-title {
+.ctc-chat-panel-title {
     margin: 0 0 20px 0;
     padding-bottom: 10px;
     border-bottom: 2px solid #f0f0f0;
     font-size: 18px;
 }
 
-.ctc-field-section {
+.ctc-chat-field-section {
     margin-bottom: 25px;
 }
 
-.ctc-field-section h3 {
+.ctc-chat-field-section h3 {
     font-size: 14px;
     font-weight: 600;
     margin-bottom: 12px;
     color: #333;
 }
 
-.ctc-button-types {
+.ctc-chat-button-types {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 10px;
 }
 
-.ctc-type-card {
+.ctc-chat-type-card {
     display: block;
     cursor: pointer;
 }
 
-.ctc-type-card input {
+.ctc-chat-type-card input {
     display: none;
 }
 
-.ctc-type-card-inner {
+.ctc-chat-type-card-inner {
     border: 2px solid #e0e0e0;
     border-radius: 6px;
     padding: 12px;
@@ -723,40 +723,40 @@
     align-items: center;
 }
 
-.ctc-type-card input:checked + .ctc-type-card-inner {
+.ctc-chat-type-card input:checked + .ctc-chat-type-card-inner {
     border-color: #25D366;
     background: #f0fff4;
 }
 
-.ctc-type-icon {
+.ctc-chat-type-icon {
     font-size: 24px;
     margin-bottom: 5px;
 }
 
-.ctc-type-label {
+.ctc-chat-type-label {
     font-weight: 500;
     display: block;
     margin-bottom: 2px;
 }
 
-.ctc-type-card small {
+.ctc-chat-type-card small {
     font-size: 11px;
     color: #666;
 }
 
-.ctc-color-fields,
-.ctc-size-align-fields {
+.ctc-chat-color-fields,
+.ctc-chat-size-align-fields {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 10px;
 }
 
-.ctc-product-id-field {
+.ctc-chat-product-id-field {
     margin-top: 10px;
     margin-left: 25px;
 }
 
-.ctc-collapsible {
+.ctc-chat-collapsible {
     cursor: pointer;
     user-select: none;
     display: flex;
@@ -764,35 +764,35 @@
     gap: 8px;
 }
 
-.ctc-collapsible:hover {
+.ctc-chat-collapsible:hover {
     color: #25D366;
 }
 
-.ctc-collapsible.active .dashicons {
+.ctc-chat-collapsible.active .dashicons {
     transform: rotate(90deg);
 }
 
-.ctc-advanced-content {
+.ctc-chat-advanced-content {
     margin-top: 15px;
 }
 
-.ctc-preview-section,
-.ctc-shortcode-section,
-.ctc-examples-section,
-.ctc-help-section {
+.ctc-chat-preview-section,
+.ctc-chat-shortcode-section,
+.ctc-chat-examples-section,
+.ctc-chat-help-section {
     margin-bottom: 25px;
 }
 
-.ctc-preview-section h3,
-.ctc-shortcode-section h3,
-.ctc-examples-section h3,
-.ctc-help-section h3 {
+.ctc-chat-preview-section h3,
+.ctc-chat-shortcode-section h3,
+.ctc-chat-examples-section h3,
+.ctc-chat-help-section h3 {
     font-size: 14px;
     font-weight: 600;
     margin-bottom: 12px;
 }
 
-.ctc-preview-area {
+.ctc-chat-preview-area {
     background: #f8f9fa;
     padding: 30px;
     border-radius: 6px;
@@ -803,7 +803,7 @@
     justify-content: center;
 }
 
-.ctc-shortcode-box {
+.ctc-chat-shortcode-box {
     display: flex;
     align-items: center;
     background: #f8f9fa;
@@ -813,13 +813,13 @@
     gap: 10px;
 }
 
-.ctc-shortcode-box code {
+.ctc-chat-shortcode-box code {
     flex: 1;
     font-family: monospace;
     font-size: 13px;
 }
 
-.ctc-copy-btn {
+.ctc-chat-copy-btn {
     background: #25D366;
     color: white;
     border: none;
@@ -832,46 +832,46 @@
     transition: background 0.2s;
 }
 
-.ctc-copy-btn:hover {
+.ctc-chat-copy-btn:hover {
     background: #20bd5a;
 }
 
-.ctc-copy-success {
+.ctc-chat-copy-success {
     margin-top: 8px;
     color: #25D366;
     font-weight: 500;
     font-size: 13px;
 }
 
-.ctc-example-list {
+.ctc-chat-example-list {
     background: #f8f9fa;
     padding: 15px;
     border-radius: 6px;
 }
 
-.ctc-example {
+.ctc-chat-example {
     margin-bottom: 10px;
     font-size: 13px;
 }
 
-.ctc-example:last-child {
+.ctc-chat-example:last-child {
     margin-bottom: 0;
 }
 
-.ctc-example code {
+.ctc-chat-example code {
     background: white;
     padding: 2px 6px;
     border-radius: 3px;
     font-size: 12px;
 }
 
-.ctc-help-list {
+.ctc-chat-help-list {
     margin: 0;
     padding-left: 0;
     list-style: none;
 }
 
-.ctc-help-list li {
+.ctc-chat-help-list li {
     margin-bottom: 8px;
     font-size: 13px;
 }
@@ -880,21 +880,21 @@
    VISIBILITY HELPERS
    ============================================ */
 
-.ctc-template-preview.ctc-hidden,
-.ctc-product-options.ctc-hidden,
-.ctc-product-id-field.ctc-hidden,
-.ctc-advanced-content.ctc-hidden,
-.ctc-copy-success.ctc-hidden,
-.ctc-cart-position-row.ctc-hidden,
-.ctc-checkout-position-row.ctc-hidden {
+.ctc-chat-template-preview.ctc-chat-hidden,
+.ctc-chat-product-options.ctc-chat-hidden,
+.ctc-chat-product-id-field.ctc-chat-hidden,
+.ctc-chat-advanced-content.ctc-chat-hidden,
+.ctc-chat-copy-success.ctc-chat-hidden,
+.ctc-chat-cart-position-row.ctc-chat-hidden,
+.ctc-chat-checkout-position-row.ctc-chat-hidden {
     display: none;
 }
 
-.ctc-template-preview.ctc-visible,
-.ctc-product-options.ctc-visible,
-.ctc-product-id-field.ctc-visible,
-.ctc-advanced-content.ctc-visible,
-.ctc-copy-success.ctc-visible {
+.ctc-chat-template-preview.ctc-chat-visible,
+.ctc-chat-product-options.ctc-chat-visible,
+.ctc-chat-product-id-field.ctc-chat-visible,
+.ctc-chat-advanced-content.ctc-chat-visible,
+.ctc-chat-copy-success.ctc-chat-visible {
     display: block;
 }
 
@@ -902,22 +902,22 @@
    SELECT2 OVERRIDES
    ============================================ */
 
-.ctc-page-select,
-.ctc-post-select,
-.ctc-category-select,
-.ctc-tag-select,
-.ctc-product-select,
-.ctc-number-card .select2-container {
+.ctc-chat-page-select,
+.ctc-chat-post-select,
+.ctc-chat-category-select,
+.ctc-chat-tag-select,
+.ctc-chat-product-select,
+.ctc-chat-number-card .select2-container {
     width: 100% !important;
 }
 
-.ctc-number-card .select2-container--default .select2-selection--multiple {
+.ctc-chat-number-card .select2-container--default .select2-selection--multiple {
     border: 1px solid #ddd;
     border-radius: 4px;
     min-height: 38px;
 }
 
-.ctc-number-card .select2-container--default.select2-container--focus .select2-selection--multiple {
+.ctc-chat-number-card .select2-container--default.select2-container--focus .select2-selection--multiple {
     border-color: #25D366;
     box-shadow: 0 0 0 3px rgba(37, 211, 102, 0.1);
 }
@@ -926,18 +926,18 @@
    CATALOG MODE
    ============================================ */
 
-.ctc-catalog-mode-active {
+.ctc-chat-catalog-mode-active {
     position: relative;
     opacity: 0.6;
 }
 
-.ctc-catalog-mode-active label {
+.ctc-chat-catalog-mode-active label {
     cursor: not-allowed;
     position: relative;
     padding-left: 25px;
 }
 
-.ctc-catalog-mode-active label::before {
+.ctc-chat-catalog-mode-active label::before {
     content: '✓';
     position: absolute;
     left: 2px;
@@ -957,7 +957,7 @@
     line-height: 1;
 }
 
-.ctc-catalog-mode-active input[type="checkbox"] {
+.ctc-chat-catalog-mode-active input[type="checkbox"] {
     opacity: 0;
     cursor: not-allowed;
 }
@@ -967,47 +967,47 @@
    ============================================ */
 
 @media (max-width: 900px) {
-    .ctc-quick-steps {
+    .ctc-chat-quick-steps {
         flex-direction: column;
         gap: 10px;
     }
 
-    .ctc-fields-grid {
+    .ctc-chat-fields-grid {
         grid-template-columns: 1fr;
     }
 
-    .ctc-field-group.ctc-full-width {
+    .ctc-chat-field-group.ctc-chat-full-width {
         grid-column: span 1;
     }
 
-    .ctc-assignments-grid {
+    .ctc-chat-assignments-grid {
         grid-template-columns: 1fr;
     }
 
-    .ctc-settings-nav {
+    .ctc-chat-settings-nav {
         flex-wrap: wrap;
     }
 
-    .ctc-form-group input[type="text"],
-    .ctc-form-group input[type="number"],
-    .ctc-form-group select,
-    .ctc-form-group textarea {
+    .ctc-chat-form-group input[type="text"],
+    .ctc-chat-form-group input[type="number"],
+    .ctc-chat-form-group select,
+    .ctc-chat-form-group textarea {
         max-width: 100%;
     }
 
-    .ctc-builder-wrapper {
+    .ctc-chat-builder-wrapper {
         grid-template-columns: 1fr;
     }
 
-    .ctc-button-types {
+    .ctc-chat-button-types {
         grid-template-columns: 1fr;
     }
 
-    .ctc-placeholders-grid {
+    .ctc-chat-placeholders-grid {
         flex-direction: column;
     }
 
-    .ctc-template-actions {
+    .ctc-chat-template-actions {
         flex-direction: column;
     }
 }
@@ -1016,7 +1016,7 @@
    BUTTON PREVIEW STYLES
    ============================================ */
 
-.ctc-whatsapp-button {
+.ctc-chat-whatsapp-button {
     display: inline-flex;
     align-items: center;
     gap: 8px;
@@ -1028,32 +1028,32 @@
     box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
 
-.ctc-whatsapp-button:hover {
+.ctc-chat-whatsapp-button:hover {
     transform: translateY(-2px);
     box-shadow: 0 4px 8px rgba(0,0,0,0.15);
 }
 
-.ctc-button-size-small {
+.ctc-chat-button-size-small {
     padding: 8px 16px;
     font-size: 14px;
 }
 
-.ctc-button-size-large {
+.ctc-chat-button-size-large {
     padding: 16px 32px;
     font-size: 18px;
 }
 
-.ctc-whatsapp-icon svg {
+.ctc-chat-whatsapp-icon svg {
     width: 20px;
     height: 20px;
 }
 
-.ctc-button-size-small .ctc-whatsapp-icon svg {
+.ctc-chat-button-size-small .ctc-chat-whatsapp-icon svg {
     width: 16px;
     height: 16px;
 }
 
-.ctc-button-size-large .ctc-whatsapp-icon svg {
+.ctc-chat-button-size-large .ctc-chat-whatsapp-icon svg {
     width: 24px;
     height: 24px;
 }

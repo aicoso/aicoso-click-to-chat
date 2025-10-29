@@ -16,7 +16,7 @@ if ( ! defined( 'WPINC' ) ) {
 /**
  * Settings class.
  */
-class CTC_Settings {
+class CTC_Chat_Settings {
 
 	/**
 	 * Plugin settings
@@ -29,7 +29,7 @@ class CTC_Settings {
 	 * Constructor
 	 */
 	public function __construct() {
-		$this->settings = get_option( 'ctc_settings', array() );
+		$this->settings = get_option( 'ctc_chat_settings', array() );
 
 		// Initialize hooks.
 		$this->init_hooks();
@@ -40,13 +40,13 @@ class CTC_Settings {
 	 */
 	private function init_hooks() {
 		// Register AJAX handlers.
-		add_action( 'wp_ajax_ctc_get_setting', array( $this, 'ajax_get_setting' ) );
-		add_action( 'wp_ajax_ctc_search_products', array( $this, 'ajax_search_products' ) );
-		add_action( 'wp_ajax_ctc_search_categories', array( $this, 'ajax_search_categories' ) );
-		add_action( 'wp_ajax_ctc_search_pages', array( $this, 'ajax_search_pages' ) );
-		add_action( 'wp_ajax_ctc_search_posts', array( $this, 'ajax_search_posts' ) );
-		add_action( 'wp_ajax_ctc_search_tags', array( $this, 'ajax_search_tags' ) );
-		add_action( 'wp_ajax_ctc_preview_message', array( $this, 'ajax_preview_message' ) );
+		add_action( 'wp_ajax_ctc_chat_get_setting', array( $this, 'ajax_get_setting' ) );
+		add_action( 'wp_ajax_ctc_chat_search_products', array( $this, 'ajax_search_products' ) );
+		add_action( 'wp_ajax_ctc_chat_search_categories', array( $this, 'ajax_search_categories' ) );
+		add_action( 'wp_ajax_ctc_chat_search_pages', array( $this, 'ajax_search_pages' ) );
+		add_action( 'wp_ajax_ctc_chat_search_posts', array( $this, 'ajax_search_posts' ) );
+		add_action( 'wp_ajax_ctc_chat_search_tags', array( $this, 'ajax_search_tags' ) );
+		add_action( 'wp_ajax_ctc_chat_preview_message', array( $this, 'ajax_preview_message' ) );
 	}
 
 	/**
@@ -78,7 +78,7 @@ class CTC_Settings {
 	 */
 	public function ajax_get_setting() {
 		// Check nonce.
-		if ( ! check_ajax_referer( 'ctc_admin_nonce', 'nonce', false ) ) {
+		if ( ! check_ajax_referer( 'ctc_chat_admin_nonce', 'nonce', false ) ) {
 			wp_send_json_error(
 				array(
 					'message' => esc_html__( 'Security check failed.', 'aicoso-click-to-chat' ),
@@ -113,7 +113,7 @@ class CTC_Settings {
 	 */
 	public function ajax_search_products() {
 		// Check nonce.
-		if ( ! check_ajax_referer( 'ctc_admin_nonce', 'nonce', false ) ) {
+		if ( ! check_ajax_referer( 'ctc_chat_admin_nonce', 'nonce', false ) ) {
 			wp_send_json_error(
 				array(
 					'message' => esc_html__( 'Security check failed.', 'aicoso-click-to-chat' ),
@@ -167,7 +167,7 @@ class CTC_Settings {
 	 */
 	public function ajax_search_categories() {
 		// Check nonce.
-		if ( ! check_ajax_referer( 'ctc_admin_nonce', 'nonce', false ) ) {
+		if ( ! check_ajax_referer( 'ctc_chat_admin_nonce', 'nonce', false ) ) {
 			wp_send_json_error(
 				array(
 					'message' => esc_html__( 'Security check failed.', 'aicoso-click-to-chat' ),
@@ -223,7 +223,7 @@ class CTC_Settings {
 	 */
 	public function ajax_search_pages() {
 		// Check nonce.
-		if ( ! check_ajax_referer( 'ctc_admin_nonce', 'nonce', false ) ) {
+		if ( ! check_ajax_referer( 'ctc_chat_admin_nonce', 'nonce', false ) ) {
 			wp_send_json_error(
 				array(
 					'message' => esc_html__( 'Security check failed.', 'aicoso-click-to-chat' ),
@@ -277,7 +277,7 @@ class CTC_Settings {
 	 */
 	public function ajax_search_posts() {
 		// Check nonce.
-		if ( ! check_ajax_referer( 'ctc_admin_nonce', 'nonce', false ) ) {
+		if ( ! check_ajax_referer( 'ctc_chat_admin_nonce', 'nonce', false ) ) {
 			wp_send_json_error(
 				array(
 					'message' => esc_html__( 'Security check failed.', 'aicoso-click-to-chat' ),
@@ -331,7 +331,7 @@ class CTC_Settings {
 	 */
 	public function ajax_search_tags() {
 		// Check nonce.
-		if ( ! check_ajax_referer( 'ctc_admin_nonce', 'nonce', false ) ) {
+		if ( ! check_ajax_referer( 'ctc_chat_admin_nonce', 'nonce', false ) ) {
 			wp_send_json_error(
 				array(
 					'message' => esc_html__( 'Security check failed.', 'aicoso-click-to-chat' ),
@@ -387,7 +387,7 @@ class CTC_Settings {
 	 */
 	public function ajax_preview_message() {
 		// Check nonce.
-		if ( ! check_ajax_referer( 'ctc_admin_nonce', 'nonce', false ) ) {
+		if ( ! check_ajax_referer( 'ctc_chat_admin_nonce', 'nonce', false ) ) {
 			wp_send_json_error(
 				array(
 					'message' => esc_html__( 'Security check failed.', 'aicoso-click-to-chat' ),
@@ -665,4 +665,4 @@ class CTC_Settings {
 }
 
 // Initialize the class.
-new CTC_Settings();
+new CTC_Chat_Settings();

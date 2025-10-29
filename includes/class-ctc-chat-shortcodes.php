@@ -17,7 +17,7 @@ if ( ! defined( 'WPINC' ) ) {
 /**
  * Shortcodes class.
  */
-class CTC_Shortcodes {
+class CTC_Chat_Shortcodes {
 
 	/**
 	 * Plugin settings
@@ -29,7 +29,7 @@ class CTC_Shortcodes {
 	/**
 	 * WhatsApp Link Generator instance
 	 *
-	 * @var CTC_WhatsApp_Link_Generator
+	 * @var CTC_Chat_WhatsApp_Link_Generator
 	 */
 	private $link_generator;
 
@@ -37,8 +37,8 @@ class CTC_Shortcodes {
 	 * Constructor
 	 */
 	public function __construct() {
-		$this->settings = get_option( 'ctc_settings', array() );
-		$this->link_generator = new CTC_WhatsApp_Link_Generator();
+		$this->settings = get_option( 'ctc_chat_settings', array() );
+		$this->link_generator = new CTC_Chat_WhatsApp_Link_Generator();
 
 		// Register shortcodes.
 		$this->register_shortcodes();
@@ -48,7 +48,7 @@ class CTC_Shortcodes {
 	 * Register shortcodes
 	 */
 	private function register_shortcodes() {
-		add_shortcode( 'ctc_button', array( $this, 'whatsapp_button_shortcode' ) );
+		add_shortcode( 'ctc_chat_button', array( $this, 'whatsapp_button_shortcode' ) );
 		// Keep old shortcode for backward compatibility.
 		add_shortcode( 'whatsapp_button', array( $this, 'whatsapp_button_shortcode' ) );
 	}
@@ -105,20 +105,20 @@ class CTC_Shortcodes {
 			}
 		}
 
-		// If no valid product ID, try to get current page/cart info based on type.
-		if ( ! $product_id && 'product' === $atts['type'] ) {
-			// For product type shortcode when not on a product page and no product_id specified,
-			// we cannot proceed as we need a valid product to generate the message.
-			// Return a helpful comment for debugging (won't be visible in frontend).
-			return '<!-- CTC: Product shortcode requires product_id attribute when not on a product page -->';
-		}
+		// For non-product types, we don't need a product ID.
+		// Only require product_id for product type when not on a product page.
 
 		// Get the appropriate WhatsApp URL based on the shortcode type.
 		$whatsapp_url = '';
 
 		switch ( $atts['type'] ) {
 			case 'product':
-				$whatsapp_url = $this->link_generator->get_product_url( $product_id );
+				// For product type, if no product_id and not on product page, use floating URL as fallback
+				if ( ! $product_id ) {
+					$whatsapp_url = $this->link_generator->get_floating_url();
+				} else {
+					$whatsapp_url = $this->link_generator->get_product_url( $product_id );
+				}
 				break;
 
 			case 'shop':
@@ -184,7 +184,6 @@ class CTC_Shortcodes {
 			'ctc-whatsapp-button',
 			'ctc-button-' . $atts['type'],
 			'ctc-button-size-' . $atts['size'],
-			'ctc-button-align-' . $atts['align'],
 		);
 
 		if ( $show_icon ) {
@@ -199,7 +198,7 @@ class CTC_Shortcodes {
 		$class_attr = implode( ' ', $button_classes );
 
 		// Build container based on alignment.
-		$container_class = 'ctc-shortcode-container ctc-align-' . $atts['align'];
+		$container_class = 'ctc-shortcode-container';
 
 		// Build output HTML.
 		$output .= '<div class="' . esc_attr( $container_class ) . '">';
@@ -223,4 +222,4 @@ class CTC_Shortcodes {
 }
 
 // Initialize the class.
-new CTC_Shortcodes();
+new CTC_Chat_Shortcodes();
