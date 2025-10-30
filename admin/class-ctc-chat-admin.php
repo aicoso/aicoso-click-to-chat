@@ -180,7 +180,7 @@ class CTC_Chat_Admin {
 				'duplicate_name_error'   => esc_html__( 'This name is already being used. Please choose a different name.', 'aicoso-click-to-chat' ),
 				'loading_text'           => esc_html__( 'Loading...', 'aicoso-click-to-chat' ),
 				'preview_text'           => esc_html__( 'Preview', 'aicoso-click-to-chat' ),
-				'default_button_text'    => esc_html__( 'Chat with us', 'aicoso-click-to-chat' ),
+				'default_button_text'    => esc_html__( 'Order via WhatsApp', 'aicoso-click-to-chat' ),
 				'copy_success'           => esc_html__( 'Shortcode copied to clipboard!', 'aicoso-click-to-chat' ),
 				'copy_error'             => esc_html__( 'Failed to copy shortcode. Please select and copy manually.', 'aicoso-click-to-chat' ),
 				'select_products_text'   => esc_html__( 'Select products...', 'aicoso-click-to-chat' ),

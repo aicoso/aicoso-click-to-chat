@@ -151,9 +151,40 @@
      * Initialize color pickers
      */
     function initColorPickers() {
-        $('.ctc-chat-color-field').wpColorPicker();
+        $('.ctc-chat-color-field').each(function() {
+            const $input = $(this);
+            $input.wpColorPicker({
+                change: function(event, ui) {
+                    // Trigger the change event on the original input to update the preview
+                    $(event.target).trigger('change');
+                },
+                clear: function(event, ui) {
+                    // Trigger the change event when color is cleared
+                    $(event.target).trigger('change');
+                }
+            });
+        });
     }
-    
+
+    /**
+     * Initialize color pickers specifically for the shortcode generator
+     */
+    function initShortcodeColorPickers() {
+        // Initialize color pickers for shortcode generator fields with real-time preview
+        $('#ctc_chat_bg_color, #ctc_chat_text_color').wpColorPicker({
+            change: function(event, ui) {
+                // Immediately update the preview when color changes
+                generateImprovedShortcode();
+                updateImprovedPreview();
+            },
+            clear: function(event, ui) {
+                // Update the preview when color is cleared
+                generateImprovedShortcode();
+                updateImprovedPreview();
+            }
+        });
+    }
+
     /**
      * Initialize WhatsApp number management
      */
@@ -488,6 +519,9 @@
      */
     function initShortcodeGenerator() {
         // New improved shortcode builder
+
+        // Initialize color pickers for shortcode generator
+        initShortcodeColorPickers();
 
         // Handle button type selection
         $('input[name="button_type"]').on('change', function() {
