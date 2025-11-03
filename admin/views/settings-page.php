@@ -219,12 +219,7 @@ $floating_positions = $settings_helper->get_floating_position_options();
 						<input type="text" name="ctc_chat_button[text_color]" id="ctc_chat_button_text_color" value="<?php echo esc_attr( isset( $settings['button_settings']['text_color'] ) ? $settings['button_settings']['text_color'] : '#ffffff' ); ?>" class="ctc-chat-color-field">
 					</div>
 
-					<div class="ctc-chat-form-group">
-						<label for="ctc_chat_button_custom_css"><?php esc_html_e( 'Custom CSS', 'aicoso-click-to-chat' ); ?></label>
-						<textarea name="ctc_chat_button[custom_css]" id="ctc_chat_button_custom_css" rows="6" class="large-text code"><?php echo esc_textarea( isset( $settings['button_settings']['custom_css'] ) ? $settings['button_settings']['custom_css'] : '' ); ?></textarea>
-						<p class="ctc-chat-field-description"><?php esc_html_e( 'Add custom CSS for advanced button styling.', 'aicoso-click-to-chat' ); ?></p>
-					</div>
-				</div>
+									</div>
 			</div>
 		</div>
 

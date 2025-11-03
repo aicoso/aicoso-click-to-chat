@@ -101,7 +101,6 @@ function ctc_chat_activate() {
 			'icon'       => true,
 			'bg_color'   => '#25D366',
 			'text_color' => '#ffffff',
-			'custom_css' => '',
 		),
 		'single_product'    => array(
 			'enabled'  => true,
@@ -142,8 +141,31 @@ function ctc_chat_activate() {
 	);
 
 	update_option( 'ctc_chat_settings', $default_settings );
+
+	// Clean up any existing custom CSS data (removed in version 1.0.1)
+	ctc_chat_cleanup_custom_css();
 }
 register_activation_hook( __FILE__, 'ctc_chat_activate' );
+
+/**
+ * Clean up custom CSS data from existing installations
+ */
+function ctc_chat_cleanup_custom_css() {
+	$settings = get_option( 'ctc_chat_settings', array() );
+
+	// Remove custom_css from button_settings if it exists
+	if ( isset( $settings['button_settings']['custom_css'] ) ) {
+		unset( $settings['button_settings']['custom_css'] );
+		update_option( 'ctc_chat_settings', $settings );
+	}
+}
+
+// Run cleanup on plugin load for existing installations
+add_action( 'plugins_loaded', function() {
+	if ( is_admin() ) {
+		ctc_chat_cleanup_custom_css();
+	}
+});
 
 /**
  * Register deactivation hook

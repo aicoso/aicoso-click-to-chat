@@ -406,12 +406,8 @@ class CTC_Chat_Settings {
 
 		// Get template type and content.
 		$template_type = isset( $_POST['template_type'] ) ? sanitize_text_field( wp_unslash( $_POST['template_type'] ) ) : '';
-		// Use wp_unslash to handle slashes and stripslashes_deep for arrays.
-		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Sanitized on next line with wp_check_invalid_utf8.
-		$template_content = isset( $_POST['template_content'] ) ? wp_unslash( $_POST['template_content'] ) : '';
-
-		// Basic sanitization without encoding entities.
-		$template_content = wp_check_invalid_utf8( $template_content );
+		// Use wp_unslash to handle slashes and properly sanitize template content.
+		$template_content = isset( $_POST['template_content'] ) ? wp_kses_post( wp_unslash( $_POST['template_content'] ) ) : '';
 
 		if ( empty( $template_type ) || empty( $template_content ) ) {
 			wp_send_json_error(

@@ -50,6 +50,7 @@ class CTC_Chat_Shortcodes {
 	private function register_shortcodes() {
 		add_shortcode( 'ctc_chat_button', array( $this, 'whatsapp_button_shortcode' ) );
 		// Keep old shortcode for backward compatibility.
+		// @deprecated since 1.0.0 - use [ctc_chat_button] instead.
 		add_shortcode( 'whatsapp_button', array( $this, 'whatsapp_button_shortcode' ) );
 	}
 
@@ -64,6 +65,16 @@ class CTC_Chat_Shortcodes {
 		$plugin_enabled = isset( $this->settings['plugin_enabled'] ) ? $this->settings['plugin_enabled'] : true;
 		if ( ! $plugin_enabled ) {
 			return ''; // Return empty string if plugin is disabled.
+		}
+
+		// Check if old shortcode is being used by checking current post content.
+		if ( ! is_admin() && ! defined( 'CTC_CHAT_DEPRECATED_SHOWN' ) ) {
+			global $post;
+			if ( $post && has_shortcode( $post->post_content, 'whatsapp_button' ) ) {
+				define( 'CTC_CHAT_DEPRECATED_SHOWN', true );
+				// Log the usage for admin notice later.
+				set_transient( 'ctc_chat_deprecated_used', true, HOUR_IN_SECONDS );
+			}
 		}
 
 		// Extract and merge attributes with defaults.

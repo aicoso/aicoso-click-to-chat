@@ -49,9 +49,6 @@ class CTC_Chat_Public {
 		// Enqueue scripts and styles.
 		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_assets' ) );
 
-		// Add custom inline CSS.
-		add_action( 'wp_head', array( $this, 'add_custom_css' ) );
-
 		// Add JavaScript for variable products.
 		add_action( 'woocommerce_after_single_product', array( $this, 'add_variable_product_script' ) );
 
@@ -164,28 +161,7 @@ class CTC_Chat_Public {
 		return false;
 	}
 
-	/**
-	 * Add custom CSS to the head
-	 */
-	public function add_custom_css() {
-		// Only add custom CSS when needed.
-		if ( ! $this->should_load_assets() ) {
-			return;
-		}
-
-		// Get custom CSS from settings.
-		$custom_css = isset( $this->settings['button_settings']['custom_css'] ) ?
-					 $this->settings['button_settings']['custom_css'] : '';
-
-		// If no custom CSS, return.
-		if ( empty( $custom_css ) ) {
-			return;
-		}
-
-		// Add custom CSS inline.
-		wp_add_inline_style( 'ctc-chat-public-styles', wp_strip_all_tags( $custom_css ) );
-	}
-
+	
 	/**
 	 * Add JavaScript for variable products
 	 */
@@ -225,29 +201,28 @@ class CTC_Chat_Public {
 		}
 
 		// Prepare the JavaScript.
-		?>
-		<script type="text/javascript">
+		$script = "
 			(function($) {
 				'use strict';
 
 				$(document).ready(function() {
 					// Get references to elements
-					var $variationForm = $('.variations_form');
-					var $whatsappButton = $('.ctc-whatsapp-button');
+					var \$variationForm = $('.variations_form');
+					var \$whatsappButton = $('.ctc-whatsapp-button');
 
 					// If either element is missing, return
-					if (!$variationForm.length || !$whatsappButton.length) {
+					if (!\$variationForm.length || !\$whatsappButton.length) {
 						return;
 					}
 
 					// Listen for variation changes
-					$variationForm.on('show_variation', function(event, variation) {
+					\$variationForm.on('show_variation', function(event, variation) {
 						// Store the selected variation details
 						var variationDetails = [];
 						$('.variations select').each(function() {
-							var $select = $(this);
-							var attributeName = $select.data('attribute_name') || $select.attr('name');
-							var attributeValue = $select.val();
+							var \$select = $(this);
+							var attributeName = \$select.data('attribute_name') || \$select.attr('name');
+							var attributeValue = \$select.val();
 
 							if (attributeValue) {
 								// Get the attribute label
@@ -258,10 +233,10 @@ class CTC_Chat_Public {
 
 								// Get the attribute value label
 								var valueLabel = '';
-								var $selectedOption = $select.find('option:selected');
+								var \$selectedOption = \$select.find('option:selected');
 
-								if ($selectedOption.length) {
-									valueLabel = $selectedOption.text();
+								if (\$selectedOption.length) {
+									valueLabel = \$selectedOption.text();
 								} else {
 									valueLabel = attributeValue;
 								}
@@ -271,22 +246,23 @@ class CTC_Chat_Public {
 						});
 
 						// Create message with variation details
-						var baseUrl = 'https://wa.me/<?php echo esc_js( $whatsapp_number ); ?>?text=';
-						var message = '<?php echo esc_js( $message_template ); ?>';
+						var baseUrl = 'https://wa.me/" . esc_js( $whatsapp_number ) . "?text=';
+						var message = '" . esc_js( $message_template ) . "';
 
 						// Replace placeholders in message
-						message = message.replace('{product_name}', '<?php echo esc_js( $product->get_name() ); ?>');
+						message = message.replace('{product_name}', '" . esc_js( $product->get_name() ) . "');
 						message = message.replace('{variation_details}', variationDetails.join(', '));
 						message = message.replace('{variation_price}', variation.display_price.toFixed(2));
-						message = message.replace('{product_url}', '<?php echo esc_js( get_permalink( $product->get_id() ) ); ?>');
+						message = message.replace('{product_url}', '" . esc_js( get_permalink( $product->get_id() ) ) . "');
 
 						// Update the WhatsApp button URL
-						$whatsappButton.attr('href', baseUrl + encodeURIComponent(message));
+						\$whatsappButton.attr('href', baseUrl + encodeURIComponent(message));
 					});
 				});
 			})(jQuery);
-		</script>
-		<?php
+		";
+
+		wp_add_inline_script( 'ctc-chat-public-script', $script );
 	}
 
 	/**
@@ -427,7 +403,7 @@ class CTC_Chat_Public {
 		remove_action( 'woocommerce_after_shop_loop_item', 'woocommerce_template_loop_add_to_cart', 10 );
 
 		// Add CSS to hide any remaining add to cart buttons.
-		add_action( 'wp_head', array( $this, 'hide_add_to_cart_css' ) );
+		add_action( 'wp_enqueue_scripts', array( $this, 'hide_add_to_cart_css' ) );
 	}
 
 	/**
@@ -438,7 +414,7 @@ class CTC_Chat_Public {
 		remove_action( 'woocommerce_proceed_to_checkout', 'woocommerce_button_proceed_to_checkout', 20 );
 
 		// Add CSS to hide the button on all pages.
-		add_action( 'wp_head', array( $this, 'hide_proceed_checkout_css' ) );
+		add_action( 'wp_enqueue_scripts', array( $this, 'hide_proceed_checkout_css' ) );
 	}
 
 	/**
@@ -446,18 +422,17 @@ class CTC_Chat_Public {
 	 */
 	private function hide_place_order_button() {
 		// Add CSS to hide the place order button on all pages.
-		add_action( 'wp_head', array( $this, 'hide_place_order_css' ) );
+		add_action( 'wp_enqueue_scripts', array( $this, 'hide_place_order_css' ) );
 
 		// Optionally prevent form submission.
-		add_action( 'wp_footer', array( $this, 'disable_checkout_form_submission' ) );
+		add_action( 'wp_enqueue_scripts', array( $this, 'disable_checkout_form_submission' ) );
 	}
 
 	/**
 	 * Add CSS to hide Add to Cart buttons
 	 */
 	public function hide_add_to_cart_css() {
-		?>
-		<style type="text/css">
+		$css = '
 			/* Hide WooCommerce Add to Cart buttons only, NOT WhatsApp buttons */
 			.single_add_to_cart_button:not(.ctc-whatsapp-button),
 			.add_to_cart_button:not(.ctc-whatsapp-button),
@@ -475,16 +450,16 @@ class CTC_Chat_Public {
 			a.ctc-whatsapp-button {
 				display: inline-flex !important;
 			}
-		</style>
-		<?php
+		';
+
+		wp_add_inline_style( 'ctc-chat-public-styles', $css );
 	}
 
 	/**
 	 * Add CSS to hide Proceed to Checkout button
 	 */
 	public function hide_proceed_checkout_css() {
-		?>
-		<style type="text/css">
+		$css = '
 			/* Hide WooCommerce checkout button only, NOT WhatsApp buttons */
 			.wc-proceed-to-checkout a.checkout-button:not(.ctc-whatsapp-button),
 			.wc-proceed-to-checkout .checkout-button:not(.ctc-whatsapp-button),
@@ -497,16 +472,16 @@ class CTC_Chat_Public {
 			a.ctc-whatsapp-button {
 				display: inline-flex !important;
 			}
-		</style>
-		<?php
+		';
+
+		wp_add_inline_style( 'ctc-chat-public-styles', $css );
 	}
 
 	/**
 	 * Add CSS to hide Place Order button
 	 */
 	public function hide_place_order_css() {
-		?>
-		<style type="text/css">
+		$css = '
 			/* Hide WooCommerce place order button only, NOT WhatsApp buttons */
 			#place_order:not(.ctc-whatsapp-button),
 			.woocommerce-checkout-payment button#place_order:not(.ctc-whatsapp-button),
@@ -519,8 +494,9 @@ class CTC_Chat_Public {
 			a.ctc-whatsapp-button {
 				display: inline-flex !important;
 			}
-		</style>
-		<?php
+		';
+
+		wp_add_inline_style( 'ctc-chat-public-styles', $css );
 	}
 
 	/**
@@ -528,8 +504,7 @@ class CTC_Chat_Public {
 	 */
 	public function disable_checkout_form_submission() {
 		if ( is_checkout() ) {
-			?>
-			<script type="text/javascript">
+			$script = "
 				jQuery(document).ready(function($) {
 					// Disable form submission.
 					$('form.checkout').on('submit', function(e) {
@@ -537,8 +512,9 @@ class CTC_Chat_Public {
 						return false;
 					});
 				});
-			</script>
-			<?php
+			";
+
+			wp_add_inline_script( 'ctc-chat-public-script', $script );
 		}
 	}
 
