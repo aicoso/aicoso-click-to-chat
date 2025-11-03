@@ -154,7 +154,7 @@ class CTC_Chat_Public {
 
 		// Check if any shortcodes are used.
 		global $post;
-		if ( $post && ( has_shortcode( $post->post_content, 'whatsapp_button' ) || has_shortcode( $post->post_content, 'ctc_chat_button' ) ) ) {
+		if ( $post && has_shortcode( $post->post_content, 'ctc_chat_button' ) ) {
 			return true;
 		}
 

@@ -64,9 +64,6 @@ class CTC_Chat_Admin {
 
 		// Save product meta.
 		add_action( 'save_post_product', array( $this, 'save_product_meta' ), 10, 2 );
-
-		// Check for deprecated shortcode usage.
-		add_action( 'admin_notices', array( $this, 'check_deprecated_shortcode' ) );
 	}
 
 	/**
@@ -727,21 +724,6 @@ class CTC_Chat_Admin {
 			update_post_meta( $post_id, '_ctc_chat_custom_message', sanitize_textarea_field( wp_unslash( $_POST['ctc_chat_custom_message'] ) ) );
 		} else {
 			delete_post_meta( $post_id, '_ctc_chat_custom_message' );
-		}
-	}
-
-	/**
-	 * Check for deprecated shortcode usage and show admin notice
-	 */
-	public function check_deprecated_shortcode() {
-		if ( ! current_user_can( 'manage_options' ) ) {
-			return;
-		}
-
-		// Check if deprecated shortcode was used.
-		if ( get_transient( 'ctc_chat_deprecated_used' ) ) {
-			delete_transient( 'ctc_chat_deprecated_used' );
-			echo '<div class="notice notice-warning is-dismissible"><p><strong>AICOSO Click to Chat:</strong> The [whatsapp_button] shortcode is deprecated. Please use [ctc_chat_button] instead for better compatibility and future updates.</p></div>';
 		}
 	}
 }
