@@ -161,7 +161,6 @@ class CTC_Chat_Public {
 		return false;
 	}
 
-	
 	/**
 	 * Add JavaScript for variable products
 	 */

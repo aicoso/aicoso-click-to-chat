@@ -155,11 +155,15 @@
             const $input = $(this);
             $input.wpColorPicker({
                 change: function(event, ui) {
-                    // Trigger the change event on the original input to update the preview
-                    $(event.target).trigger('change');
+                    // Update the input field value and trigger change
+                    if (ui.color) {
+                        $(event.target).val(ui.color.toString());
+                        $(event.target).trigger('change');
+                    }
                 },
                 clear: function(event, ui) {
-                    // Trigger the change event when color is cleared
+                    // Clear the input field value and trigger change
+                    $(event.target).val('');
                     $(event.target).trigger('change');
                 }
             });
@@ -173,11 +177,17 @@
         // Initialize color pickers for shortcode generator fields with real-time preview
         $('#ctc_chat_bg_color, #ctc_chat_text_color').wpColorPicker({
             change: function(event, ui) {
+                // Update the input field value first
+                if (ui.color) {
+                    $(event.target).val(ui.color.toString());
+                }
                 // Immediately update the preview when color changes
                 generateImprovedShortcode();
                 updateImprovedPreview();
             },
             clear: function(event, ui) {
+                // Clear the input field value
+                $(event.target).val('');
                 // Update the preview when color is cleared
                 generateImprovedShortcode();
                 updateImprovedPreview();
