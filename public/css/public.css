@@ -6,7 +6,8 @@
 
 /* General Button Styles */
 .ctc-whatsapp-button,
-.ctc-chat-whatsapp-button {
+.ctc-chat-whatsapp-button,
+.ctc_chat_whatsapp_button {
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -25,7 +26,8 @@
     color: white;
 }
 
-.ctc-chat-whatsapp-button:hover {
+.ctc-chat-whatsapp-button:hover,
+.ctc_chat_whatsapp_button:hover {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.25);
     transform: translateY(-2px);
     opacity: 0.95;
@@ -33,20 +35,23 @@
     color: white;
 }
 
-.ctc-chat-whatsapp-button:focus {
+.ctc-chat-whatsapp-button:focus,
+.ctc_chat_whatsapp_button:focus {
     outline: none;
     text-decoration: none;
 }
 
 /* WhatsApp Icon Styles */
 .ctc-whatsapp-icon,
-.ctc-chat-whatsapp-icon {
+.ctc-chat-whatsapp-icon,
+.ctc_chat_whatsapp_icon {
     display: inline-flex;
     margin-right: 8px;
     align-items: center;
 }
 
-.ctc-chat-whatsapp-icon svg {
+.ctc-chat-whatsapp-icon svg,
+.ctc_chat_whatsapp_icon svg {
     width: 18px;
     height: 18px;
     fill: currentColor;
@@ -54,50 +59,59 @@
 
 /* Button Size Variations */
 .ctc-button-size-small,
-.ctc-chat-button-size-small {
+.ctc-chat-button-size-small,
+.ctc_chat_button_size_small {
     padding: 6px 12px;
     font-size: 12px;
 }
 
-.ctc-chat-button-size-small .ctc-chat-whatsapp-icon svg {
+.ctc-chat-button-size-small .ctc-chat-whatsapp-icon svg,
+.ctc_chat_button_size_small .ctc_chat_whatsapp_icon svg {
     width: 14px;
     height: 14px;
 }
 
 .ctc-button-size-normal,
-.ctc-chat-button-size-normal {
+.ctc-chat-button-size-normal,
+.ctc_chat_button_size_normal {
     padding: 10px 20px;
     font-size: 14px;
 }
 
 .ctc-button-size-large,
-.ctc-chat-button-size-large {
+.ctc-chat-button-size-large,
+.ctc_chat_button_size_large {
     padding: 12px 24px;
     font-size: 16px;
 }
 
-.ctc-chat-button-size-large .ctc-chat-whatsapp-icon svg {
+.ctc-chat-button-size-large .ctc-chat-whatsapp-icon svg,
+.ctc_chat_button_size_large .ctc_chat_whatsapp_icon svg {
     width: 20px;
     height: 20px;
 }
 
 /* Button Alignment */
 .ctc-shortcode-container,
-.ctc-chat-shortcode-container {
+.ctc-chat-shortcode-container,
+.ctc_chat_shortcode_container {
     display: block;
     width: 100%;
     margin: 15px 0;
 }
 
-.ctc-chat-align-left {
+.ctc-chat-align-left,
+.ctc_chat_align_left {
     text-align: left;
 }
 
-.ctc-chat-align-center {
+.ctc-chat-align-center,
+.ctc_chat_align_center {
     text-align: center;
 }
 
-.ctc-chat-align-right {
+.ctc-chat-align-right,
+.ctc_chat_align_right {
     text-align: right;
 }
 
@@ -123,12 +137,28 @@
     vertical-align: middle;
 }
 
-/* When button is beside add to cart */
-.woocommerce div.product form.cart {
-    display: flex;
-    flex-wrap: wrap;
+/* When button is beside add to cart - TARGETED APPROACH */
+.woocommerce div.product form.cart .ctc-chat-position-after-add-to-cart {
+    display: inline-flex;
     align-items: center;
-    gap: 10px;
+    margin-left: 10px;
+}
+
+.woocommerce div.product form.cart .ctc-chat-whatsapp-button {
+    flex: 0 0 auto;
+}
+
+/* NEW: Prevent button container from affecting page layout */
+.woocommerce div.product .ctc-chat-whatsapp-button-container {
+    position: relative;
+    z-index: 10;
+    clear: both;
+}
+
+/* Ensure form containers don't break page layout */
+.woocommerce div.product form.cart,
+.woocommerce div.product form.variations_form {
+    overflow: visible;
 }
 
 .woocommerce div.product form.cart .quantity {
@@ -139,16 +169,11 @@
     margin-right: 10px;
 }
 
-/* Variable Product Adjustments */
-.woocommerce div.product form.variations_form .single_variation_wrap {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 10px;
-}
-
-.woocommerce div.product form.variations_form .ctc-chat-whatsapp-button {
-    flex: 0 0 auto;
+/* Variable Product Adjustments - ONLY target button container */
+.woocommerce div.product form.variations_form .single_variation_wrap .ctc-chat-whatsapp-button {
+    display: inline-flex;
+    vertical-align: middle;
+    margin-left: 10px;
 }
 
 /* Cart Page Button */
@@ -267,6 +292,13 @@
 .ctc-chat-floating-button-container .ctc-chat-button-text {
     display: none;
 }
+
+.ctc-floating-button-container .ctc-button-text,
+.ctc-chat-floating-button-container .ctc-chat-button-text,
+.ctc_chat_floating_button_container .ctc_chat_button_text {
+    display: none;
+}
+
 
 /* Button Position Specific Adjustments */
 /* Below Add to Cart Button */

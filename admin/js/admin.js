@@ -10,30 +10,30 @@
     /**
      * Initialize the admin functionality
      */
-    function initAdmin() {
+    function ctc_chat_init_admin() {
         // Initialize tabs
-        initTabs();
+        ctc_chat_init_tabs();
 
         // Initialize color pickers
-        initColorPickers();
+        ctc_chat_init_color_pickers();
 
         // Initialize WhatsApp number management
-        initNumbersManagement();
+        ctc_chat_init_numbers_management();
 
         // Initialize message template previews
-        initMessageTemplates();
+        ctc_chat_init_message_templates();
 
         // Initialize shortcode generator
-        initShortcodeGenerator();
+        ctc_chat_init_shortcode_generator();
 
         // Initialize select2 for multiselect dropdowns
-        initSelect2();
+        ctc_chat_init_select2();
 
         // Initialize position field toggles
-        initPositionToggles();
+        ctc_chat_init_position_toggles();
 
         // Initialize catalog mode and advanced options
-        initAdvancedOptions();
+        ctc_chat_init_advanced_options();
 
         // Initialize the hidden field with the current tab value
         if ($('#ctc_chat_current_tab').length && $('.ctc-chat-settings-nav-item.active').length) {
@@ -45,7 +45,7 @@
     /**
      * Initialize tab navigation
      */
-    function initTabs() {
+    function ctc_chat_init_tabs() {
         // Settings page tab navigation (button style)
         $('.ctc-chat-settings-nav-item').on('click', function(e) {
             e.preventDefault();
@@ -150,7 +150,7 @@
     /**
      * Initialize color pickers
      */
-    function initColorPickers() {
+    function ctc_chat_init_color_pickers() {
         $('.ctc-chat-color-field').each(function() {
             const $input = $(this);
             $input.wpColorPicker({
@@ -173,7 +173,7 @@
     /**
      * Initialize color pickers specifically for the shortcode generator
      */
-    function initShortcodeColorPickers() {
+    function ctc_chat_init_shortcode_color_pickers() {
         // Initialize color pickers for shortcode generator fields with real-time preview
         $('#ctc_chat_bg_color, #ctc_chat_text_color').wpColorPicker({
             change: function(event, ui) {
@@ -182,15 +182,15 @@
                     $(event.target).val(ui.color.toString());
                 }
                 // Immediately update the preview when color changes
-                generateImprovedShortcode();
-                updateImprovedPreview();
+                ctc_chat_generate_improved_shortcode();
+                ctc_chat_update_improved_preview();
             },
             clear: function(event, ui) {
                 // Clear the input field value
                 $(event.target).val('');
                 // Update the preview when color is cleared
-                generateImprovedShortcode();
-                updateImprovedPreview();
+                ctc_chat_generate_improved_shortcode();
+                ctc_chat_update_improved_preview();
             }
         });
     }
@@ -198,7 +198,7 @@
     /**
      * Initialize WhatsApp number management
      */
-    function initNumbersManagement() {
+    function ctc_chat_init_numbers_management() {
         // Handle expand/collapse functionality - updated for new classes
         $(document).on('click', '.ctc-chat-number-toggle', function() {
             const $card = $(this).closest('.ctc-chat-number-item, .ctc-chat-number-card');
@@ -266,7 +266,7 @@
             $('#ctc-chat-numbers-container').append(html);
             
             // Initialize select2 for the new selects
-            initSelect2();
+            ctc_chat_init_select2();
             
             // Update the next ID
             $('#ctc-chat-next-number-id').val(nextId + 1);
@@ -307,10 +307,10 @@
         $('.ctc-chat-number-item:first .ctc-chat-number-content, .ctc-chat-number-card:first .ctc-chat-number-body').show();
         
         // Initialize select2 for existing selects
-        initSelect2();
+        ctc_chat_init_select2();
         
         // Helper function to update indices for all numbers - updated for new classes
-        function updateNumberIndices() {
+        function ctc_chat_update_number_indices() {
             $('.ctc-chat-number-item, .ctc-chat-number-card').each(function(index) {
                 const id = $(this).data('id');
                 
@@ -327,7 +327,7 @@
     /**
      * Initialize Select2 for various select inputs
      */
-    function initSelect2() {
+    function ctc_chat_init_select2() {
         // Page select
         $('.ctc-chat-page-select').select2({
             ajax: {
@@ -336,7 +336,7 @@
                 delay: 250,
                 data: function(params) {
                     return {
-                        action: 'ctc_chat_search_pages',
+                        action: 'ctc_chat_ajax_search_pages',
                         term: params.term || '',
                         nonce: ctc_chat_admin.nonce
                     };
@@ -361,7 +361,7 @@
                 delay: 250,
                 data: function(params) {
                     return {
-                        action: 'ctc_chat_search_posts',
+                        action: 'ctc_chat_ajax_search_posts',
                         term: params.term || '',
                         nonce: ctc_chat_admin.nonce
                     };
@@ -386,7 +386,7 @@
                 delay: 250,
                 data: function(params) {
                     return {
-                        action: 'ctc_chat_search_categories',
+                        action: 'ctc_chat_ajax_search_categories',
                         term: params.term || '',
                         nonce: ctc_chat_admin.nonce
                     };
@@ -411,7 +411,7 @@
                 delay: 250,
                 data: function(params) {
                     return {
-                        action: 'ctc_chat_search_tags',
+                        action: 'ctc_chat_ajax_search_tags',
                         term: params.term || '',
                         nonce: ctc_chat_admin.nonce
                     };
@@ -436,7 +436,7 @@
                 delay: 250,
                 data: function(params) {
                     return {
-                        action: 'ctc_chat_search_products',
+                        action: 'ctc_chat_ajax_search_products',
                         term: params.term || '',
                         nonce: ctc_chat_admin.nonce
                     };
@@ -457,7 +457,7 @@
     /**
      * Initialize message template previews
      */
-    function initMessageTemplates() {
+    function ctc_chat_init_message_templates() {
         // Preview template - updated to work with both old and new class names
         $('.ctc-chat-template-preview-button, .ctc-chat-preview-btn').on('click', function() {
             const $button = $(this);
@@ -475,7 +475,7 @@
                 url: ctc_chat_admin.ajaxurl,
                 type: 'POST',
                 data: {
-                    action: 'ctc_chat_preview_message',
+                    action: 'ctc_chat_ajax_preview_message',
                     template_type: templateType,
                     template_content: templateContent,
                     nonce: ctc_chat_admin.nonce
@@ -518,7 +518,7 @@
             const placeholder = $(this).text();
             const $textarea = $(this).closest('.ctc-chat-template-item, .ctc-chat-template-card').find('.ctc-chat-template-textarea');
             
-            insertAtCursor($textarea[0], placeholder);
+            ctc_chat_insert_at_cursor($textarea[0], placeholder);
             
             return false;
         });
@@ -527,11 +527,11 @@
     /**
      * Initialize shortcode generator
      */
-    function initShortcodeGenerator() {
+    function ctc_chat_init_shortcode_generator() {
         // New improved shortcode builder
 
         // Initialize color pickers for shortcode generator
-        initShortcodeColorPickers();
+        ctc_chat_init_shortcode_color_pickers();
 
         // Handle button type selection
         $('input[name="button_type"]').on('change', function() {
@@ -541,8 +541,8 @@
             } else {
                 $('.ctc-chat-product-options').removeClass('ctc-chat-visible').addClass('ctc-chat-hidden');
             }
-            generateImprovedShortcode();
-            updateImprovedPreview();
+            ctc_chat_generate_improved_shortcode();
+            ctc_chat_update_improved_preview();
         });
 
         // Handle product source selection
@@ -552,23 +552,23 @@
             } else {
                 $('.ctc-chat-product-id-field').removeClass('ctc-chat-visible').addClass('ctc-chat-hidden');
             }
-            generateImprovedShortcode();
+            ctc_chat_generate_improved_shortcode();
         });
 
         // Handle all parameter changes
         $('.ctc-chat-shortcode-param').on('change input', function() {
-            generateImprovedShortcode();
-            updateImprovedPreview();
+            ctc_chat_generate_improved_shortcode();
+            ctc_chat_update_improved_preview();
         });
 
         // Initialize on page load
-        generateImprovedShortcode();
-        updateImprovedPreview();
+        ctc_chat_generate_improved_shortcode();
+        ctc_chat_update_improved_preview();
 
         // Handle copy button
         $('#ctc-chat-copy-shortcode').on('click', function() {
             const shortcode = $('#ctc-chat-generated-shortcode').text();
-            copyToClipboard(shortcode);
+            ctc_chat_copy_to_clipboard(shortcode);
 
             // Show success message
             $('.ctc-chat-copy-success').removeClass('ctc-chat-hidden').addClass('ctc-chat-visible');
@@ -594,17 +594,17 @@
         });
 
         // Initialize on load
-        generateImprovedShortcode();
-        updateImprovedPreview();
+        ctc_chat_generate_improved_shortcode();
+        ctc_chat_update_improved_preview();
 
         // Legacy support - keep old functionality
         $('.ctc-chat-shortcode-form select, .ctc-chat-shortcode-form input').on('change', function() {
-            generateShortcode();
+            ctc_chat_generate_shortcode();
         });
 
         $(document).on('click', '.ctc-chat-copy-shortcode', function() {
             const shortcode = $('.ctc-chat-shortcode-code').text();
-            copyToClipboard(shortcode);
+            ctc_chat_copy_to_clipboard(shortcode);
             return false;
         });
     }
@@ -612,7 +612,7 @@
     /**
      * Generate improved shortcode
      */
-    function generateImprovedShortcode() {
+    function ctc_chat_generate_improved_shortcode() {
         let shortcode = '[ctc_chat_button';
 
         // Get all parameters
@@ -688,7 +688,7 @@
     /**
      * Update improved preview
      */
-    function updateImprovedPreview() {
+    function ctc_chat_update_improved_preview() {
         const text = $('#ctc_chat_button_text').val() || ctc_chat_admin.default_button_text || 'Order via WhatsApp';
         const bgColor = $('#ctc_chat_bg_color').val() || '#25D366';
         const textColor = $('#ctc_chat_text_color').val() || '#ffffff';
@@ -708,7 +708,7 @@
             previewHtml += '</span>';
         }
 
-        previewHtml += '<span class="ctc-chat-button-text">' + escapeHtml(text) + '</span>';
+        previewHtml += '<span class="ctc-chat-button-text">' + ctc_chat_escape_html(text) + '</span>';
         previewHtml += '</a>';
         previewHtml += '</div>';
 
@@ -718,7 +718,7 @@
     /**
      * Escape HTML
      */
-    function escapeHtml(text) {
+    function ctc_chat_escape_html(text) {
         const div = document.createElement('div');
         div.textContent = text;
         return div.innerHTML;
@@ -727,7 +727,7 @@
     /**
      * Generate shortcode based on form values (Legacy)
      */
-    function generateShortcode() {
+    function ctc_chat_generate_shortcode() {
         const $form = $('.ctc-chat-shortcode-form');
         const productId = $form.find('#shortcode_product_id').val();
         const current = $form.find('#shortcode_current').is(':checked') ? 'yes' : 'no';
@@ -742,7 +742,7 @@
         const cssClass = $form.find('#shortcode_css_class').val();
         
         // Build the shortcode
-        let shortcode = '[whatsapp_button';
+        let shortcode = '[ctc_chat_button';
         
         if (productId) {
             shortcode += ' product_id="' + productId + '"';
@@ -782,13 +782,13 @@
         $('.ctc-chat-shortcode-code').text(shortcode);
         
         // Update the preview
-        updateShortcodePreview();
+        ctc_chat_update_shortcode_preview();
     }
 
     /**
      * Update the shortcode preview
      */
-    function updateShortcodePreview() {
+    function ctc_chat_update_shortcode_preview() {
         const $form = $('.ctc-chat-shortcode-form');
         const text = $form.find('#shortcode_text').val() || ctc_chat_admin.default_button_text;
         const bgColor = $form.find('#shortcode_bg_color').val() || '#25D366';
@@ -798,24 +798,24 @@
         const align = $form.find('#shortcode_align').val();
         
         // Create button HTML
-        let buttonHtml = '<div class="ctc-shortcode-container">';
-        buttonHtml += '<a href="#" class="ctc-whatsapp-button ctc-button-size-' + size;
+        let buttonHtml = '<div class="ctc_chat_shortcode_container">';
+        buttonHtml += '<a href="#" class="ctc_chat_whatsapp_button ctc_chat_button_size_' + size;
 
         if (icon) {
-            buttonHtml += ' ctc-button-with-icon';
+            buttonHtml += ' ctc_chat_button_with_icon';
         }
 
         buttonHtml += '" style="background-color: ' + bgColor + '; color: ' + textColor + ';">';
 
         if (icon) {
-            buttonHtml += '<span class="ctc-whatsapp-icon">';
+            buttonHtml += '<span class="ctc_chat_whatsapp_icon">';
             buttonHtml += '<svg viewBox="0 0 24 24" width="24" height="24">';
             buttonHtml += '<path fill="currentColor" d="M17.498 14.382c-.301-.15-1.767-.867-2.04-.966-.273-.101-.473-.15-.673.15-.197.295-.771.964-.944 1.162-.175.195-.349.21-.646.075-.3-.15-1.263-.465-2.403-1.485-.888-.795-1.484-1.77-1.66-2.07-.174-.3-.019-.465.13-.615.136-.135.301-.345.451-.523.146-.181.194-.301.297-.496.1-.21.049-.375-.025-.524-.075-.15-.672-1.62-.922-2.206-.24-.584-.487-.51-.672-.51-.172-.015-.371-.015-.571-.015-.2 0-.523.074-.797.359-.273.3-1.045 1.02-1.045 2.475s1.07 2.865 1.219 3.075c.149.195 2.105 3.195 5.1 4.485.714.3 1.27.48 1.704.629.714.227 1.365.195 1.88.121.574-.091 1.767-.721 2.016-1.426.255-.705.255-1.29.18-1.425-.074-.135-.27-.21-.57-.345m-5.446 7.443h-.016c-1.77 0-3.524-.48-5.055-1.38l-.36-.214-3.75.975 1.005-3.645-.239-.375c-.99-1.576-1.516-3.391-1.516-5.26 0-5.445 4.455-9.885 9.942-9.885 2.654 0 5.145 1.035 7.021 2.91 1.875 1.859 2.909 4.35 2.909 6.99-.004 5.444-4.46 9.885-9.935 9.885M20.52 3.449C18.24 1.245 15.24 0 12.045 0 5.463 0 .104 5.334.101 11.893c0 2.096.549 4.14 1.595 5.945L0 24l6.335-1.652c1.746.943 3.71 1.444 5.71 1.447h.006c6.585 0 11.946-5.336 11.949-11.896 0-3.176-1.24-6.165-3.495-8.411"/>';
             buttonHtml += '</svg>';
             buttonHtml += '</span>';
         }
 
-        buttonHtml += '<span class="ctc-button-text">' + text + '</span>';
+        buttonHtml += '<span class="ctc_chat_button_text">' + text + '</span>';
         buttonHtml += '</a>';
         buttonHtml += '</div>';
         
@@ -826,7 +826,7 @@
     /**
      * Helper function to insert text at cursor position in textarea
      */
-    function insertAtCursor(field, text) {
+    function ctc_chat_insert_at_cursor(field, text) {
         // IE support
         if (document.selection) {
             field.focus();
@@ -854,7 +854,7 @@
     /**
      * Initialize position field toggles
      */
-    function initPositionToggles() {
+    function ctc_chat_init_position_toggles() {
         // Toggle cart position field
         $('#ctc_chat_cart_page_enabled').on('change', function() {
             if ($(this).is(':checked')) {
@@ -900,7 +900,7 @@
     /**
      * Initialize advanced options functionality
      */
-    function initAdvancedOptions() {
+    function ctc_chat_init_advanced_options() {
         // Handle catalog mode toggle
         $('#ctc_chat_catalog_mode').on('change', function() {
             if ($(this).is(':checked')) {
@@ -932,7 +932,7 @@
     /**
      * Helper function to copy text to clipboard
      */
-    function copyToClipboard(text) {
+    function ctc_chat_copy_to_clipboard(text) {
         const textarea = document.createElement('textarea');
         textarea.value = text;
         textarea.setAttribute('readonly', '');
@@ -955,7 +955,7 @@
 
     // Initialize when document is ready
     $(document).ready(function() {
-        initAdmin();
+        ctc_chat_init_admin();
     });
 
 })(jQuery);

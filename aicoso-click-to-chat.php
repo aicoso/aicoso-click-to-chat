@@ -94,45 +94,45 @@ add_action( 'plugins_loaded', 'ctc_chat_plugin', 10 );
 function ctc_chat_activate() {
 	// Add default settings.
 	$default_settings = array(
-		'plugin_enabled'    => true,
-		'whatsapp_numbers'  => array(),
-		'button_settings'   => array(
-			'text'       => esc_html__( 'Order via WhatsApp', 'aicoso-click-to-chat' ),
-			'icon'       => true,
-			'bg_color'   => '#25D366',
-			'text_color' => '#ffffff',
+		'ctc_chat_plugin_enabled'    => true,
+		'ctc_chat_whatsapp_numbers'  => array(),
+		'ctc_chat_button_settings'   => array(
+			'ctc_chat_text'       => esc_html__( 'Order via WhatsApp', 'aicoso-click-to-chat' ),
+			'ctc_chat_icon'       => true,
+			'ctc_chat_bg_color'   => '#25D366',
+			'ctc_chat_text_color' => '#ffffff',
 		),
-		'single_product'    => array(
-			'enabled'  => true,
-			'position' => 'after_add_to_cart',
+		'ctc_chat_single_product'    => array(
+			'ctc_chat_enabled'  => true,
+			'ctc_chat_position' => 'after_add_to_cart',
 		),
-		'shop_page'         => array(
-			'enabled'  => false,
-			'position' => 'after_add_to_cart',
+		'ctc_chat_shop_page'         => array(
+			'ctc_chat_enabled'  => false,
+			'ctc_chat_position' => 'after_add_to_cart',
 		),
-		'cart_page'         => array(
-			'enabled'  => false,
-			'position' => 'after_cart_table',
+		'ctc_chat_cart_page'         => array(
+			'ctc_chat_enabled'  => false,
+			'ctc_chat_position' => 'after_cart_table',
 		),
-		'checkout_page'     => array(
-			'enabled'  => false,
-			'position' => 'after_payment',
+		'ctc_chat_checkout_page'     => array(
+			'ctc_chat_enabled'  => false,
+			'ctc_chat_position' => 'after_payment',
 		),
-		'thankyou_page'     => array(
-			'enabled' => false,
+		'ctc_chat_thankyou_page'     => array(
+			'ctc_chat_enabled' => false,
 		),
-		'floating_button'   => array(
-			'enabled'  => false,
-			'position' => 'bottom_right',
+		'ctc_chat_floating_button'   => array(
+			'ctc_chat_enabled'  => false,
+			'ctc_chat_position' => 'bottom_right',
 		),
-		'message_templates' => array(
-			'single_product' => esc_html__( "Hello! I'm interested in the product: *{product_name}*\nPrice: {price}\nURL: {product_url}\n\nDo you have this item in stock? I'd like to get more information.", 'aicoso-click-to-chat' ),
-			'cart_checkout'  => esc_html__( "Hello! I'd like to complete my purchase of:\n{cart_items_list}\n---------------------\nSubtotal: {cart_subtotal}\nTax: {tax_amount}\nShipping: {shipping_method} - {shipping_cost}\nTotal: {cart_total}\n\nI have a few questions before finalizing my order.", 'aicoso-click-to-chat' ),
-			'thank_you'      => esc_html__( "Hello! I've just placed order #{order_number} on {order_date}.\nMy order includes:\n{ordered_items_list}\n---------------------\nApplied Coupon: {coupon_code}\nTotal: {order_total}\n\nI'd like to confirm when this will be shipped.", 'aicoso-click-to-chat' ),
-			'floating'       => esc_html__( 'Hello! I was browsing your website at {current_page_url} and have a question.', 'aicoso-click-to-chat' ),
-			'variations'     => esc_html__( "Hello! I'm interested in the product: *{product_name}*\nSelected options: {variation_details}\nPrice: {variation_price}\nURL: {product_url}\n\nIs this combination available for immediate shipping?", 'aicoso-click-to-chat' ),
+		'ctc_chat_message_templates' => array(
+			'ctc_chat_single_product' => esc_html__( "Hello! I'm interested in the product: *{product_name}*\nPrice: {price}\nURL: {product_url}\n\nDo you have this item in stock? I'd like to get more information.", 'aicoso-click-to-chat' ),
+			'ctc_chat_cart_checkout'  => esc_html__( "Hello! I'd like to complete my purchase of:\n{cart_items_list}\n---------------------\nSubtotal: {cart_subtotal}\nTax: {tax_amount}\nShipping: {shipping_method} - {shipping_cost}\nTotal: {cart_total}\n\nI have a few questions before finalizing my order.", 'aicoso-click-to-chat' ),
+			'ctc_chat_thank_you'      => esc_html__( "Hello! I've just placed order #{order_number} on {order_date}.\nMy order includes:\n{ordered_items_list}\n---------------------\nApplied Coupon: {coupon_code}\nTotal: {order_total}\n\nI'd like to confirm when this will be shipped.", 'aicoso-click-to-chat' ),
+			'ctc_chat_floating'       => esc_html__( 'Hello! I was browsing your website at {current_page_url} and have a question.', 'aicoso-click-to-chat' ),
+			'ctc_chat_variations'     => esc_html__( "Hello! I'm interested in the product: *{product_name}*\nSelected options: {variation_details}\nPrice: {variation_price}\nURL: {product_url}\n\nIs this combination available for immediate shipping?", 'aicoso-click-to-chat' ),
 		),
-		'exclusions'        => array(
+		'ctc_chat_exclusions'        => array(
 			'pages'      => array(),
 			'posts'      => array(),
 			'categories' => array(),

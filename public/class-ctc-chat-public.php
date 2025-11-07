@@ -27,37 +27,37 @@ class CTC_Chat_Public {
 	 * @since 1.0.0
 	 * @var array
 	 */
-	private $settings;
+	private $ctc_chat_settings;
 
 	/**
 	 * Constructor
 	 */
 	public function __construct() {
-		$this->settings = get_option( 'ctc_chat_settings', array() );
+		$this->ctc_chat_settings = get_option( 'ctc_chat_settings', array() );
 
 		// Initialize hooks.
-		$this->init_hooks();
+		$this->ctc_chat_init_hooks();
 	}
 
 	/**
 	 * Initialize hooks
 	 */
-	private function init_hooks() {
+	private function ctc_chat_init_hooks() {
 		// Handle advanced options for hiding WooCommerce buttons FIRST (before other hooks).
-		add_action( 'init', array( $this, 'handle_advanced_options' ), 999 );
+		add_action( 'init', array( $this, 'ctc_chat_handle_advanced_options' ), 999 );
 
 		// Enqueue scripts and styles.
-		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_assets' ) );
+		add_action( 'wp_enqueue_scripts', array( $this, 'ctc_chat_enqueue_assets' ) );
 
 		// Add JavaScript for variable products.
-		add_action( 'woocommerce_after_single_product', array( $this, 'add_variable_product_script' ) );
+		add_action( 'woocommerce_after_single_product', array( $this, 'ctc_chat_add_variable_product_script' ) );
 
 		// Enqueue block-specific scripts for cart and checkout.
-		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_block_scripts' ) );
+		add_action( 'wp_enqueue_scripts', array( $this, 'ctc_chat_enqueue_block_scripts' ) );
 
 		// AJAX handlers for variation URLs.
-		add_action( 'wp_ajax_ctc_chat_get_variation_url', array( $this, 'ajax_get_variation_url' ) );
-		add_action( 'wp_ajax_nopriv_ctc_chat_get_variation_url', array( $this, 'ajax_get_variation_url' ) );
+		add_action( 'wp_ajax_ctc_chat_get_variation_url', array( $this, 'ctc_chat_ajax_get_variation_url' ) );
+		add_action( 'wp_ajax_nopriv_ctc_chat_get_variation_url', array( $this, 'ctc_chat_ajax_get_variation_url' ) );
 	}
 
 	/**
@@ -66,9 +66,9 @@ class CTC_Chat_Public {
 	 * @since 1.0.0
 	 * @return void
 	 */
-	public function enqueue_assets() {
+	public function ctc_chat_enqueue_assets() {
 		// Only enqueue assets when needed.
-		if ( ! $this->should_load_assets() ) {
+		if ( ! $this->ctc_chat_should_load_assets() ) {
 			return;
 		}
 
@@ -98,12 +98,12 @@ class CTC_Chat_Public {
 		);
 
 		// Localize script with data.
-		$localize_data = array(
+		$ctc_chat_localize_data = array(
 			'ajaxurl' => admin_url( 'admin-ajax.php' ),
 			'nonce'   => wp_create_nonce( 'ctc_chat_public_nonce' ),
 		);
 
-		wp_localize_script( 'ctc-chat-public-script', 'ctc_chat_public', $localize_data );
+		wp_localize_script( 'ctc-chat-public-script', 'ctc_chat_public', $ctc_chat_localize_data );
 	}
 
 	/**
@@ -111,44 +111,44 @@ class CTC_Chat_Public {
 	 *
 	 * @return bool True if assets should be loaded, false otherwise.
 	 */
-	private function should_load_assets() {
+	private function ctc_chat_should_load_assets() {
 		// Always load if floating button is enabled.
-		if ( isset( $this->settings['floating_button']['enabled'] ) && $this->settings['floating_button']['enabled'] ) {
+		if ( isset( $this->ctc_chat_settings['ctc_chat_floating_button']['ctc_chat_enabled'] ) && $this->ctc_chat_settings['ctc_chat_floating_button']['ctc_chat_enabled'] ) {
 			return true;
 		}
 
 		// Load on shop pages if enabled.
 		if ( ( is_shop() || is_product_category() || is_product_tag() ) &&
-			 isset( $this->settings['shop_page']['enabled'] ) &&
-			 $this->settings['shop_page']['enabled'] ) {
+			 isset( $this->ctc_chat_settings['ctc_chat_shop_page']['ctc_chat_enabled'] ) &&
+			 $this->ctc_chat_settings['ctc_chat_shop_page']['ctc_chat_enabled'] ) {
 			return true;
 		}
 
 		// Load on single product pages if enabled.
 		if ( is_product() &&
-			 isset( $this->settings['single_product']['enabled'] ) &&
-			 $this->settings['single_product']['enabled'] ) {
+			 isset( $this->ctc_chat_settings['ctc_chat_single_product']['ctc_chat_enabled'] ) &&
+			 $this->ctc_chat_settings['ctc_chat_single_product']['ctc_chat_enabled'] ) {
 			return true;
 		}
 
 		// Load on cart page if enabled.
 		if ( is_cart() &&
-			 isset( $this->settings['cart_page']['enabled'] ) &&
-			 $this->settings['cart_page']['enabled'] ) {
+			 isset( $this->ctc_chat_settings['ctc_chat_cart_page']['ctc_chat_enabled'] ) &&
+			 $this->ctc_chat_settings['ctc_chat_cart_page']['ctc_chat_enabled'] ) {
 			return true;
 		}
 
 		// Load on checkout page if enabled.
 		if ( is_checkout() && ! is_wc_endpoint_url( 'order-received' ) &&
-			 isset( $this->settings['checkout_page']['enabled'] ) &&
-			 $this->settings['checkout_page']['enabled'] ) {
+			 isset( $this->ctc_chat_settings['ctc_chat_checkout_page']['ctc_chat_enabled'] ) &&
+			 $this->ctc_chat_settings['ctc_chat_checkout_page']['ctc_chat_enabled'] ) {
 			return true;
 		}
 
 		// Load on thank you page if enabled.
 		if ( is_wc_endpoint_url( 'order-received' ) &&
-			 isset( $this->settings['thankyou_page']['enabled'] ) &&
-			 $this->settings['thankyou_page']['enabled'] ) {
+			 isset( $this->ctc_chat_settings['ctc_chat_thankyou_page']['ctc_chat_enabled'] ) &&
+			 $this->ctc_chat_settings['ctc_chat_thankyou_page']['ctc_chat_enabled'] ) {
 			return true;
 		}
 
@@ -164,7 +164,7 @@ class CTC_Chat_Public {
 	/**
 	 * Add JavaScript for variable products
 	 */
-	public function add_variable_product_script() {
+	public function ctc_chat_add_variable_product_script() {
 		global $product;
 
 		// Only add for variable products.
@@ -173,34 +173,39 @@ class CTC_Chat_Public {
 		}
 
 		// Only add if single product button is enabled.
-		if ( ! isset( $this->settings['single_product']['enabled'] ) || ! $this->settings['single_product']['enabled'] ) {
+		if ( ! isset( $this->ctc_chat_settings['ctc_chat_single_product']['ctc_chat_enabled'] ) || ! $this->ctc_chat_settings['ctc_chat_single_product']['ctc_chat_enabled'] ) {
 			return;
 		}
 
-		// Prepare the WhatsApp URL base.
-		$link_generator = new CTC_Chat_WhatsApp_Link_Generator();
-		$whatsapp_number = $link_generator->get_whatsapp_number( $product->get_id() );
+		// Prepare the WhatsApp URL base with error handling.
+		try {
+			$ctc_chat_link_generator = new CTC_Chat_WhatsApp_Link_Generator();
+			$ctc_chat_whatsapp_number = $ctc_chat_link_generator->ctc_chat_get_whatsapp_number( $product->get_id() );
+		} catch ( Exception $e ) {
+			error_log( 'CTC Chat Public Product Error: ' . $e->getMessage() );
+			return;
+		}
 
 		// If no number, return.
-		if ( empty( $whatsapp_number ) ) {
+		if ( empty( $ctc_chat_whatsapp_number ) ) {
 			return;
 		}
 
 		// Format the WhatsApp number.
-		$whatsapp_number = preg_replace( '/[^0-9]/', '', $whatsapp_number );
+		$ctc_chat_whatsapp_number = preg_replace( '/[^0-9]/', '', $ctc_chat_whatsapp_number );
 
 		// Get the message template.
-		$message_template = isset( $this->settings['message_templates']['variations'] ) ?
-						   $this->settings['message_templates']['variations'] : '';
+		$ctc_chat_message_template = isset( $this->ctc_chat_settings['ctc_chat_message_templates']['ctc_chat_variations'] ) ?
+						   $this->ctc_chat_settings['ctc_chat_message_templates']['ctc_chat_variations'] : '';
 
 		// Check for product-specific custom message.
-		$custom_message = get_post_meta( $product->get_id(), '_ctc_chat_custom_message', true );
-		if ( ! empty( $custom_message ) ) {
-			$message_template = $custom_message;
+		$ctc_chat_custom_message = get_post_meta( $product->get_id(), '_ctc_chat_custom_message', true );
+		if ( ! empty( $ctc_chat_custom_message ) ) {
+			$ctc_chat_message_template = $ctc_chat_custom_message;
 		}
 
 		// Prepare the JavaScript.
-		$script = "
+		$ctc_chat_script = "
 			(function($) {
 				'use strict';
 
@@ -245,8 +250,8 @@ class CTC_Chat_Public {
 						});
 
 						// Create message with variation details
-						var baseUrl = 'https://wa.me/" . esc_js( $whatsapp_number ) . "?text=';
-						var message = '" . esc_js( $message_template ) . "';
+						var baseUrl = 'https://wa.me/" . esc_js( $ctc_chat_whatsapp_number ) . "?text=';
+						var message = '" . esc_js( $ctc_chat_message_template ) . "';
 
 						// Replace placeholders in message
 						message = message.replace('{product_name}', '" . esc_js( $product->get_name() ) . "');
@@ -261,34 +266,34 @@ class CTC_Chat_Public {
 			})(jQuery);
 		";
 
-		wp_add_inline_script( 'ctc-chat-public-script', $script );
+		wp_add_inline_script( 'ctc-chat-public-script', $ctc_chat_script );
 	}
 
 	/**
 	 * Enqueue scripts for WooCommerce block-based cart and checkout
 	 */
-	public function enqueue_block_scripts() {
+	public function ctc_chat_enqueue_block_scripts() {
 		// Only load on cart or checkout pages.
 		if ( ! is_cart() && ! is_checkout() ) {
 			return;
 		}
 
 		// Check if plugin is enabled globally.
-		$plugin_enabled = isset( $this->settings['plugin_enabled'] ) ? $this->settings['plugin_enabled'] : true;
-		if ( ! $plugin_enabled ) {
+		$ctc_chat_plugin_enabled = isset( $this->ctc_chat_settings['ctc_chat_plugin_enabled'] ) ? $this->ctc_chat_settings['ctc_chat_plugin_enabled'] : true;
+		if ( ! $ctc_chat_plugin_enabled ) {
 			return;
 		}
 
 		// Check if cart or checkout is enabled.
-		$cart_enabled = isset( $this->settings['cart_page']['enabled'] ) && $this->settings['cart_page']['enabled'];
-		$checkout_enabled = isset( $this->settings['checkout_page']['enabled'] ) && $this->settings['checkout_page']['enabled'];
+		$ctc_chat_cart_enabled = isset( $this->ctc_chat_settings['ctc_chat_cart_page']['ctc_chat_enabled'] ) && $this->ctc_chat_settings['ctc_chat_cart_page']['ctc_chat_enabled'];
+		$ctc_chat_checkout_enabled = isset( $this->ctc_chat_settings['ctc_chat_checkout_page']['ctc_chat_enabled'] ) && $this->ctc_chat_settings['ctc_chat_checkout_page']['ctc_chat_enabled'];
 
-		if ( ! $cart_enabled && ! $checkout_enabled ) {
+		if ( ! $ctc_chat_cart_enabled && ! $ctc_chat_checkout_enabled ) {
 			return;
 		}
 
 		// Check if current page is excluded.
-		if ( $this->is_page_excluded() ) {
+		if ( $this->ctc_chat_is_page_excluded() ) {
 			return;
 		}
 
@@ -301,24 +306,30 @@ class CTC_Chat_Public {
 			true
 		);
 
-		// Get WhatsApp URL.
-		$link_generator = new CTC_Chat_WhatsApp_Link_Generator();
-		$whatsapp_url = '';
+		// Get WhatsApp URL with error handling.
+		$ctc_chat_whatsapp_url = '';
 
-		if ( is_cart() ) {
-			$whatsapp_url = $link_generator->get_cart_url();
-		} elseif ( is_checkout() ) {
-			$whatsapp_url = $link_generator->get_cart_url(); // Uses same URL as cart.
+		try {
+			$ctc_chat_link_generator = new CTC_Chat_WhatsApp_Link_Generator();
+
+			if ( is_cart() ) {
+				$ctc_chat_whatsapp_url = $ctc_chat_link_generator->ctc_chat_get_cart_url();
+			} elseif ( is_checkout() ) {
+				$ctc_chat_whatsapp_url = $ctc_chat_link_generator->ctc_chat_get_checkout_url(); // Uses checkout URL.
+			}
+		} catch ( Exception $e ) {
+			error_log( 'CTC Chat Block Script Error: ' . $e->getMessage() );
+			$ctc_chat_whatsapp_url = '';
 		}
 
 		// If no URL generated, create a basic one.
-		if ( empty( $whatsapp_url ) ) {
-			$whatsapp_number = isset( $this->settings['whatsapp_numbers'][0]['number'] ) ?
-							  $this->settings['whatsapp_numbers'][0]['number'] : '';
-			if ( ! empty( $whatsapp_number ) ) {
-				$whatsapp_number = preg_replace( '/[^0-9]/', '', $whatsapp_number );
-				$default_message = __( 'Hello! I need help with my order.', 'aicoso-click-to-chat' );
-				$whatsapp_url = 'https://wa.me/' . $whatsapp_number . '?text=' . rawurlencode( $default_message );
+		if ( empty( $ctc_chat_whatsapp_url ) ) {
+			$ctc_chat_whatsapp_number = isset( $this->ctc_chat_settings['ctc_chat_whatsapp_numbers'][0]['ctc_chat_number'] ) ?
+							  $this->ctc_chat_settings['ctc_chat_whatsapp_numbers'][0]['ctc_chat_number'] : '';
+			if ( ! empty( $ctc_chat_whatsapp_number ) ) {
+				$ctc_chat_whatsapp_number = preg_replace( '/[^0-9]/', '', $ctc_chat_whatsapp_number );
+				$ctc_chat_default_message = __( 'Hello! I need help with my order.', 'aicoso-click-to-chat' );
+				$ctc_chat_whatsapp_url = 'https://wa.me/' . $ctc_chat_whatsapp_number . '?text=' . rawurlencode( $ctc_chat_default_message );
 			}
 		}
 
@@ -327,20 +338,20 @@ class CTC_Chat_Public {
 			'ctc-chat-cart-checkout-blocks',
 			'ctc_chat_block_params',
 			array(
-				'cart_enabled'      => $cart_enabled ? '1' : '0',
-				'checkout_enabled'  => $checkout_enabled ? '1' : '0',
-				'cart_position'     => isset( $this->settings['cart_page']['position'] ) ?
-					$this->settings['cart_page']['position'] : 'after_cart_table',
-				'checkout_position' => isset( $this->settings['checkout_page']['position'] ) ?
-					$this->settings['checkout_page']['position'] : 'after_payment',
-				'button_text'       => isset( $this->settings['button_settings']['text'] ) ?
-					$this->settings['button_settings']['text'] : __( 'Order via WhatsApp', 'aicoso-click-to-chat' ),
-				'bg_color'          => isset( $this->settings['button_settings']['bg_color'] ) ?
-					$this->settings['button_settings']['bg_color'] : '#25D366',
-				'text_color'        => isset( $this->settings['button_settings']['text_color'] ) ?
-					$this->settings['button_settings']['text_color'] : '#ffffff',
-				'show_icon'         => isset( $this->settings['button_settings']['icon'] ) && $this->settings['button_settings']['icon'] ? '1' : '0',
-				'whatsapp_url'      => $whatsapp_url,
+				'cart_enabled'      => $ctc_chat_cart_enabled ? '1' : '0',
+				'checkout_enabled'  => $ctc_chat_checkout_enabled ? '1' : '0',
+				'cart_position'     => isset( $this->ctc_chat_settings['ctc_chat_cart_page']['ctc_chat_position'] ) ?
+					$this->ctc_chat_settings['ctc_chat_cart_page']['ctc_chat_position'] : 'after_cart_table',
+				'checkout_position' => isset( $this->ctc_chat_settings['ctc_chat_checkout_page']['ctc_chat_position'] ) ?
+					$this->ctc_chat_settings['ctc_chat_checkout_page']['ctc_chat_position'] : 'after_payment',
+				'button_text'       => isset( $this->ctc_chat_settings['ctc_chat_button_settings']['ctc_chat_text'] ) ?
+					$this->ctc_chat_settings['ctc_chat_button_settings']['ctc_chat_text'] : __( 'Order via WhatsApp', 'aicoso-click-to-chat' ),
+				'bg_color'          => isset( $this->ctc_chat_settings['ctc_chat_button_settings']['ctc_chat_bg_color'] ) ?
+					$this->ctc_chat_settings['ctc_chat_button_settings']['ctc_chat_bg_color'] : '#25D366',
+				'text_color'        => isset( $this->ctc_chat_settings['ctc_chat_button_settings']['ctc_chat_text_color'] ) ?
+					$this->ctc_chat_settings['ctc_chat_button_settings']['ctc_chat_text_color'] : '#ffffff',
+				'show_icon'         => isset( $this->ctc_chat_settings['ctc_chat_button_settings']['ctc_chat_icon'] ) && $this->ctc_chat_settings['ctc_chat_button_settings']['ctc_chat_icon'] ? '1' : '0',
+				'whatsapp_url'      => $ctc_chat_whatsapp_url,
 			)
 		);
 	}
@@ -348,90 +359,90 @@ class CTC_Chat_Public {
 	/**
 	 * Handle advanced options for hiding WooCommerce buttons
 	 */
-	public function handle_advanced_options() {
+	public function ctc_chat_handle_advanced_options() {
 		// Check if plugin is enabled.
-		$plugin_enabled = isset( $this->settings['plugin_enabled'] ) ? $this->settings['plugin_enabled'] : true;
-		if ( ! $plugin_enabled ) {
+		$ctc_chat_plugin_enabled = isset( $this->ctc_chat_settings['ctc_chat_plugin_enabled'] ) ? $this->ctc_chat_settings['ctc_chat_plugin_enabled'] : true;
+		if ( ! $ctc_chat_plugin_enabled ) {
 			return;
 		}
 
 		// Check if any advanced options are enabled.
-		if ( ! isset( $this->settings['advanced'] ) ) {
+		if ( ! isset( $this->ctc_chat_settings['ctc_chat_advanced'] ) ) {
 			return;
 		}
 
-		$advanced = $this->settings['advanced'];
+		$ctc_chat_advanced = $this->ctc_chat_settings['ctc_chat_advanced'];
 
 		// Check for catalog mode first (overrides individual settings).
-		if ( isset( $advanced['catalog_mode'] ) && $advanced['catalog_mode'] ) {
-			$this->hide_all_purchase_buttons();
+		if ( isset( $ctc_chat_advanced['ctc_chat_catalog_mode'] ) && $ctc_chat_advanced['ctc_chat_catalog_mode'] ) {
+			$this->ctc_chat_hide_all_purchase_buttons();
 			return;
 		}
 
 		// Hide Add to Cart buttons.
-		if ( isset( $advanced['hide_add_to_cart'] ) && $advanced['hide_add_to_cart'] ) {
-			$this->hide_add_to_cart_buttons();
+		if ( isset( $ctc_chat_advanced['ctc_chat_hide_add_to_cart'] ) && $ctc_chat_advanced['ctc_chat_hide_add_to_cart'] ) {
+			$this->ctc_chat_hide_add_to_cart_buttons();
 		}
 
 		// Hide Proceed to Checkout button.
-		if ( isset( $advanced['hide_proceed_checkout'] ) && $advanced['hide_proceed_checkout'] ) {
-			$this->hide_proceed_checkout_button();
+		if ( isset( $ctc_chat_advanced['ctc_chat_hide_proceed_checkout'] ) && $ctc_chat_advanced['ctc_chat_hide_proceed_checkout'] ) {
+			$this->ctc_chat_hide_proceed_checkout_button();
 		}
 
 		// Hide Place Order button.
-		if ( isset( $advanced['hide_place_order'] ) && $advanced['hide_place_order'] ) {
-			$this->hide_place_order_button();
+		if ( isset( $ctc_chat_advanced['ctc_chat_hide_place_order'] ) && $ctc_chat_advanced['ctc_chat_hide_place_order'] ) {
+			$this->ctc_chat_hide_place_order_button();
 		}
 	}
 
 	/**
 	 * Hide all purchase buttons (catalog mode)
 	 */
-	private function hide_all_purchase_buttons() {
-		$this->hide_add_to_cart_buttons();
-		$this->hide_proceed_checkout_button();
-		$this->hide_place_order_button();
+	private function ctc_chat_hide_all_purchase_buttons() {
+		$this->ctc_chat_hide_add_to_cart_buttons();
+		$this->ctc_chat_hide_proceed_checkout_button();
+		$this->ctc_chat_hide_place_order_button();
 	}
 
 	/**
 	 * Hide Add to Cart buttons
 	 */
-	private function hide_add_to_cart_buttons() {
+	private function ctc_chat_hide_add_to_cart_buttons() {
 		// Remove add to cart buttons globally first.
 		remove_action( 'woocommerce_single_product_summary', 'woocommerce_template_single_add_to_cart', 30 );
 		remove_action( 'woocommerce_after_shop_loop_item', 'woocommerce_template_loop_add_to_cart', 10 );
 
 		// Add CSS to hide any remaining add to cart buttons.
-		add_action( 'wp_enqueue_scripts', array( $this, 'hide_add_to_cart_css' ) );
+		add_action( 'wp_enqueue_scripts', array( $this, 'ctc_chat_hide_add_to_cart_css' ) );
 	}
 
 	/**
 	 * Hide Proceed to Checkout button
 	 */
-	private function hide_proceed_checkout_button() {
+	private function ctc_chat_hide_proceed_checkout_button() {
 		// Remove proceed to checkout button.
 		remove_action( 'woocommerce_proceed_to_checkout', 'woocommerce_button_proceed_to_checkout', 20 );
 
 		// Add CSS to hide the button on all pages.
-		add_action( 'wp_enqueue_scripts', array( $this, 'hide_proceed_checkout_css' ) );
+		add_action( 'wp_enqueue_scripts', array( $this, 'ctc_chat_hide_proceed_checkout_css' ) );
 	}
 
 	/**
 	 * Hide Place Order button
 	 */
-	private function hide_place_order_button() {
+	private function ctc_chat_hide_place_order_button() {
 		// Add CSS to hide the place order button on all pages.
-		add_action( 'wp_enqueue_scripts', array( $this, 'hide_place_order_css' ) );
+		add_action( 'wp_enqueue_scripts', array( $this, 'ctc_chat_hide_place_order_css' ) );
 
 		// Optionally prevent form submission.
-		add_action( 'wp_enqueue_scripts', array( $this, 'disable_checkout_form_submission' ) );
+		add_action( 'wp_enqueue_scripts', array( $this, 'ctc_chat_disable_checkout_form_submission' ) );
 	}
 
 	/**
 	 * Add CSS to hide Add to Cart buttons
 	 */
-	public function hide_add_to_cart_css() {
-		$css = '
+	public function ctc_chat_hide_add_to_cart_css() {
+		$ctc_chat_css = '
 			/* Hide WooCommerce Add to Cart buttons only, NOT WhatsApp buttons */
 			.single_add_to_cart_button:not(.ctc-whatsapp-button),
 			.add_to_cart_button:not(.ctc-whatsapp-button),
@@ -451,14 +462,14 @@ class CTC_Chat_Public {
 			}
 		';
 
-		wp_add_inline_style( 'ctc-chat-public-styles', $css );
+		wp_add_inline_style( 'ctc-chat-public-styles', $ctc_chat_css );
 	}
 
 	/**
 	 * Add CSS to hide Proceed to Checkout button
 	 */
-	public function hide_proceed_checkout_css() {
-		$css = '
+	public function ctc_chat_hide_proceed_checkout_css() {
+		$ctc_chat_css = '
 			/* Hide WooCommerce checkout button only, NOT WhatsApp buttons */
 			.wc-proceed-to-checkout a.checkout-button:not(.ctc-whatsapp-button),
 			.wc-proceed-to-checkout .checkout-button:not(.ctc-whatsapp-button),
@@ -473,14 +484,14 @@ class CTC_Chat_Public {
 			}
 		';
 
-		wp_add_inline_style( 'ctc-chat-public-styles', $css );
+		wp_add_inline_style( 'ctc-chat-public-styles', $ctc_chat_css );
 	}
 
 	/**
 	 * Add CSS to hide Place Order button
 	 */
-	public function hide_place_order_css() {
-		$css = '
+	public function ctc_chat_hide_place_order_css() {
+		$ctc_chat_css = '
 			/* Hide WooCommerce place order button only, NOT WhatsApp buttons */
 			#place_order:not(.ctc-whatsapp-button),
 			.woocommerce-checkout-payment button#place_order:not(.ctc-whatsapp-button),
@@ -495,15 +506,15 @@ class CTC_Chat_Public {
 			}
 		';
 
-		wp_add_inline_style( 'ctc-chat-public-styles', $css );
+		wp_add_inline_style( 'ctc-chat-public-styles', $ctc_chat_css );
 	}
 
 	/**
 	 * Disable checkout form submission
 	 */
-	public function disable_checkout_form_submission() {
+	public function ctc_chat_disable_checkout_form_submission() {
 		if ( is_checkout() ) {
-			$script = "
+			$ctc_chat_script = "
 				jQuery(document).ready(function($) {
 					// Disable form submission.
 					$('form.checkout').on('submit', function(e) {
@@ -513,7 +524,7 @@ class CTC_Chat_Public {
 				});
 			";
 
-			wp_add_inline_script( 'ctc-chat-public-script', $script );
+			wp_add_inline_script( 'ctc-chat-public-script', $ctc_chat_script );
 		}
 	}
 
@@ -522,9 +533,9 @@ class CTC_Chat_Public {
 	 *
 	 * @return bool True if page is excluded, false otherwise
 	 */
-	private function is_page_excluded() {
+	private function ctc_chat_is_page_excluded() {
 		// If exclusions not set or empty, nothing is excluded.
-		if ( empty( $this->settings['exclusions'] ) ) {
+		if ( empty( $this->ctc_chat_settings['exclusions'] ) ) {
 			return false;
 		}
 
@@ -534,8 +545,8 @@ class CTC_Chat_Public {
 		// Special handling for WooCommerce Cart page.
 		if ( is_cart() ) {
 			$cart_page_id = wc_get_page_id( 'cart' );
-			if ( $cart_page_id && isset( $this->settings['exclusions']['pages'] ) && ! empty( $this->settings['exclusions']['pages'] ) ) {
-				if ( in_array( $cart_page_id, $this->settings['exclusions']['pages'], true ) ) {
+			if ( $cart_page_id && isset( $this->ctc_chat_settings['exclusions']['pages'] ) && ! empty( $this->ctc_chat_settings['exclusions']['pages'] ) ) {
+				if ( in_array( $cart_page_id, $this->ctc_chat_settings['exclusions']['pages'], true ) ) {
 					return true;
 				}
 			}
@@ -544,16 +555,16 @@ class CTC_Chat_Public {
 		// Special handling for WooCommerce Checkout page.
 		if ( is_checkout() ) {
 			$checkout_page_id = wc_get_page_id( 'checkout' );
-			if ( $checkout_page_id && isset( $this->settings['exclusions']['pages'] ) && ! empty( $this->settings['exclusions']['pages'] ) ) {
-				if ( in_array( $checkout_page_id, $this->settings['exclusions']['pages'], true ) ) {
+			if ( $checkout_page_id && isset( $this->ctc_chat_settings['exclusions']['pages'] ) && ! empty( $this->ctc_chat_settings['exclusions']['pages'] ) ) {
+				if ( in_array( $checkout_page_id, $this->ctc_chat_settings['exclusions']['pages'], true ) ) {
 					return true;
 				}
 			}
 		}
 
 		// Check general page exclusions if we have a current ID.
-		if ( $current_id && isset( $this->settings['exclusions']['pages'] ) && ! empty( $this->settings['exclusions']['pages'] ) ) {
-			if ( in_array( $current_id, $this->settings['exclusions']['pages'], true ) ) {
+		if ( $current_id && isset( $this->ctc_chat_settings['exclusions']['pages'] ) && ! empty( $this->ctc_chat_settings['exclusions']['pages'] ) ) {
+			if ( in_array( $current_id, $this->ctc_chat_settings['exclusions']['pages'], true ) ) {
 				return true;
 			}
 		}
@@ -564,31 +575,31 @@ class CTC_Chat_Public {
 	/**
 	 * AJAX handler to get variation-specific WhatsApp URL
 	 */
-	public function ajax_get_variation_url() {
+	public function ctc_chat_ajax_get_variation_url() {
 		// Check nonce.
 		if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['nonce'] ) ), 'ctc_chat_public_nonce' ) ) {
 			wp_send_json_error( array( 'message' => __( 'Security check failed.', 'aicoso-click-to-chat' ) ) );
 		}
 
 		// Get product ID and variations.
-		$product_id = isset( $_POST['product_id'] ) ? intval( $_POST['product_id'] ) : 0;
-		$variations = isset( $_POST['variations'] ) ? array_map( 'sanitize_text_field', wp_unslash( $_POST['variations'] ) ) : array();
+		$ctc_chat_product_id = isset( $_POST['product_id'] ) ? intval( $_POST['product_id'] ) : 0;
+		$ctc_chat_variations = isset( $_POST['variations'] ) ? array_map( 'sanitize_text_field', wp_unslash( $_POST['variations'] ) ) : array();
 
-		if ( ! $product_id ) {
+		if ( ! $ctc_chat_product_id ) {
 			wp_send_json_error( array( 'message' => __( 'Invalid product ID.', 'aicoso-click-to-chat' ) ) );
 		}
 
 		// Initialize link generator.
-		$link_generator = new CTC_Chat_WhatsApp_Link_Generator();
+		$ctc_chat_link_generator = new CTC_Chat_WhatsApp_Link_Generator();
 
 		// Generate WhatsApp URL with variations.
-		$whatsapp_url = $link_generator->get_product_url( $product_id, $variations );
+		$ctc_chat_whatsapp_url = $ctc_chat_link_generator->get_product_url( $ctc_chat_product_id, $ctc_chat_variations );
 
-		if ( empty( $whatsapp_url ) ) {
+		if ( empty( $ctc_chat_whatsapp_url ) ) {
 			wp_send_json_error( array( 'message' => __( 'Could not generate WhatsApp URL.', 'aicoso-click-to-chat' ) ) );
 		}
 
-		wp_send_json_success( array( 'url' => $whatsapp_url ) );
+		wp_send_json_success( array( 'url' => $ctc_chat_whatsapp_url ) );
 	}
 }
 

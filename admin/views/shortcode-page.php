@@ -12,16 +12,16 @@ if ( ! defined( 'WPINC' ) ) {
 }
 
 // Get plugin settings.
-$settings = get_option( 'ctc_chat_settings', array() );
+$ctc_chat_settings = get_option( 'ctc_chat_settings', array() );
 
 // Get button settings for defaults.
-$button_settings = isset( $settings['button_settings'] ) ? $settings['button_settings'] : array();
-$default_text = isset( $button_settings['text'] ) ? $button_settings['text'] : esc_html__( 'Order via WhatsApp', 'aicoso-click-to-chat' );
-$default_bg_color = isset( $button_settings['bg_color'] ) ? $button_settings['bg_color'] : '#25D366';
-$default_text_color = isset( $button_settings['text_color'] ) ? $button_settings['text_color'] : '#ffffff';
+$ctc_chat_button_settings = isset( $ctc_chat_settings['ctc_chat_button_settings'] ) ? $ctc_chat_settings['ctc_chat_button_settings'] : array();
+$ctc_chat_default_text = isset( $ctc_chat_button_settings['ctc_chat_text'] ) ? $ctc_chat_button_settings['ctc_chat_text'] : esc_html__( 'Order via WhatsApp', 'aicoso-click-to-chat' );
+$ctc_chat_default_bg_color = isset( $ctc_chat_button_settings['ctc_chat_bg_color'] ) ? $ctc_chat_button_settings['ctc_chat_bg_color'] : '#25D366';
+$ctc_chat_default_text_color = isset( $ctc_chat_button_settings['ctc_chat_text_color'] ) ? $ctc_chat_button_settings['ctc_chat_text_color'] : '#ffffff';
 
 // Get WhatsApp numbers.
-$whatsapp_numbers = isset( $settings['whatsapp_numbers'] ) ? $settings['whatsapp_numbers'] : array();
+$ctc_chat_whatsapp_numbers = isset( $ctc_chat_settings['ctc_chat_whatsapp_numbers'] ) ? $ctc_chat_settings['ctc_chat_whatsapp_numbers'] : array();
 ?>
 
 <div class="wrap ctc-chat-admin-container">
@@ -52,23 +52,23 @@ $whatsapp_numbers = isset( $settings['whatsapp_numbers'] ) ? $settings['whatsapp
 	
 	<?php
 	// Check if plugin is disabled or no numbers configured.
-	$plugin_enabled = isset( $settings['plugin_enabled'] ) ? $settings['plugin_enabled'] : true;
+	$ctc_chat_plugin_enabled = isset( $ctc_chat_settings['ctc_chat_plugin_enabled'] ) ? $ctc_chat_settings['ctc_chat_plugin_enabled'] : true;
 
 	// Check if there are any numbers with actual phone numbers configured.
-	$has_valid_numbers = false;
-	if ( isset( $settings['whatsapp_numbers'] ) && ! empty( $settings['whatsapp_numbers'] ) ) {
-		foreach ( $settings['whatsapp_numbers'] as $number ) {
-			if ( ! empty( $number['number'] ) ) {
-				$has_valid_numbers = true;
+	$ctc_chat_has_valid_numbers = false;
+	if ( isset( $ctc_chat_settings['ctc_chat_whatsapp_numbers'] ) && ! empty( $ctc_chat_settings['ctc_chat_whatsapp_numbers'] ) ) {
+		foreach ( $ctc_chat_settings['ctc_chat_whatsapp_numbers'] as $ctc_chat_number ) {
+			if ( ! empty( $ctc_chat_number['ctc_chat_number'] ) ) {
+				$ctc_chat_has_valid_numbers = true;
 				break;
 			}
 		}
 	}
 
-	if ( ! $plugin_enabled || ! $has_valid_numbers ) :
+	if ( ! $ctc_chat_plugin_enabled || ! $ctc_chat_has_valid_numbers ) :
 		?>
 	<div class="ctc-chat-admin-warning-box">
-		<?php if ( ! $plugin_enabled ) : ?>
+		<?php if ( ! $ctc_chat_plugin_enabled ) : ?>
 		<div class="ctc-chat-warning-item">
 			<span class="ctc-chat-warning-icon">⚠️</span>
 			<div class="ctc-chat-warning-content">
@@ -84,7 +84,7 @@ $whatsapp_numbers = isset( $settings['whatsapp_numbers'] ) ? $settings['whatsapp
 		</div>
 		<?php endif; ?>
 
-		<?php if ( ! $has_valid_numbers ) : ?>
+		<?php if ( ! $ctc_chat_has_valid_numbers ) : ?>
 		<div class="ctc-chat-warning-item">
 			<span class="ctc-chat-warning-icon">⚠️</span>
 			<div class="ctc-chat-warning-content">
@@ -174,17 +174,17 @@ $whatsapp_numbers = isset( $settings['whatsapp_numbers'] ) ? $settings['whatsapp
 
 				<div class="ctc-chat-field-group">
 					<label for="ctc_chat_button_text"><?php esc_html_e( 'Button Text', 'aicoso-click-to-chat' ); ?></label>
-					<input type="text" id="ctc_chat_button_text" class="ctc-chat-shortcode-param" data-param="text" placeholder="<?php echo esc_attr( $default_text ); ?>">
+					<input type="text" id="ctc_chat_button_text" class="ctc-chat-shortcode-param" data-param="text" placeholder="<?php echo esc_attr( $ctc_chat_default_text ); ?>">
 				</div>
 
 				<div class="ctc-chat-color-fields">
 					<div class="ctc-chat-field-group">
 						<label><?php esc_html_e( 'Background', 'aicoso-click-to-chat' ); ?></label>
-						<input type="text" id="ctc_chat_bg_color" class="ctc-chat-color-field ctc-chat-shortcode-param" data-param="bg_color" value="<?php echo esc_attr( $default_bg_color ); ?>">
+						<input type="text" id="ctc_chat_bg_color" class="ctc-chat-color-field ctc-chat-shortcode-param" data-param="bg_color" value="<?php echo esc_attr( $ctc_chat_default_bg_color ); ?>">
 					</div>
 					<div class="ctc-chat-field-group">
 						<label><?php esc_html_e( 'Text Color', 'aicoso-click-to-chat' ); ?></label>
-						<input type="text" id="ctc_chat_text_color" class="ctc-chat-color-field ctc-chat-shortcode-param" data-param="text_color" value="<?php echo esc_attr( $default_text_color ); ?>">
+						<input type="text" id="ctc_chat_text_color" class="ctc-chat-color-field ctc-chat-shortcode-param" data-param="text_color" value="<?php echo esc_attr( $ctc_chat_default_text_color ); ?>">
 					</div>
 				</div>
 
@@ -222,14 +222,14 @@ $whatsapp_numbers = isset( $settings['whatsapp_numbers'] ) ? $settings['whatsapp
 					<?php esc_html_e( 'Advanced Options', 'aicoso-click-to-chat' ); ?>
 				</h3>
 				<div class="ctc-chat-advanced-content ctc-chat-hidden">
-					<?php if ( ! empty( $whatsapp_numbers ) ) : ?>
+					<?php if ( ! empty( $ctc_chat_whatsapp_numbers ) ) : ?>
 					<div class="ctc-chat-field-group">
 						<label><?php esc_html_e( 'Specific Number', 'aicoso-click-to-chat' ); ?></label>
 						<select class="ctc-chat-shortcode-param" data-param="show_number">
 							<option value=""><?php esc_html_e( 'Use default', 'aicoso-click-to-chat' ); ?></option>
-							<?php foreach ( $whatsapp_numbers as $number ) : ?>
-								<option value="<?php echo esc_attr( $number['id'] ); ?>">
-									<?php echo esc_html( $number['name'] . ' (' . $number['number'] . ')' ); ?>
+							<?php foreach ( $ctc_chat_whatsapp_numbers as $ctc_chat_number ) : ?>
+								<option value="<?php echo esc_attr( $ctc_chat_number['ctc_chat_id'] ); ?>">
+									<?php echo esc_html( $ctc_chat_number['ctc_chat_name'] . ' (' . $ctc_chat_number['ctc_chat_number'] . ')' ); ?>
 								</option>
 							<?php endforeach; ?>
 						</select>
