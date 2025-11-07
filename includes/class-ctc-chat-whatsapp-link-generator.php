@@ -281,7 +281,6 @@ class CTC_Chat_WhatsApp_Link_Generator {
 				return '';
 			}
 		} catch ( Exception $e ) {
-			error_log( 'CTC Chat WC Instance Error: ' . $e->getMessage() );
 			return '';
 		}
 

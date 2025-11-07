@@ -182,7 +182,6 @@ class CTC_Chat_Public {
 			$ctc_chat_link_generator = new CTC_Chat_WhatsApp_Link_Generator();
 			$ctc_chat_whatsapp_number = $ctc_chat_link_generator->ctc_chat_get_whatsapp_number( $product->get_id() );
 		} catch ( Exception $e ) {
-			error_log( 'CTC Chat Public Product Error: ' . $e->getMessage() );
 			return;
 		}
 
@@ -318,7 +317,6 @@ class CTC_Chat_Public {
 				$ctc_chat_whatsapp_url = $ctc_chat_link_generator->ctc_chat_get_checkout_url(); // Uses checkout URL.
 			}
 		} catch ( Exception $e ) {
-			error_log( 'CTC Chat Block Script Error: ' . $e->getMessage() );
 			$ctc_chat_whatsapp_url = '';
 		}
 

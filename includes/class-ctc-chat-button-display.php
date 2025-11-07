@@ -258,7 +258,6 @@ class CTC_Chat_Button_Display {
 		try {
 			$ctc_chat_whatsapp_url = $this->ctc_chat_link_generator->ctc_chat_get_product_url( $product->get_id() );
 		} catch ( Exception $e ) {
-			error_log( 'CTC Chat Single Product Button Error: ' . $e->getMessage() );
 			return;
 		}
 
@@ -396,8 +395,6 @@ class CTC_Chat_Button_Display {
 		try {
 			$ctc_chat_whatsapp_url = $this->ctc_chat_link_generator->ctc_chat_get_cart_url();
 		} catch ( Exception $e ) {
-			// Log error and return gracefully
-			error_log( 'CTC Chat Cart Button Error: ' . $e->getMessage() );
 			return;
 		}
 
@@ -447,8 +444,6 @@ class CTC_Chat_Button_Display {
 		try {
 			$ctc_chat_whatsapp_url = $this->ctc_chat_link_generator->ctc_chat_get_checkout_url();
 		} catch ( Exception $e ) {
-			// Log error and return gracefully
-			error_log( 'CTC Chat Checkout Button Error: ' . $e->getMessage() );
 			return;
 		}
 

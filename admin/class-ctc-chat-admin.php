@@ -494,14 +494,7 @@ class CTC_Chat_Admin {
 			// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Each field is sanitized individually below.
 			$ctc_chat_numbers = wp_unslash( $_POST['ctc_numbers'] );
 
-			if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
-				error_log( 'CTC Chat: Processing numbers array: ' . print_r( $ctc_chat_numbers, true ) );
-			}
-
 			foreach ( $ctc_chat_numbers as $number_index => $number_data ) {
-				if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
-					error_log( 'CTC Chat: Processing number ' . $number_index . ': ' . print_r( $number_data, true ) );
-				}
 				// Get the number ID.
 				$number_id = isset( $number_data['ctc_chat_id'] ) ? absint( $number_data['ctc_chat_id'] ) : 0;
 
@@ -566,15 +559,7 @@ class CTC_Chat_Admin {
 		$ctc_chat_settings['ctc_chat_whatsapp_numbers'] = $ctc_chat_whatsapp_numbers;
 
 		// Update settings.
-		if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
-			error_log( 'CTC Chat: About to update settings with ' . count( $ctc_chat_whatsapp_numbers ) . ' numbers' );
-		}
-
 		update_option( 'ctc_chat_settings', $ctc_chat_settings );
-
-		if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
-			error_log( 'CTC Chat: Settings updated successfully' );
-		}
 
 		// Add message based on whether we found duplicates.
 		if ( $ctc_chat_has_duplicate ) {

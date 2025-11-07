@@ -144,10 +144,6 @@ class CTC_Chat_Shortcodes {
 
 		// If we couldn't generate a WhatsApp URL, return empty string.
 		if ( empty( $ctc_chat_whatsapp_url ) ) {
-			// Log the error for debugging
-			if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
-				error_log( 'CTC Chat Shortcode: Could not generate WhatsApp URL. Type: ' . $ctc_chat_atts['type'] . ', Product ID: ' . $ctc_chat_product_id );
-			}
 			return '';
 		}
 
