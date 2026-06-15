@@ -1,0 +1,87 @@
+<?xml version="1.0"?>
+<ruleset name="AICOSO Click to Chat WordPress Coding Standards">
+    <description>WordPress and WooCommerce Coding Standards for AICOSO Click to Chat Plugin</description>
+
+    <!-- What to scan -->
+    <file>.</file>
+
+    <!-- Exclude patterns -->
+    <exclude-pattern>*/vendor/*</exclude-pattern>
+    <exclude-pattern>*/node_modules/*</exclude-pattern>
+    <exclude-pattern>*/build/*</exclude-pattern>
+    <exclude-pattern>*/tests/*</exclude-pattern>
+    <exclude-pattern>*/.git/*</exclude-pattern>
+    <exclude-pattern>*/.github/*</exclude-pattern>
+    <exclude-pattern>*/languages/*</exclude-pattern>
+
+    <!-- How to scan -->
+    <arg value="sp"/> <!-- Show sniff and progress -->
+    <arg name="basepath" value="."/>
+    <arg name="colors"/>
+    <arg name="extensions" value="php"/>
+    <arg name="parallel" value="8"/>
+
+    <!-- Rules: Check PHP version compatibility -->
+    <config name="testVersion" value="7.4-"/>
+
+    <!-- Rules: WordPress Coding Standards -->
+    <rule ref="WordPress">
+        <!-- Allow short array syntax (modern PHP) -->
+        <exclude name="Generic.Arrays.DisallowShortArraySyntax"/>
+
+        <!-- Relax translator comments requirement -->
+        <exclude name="WordPress.WP.I18n.MissingTranslatorsComment"/>
+
+        <!-- Allow flexible file naming -->
+        <exclude name="WordPress.Files.FileName"/>
+
+        <!-- Allow camelCase for variables -->
+        <exclude name="WordPress.NamingConventions.ValidVariableName"/>
+
+        <!-- Exclude alignment warnings (cosmetic only) -->
+        <exclude name="Generic.Formatting.MultipleStatementAlignment"/>
+        <exclude name="WordPress.Arrays.MultipleStatementAlignment"/>
+    </rule>
+
+    <!-- Main plugin file is allowed to have mixed structure (functions + class) -->
+    <rule ref="WordPress.Files.FileName">
+        <exclude-pattern>aicoso-click-to-chat\.php</exclude-pattern>
+    </rule>
+
+    <!-- Set the text domain for i18n checks -->
+    <rule ref="WordPress.WP.I18n">
+        <properties>
+            <property name="text_domain" type="array">
+                <element value="aicoso-click-to-chat"/>
+            </property>
+        </properties>
+    </rule>
+
+    <!-- WooCommerce Coding Standards (if applicable) -->
+    <!-- Commented out until WooCommerce-Core ruleset is installed -->
+    <!--
+    <rule ref="WooCommerce-Core">
+        <exclude name="WooCommerce.Functions.InternalInjectionMethod"/>
+    </rule>
+    -->
+
+    <!-- Check for PHP cross-version compatibility -->
+    <!-- Commented out until PHPCompatibilityWP ruleset is installed -->
+    <!--
+    <rule ref="PHPCompatibilityWP"/>
+    -->
+
+    <!-- Enforce proper spacing -->
+    <rule ref="WordPress.WhiteSpace.ControlStructureSpacing">
+        <properties>
+            <property name="blank_line_check" value="true"/>
+        </properties>
+    </rule>
+
+    <!-- Security: Verify nonce checks -->
+    <rule ref="WordPress.Security.NonceVerification"/>
+
+    <!-- Security: Sanitization and escaping -->
+    <rule ref="WordPress.Security.ValidatedSanitizedInput"/>
+    <rule ref="WordPress.Security.EscapeOutput"/>
+</ruleset>

@@ -1,0 +1,45 @@
+name: PHPCS WordPress Coding Standards
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+
+jobs:
+  phpcs:
+    name: PHPCS Check
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.0'
+          tools: composer, cs2pr
+
+      - name: Install Composer dependencies
+        run: |
+          composer require --dev squizlabs/php_codesniffer:"^3.7"
+          composer require --dev wp-coding-standards/wpcs:"^2.3"
+          composer require --dev phpcompatibility/phpcompatibility-wp:"^2.1"
+          composer require --dev dealerdirect/phpcodesniffer-composer-installer:"^0.7"
+
+      - name: Configure PHPCS
+        run: |
+          vendor/bin/phpcs --config-set installed_paths vendor/wp-coding-standards/wpcs,vendor/phpcompatibility/phpcompatibility-wp
+          vendor/bin/phpcs -i
+
+      - name: Run PHPCS
+        run: |
+          vendor/bin/phpcs --standard=./phpcs.xml --warning-severity=0 --report=checkstyle | cs2pr || true
+          vendor/bin/phpcs --standard=./phpcs.xml --error-severity=1 --warning-severity=0
+
+      - name: Check PHP compatibility
+        run: |
+          echo "PHP compatibility check requires PHPCompatibilityWP package."
+          echo "Skipping for now as we're using WordPress Coding Standards v2.3"
+          echo "Plugin requires PHP 7.4+ as specified in readme.txt"

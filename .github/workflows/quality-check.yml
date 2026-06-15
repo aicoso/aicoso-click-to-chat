@@ -1,0 +1,87 @@
+name: Code Quality Check
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+
+jobs:
+  phpcs-check:
+    name: PHP Coding Standards Check
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+          tools: composer
+
+      - name: Install Composer dependencies
+        run: |
+          composer global config allow-plugins.dealerdirect/phpcodesniffer-composer-installer true
+          composer global require --with-all-dependencies \
+            dealerdirect/phpcodesniffer-composer-installer:^1.0 \
+            wp-coding-standards/wpcs \
+            phpcompatibility/phpcompatibility-wp \
+            phpcsstandards/phpcsutils \
+            phpcsstandards/phpcsextra \
+            woocommerce/woocommerce-sniffs
+
+      - name: Add Composer global bin to PATH
+        run: echo "$(composer global config bin-dir --absolute)" >> $GITHUB_PATH
+
+      - name: Verify PHPCS configuration
+        run: |
+          phpcs --config-show installed_paths
+          phpcs -i
+
+      - name: Run PHPCS with clean organized output
+        run: |
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+          echo "📋 PHPCS REPORT - WordPress & WooCommerce Coding Standards Check"
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+
+          # Run PHPCS and capture output
+          phpcs --standard=./phpcs.xml \
+            --warning-severity=0 \
+            --extensions=php \
+            --ignore=vendor/*,node_modules/*,build/*,.git/*,.github/* \
+            . > phpcs-output.txt 2>&1 || true
+
+          # Check if there are errors
+          if [ -s phpcs-output.txt ]; then
+            # Display the organized output
+            cat phpcs-output.txt
+
+            # Check if actual errors exist
+            if grep -q "ERROR" phpcs-output.txt; then
+              echo ""
+              echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+              echo "❌ PHPCS found coding standard violations. Please fix the errors above."
+              echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+              exit 1
+            fi
+          else
+            echo "✅ No coding standard violations found!"
+            echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+          fi
+
+      - name: Generate error summary
+        if: failure()
+        run: |
+          echo ""
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+          echo "📊 SUMMARY - Errors by file"
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+          phpcs --standard=./phpcs.xml \
+            --warning-severity=0 \
+            --extensions=php \
+            --ignore=vendor/*,node_modules/*,build/*,.git/*,.github/* \
+            --report=summary \
+            . || true
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
