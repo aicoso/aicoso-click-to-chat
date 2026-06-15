@@ -667,4 +667,3 @@ class CTC_Chat_Settings {
 		return $placeholders;
 	}
 }
-

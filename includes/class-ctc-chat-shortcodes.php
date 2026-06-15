@@ -222,4 +222,3 @@ class CTC_Chat_Shortcodes {
 		return $output;
 	}
 }
-

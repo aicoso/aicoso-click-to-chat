@@ -485,4 +485,3 @@ class CTC_Chat_Public {
 		wp_send_json_success( array( 'url' => $whatsapp_url ) );
 	}
 }
-

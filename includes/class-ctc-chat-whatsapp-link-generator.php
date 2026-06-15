@@ -948,4 +948,3 @@ class CTC_Chat_WhatsApp_Link_Generator {
 		return $message_template;
 	}
 }
-
