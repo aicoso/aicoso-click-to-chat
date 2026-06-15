@@ -84,7 +84,6 @@ class CTC_Chat_Shortcodes {
 			'ctc_chat_button'
 		);
 
-
 		// Determine the product ID to use.
 		$product_id = 0;
 
@@ -202,7 +201,7 @@ class CTC_Chat_Shortcodes {
 		if ( ! empty( $atts['show_number'] ) ) {
 			$number_id = absint( $atts['show_number'] );
 		} else {
-			$number_id = $this->link_generator->get_number_id( $product_id ?: null );
+			$number_id = $this->link_generator->get_number_id( $product_id ? $product_id : null );
 		}
 
 		$context = array_merge(

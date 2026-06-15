@@ -77,6 +77,40 @@ class CTC_Chat_Analytics_Admin {
 	}
 
 	/**
+	 * Read a verified POST field.
+	 *
+	 * @param string $key      Field key.
+	 * @param mixed  $fallback Default value.
+	 * @return mixed
+	 */
+	private function get_verified_post( $key, $fallback = null ) {
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verified in verify_request().
+		if ( ! isset( $_POST[ $key ] ) ) {
+			return $fallback;
+		}
+
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Sanitized by callers.
+		return wp_unslash( $_POST[ $key ] );
+	}
+
+	/**
+	 * Read a request field after caller verifies nonce.
+	 *
+	 * @param string $key      Field key.
+	 * @param mixed  $fallback Default value.
+	 * @return mixed
+	 */
+	private function get_request_value( $key, $fallback = null ) {
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Caller verifies nonce.
+		if ( ! isset( $_REQUEST[ $key ] ) ) {
+			return $fallback;
+		}
+
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Sanitized by callers.
+		return wp_unslash( $_REQUEST[ $key ] );
+	}
+
+	/**
 	 * KPI endpoint.
 	 */
 	public function ajax_kpis() {
@@ -90,7 +124,7 @@ class CTC_Chat_Analytics_Admin {
 	 */
 	public function ajax_trend() {
 		$request  = $this->verify_request();
-		$grouping = isset( $_POST['grouping'] ) ? sanitize_key( wp_unslash( $_POST['grouping'] ) ) : 'day';
+		$grouping = sanitize_key( (string) $this->get_verified_post( 'grouping', 'day' ) );
 		if ( ! in_array( $grouping, array( 'day', 'week', 'month' ), true ) ) {
 			$grouping = 'day';
 		}
@@ -129,9 +163,9 @@ class CTC_Chat_Analytics_Admin {
 	 * Click log endpoint.
 	 */
 	public function ajax_report_clicks() {
-		$request = $this->verify_request();
-		$page    = isset( $_POST['page'] ) ? absint( $_POST['page'] ) : 1;
-		$per_page = isset( $_POST['per_page'] ) ? absint( $_POST['per_page'] ) : 20;
+		$request  = $this->verify_request();
+		$page     = absint( $this->get_verified_post( 'page', 1 ) );
+		$per_page = absint( $this->get_verified_post( 'per_page', 20 ) );
 		$filters = $this->parse_filters();
 
 		$data = $this->analytics->get_click_log( $request['start_date'], $request['end_date'], $filters, $page, $per_page );
@@ -142,10 +176,10 @@ class CTC_Chat_Analytics_Admin {
 	 * Aggregate report endpoint.
 	 */
 	public function ajax_report_aggregate() {
-		$request = $this->verify_request();
-		$report  = isset( $_POST['report'] ) ? sanitize_key( wp_unslash( $_POST['report'] ) ) : 'placements';
-		$page    = isset( $_POST['page'] ) ? absint( $_POST['page'] ) : 1;
-		$per_page = isset( $_POST['per_page'] ) ? absint( $_POST['per_page'] ) : 20;
+		$request  = $this->verify_request();
+		$report   = sanitize_key( (string) $this->get_verified_post( 'report', 'placements' ) );
+		$page     = absint( $this->get_verified_post( 'page', 1 ) );
+		$per_page = absint( $this->get_verified_post( 'per_page', 20 ) );
 
 		$data = $this->analytics->get_aggregate_report( $report, $request['start_date'], $request['end_date'], $page, $per_page );
 		wp_send_json_success( $data );
@@ -225,25 +259,30 @@ class CTC_Chat_Analytics_Admin {
 	private function parse_filters_from_request() {
 		$filters = array();
 
-		if ( ! empty( $_REQUEST['button_type'] ) ) {
-			$types = (array) wp_unslash( $_REQUEST['button_type'] );
+		$button_types = $this->get_request_value( 'button_type' );
+		if ( ! empty( $button_types ) ) {
+			$types = (array) $button_types;
 			$filters['button_types'] = array_map( 'sanitize_key', $types );
 		}
 
-		if ( ! empty( $_REQUEST['number_id'] ) ) {
-			$filters['number_id'] = absint( $_REQUEST['number_id'] );
+		$number_id = $this->get_request_value( 'number_id' );
+		if ( ! empty( $number_id ) ) {
+			$filters['number_id'] = absint( $number_id );
 		}
 
-		if ( ! empty( $_REQUEST['product_id'] ) ) {
-			$filters['product_id'] = absint( $_REQUEST['product_id'] );
+		$product_id = $this->get_request_value( 'product_id' );
+		if ( ! empty( $product_id ) ) {
+			$filters['product_id'] = absint( $product_id );
 		}
 
-		if ( ! empty( $_REQUEST['device_type'] ) ) {
-			$filters['device_type'] = sanitize_key( wp_unslash( $_REQUEST['device_type'] ) );
+		$device_type = $this->get_request_value( 'device_type' );
+		if ( ! empty( $device_type ) ) {
+			$filters['device_type'] = sanitize_key( (string) $device_type );
 		}
 
-		if ( ! empty( $_REQUEST['search'] ) ) {
-			$filters['search'] = sanitize_text_field( wp_unslash( $_REQUEST['search'] ) );
+		$search = $this->get_request_value( 'search' );
+		if ( ! empty( $search ) ) {
+			$filters['search'] = sanitize_text_field( (string) $search );
 		}
 
 		return $filters;

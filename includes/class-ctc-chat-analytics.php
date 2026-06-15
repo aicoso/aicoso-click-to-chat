@@ -82,7 +82,7 @@ class CTC_Chat_Analytics {
 
 		$table = ctc_chat_get_clicks_table_name();
 
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+		// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 		$totals = $wpdb->get_row(
 			$wpdb->prepare(
 				"SELECT
@@ -102,7 +102,6 @@ class CTC_Chat_Analytics {
 		$total_clicks = isset( $totals['total_clicks'] ) ? (int) $totals['total_clicks'] : 0;
 		$mobile       = isset( $totals['mobile_clicks'] ) ? (int) $totals['mobile_clicks'] : 0;
 
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 		$top = $wpdb->get_row(
 			$wpdb->prepare(
 				"SELECT button_type, COUNT(*) AS click_count
@@ -143,7 +142,6 @@ class CTC_Chat_Analytics {
 		$table  = ctc_chat_get_clicks_table_name();
 		$tz     = wp_timezone();
 
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 		$rows = $wpdb->get_results(
 			$wpdb->prepare(
 				"SELECT clicked_at, is_unique FROM {$table}
@@ -211,7 +209,6 @@ class CTC_Chat_Analytics {
 		$range = ctc_chat_analytics_parse_range( $start_date, $end_date );
 		$table = ctc_chat_get_clicks_table_name();
 
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 		$rows = $wpdb->get_results(
 			$wpdb->prepare(
 				"SELECT button_type, COUNT(*) AS click_count
@@ -272,7 +269,6 @@ class CTC_Chat_Analytics {
 		$table = ctc_chat_get_clicks_table_name();
 		$limit = max( 1, min( 10, absint( $limit ) ) );
 
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 		$rows = $wpdb->get_results(
 			$wpdb->prepare(
 				"SELECT product_id,
@@ -295,9 +291,10 @@ class CTC_Chat_Analytics {
 
 		foreach ( (array) $rows as $row ) {
 			$product_id = (int) $row['product_id'];
+			$title      = get_the_title( $product_id );
 			$items[]    = array(
 				'product_id'     => $product_id,
-				'name'           => get_the_title( $product_id ) ?: __( '(deleted product)', 'aicoso-click-to-chat' ),
+				'name'           => $title ? $title : __( '(deleted product)', 'aicoso-click-to-chat' ),
 				'clicks'         => (int) $row['clicks'],
 				'unique_clicks'  => (int) $row['unique_clicks'],
 				'report_url'     => add_query_arg(
@@ -331,7 +328,6 @@ class CTC_Chat_Analytics {
 		$table = ctc_chat_get_clicks_table_name();
 		$limit = max( 1, min( 10, absint( $limit ) ) );
 
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 		$rows = $wpdb->get_results(
 			$wpdb->prepare(
 				"SELECT number_id,
@@ -397,7 +393,6 @@ class CTC_Chat_Analytics {
 
 		list( $where_sql, $where_args ) = $this->build_filter_sql( $range['start'], $range['end'], $filters );
 
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 		$total = (int) $wpdb->get_var(
 			$wpdb->prepare(
 				"SELECT COUNT(*) FROM {$table} WHERE {$where_sql}",
@@ -409,7 +404,6 @@ class CTC_Chat_Analytics {
 		$query_args[] = $per_page;
 		$query_args[] = $offset;
 
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 		$rows = $wpdb->get_results(
 			$wpdb->prepare(
 				"SELECT * FROM {$table} WHERE {$where_sql} ORDER BY clicked_at DESC LIMIT %d OFFSET %d",
@@ -463,10 +457,14 @@ class CTC_Chat_Analytics {
 				$where     = "page_path IS NOT NULL AND page_path <> ''";
 				break;
 			default:
-				return array( 'rows' => array(), 'total' => 0, 'page' => 1, 'per_page' => $per_page );
+				return array(
+					'rows'     => array(),
+					'total'    => 0,
+					'page'     => 1,
+					'per_page' => $per_page,
+				);
 		}
 
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 		$total = (int) $wpdb->get_var(
 			$wpdb->prepare(
 				"SELECT COUNT(*) FROM (
@@ -480,7 +478,6 @@ class CTC_Chat_Analytics {
 			)
 		);
 
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 		$rows = $wpdb->get_results(
 			$wpdb->prepare(
 				"SELECT {$group_col} AS group_key,
@@ -500,7 +497,6 @@ class CTC_Chat_Analytics {
 			ARRAY_A
 		);
 
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 		$grand_total = (int) $wpdb->get_var(
 			$wpdb->prepare(
 				"SELECT COUNT(*) FROM {$table} WHERE clicked_at BETWEEN %s AND %s",
@@ -527,8 +523,9 @@ class CTC_Chat_Analytics {
 					break;
 				case 'products':
 					$pid = (int) $row['group_key'];
+					$title = get_the_title( $pid );
 					$item['product_id'] = $pid;
-					$item['product']    = get_the_title( $pid ) ?: __( '(deleted product)', 'aicoso-click-to-chat' );
+					$item['product']    = $title ? $title : __( '(deleted product)', 'aicoso-click-to-chat' );
 					break;
 				case 'numbers':
 					$nid = (int) $row['group_key'];
@@ -571,7 +568,6 @@ class CTC_Chat_Analytics {
 		$query_args                     = $where_args;
 		$query_args[]                   = $limit;
 
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 		$rows = $wpdb->get_results(
 			$wpdb->prepare(
 				"SELECT * FROM {$table} WHERE {$where_sql} ORDER BY clicked_at DESC LIMIT %d",
@@ -684,7 +680,7 @@ class CTC_Chat_Analytics {
 			'order_number'         => $order_number,
 			'cart_total_formatted' => $cart_total_formatted,
 			'number_label'         => ! empty( $row['number_id'] ) ? ctc_chat_get_number_display( (int) $row['number_id'] ) : '—',
-			'device_type'          => $row['device_type'] ?: 'unknown',
+			'device_type'          => ! empty( $row['device_type'] ) ? $row['device_type'] : 'unknown',
 			'page_url'             => $row['page_url'],
 		);
 	}

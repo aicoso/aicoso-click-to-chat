@@ -146,8 +146,25 @@ class CTC_Chat_Tracker {
 				'is_bot'          => 0,
 			),
 			array(
-				'%s', '%s', '%s', '%d', '%d', '%d', '%d', '%d', '%f', '%s',
-				'%s', '%s', '%s', '%s', '%s', '%s', '%s', '%d', '%d',
+				'%s',
+				'%s',
+				'%s',
+				'%d',
+				'%d',
+				'%d',
+				'%d',
+				'%d',
+				'%f',
+				'%s',
+				'%s',
+				'%s',
+				'%s',
+				'%s',
+				'%s',
+				'%s',
+				'%s',
+				'%d',
+				'%d',
 			)
 		);
 
@@ -210,7 +227,7 @@ class CTC_Chat_Tracker {
 		$table = ctc_chat_get_clicks_table_name();
 		$since = gmdate( 'Y-m-d H:i:s', time() - MINUTE_IN_SECONDS );
 
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+		// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 		$count = (int) $wpdb->get_var(
 			$wpdb->prepare(
 				"SELECT COUNT(*) FROM {$table} WHERE visitor_key = %s AND clicked_at >= %s",
@@ -218,6 +235,7 @@ class CTC_Chat_Tracker {
 				$since
 			)
 		);
+		// phpcs:enable
 
 		return $count >= 30;
 	}
@@ -238,7 +256,7 @@ class CTC_Chat_Tracker {
 		$table = ctc_chat_get_clicks_table_name();
 		$since = gmdate( 'Y-m-d H:i:s', time() - ( $dedupe_hours * HOUR_IN_SECONDS ) );
 
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+		// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 		$existing = (int) $wpdb->get_var(
 			$wpdb->prepare(
 				"SELECT COUNT(*) FROM {$table}
@@ -254,6 +272,7 @@ class CTC_Chat_Tracker {
 				$since
 			)
 		);
+		// phpcs:enable
 
 		return 0 === $existing;
 	}

@@ -124,13 +124,14 @@ class CTC_Chat_Install {
 		$table = ctc_chat_get_clicks_table_name();
 		$cutoff = gmdate( 'Y-m-d H:i:s', time() - ( $retention_days * DAY_IN_SECONDS ) );
 
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+		// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 		$wpdb->query(
 			$wpdb->prepare(
 				"DELETE FROM {$table} WHERE clicked_at < %s LIMIT 1000",
 				$cutoff
 			)
 		);
+		// phpcs:enable
 	}
 
 	/**
@@ -140,7 +141,8 @@ class CTC_Chat_Install {
 		global $wpdb;
 
 		$table = ctc_chat_get_clicks_table_name();
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.SchemaChange
+		// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.SchemaChange, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 		$wpdb->query( "DROP TABLE IF EXISTS {$table}" );
+		// phpcs:enable
 	}
 }
