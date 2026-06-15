@@ -1,0 +1,139 @@
+/**
+ * Click to Chat - Button Layout Fixes
+ * High-priority CSS fixes for proper button alignment
+ */
+
+/* Shop Page Grid Fixes */
+.woocommerce ul.products li.product .ctc-chat-whatsapp-button,
+.woocommerce-page ul.products li.product .ctc-chat-whatsapp-button {
+    width: 100%;
+    margin: 8px 0 !important;
+    box-sizing: border-box;
+    display: flex !important;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Prevent button text from wrapping */
+.woocommerce .ctc-whatsapp-button .ctc-button-text,
+.woocommerce .ctc-chat-whatsapp-button .ctc-chat-button-text {
+    white-space: nowrap;
+}
+
+/* Single Product Page - Inline with Add to Cart */
+.woocommerce div.product form.cart:has(.ctc-chat-whatsapp-button) {
+    display: flex !important;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+}
+
+.single_add_to_cart_button + .ctc-chat-whatsapp-button,
+.ctc-chat-position-after-add-to-cart .ctc-chat-whatsapp-button {
+    margin-left: 10px !important;
+    vertical-align: middle;
+}
+
+.woocommerce div.product form.cart:has(.ctc-chat-whatsapp-button) .quantity {
+    flex: 0 0 auto;
+}
+
+.woocommerce div.product form.cart:has(.ctc-chat-whatsapp-button) button.single_add_to_cart_button {
+    flex: 0 0 auto;
+    margin-bottom: 0 !important;
+}
+
+.woocommerce div.product form.cart:has(.ctc-chat-whatsapp-button) .ctc-chat-position-after-add-to-cart {
+    flex: 0 0 auto;
+    display: inline-flex;
+    margin: 0 0 0 10px;
+}
+
+/* Below Add to Cart positioning */
+.ctc-chat-position-below-add-to-cart {
+    width: 100%;
+    margin-top: 15px;
+    display: block;
+    clear: both;
+}
+
+/* Variable products form fixes */
+.woocommerce div.product form.variations_form .single_variation_wrap .woocommerce-variation-add-to-cart {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+}
+
+.variations_form .single_variation_wrap .ctc-chat-whatsapp-button {
+    flex: 0 0 auto;
+    margin: 0 0 0 10px !important;
+}
+
+/* Cart and Checkout Pages */
+.woocommerce-cart .wc-proceed-to-checkout .ctc-chat-whatsapp-button,
+.woocommerce-checkout #payment .ctc-chat-whatsapp-button {
+    width: 100% !important;
+    display: flex !important;
+    justify-content: center;
+    margin: 15px 0 !important;
+}
+
+/* Thank You Page - Ensure proper display */
+.woocommerce-order-received .ctc-chat-thankyou-button-container {
+    clear: both;
+    width: 100%;
+    text-align: center;
+}
+
+.woocommerce-order-received .ctc-chat-thankyou-button-container .ctc-chat-whatsapp-button {
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Mobile Responsive Fixes */
+@media screen and (max-width: 768px) {
+    /* Stack buttons vertically on mobile */
+    .woocommerce div.product form.cart:has(.ctc-chat-whatsapp-button),
+    .woocommerce div.product form.variations_form .single_variation_wrap .woocommerce-variation-add-to-cart {
+        flex-direction: column !important;
+        align-items: stretch !important;
+    }
+
+    .woocommerce div.product form.cart .quantity {
+        width: 100% !important;
+        margin-bottom: 10px;
+    }
+
+    .woocommerce div.product form.cart button.single_add_to_cart_button,
+    .woocommerce div.product form.cart .ctc-chat-whatsapp-button {
+        width: 100% !important;
+        margin: 5px 0 !important;
+    }
+
+    .ctc-chat-position-after-add-to-cart {
+        margin-left: 0 !important;
+        width: 100% !important;
+    }
+
+    .ctc-chat-position-after-add-to-cart .ctc-chat-whatsapp-button {
+        width: 100% !important;
+        margin-left: 0 !important;
+    }
+}
+
+/* Ensure consistent button height */
+.woocommerce .button,
+.woocommerce .ctc-chat-whatsapp-button {
+    min-height: 38px;
+}
+
+/* Fix button alignment in shop loop */
+.woocommerce ul.products li.product .button {
+    margin-bottom: 0;
+}
+
+.woocommerce ul.products li.product .ctc-chat-whatsapp-button {
+    margin-top: 8px;
+}

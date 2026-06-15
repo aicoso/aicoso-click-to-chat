@@ -1,0 +1,451 @@
+/**
+ * Click to Chat - Public CSS
+ *
+ * This file contains all the styles for the public-facing aspects of the plugin.
+ */
+
+/* General Button Styles */
+.ctc-whatsapp-button,
+.ctc-chat-whatsapp-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 20px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+    cursor: pointer;
+    line-height: 1.5;
+    font-size: 14px;
+    white-space: nowrap;
+    border: none;
+    background-color: #25D366;
+    color: white;
+}
+
+.ctc-chat-whatsapp-button:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.25);
+    transform: translateY(-2px);
+    opacity: 0.95;
+    text-decoration: none;
+    color: inherit;
+}
+
+.ctc-chat-whatsapp-button:focus {
+    outline: none;
+    text-decoration: none;
+}
+
+.ctc-chat-whatsapp-button:focus-visible {
+    outline: 2px solid currentColor;
+    outline-offset: 2px;
+}
+
+/* WhatsApp Icon Styles */
+.ctc-whatsapp-icon,
+.ctc-chat-whatsapp-icon {
+    display: inline-flex;
+    margin-right: 8px;
+    align-items: center;
+}
+
+.ctc-chat-whatsapp-icon svg {
+    width: 18px;
+    height: 18px;
+    fill: currentColor;
+}
+
+/* Button Size Variations */
+.ctc-button-size-small,
+.ctc-chat-button-size-small {
+    padding: 6px 12px;
+    font-size: 12px;
+}
+
+.ctc-chat-button-size-small .ctc-chat-whatsapp-icon svg {
+    width: 14px;
+    height: 14px;
+}
+
+.ctc-button-size-normal,
+.ctc-chat-button-size-normal {
+    padding: 10px 20px;
+    font-size: 14px;
+}
+
+.ctc-button-size-large,
+.ctc-chat-button-size-large {
+    padding: 12px 24px;
+    font-size: 16px;
+}
+
+.ctc-chat-button-size-large .ctc-chat-whatsapp-icon svg {
+    width: 20px;
+    height: 20px;
+}
+
+/* Button Alignment */
+.ctc-shortcode-container,
+.ctc-chat-shortcode-container {
+    display: block;
+    width: 100%;
+    margin: 15px 0;
+}
+
+.ctc-chat-align-left {
+    text-align: left;
+}
+
+.ctc-chat-align-center {
+    text-align: center;
+}
+
+.ctc-chat-align-right {
+    text-align: right;
+}
+
+/* Shop Page Product Grid Buttons */
+.woocommerce ul.products li.product .ctc-chat-whatsapp-button,
+.woocommerce-page ul.products li.product .ctc-chat-whatsapp-button {
+    width: 100%;
+    margin: 8px 0;
+    box-sizing: border-box;
+}
+
+/* Ensure buttons stay within product containers */
+.woocommerce ul.products li.product,
+.woocommerce-page ul.products li.product {
+    position: relative;
+}
+
+/* Single Product Page Buttons */
+.woocommerce div.product form.cart .ctc-chat-whatsapp-button,
+.woocommerce div.product .summary .ctc-chat-whatsapp-button {
+    margin: 15px 0;
+    display: inline-flex;
+    vertical-align: middle;
+}
+
+/* When button is beside add to cart */
+.woocommerce div.product form.cart:has(.ctc-chat-whatsapp-button) {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+}
+
+.woocommerce div.product form.cart .quantity {
+    margin-right: 10px;
+}
+
+.woocommerce div.product form.cart .single_add_to_cart_button {
+    margin-right: 10px;
+}
+
+/* Variable Product Adjustments */
+.woocommerce div.product form.variations_form .single_variation_wrap {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+}
+
+.woocommerce div.product form.variations_form .ctc-chat-whatsapp-button {
+    flex: 0 0 auto;
+}
+
+/* Cart Page Button */
+.woocommerce-cart .ctc-chat-whatsapp-button,
+.ctc-chat-button-cart {
+    width: 100%;
+    max-width: none;
+    margin: 15px 0;
+    display: flex;
+}
+
+.woocommerce-cart .wc-proceed-to-checkout {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.woocommerce-cart .wc-proceed-to-checkout .ctc-chat-whatsapp-button {
+    order: 1;
+}
+
+/* Checkout Page Button */
+.woocommerce-checkout .ctc-chat-whatsapp-button,
+.ctc-chat-button-checkout {
+    width: 100%;
+    margin: 15px 0;
+    display: flex;
+}
+
+.woocommerce-checkout #payment .ctc-chat-whatsapp-button {
+    margin-bottom: 15px;
+}
+
+/* Thank You Page Button */
+.ctc-chat-button-thankyou,
+.ctc-chat-thankyou-button-container .ctc-chat-whatsapp-button {
+    width: auto;
+    max-width: 350px;
+    min-width: 250px;
+    margin: 20px auto;
+    display: flex;
+    padding: 14px 28px;
+    font-size: 15px;
+    border-radius: 8px;
+    box-shadow: 0 3px 8px rgba(37, 211, 102, 0.3);
+}
+
+.ctc-chat-thankyou-button-container .ctc-chat-whatsapp-button:hover {
+    box-shadow: 0 5px 12px rgba(37, 211, 102, 0.4);
+    transform: translateY(-3px);
+}
+
+.ctc-chat-cart-button-container,
+.ctc-chat-checkout-button-container,
+.ctc-chat-thankyou-button-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 30px 0;
+    padding: 10px 0;
+}
+
+/* Floating Button Styles */
+.ctc-chat-floating-button-container {
+    position: fixed;
+    z-index: 9999;
+    display: flex;
+    transition: all 0.3s ease;
+}
+
+.ctc-chat-floating-bottom_right {
+    bottom: 20px;
+    right: 20px;
+}
+
+.ctc-chat-floating-bottom_left {
+    bottom: 20px;
+    left: 20px;
+}
+
+.ctc-chat-floating-top_right {
+    top: 20px;
+    right: 20px;
+}
+
+.ctc-chat-floating-top_left {
+    top: 20px;
+    left: 20px;
+}
+
+.ctc-chat-floating-button-container .ctc-chat-whatsapp-button {
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    padding: 0;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+    transition: all 0.3s ease;
+}
+
+.ctc-chat-floating-button-container .ctc-chat-whatsapp-button:hover {
+    width: 64px;
+    height: 64px;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+}
+
+.ctc-chat-floating-button-container .ctc-chat-whatsapp-icon {
+    margin: 0;
+}
+
+.ctc-chat-floating-button-container .ctc-chat-whatsapp-icon svg {
+    width: 30px;
+    height: 30px;
+}
+
+.ctc-floating-button-container .ctc-button-text,
+.ctc-chat-floating-button-container .ctc-chat-button-text {
+    display: none;
+}
+
+/* Button position adjustments */
+.ctc-chat-position-after-add-to-cart {
+    display: inline-block;
+    margin-left: 10px;
+}
+
+.ctc-chat-position-after-add-to-cart .ctc-chat-whatsapp-button,
+.ctc-chat-position-below-add-to-cart .ctc-chat-whatsapp-button {
+    width: auto;
+    display: inline-flex;
+}
+
+.ctc-chat-position-below-add-to-cart {
+    display: block;
+    width: 100%;
+    margin-top: 15px;
+    margin-left: 0;
+}
+
+.ctc-chat-position-before-add-to-cart {
+    display: block;
+    margin-bottom: 15px;
+}
+
+.ctc-chat-position-before-add-to-cart .ctc-chat-whatsapp-button {
+    width: auto;
+    display: inline-flex;
+}
+
+/* Responsive Styles */
+@media screen and (max-width: 768px) {
+    /* Stack buttons on mobile */
+    .woocommerce div.product form.cart {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .woocommerce div.product form.cart .ctc-chat-whatsapp-button,
+    .woocommerce div.product form.cart .single_add_to_cart_button {
+        width: 100%;
+        margin: 5px 0;
+    }
+
+    .ctc-chat-position-after-add-to-cart {
+        display: block;
+        margin-left: 0;
+        margin-top: 10px;
+    }
+
+    .ctc-chat-position-after-add-to-cart .ctc-chat-whatsapp-button {
+        width: 100%;
+    }
+
+    .ctc-chat-floating-button-container .ctc-chat-whatsapp-button {
+        width: 50px;
+        height: 50px;
+    }
+
+    .ctc-chat-floating-button-container .ctc-chat-whatsapp-icon svg {
+        width: 25px;
+        height: 25px;
+    }
+
+    /* Smaller padding on mobile */
+    .ctc-chat-whatsapp-button {
+        padding: 8px 16px;
+    }
+
+    /* Thank You Page - Mobile Adjustments */
+    .ctc-chat-thankyou-button-container .ctc-chat-whatsapp-button {
+        max-width: 90%;
+        min-width: 200px;
+        padding: 12px 20px;
+        font-size: 14px;
+    }
+
+    .ctc-chat-thankyou-button-container {
+        margin: 20px 0;
+        padding: 5px 0;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    /* Extra small devices */
+    .ctc-chat-whatsapp-button {
+        font-size: 13px;
+        padding: 8px 14px;
+    }
+
+    .ctc-chat-whatsapp-icon svg {
+        width: 16px;
+        height: 16px;
+    }
+
+    /* Thank You Page - Extra small devices */
+    .ctc-chat-thankyou-button-container .ctc-chat-whatsapp-button {
+        max-width: 95%;
+        min-width: 180px;
+        padding: 11px 18px;
+        font-size: 13px;
+    }
+}
+
+/* WooCommerce Blocks Compatibility */
+.wc-block-grid__products .wc-block-grid__product .ctc-chat-whatsapp-button {
+    width: 100%;
+    margin-top: 10px;
+}
+
+/* Ensure proper stacking order */
+.woocommerce div.product .summary > * {
+    position: relative;
+    z-index: 1;
+}
+
+/* RTL Support */
+.rtl .ctc-chat-whatsapp-icon {
+    margin-right: 0;
+    margin-left: 8px;
+}
+
+.rtl .ctc-chat-position-after-add-to-cart {
+    margin-left: 0;
+    margin-right: 10px;
+}
+
+.rtl .ctc-chat-floating-bottom_right {
+    right: auto;
+    left: 20px;
+}
+
+.rtl .ctc-chat-floating-bottom_left {
+    left: auto;
+    right: 20px;
+}
+
+.rtl .ctc-chat-floating-top_right {
+    right: auto;
+    left: 20px;
+}
+
+.rtl .ctc-chat-floating-top_left {
+    left: auto;
+    right: 20px;
+}
+
+/* Fix for Twenty Twenty-One and similar themes */
+.wp-block-buttons .ctc-chat-whatsapp-button {
+    margin: 0;
+}
+
+/* Ensure button doesn't break layouts */
+.ctc-chat-whatsapp-button {
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Inline CSS replacements from PHP files */
+.ctc-chat-cart-button-container,
+.ctc-chat-checkout-button-container {
+    margin: 20px 0;
+}
+
+/* Catalog Mode - Single Product Button */
+.ctc-chat-catalog-mode-button {
+    margin: 20px 0 !important;
+    display: block !important;
+}
+
+.ctc-chat-catalog-mode-button .ctc-chat-whatsapp-button {
+    width: 100%;
+    max-width: 400px;
+    display: flex !important;
+    justify-content: center;
+}
