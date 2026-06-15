@@ -60,11 +60,16 @@ class CTC_Chat_Click_To_Chat {
 		// Admin.
 		require_once CTC_CHAT_PLUGIN_DIR . 'admin/class-ctc-chat-admin.php';
 		require_once CTC_CHAT_PLUGIN_DIR . 'admin/class-ctc-chat-settings.php';
+		require_once CTC_CHAT_PLUGIN_DIR . 'admin/class-ctc-chat-analytics-admin.php';
 
 		// Core functionality.
+		require_once CTC_CHAT_PLUGIN_DIR . 'includes/class-ctc-chat-install.php';
+		require_once CTC_CHAT_PLUGIN_DIR . 'includes/class-ctc-chat-button-renderer.php';
 		require_once CTC_CHAT_PLUGIN_DIR . 'includes/class-ctc-chat-whatsapp-link-generator.php';
 		require_once CTC_CHAT_PLUGIN_DIR . 'includes/class-ctc-chat-button-display.php';
 		require_once CTC_CHAT_PLUGIN_DIR . 'includes/class-ctc-chat-shortcodes.php';
+		require_once CTC_CHAT_PLUGIN_DIR . 'includes/class-ctc-chat-tracker.php';
+		require_once CTC_CHAT_PLUGIN_DIR . 'includes/class-ctc-chat-analytics.php';
 
 		// Public facing.
 		require_once CTC_CHAT_PLUGIN_DIR . 'public/class-ctc-chat-public.php';
@@ -77,8 +82,10 @@ class CTC_Chat_Click_To_Chat {
 		// Initialize classes.
 		new CTC_Chat_Admin();
 		new CTC_Chat_Settings();
+		new CTC_Chat_Analytics_Admin();
 		new CTC_Chat_Button_Display();
 		new CTC_Chat_Shortcodes();
 		new CTC_Chat_Public();
+		new CTC_Chat_Tracker();
 	}
 }

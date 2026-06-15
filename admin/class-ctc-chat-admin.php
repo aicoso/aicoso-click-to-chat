@@ -181,6 +181,12 @@ class CTC_Chat_Admin {
 			'shortcode_copy'          => 'dashicons-clipboard',
 			'shortcode_examples'      => 'dashicons-lightbulb',
 			'shortcode_usage'         => 'dashicons-info',
+			// Reports tabs.
+			'report_clicks'           => 'dashicons-list-view',
+			'report_placements'       => 'dashicons-layout',
+			'report_products'         => 'dashicons-products',
+			'report_numbers'          => 'dashicons-smartphone',
+			'report_pages'            => 'dashicons-admin-page',
 		);
 
 		return isset( $icons[ $key ] ) ? $icons[ $key ] : 'dashicons-admin-generic';
@@ -216,6 +222,99 @@ class CTC_Chat_Admin {
 				'label' => esc_html__( 'Shortcode Generator', 'aicoso-click-to-chat' ),
 				'url'   => $this->get_settings_hub_url( 'shortcodes' ),
 				'icon'  => $this->get_settings_icon( 'tab_shortcodes' ),
+			),
+		);
+	}
+
+	/**
+	 * Valid report tab slugs.
+	 *
+	 * @return string[]
+	 */
+	public function get_report_slugs() {
+		return array( 'clicks', 'placements', 'products', 'numbers', 'pages' );
+	}
+
+	/**
+	 * Resolve the active report tab from the request.
+	 *
+	 * @return string
+	 */
+	public function get_current_report() {
+		$valid_reports = $this->get_report_slugs();
+		$report        = 'clicks';
+
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Tab selection is display-only.
+		if ( isset( $_GET['report'] ) ) {
+			$candidate = sanitize_key( wp_unslash( $_GET['report'] ) );
+			if ( in_array( $candidate, $valid_reports, true ) ) {
+				$report = $candidate;
+			}
+		}
+
+		return $report;
+	}
+
+	/**
+	 * Build a Reports screen URL.
+	 *
+	 * @param string $report Report slug.
+	 * @param array  $args   Optional extra query args.
+	 * @return string
+	 */
+	public function get_reports_url( $report = 'clicks', $args = array() ) {
+		$report = sanitize_key( $report );
+		if ( ! in_array( $report, $this->get_report_slugs(), true ) ) {
+			$report = 'clicks';
+		}
+
+		$url_args = array_merge(
+			array(
+				'page'   => 'click-to-chat-reports',
+				'report' => $report,
+			),
+			$args
+		);
+
+		return add_query_arg( $url_args, admin_url( 'admin.php' ) );
+	}
+
+	/**
+	 * Get Reports header tab definitions.
+	 *
+	 * @return array
+	 */
+	public function get_reports_header_tabs() {
+		return array(
+			array(
+				'id'    => 'clicks',
+				'label' => esc_html__( 'Click Log', 'aicoso-click-to-chat' ),
+				'url'   => $this->get_reports_url( 'clicks' ),
+				'icon'  => $this->get_settings_icon( 'report_clicks' ),
+			),
+			array(
+				'id'    => 'placements',
+				'label' => esc_html__( 'By Placement', 'aicoso-click-to-chat' ),
+				'url'   => $this->get_reports_url( 'placements' ),
+				'icon'  => $this->get_settings_icon( 'report_placements' ),
+			),
+			array(
+				'id'    => 'products',
+				'label' => esc_html__( 'By Product', 'aicoso-click-to-chat' ),
+				'url'   => $this->get_reports_url( 'products' ),
+				'icon'  => $this->get_settings_icon( 'report_products' ),
+			),
+			array(
+				'id'    => 'numbers',
+				'label' => esc_html__( 'By WhatsApp Number', 'aicoso-click-to-chat' ),
+				'url'   => $this->get_reports_url( 'numbers' ),
+				'icon'  => $this->get_settings_icon( 'report_numbers' ),
+			),
+			array(
+				'id'    => 'pages',
+				'label' => esc_html__( 'By Page', 'aicoso-click-to-chat' ),
+				'url'   => $this->get_reports_url( 'pages' ),
+				'icon'  => $this->get_settings_icon( 'report_pages' ),
 			),
 		);
 	}
@@ -635,11 +734,16 @@ class CTC_Chat_Admin {
 			);
 
 			if ( ! empty( $args['header_tabs'] ) ) {
+				$tab_aria = esc_html__( 'Settings sections', 'aicoso-click-to-chat' );
+				if ( esc_html__( 'Reports', 'aicoso-click-to-chat' ) === $args['breadcrumb_current'] ) {
+					$tab_aria = esc_html__( 'Report views', 'aicoso-click-to-chat' );
+				}
+
 				$this->render_admin_tabs(
 					$args['header_tabs'],
 					$args['header_tab_current'],
 					array(
-						'aria_label' => esc_html__( 'Settings sections', 'aicoso-click-to-chat' ),
+						'aria_label' => $tab_aria,
 						'class'      => 'ctc-header-tabs',
 					)
 				);
@@ -777,7 +881,6 @@ class CTC_Chat_Admin {
 			true
 		);
 
-		// Pass variables to JavaScript.
 		wp_localize_script(
 			'ctc-chat-admin-js',
 			'ctc_chat_admin',
@@ -805,6 +908,76 @@ class CTC_Chat_Admin {
 				),
 			)
 		);
+
+		$this->enqueue_analytics_assets( $hook );
+	}
+
+	/**
+	 * Enqueue dashboard and reports analytics assets.
+	 *
+	 * @param string $hook Admin page hook.
+	 */
+	private function enqueue_analytics_assets( $hook ) {
+		$analytics_hooks = array(
+			'toplevel_page_click-to-chat',
+			'click-to-chat_page_click-to-chat-reports',
+		);
+
+		if ( ! in_array( $hook, $analytics_hooks, true ) ) {
+			return;
+		}
+
+		$currency = function_exists( 'get_woocommerce_currency_symbol' ) ? get_woocommerce_currency_symbol() : '$';
+
+		wp_enqueue_script(
+			'ctc-chat-analytics-shared',
+			CTC_CHAT_PLUGIN_URL . 'admin/js/analytics-shared.js',
+			array( 'jquery' ),
+			CTC_CHAT_VERSION,
+			true
+		);
+
+		wp_localize_script(
+			'ctc-chat-analytics-shared',
+			'ctc_chat_analytics',
+			array(
+				'ajaxurl'  => admin_url( 'admin-ajax.php' ),
+				'nonce'    => wp_create_nonce( 'ctc_chat_admin_nonce' ),
+				'currency' => $currency,
+				'i18n'     => array(
+					'loading'    => __( 'Loading…', 'aicoso-click-to-chat' ),
+					'error'      => __( 'Could not load analytics data.', 'aicoso-click-to-chat' ),
+					'empty'      => __( 'No WhatsApp clicks in this period.', 'aicoso-click-to-chat' ),
+					'disabled'   => __( 'Click tracking is disabled in Settings.', 'aicoso-click-to-chat' ),
+					'clicks'     => __( 'clicks', 'aicoso-click-to-chat' ),
+				),
+				'urls'     => array(
+					'settings' => admin_url( 'admin.php?page=click-to-chat-settings' ),
+					'reports'  => admin_url( 'admin.php?page=click-to-chat-reports' ),
+					'numbers'  => admin_url( 'admin.php?page=click-to-chat-settings&section=numbers' ),
+				),
+			)
+		);
+
+		if ( 'toplevel_page_click-to-chat' === $hook ) {
+			wp_enqueue_script(
+				'ctc-chat-analytics-dashboard',
+				CTC_CHAT_PLUGIN_URL . 'admin/js/analytics-dashboard.js',
+				array( 'ctc-chat-analytics-shared' ),
+				CTC_CHAT_VERSION,
+				true
+			);
+		}
+
+		if ( 'click-to-chat_page_click-to-chat-reports' === $hook ) {
+			wp_enqueue_script(
+				'ctc-chat-analytics-reports',
+				CTC_CHAT_PLUGIN_URL . 'admin/js/analytics-reports.js',
+				array( 'ctc-chat-analytics-shared' ),
+				CTC_CHAT_VERSION,
+				true
+			);
+		}
 	}
 
 	/**
@@ -849,10 +1022,15 @@ class CTC_Chat_Admin {
 			return;
 		}
 
+		$current_report = $this->get_current_report();
+
 		$this->render_admin_shell_open(
 			array(
 				'breadcrumb_current' => esc_html__( 'Reports', 'aicoso-click-to-chat' ),
+				'intro'              => esc_html__( 'Drill into WhatsApp click data by placement, product, number, and page.', 'aicoso-click-to-chat' ),
 				'show_setup_notices' => false,
+				'header_tabs'        => $this->get_reports_header_tabs(),
+				'header_tab_current' => $current_report,
 			)
 		);
 
@@ -1074,6 +1252,18 @@ class CTC_Chat_Admin {
 		}
 
 		$settings['advanced'] = $advanced;
+
+		$retention_days = isset( $_POST['ctc_chat_analytics']['retention_days'] ) ? absint( $_POST['ctc_chat_analytics']['retention_days'] ) : 365;
+		$retention_days = max( 30, min( 730, $retention_days ) );
+
+		$settings['analytics'] = array(
+			'enabled'            => isset( $_POST['ctc_chat_analytics']['enabled'] ),
+			'retention_days'     => $retention_days,
+			'track_ip'           => isset( $_POST['ctc_chat_analytics']['track_ip'] ),
+			'dedupe_hours'       => 24,
+			'exclude_bots'       => isset( $_POST['ctc_chat_analytics']['exclude_bots'] ),
+			'visitor_cookie_ttl' => isset( $settings['analytics']['visitor_cookie_ttl'] ) ? absint( $settings['analytics']['visitor_cookie_ttl'] ) : 30,
+		);
 
 		// Update settings.
 		update_option( 'ctc_chat_settings', $settings );

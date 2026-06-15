@@ -1689,3 +1689,232 @@ body.click-to-chat_page_click-to-chat-settings #wpbody-content,
     width: 24px;
     height: 24px;
 }
+
+/* Analytics dashboard & reports */
+.ctc-analytics-toolbar {
+    display: inline-flex;
+    flex-wrap: wrap;
+    gap: 12px 16px;
+    align-items: center;
+    justify-content: flex-start;
+    width: fit-content;
+    max-width: 100%;
+    margin: 0 0 20px;
+    padding: 12px 14px;
+    background: var(--ctc-admin-surface, #fff);
+    border: 1px solid var(--ctc-admin-border, #dcdcde);
+    border-radius: 8px;
+}
+
+.ctc-analytics-toolbar__presets,
+.ctc-analytics-toolbar__custom,
+.ctc-analytics-toolbar__filters,
+.ctc-analytics-toolbar__actions {
+    display: inline-flex;
+    flex-wrap: wrap;
+    gap: 10px 12px;
+    align-items: center;
+}
+
+.ctc-analytics-toolbar__actions {
+    gap: 8px;
+}
+
+.ctc-analytics-toolbar--reports .ctc-analytics-toolbar__actions {
+    padding-left: 12px;
+    margin-left: 4px;
+    border-left: 1px solid var(--ctc-admin-border, #dcdcde);
+}
+
+.ctc-analytics-field {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0;
+}
+
+.ctc-analytics-field__label {
+    font-size: 13px;
+    color: var(--ctc-admin-muted, #646970);
+    white-space: nowrap;
+}
+
+.ctc-analytics-field input[type="date"] {
+    width: 11.5em;
+    max-width: 100%;
+}
+
+.ctc-analytics-field--search input[type="search"] {
+    width: 14em;
+    max-width: 100%;
+}
+
+.ctc-analytics-field--checkbox {
+    gap: 6px;
+}
+
+.ctc-analytics-field--checkbox .ctc-analytics-field__label {
+    color: inherit;
+}
+
+.ctc-analytics-toolbar__compare {
+    display: inline-flex;
+    gap: 6px;
+    align-items: center;
+}
+
+.ctc-analytics-kpis {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.ctc-analytics-kpi {
+    background: var(--ctc-admin-surface, #fff);
+    border: 1px solid var(--ctc-admin-border, #dcdcde);
+    border-radius: 8px;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.ctc-analytics-kpi__label {
+    font-size: 12px;
+    color: var(--ctc-admin-muted, #646970);
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+}
+
+.ctc-analytics-kpi__value {
+    font-size: 24px;
+    line-height: 1.2;
+}
+
+.ctc-analytics-kpi__delta {
+    font-size: 12px;
+    color: var(--ctc-admin-muted, #646970);
+}
+
+.ctc-analytics-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 16px;
+}
+
+.ctc-analytics-grid--half {
+    grid-template-columns: 1fr 1fr;
+}
+
+@media (max-width: 960px) {
+    .ctc-analytics-grid,
+    .ctc-analytics-grid--half {
+        grid-template-columns: 1fr;
+    }
+}
+
+.ctc-analytics-card {
+    background: var(--ctc-admin-surface, #fff);
+    border: 1px solid var(--ctc-admin-border, #dcdcde);
+    border-radius: 8px;
+    margin-bottom: 16px;
+}
+
+.ctc-analytics-card__header {
+    padding: 14px 16px 0;
+}
+
+.ctc-analytics-card__header h2 {
+    margin: 0;
+    font-size: 15px;
+}
+
+.ctc-analytics-card__body {
+    padding: 16px;
+}
+
+.ctc-analytics-loading,
+.ctc-analytics-empty,
+.ctc-analytics-error {
+    color: var(--ctc-admin-muted, #646970);
+}
+
+.ctc-analytics-bars {
+    display: flex;
+    align-items: flex-end;
+    gap: 6px;
+    min-height: 160px;
+    overflow-x: auto;
+    padding-bottom: 8px;
+}
+
+.ctc-analytics-bar {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 28px;
+    flex: 1;
+    gap: 4px;
+}
+
+.ctc-analytics-bar span {
+    display: block;
+    width: 100%;
+    max-width: 36px;
+    background: var(--ctc-admin-accent, #3858e9);
+    border-radius: 4px 4px 0 0;
+    min-height: 4px;
+}
+
+.ctc-analytics-bar em {
+    font-style: normal;
+    font-size: 11px;
+    color: var(--ctc-admin-muted, #646970);
+}
+
+.ctc-analytics-funnel {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+}
+
+.ctc-analytics-funnel__stage {
+    background: #f6f7f7;
+    border-radius: 8px;
+    padding: 12px 14px;
+    min-width: 120px;
+}
+
+.ctc-analytics-funnel__label {
+    display: block;
+    font-size: 12px;
+    color: var(--ctc-admin-muted, #646970);
+    margin-bottom: 4px;
+}
+
+.ctc-analytics-funnel__arrow {
+    color: var(--ctc-admin-muted, #646970);
+    font-size: 18px;
+}
+
+.ctc-analytics-table {
+    margin-top: 0;
+}
+
+.ctc-analytics-truncate {
+    display: inline-block;
+    max-width: 220px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    vertical-align: bottom;
+}
+
+.ctc-analytics-quick-actions .ctc-analytics-card__body {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}

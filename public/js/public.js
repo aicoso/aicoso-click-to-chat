@@ -139,53 +139,9 @@
         });
     }
 
-    /**
-     * Handle button click tracking (optional)
-     */
-    function trackButtonClicks() {
-        $('.ctc-chat-whatsapp-button').on('click', function(e) {
-            // Get button data
-            const $button = $(this);
-            const buttonType = $button.hasClass('ctc-chat-button-product') ? 'product' : 
-                              ($button.hasClass('ctc-chat-button-shop') ? 'shop' : 
-                               ($button.hasClass('ctc-chat-button-cart') ? 'cart' : 
-                                ($button.hasClass('ctc-chat-button-checkout') ? 'checkout' : 
-                                 ($button.hasClass('ctc-chat-button-floating') ? 'floating' : 'unknown'))));
-
-            // If WooCommerce analytics is active and we want to hook into it
-            if (typeof wc_ga_pro !== 'undefined' && buttonType === 'product') {
-                // WooCommerce Google Analytics Pro integration
-                // You can add custom tracking code here if needed
-            }
-
-            // If Google Analytics is available (universal analytics)
-            if (typeof ga !== 'undefined') {
-                ga('send', {
-                    hitType: 'event',
-                    eventCategory: 'Click to Chat',
-                    eventAction: 'click',
-                    eventLabel: buttonType
-                });
-            }
-
-            // If Google Analytics 4 is available
-            if (typeof gtag !== 'undefined') {
-                gtag('event', 'whatsapp_click', {
-                    'button_type': buttonType,
-                    'page_url': window.location.href
-                });
-            }
-        });
-    }
-
     // Initialize when document is ready
     $(document).ready(function() {
         initClickToChat();
-        
-        // Initialize click tracking if supported
-        if ($('.ctc-chat-whatsapp-button').length) {
-            trackButtonClicks();
-        }
     });
 
 })(jQuery);

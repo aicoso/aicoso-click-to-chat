@@ -2,27 +2,26 @@
 /**
  * Uninstall Click to Chat.
  *
- * This file runs when the plugin is uninstalled.
- * It cleans up all plugin data from the database.
- *
  * @package ClickToChat
  * @since 1.0.0
  */
 
-// If uninstall is not called from WordPress, exit.
 if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
 	exit;
 }
 
-// Delete plugin options.
 delete_option( 'ctc_chat_settings' );
+delete_option( 'ctc_chat_db_version' );
 
-// Delete product meta data from all products.
 global $wpdb;
 
-// Delete the plugin-specific post meta for all products.
-// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- Uninstall routine requires direct database access to clean up all plugin data.
+// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 $wpdb->query( "DELETE FROM {$wpdb->postmeta} WHERE meta_key LIKE '_ctc_chat_%'" );
 
-// Clear any cached data.
+require_once plugin_dir_path( __FILE__ ) . 'includes/class-ctc-chat-analytics-helpers.php';
+require_once plugin_dir_path( __FILE__ ) . 'includes/class-ctc-chat-install.php';
+
+CTC_Chat_Install::drop_tables();
+wp_clear_scheduled_hook( 'ctc_chat_prune_click_events' );
+
 wp_cache_flush();

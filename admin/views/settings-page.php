@@ -60,6 +60,50 @@ $current_tab        = $this->get_current_settings_tab();
 			</tr>
 		</table>
 		<?php $this->render_settings_card_close(); ?>
+
+		<?php
+		$analytics = isset( $settings['analytics'] ) && is_array( $settings['analytics'] ) ? $settings['analytics'] : array();
+		$this->render_settings_card_open(
+			esc_html__( 'Click Analytics', 'aicoso-click-to-chat' ),
+			array(
+				'description' => esc_html__( 'First-party WhatsApp click tracking for Dashboard and Reports.', 'aicoso-click-to-chat' ),
+				'icon'        => 'dashicons-chart-bar',
+			)
+		);
+		?>
+		<table class="form-table" role="presentation">
+			<tr>
+				<th scope="row"><?php esc_html_e( 'Enable tracking', 'aicoso-click-to-chat' ); ?></th>
+				<td>
+					<label for="ctc_chat_analytics_enabled">
+						<input type="checkbox" name="ctc_chat_analytics[enabled]" id="ctc_chat_analytics_enabled" value="1" <?php checked( ! isset( $analytics['enabled'] ) || $analytics['enabled'] ); ?>>
+						<?php esc_html_e( 'Record WhatsApp button clicks', 'aicoso-click-to-chat' ); ?>
+					</label>
+				</td>
+			</tr>
+			<tr>
+				<th scope="row"><label for="ctc_chat_analytics_retention"><?php esc_html_e( 'Data retention (days)', 'aicoso-click-to-chat' ); ?></label></th>
+				<td>
+					<input type="number" min="30" max="730" step="1" name="ctc_chat_analytics[retention_days]" id="ctc_chat_analytics_retention" value="<?php echo esc_attr( isset( $analytics['retention_days'] ) ? absint( $analytics['retention_days'] ) : 365 ); ?>" class="small-text">
+					<p class="description"><?php esc_html_e( 'Click events older than this are deleted automatically.', 'aicoso-click-to-chat' ); ?></p>
+				</td>
+			</tr>
+			<tr>
+				<th scope="row"><?php esc_html_e( 'Privacy', 'aicoso-click-to-chat' ); ?></th>
+				<td>
+					<label for="ctc_chat_analytics_track_ip">
+						<input type="checkbox" name="ctc_chat_analytics[track_ip]" id="ctc_chat_analytics_track_ip" value="1" <?php checked( ! isset( $analytics['track_ip'] ) || $analytics['track_ip'] ); ?>>
+						<?php esc_html_e( 'Store hashed IP address with each click', 'aicoso-click-to-chat' ); ?>
+					</label>
+					<br>
+					<label for="ctc_chat_analytics_exclude_bots">
+						<input type="checkbox" name="ctc_chat_analytics[exclude_bots]" id="ctc_chat_analytics_exclude_bots" value="1" <?php checked( ! isset( $analytics['exclude_bots'] ) || $analytics['exclude_bots'] ); ?>>
+						<?php esc_html_e( 'Exclude known bots from tracking', 'aicoso-click-to-chat' ); ?>
+					</label>
+				</td>
+			</tr>
+		</table>
+		<?php $this->render_settings_card_close(); ?>
 	</div>
 
 	<div id="ctc-chat-settings-button" class="ctc-chat-settings-panel<?php echo 'button' === $current_tab ? ' active' : ''; ?>">

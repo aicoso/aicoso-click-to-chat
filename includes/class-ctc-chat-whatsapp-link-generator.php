@@ -161,6 +161,24 @@ class CTC_Chat_WhatsApp_Link_Generator {
 	}
 
 	/**
+	 * Get configured WhatsApp number ID for context.
+	 *
+	 * @param int|null $product_id  Optional product ID.
+	 * @param int|null $category_id Optional category ID.
+	 * @param int|null $page_id     Optional page ID.
+	 * @return int
+	 */
+	public function get_number_id( $product_id = null, $category_id = null, $page_id = null ) {
+		$phone = $this->get_whatsapp_number( $product_id, $category_id, $page_id );
+
+		if ( empty( $phone ) ) {
+			return 0;
+		}
+
+		return ctc_chat_resolve_number_id_by_phone( $phone );
+	}
+
+	/**
 	 * Resolve a configured WhatsApp number by its settings ID.
 	 *
 	 * @param int|string $number_id The configured number ID.

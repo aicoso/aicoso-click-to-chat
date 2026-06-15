@@ -84,8 +84,6 @@ class CTC_Chat_Shortcodes {
 			'ctc_chat_button'
 		);
 
-		// Initialize output.
-		$output = '';
 
 		// Determine the product ID to use.
 		$product_id = 0;
@@ -178,47 +176,59 @@ class CTC_Chat_Shortcodes {
 					 ( isset( $this->settings['button_settings']['text_color'] ) ?
 					   $this->settings['button_settings']['text_color'] : '#ffffff' );
 
-		// Inline styles.
-		$button_style = 'background-color: ' . esc_attr( $bg_color ) . '; color: ' . esc_attr( $text_color ) . ';';
-
-		// Button classes.
-		$button_classes = array(
-			'ctc-whatsapp-button',
-			'ctc-button-' . $atts['type'],
-			'ctc-button-size-' . $atts['size'],
-		);
-
-		if ( $show_icon ) {
-			$button_classes[] = 'ctc-button-with-icon';
-		}
-
-		// Add custom CSS classes if provided.
-		if ( ! empty( $atts['css_class'] ) ) {
-			$button_classes[] = esc_attr( $atts['css_class'] );
-		}
-
-		$class_attr = implode( ' ', $button_classes );
-
-		// Build container based on alignment.
 		$container_class = 'ctc-shortcode-container';
 
-		// Build output HTML.
-		$output .= '<div class="' . esc_attr( $container_class ) . '">';
-		$output .= '<a href="' . esc_url( $whatsapp_url ) . '" class="' . esc_attr( $class_attr ) . '" ';
-		$output .= 'style="' . esc_attr( $button_style ) . '" target="_blank" rel="noopener">';
-
-		if ( $show_icon ) {
-			$output .= '<span class="ctc-whatsapp-icon">';
-			$output .= '<svg viewBox="0 0 24 24" width="24" height="24">';
-			$output .= '<path fill="currentColor" d="M17.498 14.382c-.301-.15-1.767-.867-2.04-.966-.273-.101-.473-.15-.673.15-.197.295-.771.964-.944 1.162-.175.195-.349.21-.646.075-.3-.15-1.263-.465-2.403-1.485-.888-.795-1.484-1.77-1.66-2.07-.174-.3-.019-.465.13-.615.136-.135.301-.345.451-.523.146-.181.194-.301.297-.496.1-.21.049-.375-.025-.524-.075-.15-.672-1.62-.922-2.206-.24-.584-.487-.51-.672-.51-.172-.015-.371-.015-.571-.015-.2 0-.523.074-.797.359-.273.3-1.045 1.02-1.045 2.475s1.07 2.865 1.219 3.075c.149.195 2.105 3.195 5.1 4.485.714.3 1.27.48 1.704.629.714.227 1.365.195 1.88.121.574-.091 1.767-.721 2.016-1.426.255-.705.255-1.29.18-1.425-.074-.135-.27-.21-.57-.345m-5.446 7.443h-.016c-1.77 0-3.524-.48-5.055-1.38l-.36-.214-3.75.975 1.005-3.645-.239-.375c-.99-1.576-1.516-3.391-1.516-5.26 0-5.445 4.455-9.885 9.942-9.885 2.654 0 5.145 1.035 7.021 2.91 1.875 1.859 2.909 4.35 2.909 6.99-.004 5.444-4.46 9.885-9.935 9.885M20.52 3.449C18.24 1.245 15.24 0 12.045 0 5.463 0 .104 5.334.101 11.893c0 2.096.549 4.14 1.595 5.945L0 24l6.335-1.652c1.746.943 3.71 1.444 5.71 1.447h.006c6.585 0 11.946-5.336 11.949-11.896 0-3.176-1.24-6.165-3.495-8.411"/>';
-			$output .= '</svg>';
-			$output .= '</span>';
+		$button_type   = 'shortcode';
+		$template_type = 'custom';
+		if ( ! empty( $atts['message'] ) ) {
+			$template_type = 'custom';
+		} else {
+			switch ( $atts['type'] ) {
+				case 'shop':
+					$template_type = 'shop';
+					break;
+				case 'cart':
+					$template_type = 'cart_checkout';
+					break;
+				case 'floating':
+					$template_type = 'floating';
+					break;
+				default:
+					$template_type = $product_id && function_exists( 'wc_get_product' ) && wc_get_product( $product_id ) && wc_get_product( $product_id )->is_type( 'variable' ) ? 'variations' : 'single_product';
+			}
 		}
 
-		$output .= '<span class="ctc-button-text">' . esc_html( $button_text ) . '</span>';
-		$output .= '</a>';
-		$output .= '</div>';
+		$number_id = 0;
+		if ( ! empty( $atts['show_number'] ) ) {
+			$number_id = absint( $atts['show_number'] );
+		} else {
+			$number_id = $this->link_generator->get_number_id( $product_id ?: null );
+		}
 
-		return $output;
+		$context = array_merge(
+			ctc_chat_get_cart_tracking_context(),
+			array(
+				'template_type' => $template_type,
+				'number_id'     => $number_id,
+				'product_id'    => $product_id,
+			)
+		);
+
+		ob_start();
+		echo '<div class="' . esc_attr( $container_class ) . '">';
+		CTC_Chat_Button_Renderer::render(
+			$whatsapp_url,
+			$button_type,
+			array(
+				'text'          => $button_text,
+				'show_icon'     => $show_icon,
+				'bg_color'      => $bg_color,
+				'text_color'    => $text_color,
+				'extra_classes' => array_filter( array( 'ctc-whatsapp-button', 'ctc-button-' . $atts['type'], 'ctc-button-size-' . $atts['size'], $atts['css_class'] ) ),
+				'context'       => $context,
+			)
+		);
+		echo '</div>';
+		return ob_get_clean();
 	}
 }

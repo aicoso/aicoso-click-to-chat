@@ -43,6 +43,8 @@ class CTC_Chat_Public {
 	 * Initialize hooks
 	 */
 	private function init_hooks() {
+		add_action( 'init', array( $this, 'maybe_set_visitor_cookie' ), 1 );
+
 		// Handle advanced options for hiding WooCommerce buttons FIRST (before other hooks).
 		add_action( 'init', array( $this, 'handle_advanced_options' ), 999 );
 
@@ -101,6 +103,61 @@ class CTC_Chat_Public {
 		);
 
 		wp_localize_script( 'ctc-chat-public-script', 'ctc_chat_public', $localize_data );
+
+		if ( ctc_chat_analytics_is_enabled() ) {
+			wp_enqueue_script(
+				'ctc-chat-tracking',
+				CTC_CHAT_PLUGIN_URL . 'public/js/tracking.js',
+				array(),
+				CTC_CHAT_VERSION,
+				true
+			);
+
+			wp_localize_script(
+				'ctc-chat-tracking',
+				'ctc_chat_tracking',
+				array(
+					'ajaxurl' => admin_url( 'admin-ajax.php' ),
+					'nonce'   => wp_create_nonce( 'ctc_chat_track_click' ),
+					'enabled' => true,
+				)
+			);
+		}
+	}
+
+	/**
+	 * Set anonymous visitor cookie for analytics dedupe.
+	 */
+	public function maybe_set_visitor_cookie() {
+		if ( is_admin() || ! ctc_chat_analytics_is_enabled() ) {
+			return;
+		}
+
+		if ( ! empty( $_COOKIE['ctc_vid'] ) && preg_match( '/^[a-f0-9]{32}$/', sanitize_text_field( wp_unslash( $_COOKIE['ctc_vid'] ) ) ) ) {
+			return;
+		}
+
+		$settings = get_option( 'ctc_chat_settings', array() );
+		$ttl_days = isset( $settings['analytics']['visitor_cookie_ttl'] ) ? absint( $settings['analytics']['visitor_cookie_ttl'] ) : 30;
+		$ttl_days = max( 1, min( 365, $ttl_days ) );
+
+		$cookie_value = bin2hex( random_bytes( 16 ) );
+		$secure       = is_ssl();
+
+		setcookie(
+			'ctc_vid',
+			$cookie_value,
+			array(
+				'expires'  => time() + ( $ttl_days * DAY_IN_SECONDS ),
+				'path'     => COOKIEPATH ? COOKIEPATH : '/',
+				'domain'   => COOKIE_DOMAIN,
+				'secure'   => $secure,
+				'httponly' => true,
+				'samesite' => 'Lax',
+			)
+		);
+
+		$_COOKIE['ctc_vid'] = $cookie_value;
 	}
 
 	/**
