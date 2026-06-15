@@ -357,14 +357,6 @@
 	margin-right: 0;
 }
 
-#toplevel_page_click-to-chat .wp-menu-image img {
-	box-sizing: content-box;
-	height: 20px;
-	object-fit: contain;
-	padding: 6px 0 0;
-	width: 20px;
-}
-
 body.toplevel_page_click-to-chat #wpbody-content,
 body.click-to-chat_page_click-to-chat-reports #wpbody-content,
 body.click-to-chat_page_click-to-chat-settings #wpbody-content,

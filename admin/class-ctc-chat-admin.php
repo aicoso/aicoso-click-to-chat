@@ -54,6 +54,7 @@ class CTC_Chat_Admin {
 		add_action( 'admin_menu', array( $this, 'add_admin_menu' ) );
 
 		// Register admin assets.
+		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_admin_menu_assets' ) );
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_admin_assets' ) );
 
 		// Add plugin action links.
@@ -709,6 +710,20 @@ class CTC_Chat_Admin {
 			'manage_options',
 			'click-to-chat-settings',
 			array( $this, 'render_settings_page' )
+		);
+	}
+
+	/**
+	 * Enqueue sidebar menu styles on every admin screen.
+	 *
+	 * @return void
+	 */
+	public function enqueue_admin_menu_assets() {
+		wp_enqueue_style(
+			'ctc-chat-admin-menu',
+			CTC_CHAT_PLUGIN_URL . 'admin/css/admin-menu.css',
+			array(),
+			CTC_CHAT_VERSION
 		);
 	}
 
