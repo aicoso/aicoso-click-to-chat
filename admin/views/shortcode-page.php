@@ -170,6 +170,7 @@ $whatsapp_numbers = isset( $settings['whatsapp_numbers'] ) ? $settings['whatsapp
 				</div>
 			</div>
 		</div>
+		</div>
 
 		<!-- Right Side: Preview & Output -->
 		<div class="ctc-chat-preview-panel">

@@ -45,6 +45,7 @@ class CTC_Chat_Install {
 	 * Maybe upgrade database schema.
 	 */
 	public static function maybe_upgrade() {
+		CTC_Chat_Settings_Migrator::migrate();
 		$installed = get_option( 'ctc_chat_db_version', '' );
 
 		if ( self::DB_VERSION === $installed ) {
