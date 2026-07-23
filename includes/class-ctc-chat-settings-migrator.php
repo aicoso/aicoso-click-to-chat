@@ -88,7 +88,11 @@ class CTC_Chat_Settings_Migrator {
 		return 'canonical';
 	}
 
-	/** @return array<string,string> */
+	/**
+	 * Get legacy-to-canonical top-level setting aliases.
+	 *
+	 * @return array<string,string>
+	 */
 	private static function top_level_map() {
 		return array(
 			'ctc_chat_plugin_enabled'    => 'plugin_enabled',
@@ -106,7 +110,11 @@ class CTC_Chat_Settings_Migrator {
 		);
 	}
 
-	/** @return array<string,string> */
+	/**
+	 * Get legacy-to-canonical nested setting aliases.
+	 *
+	 * @return array<string,string>
+	 */
 	private static function nested_map() {
 		$map = array(
 			'ctc_chat_text'               => 'text',
@@ -184,7 +192,12 @@ class CTC_Chat_Settings_Migrator {
 		return $result;
 	}
 
-	/** @return array{0:mixed,1:mixed} */
+	/**
+	 * Map a legacy container and separate its unknown descendants.
+	 *
+	 * @param mixed $value Stored container value.
+	 * @return array{0:mixed,1:mixed}
+	 */
 	private static function map_container( $value ) {
 		if ( ! is_array( $value ) ) {
 			return array( $value, array() );
@@ -224,6 +237,13 @@ class CTC_Chat_Settings_Migrator {
 		return array( $mapped, $unknown );
 	}
 
+	/**
+	 * Recursively add values that are absent from the current record.
+	 *
+	 * @param array $current  Current authoritative values.
+	 * @param array $incoming Values to use only when absent.
+	 * @return array
+	 */
 	private static function merge_missing( $current, $incoming ) {
 		foreach ( $incoming as $key => $value ) {
 			if ( ! array_key_exists( $key, $current ) ) {
@@ -235,6 +255,13 @@ class CTC_Chat_Settings_Migrator {
 		return $current;
 	}
 
+	/**
+	 * Recursively add defaults without overwriting saved values.
+	 *
+	 * @param array $defaults Current plugin defaults.
+	 * @param array $current  Saved settings.
+	 * @return array
+	 */
 	private static function merge_defaults( $defaults, $current ) {
 		foreach ( $defaults as $key => $value ) {
 			if ( is_array( $value ) ) {
@@ -247,15 +274,33 @@ class CTC_Chat_Settings_Migrator {
 		return $current;
 	}
 
+	/**
+	 * Determine whether a value contains data that must be retained.
+	 *
+	 * @param mixed $value Value to inspect.
+	 * @return bool
+	 */
 	private static function has_values( $value ) {
 		return is_array( $value ) ? ! empty( $value ) : null !== $value;
 	}
 
+	/**
+	 * Complete migration metadata after a successful settings write.
+	 *
+	 * @return void
+	 */
 	private static function complete_success() {
 		update_option( self::VERSION_OPTION, self::TARGET_SCHEMA );
 		delete_option( self::ERROR_OPTION );
 	}
 
+	/**
+	 * Record a non-sensitive migration failure marker.
+	 *
+	 * @param string $code          Stable failure code.
+	 * @param string $source_schema Detected source schema family.
+	 * @return void
+	 */
 	private static function record_error( $code, $source_schema ) {
 		update_option(
 			self::ERROR_OPTION,
