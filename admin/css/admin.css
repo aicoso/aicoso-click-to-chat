@@ -1797,6 +1797,29 @@ body.click-to-chat_page_click-to-chat-settings #wpbody-content,
     color: var(--ctc-admin-muted, #646970);
 }
 
+.ctc-analytics-kpi__delta strong {
+    color: inherit;
+}
+
+.ctc-analytics-kpi__delta--positive {
+    color: #008a20;
+}
+
+.ctc-analytics-kpi__delta--negative {
+    color: #b32d2e;
+}
+
+.ctc-analytics-kpi__delta--neutral {
+    color: var(--ctc-admin-muted, #646970);
+}
+
+.ctc-analytics-kpis__comparison-period {
+    grid-column: 1 / -1;
+    margin: 0;
+    color: var(--ctc-admin-muted, #646970);
+    font-size: 12px;
+}
+
 .ctc-analytics-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;

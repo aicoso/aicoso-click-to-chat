@@ -30,11 +30,24 @@ class CTC_Chat_Analytics {
 		$previous      = $compare ? $this->get_kpi_values(
 			ctc_chat_analytics_parse_range( $compare_range['start'], $compare_range['end'] )['start'],
 			ctc_chat_analytics_parse_range( $compare_range['start'], $compare_range['end'] )['end']
-		) : array_fill_keys( array_keys( $current ), 0 );
+		) : array();
 
 		$currency = function_exists( 'get_woocommerce_currency' ) ? get_woocommerce_currency() : '';
 
-		$build = function ( $key, $format = 'number', $extra = array() ) use ( $current, $previous, $currency ) {
+		$build = function ( $key, $format = 'number', $extra = array() ) use ( $current, $previous, $compare ) {
+			if ( ! $compare ) {
+				return array_merge(
+					array(
+						'value'         => $current[ $key ],
+						'compare_value' => null,
+						'delta_pct'     => null,
+						'delta_label'   => '',
+						'format'        => $format,
+					),
+					$extra
+				);
+			}
+
 			$delta = ctc_chat_analytics_format_delta( $current[ $key ], $previous[ $key ] );
 			$data  = array(
 				'value'         => $current[ $key ],
@@ -43,6 +56,7 @@ class CTC_Chat_Analytics {
 				'delta_label'   => $delta['label'],
 				'format'        => $format,
 			);
+
 			return array_merge( $data, $extra );
 		};
 
@@ -50,7 +64,8 @@ class CTC_Chat_Analytics {
 		$top_count     = $current['top_placement_count'];
 
 		return array(
-			'range' => array(
+			'comparison_enabled' => (bool) $compare,
+			'range'              => array(
 				'start'         => $start_date,
 				'end'           => $end_date,
 				'compare_start' => $compare_range['start'],
@@ -63,9 +78,12 @@ class CTC_Chat_Analytics {
 			'cart_value_clicked' => $build( 'cart_value_clicked', 'currency', array( 'currency' => $currency ) ),
 			'mobile_share'       => $build( 'mobile_share', 'percent' ),
 			'top_placement'      => array(
-				'value' => $top_placement,
-				'label' => $top_placement ? ctc_chat_get_button_type_label( $top_placement ) : '—',
-				'count' => $top_count,
+				'value'         => $top_placement,
+				'label'         => $top_placement ? ctc_chat_get_button_type_label( $top_placement ) : '',
+				'count'         => $top_count,
+				'compare_value' => $compare ? $previous['top_placement_type'] : null,
+				'compare_label' => $compare && $previous['top_placement_type'] ? ctc_chat_get_button_type_label( $previous['top_placement_type'] ) : '',
+				'compare_count' => $compare ? $previous['top_placement_count'] : null,
 			),
 		);
 	}

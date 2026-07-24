@@ -25,20 +25,44 @@
             { key: 'mobile_share', label: 'Mobile Share', format: 'percent' }
         ];
 
+        function formatMetric(value, format) {
+            if (format === 'currency') {
+                return CtcAnalytics.formatCurrency(value);
+            }
+            if (format === 'percent') {
+                return CtcAnalytics.formatNumber(value) + '%';
+            }
+            return CtcAnalytics.formatNumber(value);
+        }
+
+        function renderComparison(metric, format) {
+            if (!data.comparison_enabled || metric.compare_value === null || typeof metric.compare_value === 'undefined') {
+                return '';
+            }
+
+            var deltaClass = 'ctc-analytics-kpi__delta--neutral';
+            if (metric.delta_pct > 0) {
+                deltaClass = 'ctc-analytics-kpi__delta--positive';
+            } else if (metric.delta_pct < 0) {
+                deltaClass = 'ctc-analytics-kpi__delta--negative';
+            }
+
+            return '<span class="ctc-analytics-kpi__delta ' + deltaClass + '">'
+                + '<strong>' + (metric.delta_label || '\u2014') + '</strong>'
+                + ' vs prior ' + formatMetric(metric.compare_value, format)
+                + '</span>';
+        }
+
         var html = '';
 
         cards.forEach(function (card) {
             var metric = data[card.key];
-            var value = card.format === 'currency'
-                ? CtcAnalytics.formatCurrency(metric.value)
-                : (card.format === 'percent' ? metric.value + '%' : CtcAnalytics.formatNumber(metric.value));
+            var value = formatMetric(metric.value, card.format);
 
             html += '<div class="ctc-analytics-kpi">';
             html += '<span class="ctc-analytics-kpi__label">' + card.label + '</span>';
             html += '<strong class="ctc-analytics-kpi__value">' + value + '</strong>';
-            if (metric.delta_label) {
-                html += '<span class="ctc-analytics-kpi__delta">' + metric.delta_label + '</span>';
-            }
+            html += renderComparison(metric, card.format);
             html += '</div>';
         });
 
@@ -47,7 +71,18 @@
             html += '<span class="ctc-analytics-kpi__label">Top Placement</span>';
             html += '<strong class="ctc-analytics-kpi__value">' + data.top_placement.label + '</strong>';
             html += '<span class="ctc-analytics-kpi__delta">' + CtcAnalytics.formatNumber(data.top_placement.count) + ' clicks</span>';
+            if (data.comparison_enabled && data.top_placement.compare_value !== null) {
+                html += '<span class="ctc-analytics-kpi__delta ctc-analytics-kpi__delta--neutral">'
+                    + 'Prior: ' + (data.top_placement.compare_label || '\u2014')
+                    + ' \u00b7 ' + CtcAnalytics.formatNumber(data.top_placement.compare_count) + ' clicks'
+                    + '</span>';
+            }
             html += '</div>';
+        }
+
+        if (data.comparison_enabled && data.range) {
+            html += '<p class="ctc-analytics-kpis__comparison-period">Compared with '
+                + data.range.compare_start + ' to ' + data.range.compare_end + '</p>';
         }
 
         $('#ctc-analytics-kpis').html(html);
