@@ -152,7 +152,7 @@ function ctc_chat_normalize_number_record_ids( $numbers ) {
 
 	if ( $default_id ) {
 		foreach ( $normalized as &$number_data ) {
-			$number_data['is_default'] = $default_id === absint( $number_data['id'] );
+			$number_data['is_default'] = absint( $number_data['id'] ) === $default_id;
 		}
 		unset( $number_data );
 	}
