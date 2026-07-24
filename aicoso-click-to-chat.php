@@ -14,7 +14,7 @@
  * Plugin Name:       AICOSO Click to Chat
  * Plugin URI:        https://wordpress.org/plugins/aicoso-click-to-chat/
  * Description:       Enable customers to order products directly through WhatsApp with a single click. Add WhatsApp buttons to product pages, shop pages, cart, and checkout.
- * Version:           1.0.2
+ * Version:           1.0.3
  * Requires at least: 6.2
  * Tested up to:      6.8
  * Requires PHP:      7.4
@@ -34,7 +34,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 // Define plugin constants.
-define( 'CTC_CHAT_VERSION', '1.0.2' );
+define( 'CTC_CHAT_VERSION', '1.0.3' );
 define( 'CTC_CHAT_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 define( 'CTC_CHAT_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 define( 'CTC_CHAT_PLUGIN_BASENAME', plugin_basename( __FILE__ ) );
@@ -75,6 +75,7 @@ function ctc_chat_woocommerce_missing_notice() {
 
 // Load analytics helpers early.
 require_once CTC_CHAT_PLUGIN_DIR . 'includes/class-ctc-chat-analytics-helpers.php';
+require_once CTC_CHAT_PLUGIN_DIR . 'includes/class-ctc-chat-settings-migrator.php';
 require_once CTC_CHAT_PLUGIN_DIR . 'includes/class-ctc-chat-install.php';
 
 CTC_Chat_Install::init();
@@ -188,19 +189,11 @@ function ctc_chat_get_default_settings() {
  * Register activation hook
  */
 function ctc_chat_activate() {
-	$default_settings = ctc_chat_get_default_settings();
-	$existing         = get_option( 'ctc_chat_settings', false );
-
 	require_once CTC_CHAT_PLUGIN_DIR . 'includes/class-ctc-chat-analytics-helpers.php';
+	require_once CTC_CHAT_PLUGIN_DIR . 'includes/class-ctc-chat-settings-migrator.php';
 	require_once CTC_CHAT_PLUGIN_DIR . 'includes/class-ctc-chat-install.php';
 	CTC_Chat_Install::activate();
-
-	if ( false === $existing ) {
-		update_option( 'ctc_chat_settings', $default_settings );
-		return;
-	}
-
-	update_option( 'ctc_chat_settings', ctc_chat_merge_settings( $default_settings, $existing ) );
+	CTC_Chat_Settings_Migrator::migrate();
 }
 register_activation_hook( __FILE__, 'ctc_chat_activate' );
 

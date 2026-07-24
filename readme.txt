@@ -6,7 +6,7 @@ Tested up to: 6.8
 Requires PHP: 7.4
 WC requires at least: 8.2
 WC tested up to: 10.3.5
-Stable tag: 1.0.1
+Stable tag: 1.0.3
 License: GPL-3.0
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -172,6 +172,9 @@ Yes, you can set exclusion rules based on products, categories, tags, or pages.
 
 == Changelog ==
 
+= 1.0.3 =
+* Preserve existing Click to Chat settings during plugin updates and initialize only missing defaults.
+
 = 1.0.1 =
 * Compatibility with latest WP (6.8) and WC (10.3)
 
@@ -179,6 +182,9 @@ Yes, you can set exclusion rules based on products, categories, tags, or pages.
 * Initial release
 
 == Upgrade Notice ==
+
+= 1.0.3 =
+* Existing Click to Chat settings are migrated safely during update; no manual reconfiguration is required.
 
 = 1.0.1 =
 * Compatibility with latest WP (6.8) and WC (10.3)
