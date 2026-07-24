@@ -76,25 +76,16 @@
             return;
         }
 
-        var button = event.currentTarget;
+        var button = event.target.closest('.ctc-chat-whatsapp-button');
+        if (!button) {
+            return;
+        }
+
         sendPayload(buildPayload(button));
         passthroughAnalytics(button);
     }
 
-    function bindButtons() {
-        var buttons = document.querySelectorAll('.ctc-chat-whatsapp-button');
-        buttons.forEach(function (button) {
-            if (button.dataset.ctcTrackingBound === '1') {
-                return;
-            }
-            button.dataset.ctcTrackingBound = '1';
-            button.addEventListener('click', onButtonClick);
-        });
-    }
-
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', bindButtons);
-    } else {
-        bindButtons();
-    }
+    // WooCommerce Blocks can replace Cart and Checkout markup at runtime.
+    // Delegate the listener so both initial and dynamically inserted buttons are tracked.
+    document.addEventListener('click', onButtonClick);
 })();

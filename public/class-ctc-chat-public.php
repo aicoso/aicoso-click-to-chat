@@ -273,6 +273,8 @@ class CTC_Chat_Public {
 			}
 		}
 
+		$cart_context = ctc_chat_get_cart_tracking_context();
+
 		// Localize script with parameters.
 		wp_localize_script(
 			'ctc-chat-cart-checkout-blocks',
@@ -292,6 +294,11 @@ class CTC_Chat_Public {
 					$this->settings['button_settings']['text_color'] : '#ffffff',
 				'show_icon'         => isset( $this->settings['button_settings']['icon'] ) && $this->settings['button_settings']['icon'] ? '1' : '0',
 				'whatsapp_url'      => $whatsapp_url,
+				'template_type'     => 'cart_checkout',
+				'number_id'         => $link_generator->get_number_id(),
+				'cart_item_count'   => isset( $cart_context['cart_item_count'] ) ? absint( $cart_context['cart_item_count'] ) : 0,
+				'cart_total'        => isset( $cart_context['cart_total'] ) ? (float) $cart_context['cart_total'] : 0,
+				'cart_currency'     => isset( $cart_context['cart_currency'] ) ? $cart_context['cart_currency'] : '',
 			)
 		);
 	}

@@ -158,6 +158,19 @@
             const tempDiv = document.createElement('div');
             tempDiv.innerHTML = buttonHtml;
             const buttonElement = tempDiv.firstElementChild;
+            const button = buttonElement.querySelector('.ctc-chat-whatsapp-button');
+
+            if (button) {
+                button.setAttribute('data-ctc-button-type', pageType);
+                button.setAttribute('data-ctc-template-type', ctc_chat_block_params.template_type || 'cart_checkout');
+                button.setAttribute('data-ctc-number-id', ctc_chat_block_params.number_id || '0');
+                button.setAttribute('data-ctc-product-id', '0');
+                button.setAttribute('data-ctc-variation-id', '0');
+                button.setAttribute('data-ctc-order-id', '0');
+                button.setAttribute('data-ctc-cart-count', ctc_chat_block_params.cart_item_count || '0');
+                button.setAttribute('data-ctc-cart-total', ctc_chat_block_params.cart_total || '0');
+                button.setAttribute('data-ctc-cart-currency', ctc_chat_block_params.cart_currency || '');
+            }
 
             switch (insertMethod) {
                 case 'before':
