@@ -1303,7 +1303,7 @@ class CTC_Chat_Admin {
 		// Process submitted numbers.
 		if ( isset( $_POST['ctc_numbers'] ) && is_array( $_POST['ctc_numbers'] ) ) {
 			// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Each field is sanitized individually below.
-			$ctc_numbers = wp_unslash( $_POST['ctc_numbers'] );
+			$ctc_numbers = ctc_chat_normalize_number_record_ids( wp_unslash( $_POST['ctc_numbers'] ) );
 			foreach ( $ctc_numbers as $number_data ) {
 				// Get the number ID.
 				$number_id = isset( $number_data['id'] ) ? absint( $number_data['id'] ) : 0;
@@ -1355,7 +1355,7 @@ class CTC_Chat_Admin {
 
 				// Add sanitized number data to the array.
 				$whatsapp_numbers[] = array(
-					'id'          => isset( $number_data['id'] ) ? absint( $number_data['id'] ) : 0,
+					'id'          => $number_id,
 					'name'        => isset( $number_data['name'] ) ? sanitize_text_field( $number_data['name'] ) : '',
 					'number'      => isset( $number_data['number'] ) ? sanitize_text_field( $number_data['number'] ) : '',
 					'description' => isset( $number_data['description'] ) ? sanitize_textarea_field( $number_data['description'] ) : '',

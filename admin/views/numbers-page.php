@@ -15,7 +15,7 @@ if ( ! defined( 'WPINC' ) ) {
 $settings = get_option( 'ctc_chat_settings', array() );
 
 // Get WhatsApp numbers.
-$whatsapp_numbers = isset( $settings['whatsapp_numbers'] ) ? $settings['whatsapp_numbers'] : array();
+$whatsapp_numbers = isset( $settings['whatsapp_numbers'] ) ? ctc_chat_normalize_number_record_ids( $settings['whatsapp_numbers'] ) : array();
 
 // Get next number ID.
 $next_id = 1;

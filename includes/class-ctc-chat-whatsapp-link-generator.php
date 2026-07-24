@@ -33,6 +33,9 @@ class CTC_Chat_WhatsApp_Link_Generator {
 	 */
 	public function __construct() {
 		$this->settings = get_option( 'ctc_chat_settings', array() );
+		if ( ! empty( $this->settings['whatsapp_numbers'] ) ) {
+			$this->settings['whatsapp_numbers'] = ctc_chat_normalize_number_record_ids( $this->settings['whatsapp_numbers'] );
+		}
 	}
 
 	/**
@@ -191,8 +194,9 @@ class CTC_Chat_WhatsApp_Link_Generator {
 			return '';
 		}
 
-		foreach ( $this->settings['whatsapp_numbers'] as $number_data ) {
-			if ( isset( $number_data['id'] ) && absint( $number_data['id'] ) === $number_id && ! empty( $number_data['number'] ) ) {
+		$numbers = ctc_chat_normalize_number_record_ids( $this->settings['whatsapp_numbers'] );
+		foreach ( $numbers as $number_data ) {
+			if ( absint( $number_data['id'] ) === $number_id && ! empty( $number_data['number'] ) ) {
 				return $number_data['number'];
 			}
 		}

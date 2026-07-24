@@ -330,13 +330,12 @@ class CTC_Chat_Analytics {
 
 		$rows = $wpdb->get_results(
 			$wpdb->prepare(
-				"SELECT number_id,
+				"SELECT COALESCE(number_id, 0) AS number_id,
 					COUNT(*) AS clicks,
 					SUM(CASE WHEN button_type IN ('cart','checkout','thankyou') THEN 1 ELSE 0 END) AS high_intent_clicks
 				FROM {$table}
 				WHERE clicked_at BETWEEN %s AND %s
-				AND number_id IS NOT NULL AND number_id > 0
-				GROUP BY number_id
+				GROUP BY COALESCE(number_id, 0)
 				ORDER BY clicks DESC
 				LIMIT %d",
 				$range['start'],
@@ -352,8 +351,8 @@ class CTC_Chat_Analytics {
 			$number_id = (int) $row['number_id'];
 			$items[]   = array(
 				'number_id'           => $number_id,
-				'label'               => ctc_chat_get_number_label( $number_id ),
-				'masked_number'       => ctc_chat_get_number_display( $number_id ),
+				'label'               => $number_id ? ctc_chat_get_number_label( $number_id ) : __( 'Unattributed', 'aicoso-click-to-chat' ),
+				'masked_number'       => $number_id ? ctc_chat_get_number_display( $number_id ) : __( 'Unattributed', 'aicoso-click-to-chat' ),
 				'clicks'              => (int) $row['clicks'],
 				'high_intent_clicks'  => (int) $row['high_intent_clicks'],
 				'report_url'          => add_query_arg(
@@ -449,8 +448,8 @@ class CTC_Chat_Analytics {
 				$where     = 'product_id IS NOT NULL AND product_id > 0';
 				break;
 			case 'numbers':
-				$group_col = 'number_id';
-				$where     = 'number_id IS NOT NULL AND number_id > 0';
+				$group_col = 'COALESCE(number_id, 0)';
+				$where     = '1=1';
 				break;
 			case 'pages':
 				$group_col = 'page_path';
@@ -530,7 +529,7 @@ class CTC_Chat_Analytics {
 				case 'numbers':
 					$nid = (int) $row['group_key'];
 					$item['number_id'] = $nid;
-					$item['number']    = ctc_chat_get_number_display( $nid );
+					$item['number']    = $nid ? ctc_chat_get_number_display( $nid ) : __( 'Unattributed', 'aicoso-click-to-chat' );
 					break;
 				case 'pages':
 					$item['page_path'] = $row['group_key'];

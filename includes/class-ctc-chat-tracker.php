@@ -78,6 +78,13 @@ class CTC_Chat_Tracker {
 		$order_id     = isset( $_POST['order_id'] ) ? absint( $_POST['order_id'] ) : 0;
 		$number_id    = isset( $_POST['number_id'] ) ? absint( $_POST['number_id'] ) : 0;
 
+		if ( ! $number_id && ! empty( $_POST['whatsapp_url'] ) ) {
+			$whatsapp_url = esc_url_raw( wp_unslash( $_POST['whatsapp_url'] ) );
+			$path         = (string) wp_parse_url( $whatsapp_url, PHP_URL_PATH );
+			$phone        = preg_replace( '/[^0-9]/', '', $path );
+			$number_id    = ctc_chat_resolve_number_id_by_phone( $phone );
+		}
+
 		if ( $product_id && 'product' !== get_post_type( $product_id ) ) {
 			$product_id = 0;
 		}

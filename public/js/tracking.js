@@ -25,6 +25,7 @@
             cart_item_count: readData(button, 'data-ctc-cart-count', '0'),
             cart_total: readData(button, 'data-ctc-cart-total', '0'),
             cart_currency: readData(button, 'data-ctc-cart-currency', ''),
+            whatsapp_url: button.href || '',
             page_url: window.location.href,
             referrer_url: document.referrer || ''
         };

@@ -109,6 +109,57 @@ function ctc_chat_mask_phone_number( $number ) {
 }
 
 /**
+ * Normalize configured WhatsApp number identities and default selection.
+ *
+ * Existing positive IDs are preserved. Missing or duplicate IDs receive the
+ * next unused ID so an identifier is never shared by two number records. If
+ * multiple records are marked default, only the last one remains default.
+ *
+ * @param array $numbers Number settings records.
+ * @return array
+ */
+function ctc_chat_normalize_number_record_ids( $numbers ) {
+	if ( ! is_array( $numbers ) ) {
+		return array();
+	}
+
+	$normalized = array();
+	$used_ids   = array();
+	$next_id    = 1;
+	$default_id = 0;
+
+	foreach ( $numbers as $number_data ) {
+		if ( ! is_array( $number_data ) ) {
+			continue;
+		}
+
+		$number_id = isset( $number_data['id'] ) ? absint( $number_data['id'] ) : 0;
+		if ( ! $number_id || isset( $used_ids[ $number_id ] ) ) {
+			while ( isset( $used_ids[ $next_id ] ) ) {
+				++$next_id;
+			}
+			$number_id = $next_id;
+		}
+
+		$number_data['id']       = $number_id;
+		$used_ids[ $number_id ] = true;
+		$next_id                 = max( $next_id, $number_id + 1 );
+		if ( ! empty( $number_data['is_default'] ) ) {
+			$default_id = $number_id;
+		}
+		$normalized[] = $number_data;
+	}
+
+	if ( $default_id ) {
+		foreach ( $normalized as &$number_data ) {
+			$number_data['is_default'] = $default_id === absint( $number_data['id'] );
+		}
+		unset( $number_data );
+	}
+
+	return $normalized;
+}
+/**
  * Resolve number ID from settings by phone digits.
  *
  * @param string $phone Phone number.
@@ -121,12 +172,13 @@ function ctc_chat_resolve_number_id_by_phone( $phone ) {
 		return 0;
 	}
 
-	$needle = preg_replace( '/[^0-9]/', '', $phone );
+	$needle  = preg_replace( '/[^0-9]/', '', $phone );
+	$numbers = ctc_chat_normalize_number_record_ids( $settings['whatsapp_numbers'] );
 
-	foreach ( $settings['whatsapp_numbers'] as $number_data ) {
+	foreach ( $numbers as $number_data ) {
 		$haystack = preg_replace( '/[^0-9]/', '', $number_data['number'] ?? '' );
 		if ( $haystack && $haystack === $needle ) {
-			return isset( $number_data['id'] ) ? absint( $number_data['id'] ) : 0;
+			return absint( $number_data['id'] );
 		}
 	}
 
@@ -147,8 +199,9 @@ function ctc_chat_get_number_label( $number_id ) {
 		return __( 'Unknown', 'aicoso-click-to-chat' );
 	}
 
-	foreach ( $settings['whatsapp_numbers'] as $number_data ) {
-		if ( isset( $number_data['id'] ) && absint( $number_data['id'] ) === $number_id ) {
+	$numbers = ctc_chat_normalize_number_record_ids( $settings['whatsapp_numbers'] );
+	foreach ( $numbers as $number_data ) {
+		if ( absint( $number_data['id'] ) === $number_id ) {
 			return ! empty( $number_data['name'] ) ? $number_data['name'] : __( 'WhatsApp', 'aicoso-click-to-chat' );
 		}
 	}
@@ -169,8 +222,9 @@ function ctc_chat_get_number_display( $number_id ) {
 	$masked    = '';
 
 	if ( $number_id && ! empty( $settings['whatsapp_numbers'] ) ) {
-		foreach ( $settings['whatsapp_numbers'] as $number_data ) {
-			if ( isset( $number_data['id'] ) && absint( $number_data['id'] ) === $number_id ) {
+		$numbers = ctc_chat_normalize_number_record_ids( $settings['whatsapp_numbers'] );
+		foreach ( $numbers as $number_data ) {
+			if ( absint( $number_data['id'] ) === $number_id ) {
 				$masked = ctc_chat_mask_phone_number( $number_data['number'] ?? '' );
 				break;
 			}
