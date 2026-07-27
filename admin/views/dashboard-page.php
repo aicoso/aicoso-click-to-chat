@@ -10,7 +10,14 @@ if ( ! defined( 'WPINC' ) ) {
 	die;
 }
 
-$analytics_enabled = ctc_chat_analytics_is_enabled();
+$analytics_enabled  = ctc_chat_analytics_is_enabled();
+$analytics_has_data = false;
+
+if ( $analytics_enabled ) {
+	$analytics          = new CTC_Chat_Analytics();
+	$analytics_has_data = $analytics->has_click_data();
+}
+
 $default_end       = wp_date( 'Y-m-d' );
 $default_start     = wp_date( 'Y-m-d', strtotime( '-29 days' ) );
 ?>
@@ -24,6 +31,19 @@ $default_start     = wp_date( 'Y-m-d', strtotime( '-29 days' ) );
 					/* translators: %s: settings URL */
 					esc_html__( 'WhatsApp click tracking is disabled. Enable it in %s to collect dashboard data.', 'aicoso-click-to-chat' ),
 					'<a href="' . esc_url( admin_url( 'admin.php?page=click-to-chat-settings' ) ) . '">' . esc_html__( 'Settings → General', 'aicoso-click-to-chat' ) . '</a>'
+				);
+				?>
+			</p>
+		</div>
+	<?php endif; ?>
+
+	<?php if ( $analytics_enabled && ! $analytics_has_data ) : ?>
+		<div class="notice notice-info">
+			<p>
+				<?php
+				esc_html_e(
+					'Analytics tracking has been enabled. Data will start appearing as visitors interact with your WhatsApp buttons. Historical data from before this update is not available.',
+					'aicoso-click-to-chat'
 				);
 				?>
 			</p>

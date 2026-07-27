@@ -16,6 +16,23 @@ if ( ! defined( 'ABSPATH' ) ) {
 class CTC_Chat_Analytics {
 
 	/**
+	 * Determine whether any analytics clicks have been recorded.
+	 *
+	 * @return bool
+	 */
+	public function has_click_data() {
+		global $wpdb;
+
+		$table = ctc_chat_get_clicks_table_name();
+
+		// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+		$has_data = $wpdb->get_var( "SELECT 1 FROM {$table} LIMIT 1" );
+		// phpcs:enable
+
+		return null !== $has_data;
+	}
+
+	/**
 	 * Get KPI metrics for a range and comparison range.
 	 *
 	 * @param string $start_date Start date Y-m-d.
