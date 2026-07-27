@@ -117,8 +117,8 @@ $default_start     = wp_date( 'Y-m-d', strtotime( '-29 days' ) );
 		</header>
 		<div class="ctc-analytics-card__body">
 			<a class="button button-secondary" href="<?php echo esc_url( admin_url( 'admin.php?page=click-to-chat-reports' ) ); ?>"><?php esc_html_e( 'View click log', 'aicoso-click-to-chat' ); ?></a>
-			<a class="button button-secondary" href="<?php echo esc_url( admin_url( 'admin.php?page=click-to-chat-settings&section=numbers' ) ); ?>"><?php esc_html_e( 'Manage numbers', 'aicoso-click-to-chat' ); ?></a>
-			<a class="button button-secondary" href="<?php echo esc_url( admin_url( 'admin.php?page=click-to-chat-settings' ) ); ?>"><?php esc_html_e( 'Button settings', 'aicoso-click-to-chat' ); ?></a>
+			<a class="button button-secondary" href="<?php echo esc_url( $this->get_settings_hub_url( 'numbers' ) ); ?>"><?php esc_html_e( 'Manage numbers', 'aicoso-click-to-chat' ); ?></a>
+			<a class="button button-secondary" href="<?php echo esc_url( $this->get_settings_hub_url( 'general', 'button' ) ); ?>"><?php esc_html_e( 'Button settings', 'aicoso-click-to-chat' ); ?></a>
 		</div>
 	</section>
 </div>

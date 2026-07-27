@@ -954,7 +954,7 @@ class CTC_Chat_Admin {
 				'urls'     => array(
 					'settings' => admin_url( 'admin.php?page=click-to-chat-settings' ),
 					'reports'  => admin_url( 'admin.php?page=click-to-chat-reports' ),
-					'numbers'  => admin_url( 'admin.php?page=click-to-chat-settings&section=numbers' ),
+					'numbers'  => $this->get_settings_hub_url( 'numbers' ),
 				),
 			)
 		);
