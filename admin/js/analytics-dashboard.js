@@ -35,6 +35,10 @@
         ];
 
         function formatMetric(value, format) {
+            if (value === null || typeof value === 'undefined') {
+                return ctc_chat_analytics.i18n.unavailable || 'Data unavailable';
+            }
+
             if (format === 'currency') {
                 return CtcAnalytics.formatCurrency(value);
             }
@@ -73,10 +77,13 @@
         cards.forEach(function (card) {
             var metric = data[card.key];
             var value = formatMetric(metric.value, card.format);
+            var valueClass = metric.value === null || typeof metric.value === 'undefined'
+                ? ' ctc-analytics-kpi__value--unavailable'
+                : '';
 
             html += '<div class="ctc-analytics-kpi">';
             html += '<span class="ctc-analytics-kpi__label">' + card.label + '</span>';
-            html += '<strong class="ctc-analytics-kpi__value">' + value + '</strong>';
+            html += '<strong class="ctc-analytics-kpi__value' + valueClass + '">' + value + '</strong>';
             html += renderComparison(metric, card.format);
             html += '</div>';
         });

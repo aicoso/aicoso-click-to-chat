@@ -245,6 +245,10 @@ function ctc_chat_get_number_display( $number_id ) {
  * @return string
  */
 function ctc_chat_detect_device_type( $user_agent = '' ) {
+	if ( '' === trim( (string) $user_agent ) ) {
+		return 'unknown';
+	}
+
 	if ( function_exists( 'wp_is_mobile' ) && wp_is_mobile() ) {
 		if ( preg_match( '/tablet|ipad|playbook|silk/i', $user_agent ) ) {
 			return 'tablet';

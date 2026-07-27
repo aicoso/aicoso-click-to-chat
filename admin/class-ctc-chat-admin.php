@@ -947,7 +947,8 @@ class CTC_Chat_Admin {
 				'i18n'     => array(
 					'loading'    => __( 'Loading…', 'aicoso-click-to-chat' ),
 					'error'      => __( 'Could not load analytics data.', 'aicoso-click-to-chat' ),
-					'empty'      => __( 'No WhatsApp clicks in this period.', 'aicoso-click-to-chat' ),
+					'empty'       => __( 'No WhatsApp clicks in this period.', 'aicoso-click-to-chat' ),
+					'unavailable' => __( 'Data unavailable', 'aicoso-click-to-chat' ),
 					'disabled'   => __( 'Click tracking is disabled in Settings.', 'aicoso-click-to-chat' ),
 					'clicks'     => __( 'clicks', 'aicoso-click-to-chat' ),
 				),

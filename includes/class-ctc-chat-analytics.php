@@ -65,7 +65,12 @@ class CTC_Chat_Analytics {
 				);
 			}
 
-			$delta = ctc_chat_analytics_format_delta( $current[ $key ], $previous[ $key ] );
+			$delta = null === $current[ $key ] || null === $previous[ $key ]
+				? array(
+					'delta_pct' => null,
+					'label'     => '',
+				)
+				: ctc_chat_analytics_format_delta( $current[ $key ], $previous[ $key ] );
 			$data  = array(
 				'value'         => $current[ $key ],
 				'compare_value' => $previous[ $key ],
@@ -125,7 +130,8 @@ class CTC_Chat_Analytics {
 					SUM(CASE WHEN is_unique = 1 THEN 1 ELSE 0 END) AS unique_clicks,
 					SUM(CASE WHEN button_type IN ('cart','checkout','thankyou') THEN 1 ELSE 0 END) AS high_intent_clicks,
 					COALESCE(SUM(CASE WHEN cart_total > 0 THEN cart_total ELSE 0 END), 0) AS cart_value_clicked,
-					SUM(CASE WHEN device_type = 'mobile' THEN 1 ELSE 0 END) AS mobile_clicks
+					SUM(CASE WHEN device_type = 'mobile' THEN 1 ELSE 0 END) AS mobile_clicks,
+					SUM(CASE WHEN device_type IN ('desktop','tablet','mobile') THEN 1 ELSE 0 END) AS known_device_clicks
 				FROM {$table}
 				WHERE clicked_at BETWEEN %s AND %s",
 				$start_utc,
@@ -134,8 +140,9 @@ class CTC_Chat_Analytics {
 			ARRAY_A
 		);
 
-		$total_clicks = isset( $totals['total_clicks'] ) ? (int) $totals['total_clicks'] : 0;
-		$mobile       = isset( $totals['mobile_clicks'] ) ? (int) $totals['mobile_clicks'] : 0;
+		$total_clicks  = isset( $totals['total_clicks'] ) ? (int) $totals['total_clicks'] : 0;
+		$mobile        = isset( $totals['mobile_clicks'] ) ? (int) $totals['mobile_clicks'] : 0;
+		$known_devices = isset( $totals['known_device_clicks'] ) ? (int) $totals['known_device_clicks'] : 0;
 
 		$top = $wpdb->get_row(
 			$wpdb->prepare(
@@ -156,7 +163,7 @@ class CTC_Chat_Analytics {
 			'unique_clicks'        => isset( $totals['unique_clicks'] ) ? (int) $totals['unique_clicks'] : 0,
 			'high_intent_clicks'   => isset( $totals['high_intent_clicks'] ) ? (int) $totals['high_intent_clicks'] : 0,
 			'cart_value_clicked'   => isset( $totals['cart_value_clicked'] ) ? (float) $totals['cart_value_clicked'] : 0,
-			'mobile_share'         => $total_clicks > 0 ? round( ( $mobile / $total_clicks ) * 100, 1 ) : 0,
+			'mobile_share'         => $known_devices > 0 ? round( ( $mobile / $known_devices ) * 100, 1 ) : null,
 			'top_placement_type'   => $top['button_type'] ?? '',
 			'top_placement_count'  => isset( $top['click_count'] ) ? (int) $top['click_count'] : 0,
 		);
