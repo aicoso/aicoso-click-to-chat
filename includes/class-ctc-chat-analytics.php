@@ -652,17 +652,25 @@ class CTC_Chat_Analytics {
 		}
 
 		if ( ! empty( $filters['search'] ) ) {
-			$search = sanitize_text_field( $filters['search'] );
-			$like   = '%' . $wpdb->esc_like( $search ) . '%';
-			$clauses[] = '(page_url LIKE %s OR page_path LIKE %s)';
-			$args[] = $like;
-			$args[] = $like;
+			$search         = sanitize_text_field( $filters['search'] );
+			$like           = '%' . $wpdb->esc_like( $search ) . '%';
+			$posts_table    = $wpdb->posts;
+			$search_clauses = array(
+				'page_url LIKE %s',
+				'page_path LIKE %s',
+				"product_id IN (SELECT ID FROM {$posts_table} WHERE post_type = 'product' AND post_title LIKE %s)",
+			);
+			$search_args    = array( $like, $like, $like );
 
 			if ( is_numeric( $search ) ) {
-				$clauses[ count( $clauses ) - 1 ] .= ' OR product_id = %d OR order_id = %d';
-				$args[] = absint( $search );
-				$args[] = absint( $search );
+				$search_clauses[] = 'product_id = %d';
+				$search_clauses[] = 'order_id = %d';
+				$search_args[]    = absint( $search );
+				$search_args[]    = absint( $search );
 			}
+
+			$clauses[] = '(' . implode( ' OR ', $search_clauses ) . ')';
+			$args      = array_merge( $args, $search_args );
 		}
 
 		return array( implode( ' AND ', $clauses ), $args );
