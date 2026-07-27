@@ -95,20 +95,74 @@
             return;
         }
 
-        var max = 1;
+        var max = 0;
         payload.series.forEach(function (point) {
-            max = Math.max(max, point.clicks);
+            max = Math.max(max, parseInt(point.clicks, 10) || 0);
         });
 
-        var html = '<div class="ctc-analytics-bars">';
+        if (max < 1) {
+            $body.html('<p class="ctc-analytics-empty">' + ctc_chat_analytics.i18n.empty + '</p>');
+            return;
+        }
+
+        function getAxisMaximum(value, steps) {
+            var roughStep = value / steps;
+            var magnitude = Math.pow(10, Math.floor(Math.log(roughStep) / Math.LN10));
+            var normalized = roughStep / magnitude;
+            var rounded = normalized <= 1 ? 1
+                : (normalized <= 2 ? 2 : (normalized <= 2.5 ? 2.5 : (normalized <= 5 ? 5 : 10)));
+            return Math.max(steps, rounded * magnitude * steps);
+        }
+
+        function formatDateLabel(date, grouping) {
+            if (grouping === 'week') {
+                return date.slice(5);
+            }
+            if (grouping === 'month') {
+                return date;
+            }
+            return date.slice(5);
+        }
+
+        var tickCount = 4;
+        var axisMax = getAxisMaximum(max, tickCount);
+        var labelStep = Math.max(1, Math.ceil(payload.series.length / 7));
+        var html = '<div class="ctc-analytics-chart" role="figure" aria-label="WhatsApp clicks over time">';
+        html += '<div class="ctc-analytics-chart__y-axis" aria-hidden="true">';
+
+        for (var tick = tickCount; tick >= 0; tick--) {
+            html += '<span>' + Math.round((axisMax * tick) / tickCount) + '</span>';
+        }
+
+        html += '</div>';
+        html += '<div class="ctc-analytics-chart__scroll">';
+        html += '<div class="ctc-analytics-chart__canvas">';
+        html += '<div class="ctc-analytics-chart__plot">';
+
+        for (var grid = 0; grid <= tickCount; grid++) {
+            html += '<span class="ctc-analytics-chart__gridline" style="bottom:' + ((grid / tickCount) * 100) + '%"></span>';
+        }
+
+        html += '<div class="ctc-analytics-chart__bars">';
         payload.series.forEach(function (point) {
-            var height = Math.round((point.clicks / max) * 100);
-            html += '<div class="ctc-analytics-bar" title="' + point.date + ': ' + point.clicks + '">';
-            html += '<span style="height:' + height + '%"></span>';
-            html += '<em>' + point.clicks + '</em>';
+            var clicks = Math.max(0, parseInt(point.clicks, 10) || 0);
+            var height = (clicks / axisMax) * 100;
+            var date = $('<span/>').text(point.date).html();
+            var tooltip = date + ': ' + clicks + (clicks === 1 ? ' click' : ' clicks');
+            html += '<div class="ctc-analytics-chart__column">';
+            html += '<span class="ctc-analytics-chart__bar" style="height:' + height + '%"'
+                + (clicks > 0 ? ' tabindex="0"' : '')
+                + ' title="' + tooltip + '" aria-label="' + tooltip + '"></span>';
             html += '</div>';
         });
-        html += '</div>';
+        html += '</div></div>';
+        html += '<div class="ctc-analytics-chart__x-axis" aria-hidden="true">';
+        payload.series.forEach(function (point, index) {
+            var showLabel = index % labelStep === 0 || index === payload.series.length - 1;
+            var label = showLabel ? formatDateLabel(point.date, payload.grouping) : '';
+            html += '<span>' + $('<span/>').text(label).html() + '</span>';
+        });
+        html += '</div></div></div></div>';
         $body.html(html);
     }
 

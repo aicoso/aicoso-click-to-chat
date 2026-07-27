@@ -188,7 +188,31 @@ class CTC_Chat_Analytics {
 			ARRAY_A
 		);
 
-		$buckets = array();
+		$buckets        = array();
+		$get_bucket_key = static function ( $date ) use ( $grouping ) {
+			if ( 'month' === $grouping ) {
+				return $date->format( 'Y-m' );
+			}
+
+			if ( 'week' === $grouping ) {
+				return $date->format( 'o-\WW' );
+			}
+
+			return $date->format( 'Y-m-d' );
+		};
+		$period_start   = new DateTimeImmutable( $start_date . ' 00:00:00', $tz );
+		$period_end     = new DateTimeImmutable( $end_date . ' 00:00:00', $tz );
+
+		for ( $cursor = $period_start; $cursor <= $period_end; $cursor = $cursor->modify( '+1 day' ) ) {
+			$key = $get_bucket_key( $cursor );
+			if ( ! isset( $buckets[ $key ] ) ) {
+				$buckets[ $key ] = array(
+					'date'          => $key,
+					'clicks'        => 0,
+					'unique_clicks' => 0,
+				);
+			}
+		}
 
 		foreach ( (array) $rows as $row ) {
 			try {
@@ -198,13 +222,7 @@ class CTC_Chat_Analytics {
 				continue;
 			}
 
-			if ( 'month' === $grouping ) {
-				$key = $dt->format( 'Y-m' );
-			} elseif ( 'week' === $grouping ) {
-				$key = $dt->format( 'o-\WW' );
-			} else {
-				$key = $dt->format( 'Y-m-d' );
-			}
+			$key = $get_bucket_key( $dt );
 
 			if ( ! isset( $buckets[ $key ] ) ) {
 				$buckets[ $key ] = array(

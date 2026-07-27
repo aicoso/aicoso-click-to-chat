@@ -1864,37 +1864,100 @@ body.click-to-chat_page_click-to-chat-settings #wpbody-content,
     color: var(--ctc-admin-muted, #646970);
 }
 
-.ctc-analytics-bars {
-    display: flex;
-    align-items: flex-end;
-    gap: 6px;
-    min-height: 160px;
-    overflow-x: auto;
-    padding-bottom: 8px;
+.ctc-analytics-chart {
+    display: grid;
+    grid-template-columns: 40px minmax(0, 1fr);
+    gap: 8px;
+    width: 100%;
 }
 
-.ctc-analytics-bar {
+.ctc-analytics-chart__y-axis {
     display: flex;
     flex-direction: column;
-    align-items: center;
-    min-width: 28px;
-    flex: 1;
-    gap: 4px;
+    justify-content: space-between;
+    height: 200px;
+    color: var(--ctc-admin-muted, #646970);
+    font-size: 11px;
+    line-height: 1;
+    text-align: right;
 }
 
-.ctc-analytics-bar span {
-    display: block;
+.ctc-analytics-chart__scroll {
+    min-width: 0;
+    overflow: hidden;
+    padding-bottom: 4px;
+}
+
+.ctc-analytics-chart__canvas {
     width: 100%;
-    max-width: 36px;
+}
+
+.ctc-analytics-chart__plot {
+    position: relative;
+    height: 200px;
+    border-left: 1px solid var(--ctc-admin-border, #dcdcde);
+    border-bottom: 1px solid var(--ctc-admin-border, #dcdcde);
+}
+
+.ctc-analytics-chart__gridline {
+    position: absolute;
+    right: 0;
+    left: 0;
+    border-top: 1px dashed #dcdcde;
+    pointer-events: none;
+}
+
+.ctc-analytics-chart__bars {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: flex-end;
+    gap: 0;
+    padding: 0 8px;
+}
+
+.ctc-analytics-chart__column {
+    display: flex;
+    flex: 1 1 0;
+    align-items: flex-end;
+    justify-content: center;
+    height: 100%;
+    min-width: 0;
+}
+
+.ctc-analytics-chart__bar {
+    display: block;
+    width: min(70%, 28px);
+    min-height: 0;
     background: var(--ctc-admin-accent, #3858e9);
     border-radius: 4px 4px 0 0;
-    min-height: 4px;
+    cursor: help;
+    transition: background-color 0.15s ease, opacity 0.15s ease;
 }
 
-.ctc-analytics-bar em {
-    font-style: normal;
-    font-size: 11px;
+.ctc-analytics-chart__bar:hover,
+.ctc-analytics-chart__bar:focus {
+    background: #2145d8;
+    opacity: 0.85;
+    outline: 2px solid #1d2327;
+    outline-offset: 2px;
+}
+
+.ctc-analytics-chart__x-axis {
+    display: flex;
+    gap: 0;
+    padding: 6px 8px 0;
     color: var(--ctc-admin-muted, #646970);
+    font-size: 11px;
+    line-height: 1;
+}
+
+.ctc-analytics-chart__x-axis span {
+    flex: 1 1 0;
+    min-width: 0;
+    overflow: visible;
+    text-align: center;
+    white-space: nowrap;
 }
 
 .ctc-analytics-funnel {
