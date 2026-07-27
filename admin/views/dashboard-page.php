@@ -52,9 +52,9 @@ $default_start     = wp_date( 'Y-m-d', strtotime( '-29 days' ) );
 
 	<div class="ctc-analytics-toolbar">
 		<div class="ctc-analytics-toolbar__presets">
-			<button type="button" class="button" data-range-preset="7"><?php esc_html_e( 'Last 7 days', 'aicoso-click-to-chat' ); ?></button>
-			<button type="button" class="button button-primary" data-range-preset="30"><?php esc_html_e( 'Last 30 days', 'aicoso-click-to-chat' ); ?></button>
-			<button type="button" class="button" data-range-preset="90"><?php esc_html_e( 'Last 90 days', 'aicoso-click-to-chat' ); ?></button>
+			<button type="button" class="button" data-range-preset="7" aria-pressed="false"><?php esc_html_e( 'Last 7 days', 'aicoso-click-to-chat' ); ?></button>
+			<button type="button" class="button button-primary" data-range-preset="30" aria-pressed="true"><?php esc_html_e( 'Last 30 days', 'aicoso-click-to-chat' ); ?></button>
+			<button type="button" class="button" data-range-preset="90" aria-pressed="false"><?php esc_html_e( 'Last 90 days', 'aicoso-click-to-chat' ); ?></button>
 		</div>
 		<div class="ctc-analytics-toolbar__custom">
 			<label class="ctc-analytics-field">

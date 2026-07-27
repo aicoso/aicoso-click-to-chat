@@ -344,7 +344,7 @@ function ctc_chat_analytics_format_delta( $current, $previous ) {
 	if ( $previous <= 0 ) {
 		return array(
 			'delta_pct' => null,
-			'label'     => $current > 0 ? __( 'New', 'aicoso-click-to-chat' ) : '—',
+			'label'     => $current > 0 ? __( 'No prior activity', 'aicoso-click-to-chat' ) : '—',
 		);
 	}
 

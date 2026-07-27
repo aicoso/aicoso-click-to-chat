@@ -3,6 +3,15 @@
 
     var currentRequest = 0;
 
+    function setActivePreset($active) {
+        var $presets = $('[data-range-preset]');
+        $presets.removeClass('button-primary').attr('aria-pressed', 'false');
+
+        if ($active && $active.length) {
+            $active.addClass('button-primary').attr('aria-pressed', 'true');
+        }
+    }
+
     function applyPreset(days) {
         var end = new Date();
         var start = new Date();
@@ -38,6 +47,12 @@
         function renderComparison(metric, format) {
             if (!data.comparison_enabled || metric.compare_value === null || typeof metric.compare_value === 'undefined') {
                 return '';
+            }
+
+            if (metric.delta_pct === null || typeof metric.delta_pct === 'undefined') {
+                return '<span class="ctc-analytics-kpi__delta ctc-analytics-kpi__delta--neutral">'
+                    + 'Prior period: ' + formatMetric(metric.compare_value, format)
+                    + '</span>';
             }
 
             var deltaClass = 'ctc-analytics-kpi__delta--neutral';
@@ -288,7 +303,12 @@
         }
 
         $('[data-range-preset]').on('click', function () {
+            setActivePreset($(this));
             applyPreset(parseInt($(this).data('range-preset'), 10));
+        });
+
+        $('#ctc-analytics-start, #ctc-analytics-end').on('change', function () {
+            setActivePreset(null);
         });
 
         $('#ctc-analytics-apply').on('click', refreshAll);
