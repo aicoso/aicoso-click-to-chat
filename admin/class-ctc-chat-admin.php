@@ -1004,6 +1004,15 @@ class CTC_Chat_Admin {
 					'unavailable' => __( 'Data unavailable', 'aicoso-click-to-chat' ),
 					'disabled'   => __( 'Click tracking is disabled in Settings.', 'aicoso-click-to-chat' ),
 					'clicks'     => __( 'clicks', 'aicoso-click-to-chat' ),
+					'about'      => __( 'About', 'aicoso-click-to-chat' ),
+					'kpi_help'   => array(
+						'whatsapp_clicks'    => __( 'Total WhatsApp button clicks recorded during the selected period. Repeated clicks are included.', 'aicoso-click-to-chat' ),
+						'unique_clicks'      => __( 'Clicks counted once per visitor, placement, product, and order within the 24-hour deduplication window.', 'aicoso-click-to-chat' ),
+						'high_intent_clicks' => __( 'WhatsApp clicks from Cart, Checkout, and Thank You pages during the selected period.', 'aicoso-click-to-chat' ),
+						'cart_value_clicked' => __( 'Sum of cart totals captured when visitors clicked WhatsApp. This is not revenue or an average.', 'aicoso-click-to-chat' ),
+						'mobile_share'       => __( 'Percentage of clicks from mobile devices among clicks with a recognized device type. When device data is unavailable, this metric is unavailable.', 'aicoso-click-to-chat' ),
+						'top_placement'      => __( 'The button placement with the most WhatsApp clicks during the selected period.', 'aicoso-click-to-chat' ),
+					),
 				),
 				'urls'     => array(
 					'settings' => admin_url( 'admin.php?page=click-to-chat-settings' ),

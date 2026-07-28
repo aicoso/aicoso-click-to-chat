@@ -1881,20 +1881,100 @@ body.click-to-chat_page_click-to-chat-settings #wpbody-content,
 }
 
 .ctc-analytics-kpi__help {
-    width: 14px;
-    height: 14px;
+    align-items: center;
+    background: transparent;
+    border: 0;
+    border-radius: 50%;
+    color: var(--ctc-admin-muted, #646970);
+    cursor: help;
+    display: inline-flex;
+    height: 20px;
+    justify-content: center;
+    margin: -3px 0;
+    padding: 0;
+    width: 20px;
+}
+
+.ctc-analytics-kpi__help .dashicons {
     color: var(--ctc-admin-muted, #646970);
     font-size: 14px;
+    height: 14px;
     line-height: 14px;
-    cursor: help;
+    width: 14px;
 }
 
-.ctc-analytics-kpi__help:focus {
-    border-radius: 50%;
-    outline: 2px solid var(--ctc-admin-primary, #3858e9);
-    outline-offset: 2px;
+.ctc-analytics-kpi__help:hover .dashicons {
+    color: var(--ctc-admin-primary, #3858e9);
 }
 
+.ctc-analytics-kpi__help:focus-visible {
+    box-shadow: var(--ctc-admin-focus-ring);
+    outline: none;
+}
+
+.ctc-analytics-kpi__tooltip {
+    display: inline-flex;
+    position: relative;
+}
+
+.ctc-analytics-kpi__tooltip-content {
+    background: var(--ctc-admin-text-strong, #1d2327);
+    border-radius: 6px;
+    bottom: calc(100% + 8px);
+    box-shadow: 0 4px 12px rgba(var(--ctc-admin-shadow-rgb), .18);
+    color: var(--ctc-admin-white, #fff);
+    font-size: 12px;
+    font-weight: 400;
+    left: 50%;
+    letter-spacing: normal;
+    line-height: 1.45;
+    max-width: 220px;
+    opacity: 0;
+    padding: 8px 10px;
+    pointer-events: none;
+    position: absolute;
+    text-align: left;
+    text-transform: none;
+    transform: translate(-50%, 4px);
+    transition: opacity .15s ease, transform .15s ease, visibility .15s ease;
+    visibility: hidden;
+    width: max-content;
+    z-index: 30;
+}
+
+.ctc-analytics-kpi__tooltip-content::after {
+    border: 5px solid transparent;
+    border-top-color: var(--ctc-admin-text-strong, #1d2327);
+    content: "";
+    left: 50%;
+    position: absolute;
+    top: 100%;
+    transform: translateX(-50%);
+}
+
+.ctc-analytics-kpi__tooltip:hover .ctc-analytics-kpi__tooltip-content,
+.ctc-analytics-kpi__tooltip:focus-within .ctc-analytics-kpi__tooltip-content {
+    opacity: 1;
+    transform: translate(-50%, 0);
+    visibility: visible;
+}
+
+.ctc-analytics-kpi--tooltip-right .ctc-analytics-kpi__tooltip-content {
+    left: auto;
+    right: -4px;
+    transform: translateY(4px);
+}
+
+.ctc-analytics-kpi--tooltip-right .ctc-analytics-kpi__tooltip-content::after {
+    left: auto;
+    right: 5px;
+    transform: none;
+}
+
+.ctc-analytics-kpi--tooltip-right .ctc-analytics-kpi__tooltip:hover .ctc-analytics-kpi__tooltip-content,
+.ctc-analytics-kpi--tooltip-right .ctc-analytics-kpi__tooltip:focus-within .ctc-analytics-kpi__tooltip-content {
+    transform: translateY(0);
+}
 .ctc-analytics-kpi__value {
     font-size: 24px;
     line-height: 1.2;

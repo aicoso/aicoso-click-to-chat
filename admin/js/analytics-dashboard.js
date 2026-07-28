@@ -26,17 +26,57 @@
             return;
         }
 
+        var kpiHelp = ctc_chat_analytics.i18n.kpi_help || {};
         var cards = [
-            { key: 'total_clicks', label: 'WhatsApp Clicks' },
-            { key: 'unique_clicks', label: 'Unique Clicks' },
+            {
+                key: 'total_clicks',
+                label: 'WhatsApp Clicks',
+                help: kpiHelp.whatsapp_clicks || 'Total WhatsApp button clicks recorded during the selected period. Repeated clicks are included.'
+            },
+            {
+                key: 'unique_clicks',
+                label: 'Unique Clicks',
+                help: kpiHelp.unique_clicks || 'Clicks counted once per visitor, placement, product, and order within the 24-hour deduplication window.'
+            },
             {
                 key: 'high_intent_clicks',
                 label: 'High-Intent Clicks',
-                help: 'Counts WhatsApp clicks from Cart, Checkout, and Thank You pages.'
+                help: kpiHelp.high_intent_clicks || 'WhatsApp clicks from Cart, Checkout, and Thank You pages during the selected period.'
             },
-            { key: 'cart_value_clicked', label: 'Total Cart Value at Click', format: 'currency' },
-            { key: 'mobile_share', label: 'Mobile Share', format: 'percent' }
+            {
+                key: 'cart_value_clicked',
+                label: 'Total Cart Value at Click',
+                format: 'currency',
+                help: kpiHelp.cart_value_clicked || 'Sum of cart totals captured when visitors clicked WhatsApp. This is not revenue or an average.'
+            },
+            {
+                key: 'mobile_share',
+                label: 'Mobile Share',
+                format: 'percent',
+                help: kpiHelp.mobile_share || 'Percentage of clicks from mobile devices among clicks with a recognized device type. When device data is unavailable, this metric is unavailable.'
+            }
         ];
+
+        function escapeHtml(value) {
+            return $('<div>').text(value || '').html();
+        }
+
+        function renderMetricLabel(label, help, key) {
+            var tooltipId = 'ctc-kpi-help-' + key;
+            var about = ctc_chat_analytics.i18n.about || 'About';
+
+            return '<span class="ctc-analytics-kpi__label-text">' + escapeHtml(label) + '</span>'
+                + '<span class="ctc-analytics-kpi__tooltip">'
+                + '<button type="button" class="ctc-analytics-kpi__help"'
+                + ' aria-label="' + escapeHtml(about + ' ' + label) + '"'
+                + ' aria-describedby="' + tooltipId + '">'
+                + '<span class="dashicons dashicons-info-outline" aria-hidden="true"></span>'
+                + '</button>'
+                + '<span class="ctc-analytics-kpi__tooltip-content" id="' + tooltipId + '" role="tooltip">'
+                + escapeHtml(help)
+                + '</span>'
+                + '</span>';
+        }
 
         function formatMetric(value, format) {
             if (value === null || typeof value === 'undefined') {
@@ -84,12 +124,7 @@
             var valueClass = metric.value === null || typeof metric.value === 'undefined'
                 ? ' ctc-analytics-kpi__value--unavailable'
                 : '';
-            var label = card.label;
-
-            if (card.help) {
-                label += '<span class="dashicons dashicons-info-outline ctc-analytics-kpi__help"'
-                    + ' tabindex="0" role="img" title="' + card.help + '" aria-label="' + card.help + '"></span>';
-            }
+            var label = renderMetricLabel(card.label, card.help, card.key);
 
             html += '<div class="ctc-analytics-kpi">';
             html += '<span class="ctc-analytics-kpi__label">' + label + '</span>';
@@ -99,8 +134,14 @@
         });
 
         if (data.top_placement && data.top_placement.label) {
-            html += '<div class="ctc-analytics-kpi">';
-            html += '<span class="ctc-analytics-kpi__label">Top Placement</span>';
+            html += '<div class="ctc-analytics-kpi ctc-analytics-kpi--tooltip-right">';
+            html += '<span class="ctc-analytics-kpi__label">'
+                + renderMetricLabel(
+                    'Top Placement',
+                    kpiHelp.top_placement || 'The button placement with the most WhatsApp clicks during the selected period.',
+                    'top-placement'
+                )
+                + '</span>';
             html += '<strong class="ctc-analytics-kpi__value">' + data.top_placement.label + '</strong>';
             html += '<span class="ctc-analytics-kpi__delta">' + CtcAnalytics.formatNumber(data.top_placement.count) + ' clicks</span>';
             if (data.comparison_enabled && data.top_placement.compare_value !== null) {
