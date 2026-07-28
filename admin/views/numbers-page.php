@@ -26,7 +26,7 @@ if ( ! empty( $whatsapp_numbers ) ) {
 ?>
 
 <div class="ctc-settings-inline-notices">
-	<?php settings_errors( 'ctc_numbers' ); ?>
+	<?php $this->render_settings_messages( 'ctc_numbers' ); ?>
 </div>
 
 <div class="ctc-settings-toolbar">

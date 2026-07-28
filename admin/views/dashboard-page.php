@@ -23,33 +23,26 @@ $default_start     = wp_date( 'Y-m-d', strtotime( '-29 days' ) );
 ?>
 
 <div class="ctc-analytics" data-ctc-analytics="dashboard" data-enabled="<?php echo $analytics_enabled ? '1' : '0'; ?>">
-	<?php if ( ! $analytics_enabled ) : ?>
-		<div class="notice notice-warning">
-			<p>
-				<?php
-				printf(
-					/* translators: %s: settings URL */
-					esc_html__( 'WhatsApp click tracking is disabled. Enable it in %s to collect dashboard data.', 'aicoso-click-to-chat' ),
-					'<a href="' . esc_url( admin_url( 'admin.php?page=click-to-chat-settings' ) ) . '">' . esc_html__( 'Settings → General', 'aicoso-click-to-chat' ) . '</a>'
+	<?php if ( ! $analytics_enabled || ! $analytics_has_data ) : ?>
+		<div class="ctc-dashboard-notices">
+			<?php
+			if ( ! $analytics_enabled ) {
+				$this->render_admin_banner(
+					sprintf(
+						/* translators: %s: settings URL */
+						__( 'WhatsApp click tracking is disabled. Enable it in %s to collect dashboard data.', 'aicoso-click-to-chat' ),
+						'<a href="' . esc_url( admin_url( 'admin.php?page=click-to-chat-settings' ) ) . '">' . esc_html__( 'Settings → General', 'aicoso-click-to-chat' ) . '</a>'
+					),
+					'warning'
 				);
-				?>
-			</p>
+			} elseif ( ! $analytics_has_data ) {
+				$this->render_admin_banner(
+					__( 'Analytics tracking has been enabled. Data will start appearing as visitors interact with your WhatsApp buttons. Historical data from before this update is not available.', 'aicoso-click-to-chat' )
+				);
+			}
+			?>
 		</div>
 	<?php endif; ?>
-
-	<?php if ( $analytics_enabled && ! $analytics_has_data ) : ?>
-		<div class="notice notice-info">
-			<p>
-				<?php
-				esc_html_e(
-					'Analytics tracking has been enabled. Data will start appearing as visitors interact with your WhatsApp buttons. Historical data from before this update is not available.',
-					'aicoso-click-to-chat'
-				);
-				?>
-			</p>
-		</div>
-	<?php endif; ?>
-
 	<div class="ctc-analytics-toolbar">
 		<div class="ctc-analytics-toolbar__presets">
 			<button type="button" class="button" data-range-preset="7" aria-pressed="false"><?php esc_html_e( 'Last 7 days', 'aicoso-click-to-chat' ); ?></button>

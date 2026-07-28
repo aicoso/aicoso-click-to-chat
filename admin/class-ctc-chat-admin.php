@@ -676,6 +676,59 @@ class CTC_Chat_Admin {
 	}
 
 	/**
+	 * Render a plugin-native admin banner.
+	 *
+	 * @param string $message     Banner message.
+	 * @param string $type        Banner type: info, success, warning, or error.
+	 * @param bool   $dismissible Whether the banner can be dismissed.
+	 * @return void
+	 */
+	public function render_admin_banner( $message, $type = 'info', $dismissible = false ) {
+		$icons = array(
+			'info'    => 'dashicons-info-outline',
+			'success' => 'dashicons-yes-alt',
+			'warning' => 'dashicons-warning',
+			'error'   => 'dashicons-dismiss',
+		);
+
+		if ( ! isset( $icons[ $type ] ) ) {
+			$type = 'info';
+		}
+
+		$role = in_array( $type, array( 'warning', 'error' ), true ) ? 'alert' : 'status';
+		?>
+		<div class="ctc-admin-banner ctc-admin-banner--<?php echo esc_attr( $type ); ?>" role="<?php echo esc_attr( $role ); ?>">
+			<span class="ctc-admin-banner__icon dashicons <?php echo esc_attr( $icons[ $type ] ); ?>" aria-hidden="true"></span>
+			<p class="ctc-admin-banner__message"><?php echo wp_kses_post( $message ); ?></p>
+			<?php if ( $dismissible ) : ?>
+				<button type="button" class="ctc-admin-banner__dismiss" aria-label="<?php esc_attr_e( 'Dismiss notification', 'aicoso-click-to-chat' ); ?>">
+					<span class="dashicons dashicons-no-alt" aria-hidden="true"></span>
+				</button>
+			<?php endif; ?>
+		</div>
+		<?php
+	}
+
+	/**
+	 * Render messages registered through the Settings API.
+	 *
+	 * @param string $setting Settings error group.
+	 * @return void
+	 */
+	public function render_settings_messages( $setting ) {
+		foreach ( get_settings_errors( $setting ) as $message ) {
+			$type = isset( $message['type'] ) ? sanitize_key( $message['type'] ) : 'info';
+			if ( in_array( $type, array( 'updated', 'success' ), true ) ) {
+				$type = 'success';
+			} elseif ( ! in_array( $type, array( 'info', 'warning', 'error' ), true ) ) {
+				$type = 'info';
+			}
+
+			$this->render_admin_banner( $message['message'], $type, true );
+		}
+	}
+
+	/**
 	 * Build breadcrumb args for a settings sub-page.
 	 *
 	 * @param string $section   Settings section slug.

@@ -23,13 +23,9 @@ $current_tab        = $this->get_current_settings_tab();
 	$message = get_transient( 'ctc_chat_settings_message' );
 	if ( 'success' === $message ) {
 		delete_transient( 'ctc_chat_settings_message' );
-		?>
-		<div class="notice notice-success is-dismissible">
-			<p><?php esc_html_e( 'Settings saved successfully.', 'aicoso-click-to-chat' ); ?></p>
-		</div>
-		<?php
+		$this->render_admin_banner( __( 'Settings saved successfully.', 'aicoso-click-to-chat' ), 'success', true );
 	}
-	settings_errors( 'ctc_chat_settings' );
+	$this->render_settings_messages( 'ctc_chat_settings' );
 	?>
 </div>
 

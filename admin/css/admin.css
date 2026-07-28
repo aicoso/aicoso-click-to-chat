@@ -23,6 +23,9 @@
 	--ctc-admin-success-border: #BFE6D1;
 	--ctc-admin-warning-soft: #FFF7E6;
 	--ctc-admin-warning-border: #F2D08A;
+	--ctc-admin-error: #B42318;
+	--ctc-admin-error-soft: #FEF3F2;
+	--ctc-admin-error-border: #FECDCA;
 	--ctc-admin-white: #fff;
 	--ctc-admin-transparent: transparent;
 	--ctc-admin-shadow-rgb: 15, 23, 42;
@@ -130,6 +133,93 @@
 
 .ctc-admin-notices .ctc-setup-notice:last-child {
 	margin-bottom: 0;
+}
+
+.ctc-admin-banner {
+	align-items: start;
+	background: var(--ctc-admin-primary-tint);
+	border: 1px solid var(--ctc-admin-primary-border);
+	border-left: 4px solid var(--ctc-admin-primary);
+	border-radius: 8px;
+	box-shadow: var(--ctc-admin-card-shadow);
+	color: var(--ctc-admin-body);
+	display: grid;
+	gap: 10px;
+	grid-template-columns: auto minmax(0, 1fr) auto;
+	padding: 12px 14px;
+}
+
+.ctc-admin-banner--success {
+	background: var(--ctc-admin-success-soft);
+	border-color: var(--ctc-admin-success-border);
+	border-left-color: var(--ctc-admin-success);
+}
+
+.ctc-admin-banner--warning {
+	background: var(--ctc-admin-warning-soft);
+	border-color: var(--ctc-admin-warning-border);
+	border-left-color: #996800;
+}
+
+.ctc-admin-banner--error {
+	background: var(--ctc-admin-error-soft);
+	border-color: var(--ctc-admin-error-border);
+	border-left-color: var(--ctc-admin-error);
+}
+
+.ctc-admin-banner__icon {
+	color: var(--ctc-admin-primary);
+	height: 20px;
+	line-height: 20px;
+	width: 20px;
+}
+
+.ctc-admin-banner--success .ctc-admin-banner__icon {
+	color: var(--ctc-admin-success);
+}
+
+.ctc-admin-banner--warning .ctc-admin-banner__icon {
+	color: #996800;
+}
+
+.ctc-admin-banner--error .ctc-admin-banner__icon {
+	color: var(--ctc-admin-error);
+}
+
+.ctc-admin-banner__message {
+	margin: 0;
+	min-width: 0;
+}
+
+.ctc-admin-banner__message a {
+	font-weight: 600;
+}
+
+.ctc-admin-banner__dismiss {
+	align-items: center;
+	background: var(--ctc-admin-transparent);
+	border: 0;
+	border-radius: 4px;
+	color: var(--ctc-admin-muted);
+	cursor: pointer;
+	display: inline-flex;
+	justify-content: center;
+	margin: -4px -6px -4px 0;
+	padding: 4px;
+}
+
+.ctc-admin-banner__dismiss:hover {
+	background: rgba(var(--ctc-admin-shadow-rgb), .06);
+	color: var(--ctc-admin-text-strong);
+}
+
+.ctc-admin-banner__dismiss:focus-visible {
+	box-shadow: var(--ctc-admin-focus-ring);
+	outline: none;
+}
+
+.ctc-dashboard-notices {
+	margin: 16px 0;
 }
 
 .ctc-product-brand {
@@ -814,11 +904,11 @@ body.click-to-chat_page_click-to-chat-settings #wpbody-content,
 	gap: 16px;
 }
 
-.ctc-settings-inline-notices .notice {
+.ctc-settings-inline-notices .ctc-admin-banner {
 	margin: 0 0 12px;
 }
 
-.ctc-settings-inline-notices .notice:last-child {
+.ctc-settings-inline-notices .ctc-admin-banner:last-child {
 	margin-bottom: 0;
 }
 

@@ -34,6 +34,18 @@
 
         // Lean tab progress feedback (matches affiliate admin pattern)
         initTabLoadingProgress();
+
+        // Initialize plugin-native dismissible banners.
+        initAdminBanners();
+    }
+
+    /**
+     * Dismiss plugin-native admin banners.
+     */
+    function initAdminBanners() {
+        $(document).on('click', '.ctc-admin-banner__dismiss', function () {
+            $(this).closest('.ctc-admin-banner').remove();
+        });
     }
 
     /**

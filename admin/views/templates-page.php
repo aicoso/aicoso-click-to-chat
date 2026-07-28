@@ -36,7 +36,7 @@ $settings_helper = new CTC_Chat_Settings();
 ?>
 
 <div class="ctc-settings-inline-notices">
-	<?php settings_errors( 'ctc_templates' ); ?>
+	<?php $this->render_settings_messages( 'ctc_templates' ); ?>
 </div>
 
 <form method="post" action="" class="ctc-settings-form">
