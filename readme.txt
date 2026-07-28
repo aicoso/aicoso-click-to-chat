@@ -93,6 +93,18 @@ Customize pre-filled messages for different scenarios:
 * Assign specific numbers to products or categories
 * Set default number for general inquiries
 
+### Filter Analytics by WhatsApp Number
+
+The Analytics Dashboard can show recorded WhatsApp button clicks for all
+configured numbers, one specific configured number, or Unattributed clicks.
+All numbers includes historical clicks for numbers that were later removed.
+Unattributed includes older or fallback click records that have no stored
+number identity. If a selected number is removed while the dashboard is open,
+the dashboard safely returns to All numbers and displays a warning.
+
+The filter scopes click analytics only. It does not represent completed sales
+or rewrite historical attribution.
+
 ### Shortcodes
 
 Use these shortcodes to add WhatsApp buttons anywhere:
@@ -173,6 +185,7 @@ Yes, you can set exclusion rules based on products, categories, tags, or pages.
 == Changelog ==
 
 = 1.0.3 =
+* Add an Analytics Dashboard filter for All numbers, a specific masked WhatsApp number, or Unattributed clicks, including safe fallback when a selected number is removed.
 * Preserve existing Click to Chat settings during plugin updates and initialize only missing defaults.
 
 = 1.0.1 =

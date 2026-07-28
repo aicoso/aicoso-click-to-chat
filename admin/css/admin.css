@@ -1853,6 +1853,46 @@ body.click-to-chat_page_click-to-chat-settings #wpbody-content,
     align-items: center;
 }
 
+.ctc-analytics-field--number select {
+    width: 220px;
+    max-width: 100%;
+}
+
+.ctc-analytics-filter-notice {
+    width: min(100%, 760px);
+    margin: -8px 0 20px;
+}
+
+.ctc-analytics-filter-notice[hidden] {
+    display: none;
+}
+
+.ctc-analytics-filter-notice .ctc-admin-banner {
+    margin: 0;
+}
+
+@media (max-width: 600px) {
+    .ctc-analytics-toolbar {
+        box-sizing: border-box;
+        width: 100%;
+    }
+
+    .ctc-analytics-toolbar__presets,
+    .ctc-analytics-toolbar__custom {
+        width: 100%;
+    }
+
+    .ctc-analytics-field--number {
+        align-items: stretch;
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .ctc-analytics-field--number select {
+        width: 100%;
+    }
+}
+
 .ctc-analytics-kpis {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));

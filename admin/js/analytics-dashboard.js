@@ -285,13 +285,43 @@
         $el.html(html);
     }
 
-    function refreshAll() {
+    function showFilterNotice(message, type) {
+        var $notice = $('#ctc-analytics-filter-notice');
+
+        if (!message) {
+            $notice.prop('hidden', true).empty();
+            return;
+        }
+
+        var variant = type === 'error' ? 'error' : 'warning';
+        var icon = variant === 'error' ? 'dashicons-warning' : 'dashicons-info-outline';
+        var html = '<div class="ctc-admin-banner ctc-admin-banner--' + variant + '">'
+            + '<span class="ctc-admin-banner__icon dashicons ' + icon + '" aria-hidden="true"></span>'
+            + '<div class="ctc-admin-banner__message">'
+            + $('<span/>').text(message).html()
+            + '</div></div>';
+
+        $notice.html(html).prop('hidden', false);
+    }
+
+    function refreshAll(options) {
+        options = options || {};
+
         if ($('[data-ctc-analytics="dashboard"]').data('enabled') !== 1) {
             return;
         }
 
         var range = CtcAnalytics.getRange();
         var requestId = ++currentRequest;
+        var outcomes = [];
+        var completed = 0;
+        var fallbackContext = null;
+
+        range.number_filter = $('#ctc-analytics-number').val() || 'all';
+
+        if (!options.keepNotice) {
+            showFilterNotice('');
+        }
 
         CtcAnalytics.setLoading($('#ctc-analytics-kpis'));
         CtcAnalytics.setLoading($('#ctc-analytics-trend .ctc-analytics-card__body'));
@@ -299,59 +329,112 @@
         CtcAnalytics.setLoading($('#ctc-analytics-top-products .ctc-analytics-card__body'));
         CtcAnalytics.setLoading($('#ctc-analytics-top-numbers .ctc-analytics-card__body'));
 
-        CtcAnalytics.post('ctc_analytics_kpis', range).done(function (result) {
-            if (requestId !== currentRequest) {
-                return;
+        var requests = [
+            {
+                action: 'ctc_analytics_kpis',
+                data: range,
+                $target: $('#ctc-analytics-kpis'),
+                render: renderKpis
+            },
+            {
+                action: 'ctc_analytics_trend',
+                data: $.extend({ grouping: 'day' }, range),
+                $target: $('#ctc-analytics-trend .ctc-analytics-card__body'),
+                render: renderTrend
+            },
+            {
+                action: 'ctc_analytics_funnel',
+                data: range,
+                $target: $('#ctc-analytics-funnel .ctc-analytics-card__body'),
+                render: renderFunnel
+            },
+            {
+                action: 'ctc_analytics_top_products',
+                data: range,
+                $target: $('#ctc-analytics-top-products .ctc-analytics-card__body'),
+                render: function (data) {
+                    renderTopTable(
+                        $('#ctc-analytics-top-products .ctc-analytics-card__body'),
+                        data.items || [],
+                        [
+                            { label: 'Product', render: function (item) { return $('<span/>').text(item.name).html(); } },
+                            { label: 'Clicks', render: function (item) { return CtcAnalytics.formatNumber(item.clicks); } },
+                            { label: 'Unique', render: function (item) { return CtcAnalytics.formatNumber(item.unique_clicks); } }
+                        ]
+                    );
+                }
+            },
+            {
+                action: 'ctc_analytics_top_numbers',
+                data: range,
+                $target: $('#ctc-analytics-top-numbers .ctc-analytics-card__body'),
+                render: function (data) {
+                    renderTopTable(
+                        $('#ctc-analytics-top-numbers .ctc-analytics-card__body'),
+                        data.items || [],
+                        [
+                            { label: 'Number', render: function (item) { return $('<span/>').text(item.masked_number || item.label).html(); } },
+                            { label: 'Clicks', render: function (item) { return CtcAnalytics.formatNumber(item.clicks); } },
+                            { label: 'High-intent', render: function (item) { return CtcAnalytics.formatNumber(item.high_intent_clicks); } }
+                        ]
+                    );
+                }
             }
-            if (!result.response.success) {
-                CtcAnalytics.setError($('#ctc-analytics-kpis'));
-                return;
-            }
-            renderKpis(result.response.data);
-        });
+        ];
 
-        CtcAnalytics.post('ctc_analytics_trend', $.extend({ grouping: 'day' }, range)).done(function (result) {
+        function finish(index, outcome) {
             if (requestId !== currentRequest) {
                 return;
             }
-            renderTrend(result.response.success ? result.response.data : { series: [] });
-        });
 
-        CtcAnalytics.post('ctc_analytics_funnel', range).done(function (result) {
-            if (requestId !== currentRequest) {
-                return;
+            outcomes[index] = outcome;
+            if (outcome.ok && outcome.data.filter_context && outcome.data.filter_context.fell_back) {
+                fallbackContext = fallbackContext || outcome.data.filter_context;
             }
-            renderFunnel(result.response.success ? result.response.data : { stages: [] });
-        });
 
-        CtcAnalytics.post('ctc_analytics_top_products', range).done(function (result) {
-            if (requestId !== currentRequest) {
+            completed++;
+            if (completed !== requests.length) {
                 return;
             }
-            renderTopTable(
-                $('#ctc-analytics-top-products .ctc-analytics-card__body'),
-                result.response.success ? result.response.data.items : [],
-                [
-                    { label: 'Product', render: function (item) { return $('<span/>').text(item.name).html(); } },
-                    { label: 'Clicks', render: function (item) { return CtcAnalytics.formatNumber(item.clicks); } },
-                    { label: 'Unique', render: function (item) { return CtcAnalytics.formatNumber(item.unique_clicks); } }
-                ]
-            );
-        });
 
-        CtcAnalytics.post('ctc_analytics_top_numbers', range).done(function (result) {
-            if (requestId !== currentRequest) {
+            if (fallbackContext && !options.recovery) {
+                $('#ctc-analytics-number').val('all');
+                showFilterNotice(
+                    fallbackContext.message || ctc_chat_analytics.i18n.filter_unavailable,
+                    'warning'
+                );
+                refreshAll({ recovery: true, keepNotice: true });
                 return;
             }
-            renderTopTable(
-                $('#ctc-analytics-top-numbers .ctc-analytics-card__body'),
-                result.response.success ? result.response.data.items : [],
-                [
-                    { label: 'Number', render: function (item) { return $('<span/>').text(item.masked_number || item.label).html(); } },
-                    { label: 'Clicks', render: function (item) { return CtcAnalytics.formatNumber(item.clicks); } },
-                    { label: 'High-intent', render: function (item) { return CtcAnalytics.formatNumber(item.high_intent_clicks); } }
-                ]
-            );
+
+            var failed = false;
+            requests.forEach(function (request, requestIndex) {
+                if (!outcomes[requestIndex] || !outcomes[requestIndex].ok) {
+                    failed = true;
+                    CtcAnalytics.setError(request.$target);
+                    return;
+                }
+                request.render(outcomes[requestIndex].data);
+            });
+
+            if (failed && options.recovery) {
+                showFilterNotice(ctc_chat_analytics.i18n.filter_retry_error, 'error');
+            }
+        }
+
+        requests.forEach(function (request, index) {
+            CtcAnalytics.post(request.action, request.data)
+                .done(function (result) {
+                    var response = result && result.response;
+                    if (!response || !response.success || !response.data) {
+                        finish(index, { ok: false });
+                        return;
+                    }
+                    finish(index, { ok: true, data: response.data });
+                })
+                .fail(function () {
+                    finish(index, { ok: false });
+                });
         });
     }
 
