@@ -29,8 +29,12 @@
         var cards = [
             { key: 'total_clicks', label: 'WhatsApp Clicks' },
             { key: 'unique_clicks', label: 'Unique Clicks' },
-            { key: 'high_intent_clicks', label: 'High-Intent Clicks' },
-            { key: 'cart_value_clicked', label: 'Cart Value at Click', format: 'currency' },
+            {
+                key: 'high_intent_clicks',
+                label: 'High-Intent Clicks',
+                help: 'Counts WhatsApp clicks from Cart, Checkout, and Thank You pages.'
+            },
+            { key: 'cart_value_clicked', label: 'Total Cart Value at Click', format: 'currency' },
             { key: 'mobile_share', label: 'Mobile Share', format: 'percent' }
         ];
 
@@ -80,9 +84,15 @@
             var valueClass = metric.value === null || typeof metric.value === 'undefined'
                 ? ' ctc-analytics-kpi__value--unavailable'
                 : '';
+            var label = card.label;
+
+            if (card.help) {
+                label += '<span class="dashicons dashicons-info-outline ctc-analytics-kpi__help"'
+                    + ' tabindex="0" role="img" title="' + card.help + '" aria-label="' + card.help + '"></span>';
+            }
 
             html += '<div class="ctc-analytics-kpi">';
-            html += '<span class="ctc-analytics-kpi__label">' + card.label + '</span>';
+            html += '<span class="ctc-analytics-kpi__label">' + label + '</span>';
             html += '<strong class="ctc-analytics-kpi__value' + valueClass + '">' + value + '</strong>';
             html += renderComparison(metric, card.format);
             html += '</div>';

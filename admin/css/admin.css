@@ -1781,10 +1781,28 @@ body.click-to-chat_page_click-to-chat-settings #wpbody-content,
 }
 
 .ctc-analytics-kpi__label {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
     font-size: 12px;
     color: var(--ctc-admin-muted, #646970);
     text-transform: uppercase;
     letter-spacing: 0.02em;
+}
+
+.ctc-analytics-kpi__help {
+    width: 14px;
+    height: 14px;
+    color: var(--ctc-admin-muted, #646970);
+    font-size: 14px;
+    line-height: 14px;
+    cursor: help;
+}
+
+.ctc-analytics-kpi__help:focus {
+    border-radius: 50%;
+    outline: 2px solid var(--ctc-admin-primary, #3858e9);
+    outline-offset: 2px;
 }
 
 .ctc-analytics-kpi__value {
