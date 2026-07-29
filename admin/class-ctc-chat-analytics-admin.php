@@ -41,7 +41,7 @@ class CTC_Chat_Analytics_Admin {
 	/**
 	 * Verify admin analytics request.
 	 *
-	 * @return array{start_date:string,end_date:string,compare:bool}
+	 * @return array{start_date:string,end_date:string,compare:bool,analytics_filters:array,filter_context:array}
 	 */
 	private function verify_request() {
 		if ( ! ctc_chat_analytics_capability() ) {
@@ -71,9 +71,85 @@ class CTC_Chat_Analytics_Admin {
 			wp_send_json_error( array( 'message' => __( 'Date range cannot exceed 366 days.', 'aicoso-click-to-chat' ) ), 400 );
 		}
 
-		$compare = ! isset( $_POST['compare'] ) || filter_var( wp_unslash( $_POST['compare'] ), FILTER_VALIDATE_BOOLEAN );
+		$compare       = ! isset( $_POST['compare'] ) || filter_var( wp_unslash( $_POST['compare'] ), FILTER_VALIDATE_BOOLEAN );
+		$number_filter = $this->resolve_number_filter();
 
-		return compact( 'start_date', 'end_date', 'compare' );
+		return array(
+			'start_date'        => $start_date,
+			'end_date'          => $end_date,
+			'compare'           => $compare,
+			'analytics_filters' => $number_filter['filters'],
+			'filter_context'    => $number_filter['context'],
+		);
+	}
+
+	/**
+	 * Resolve the dashboard number filter at the protected request boundary.
+	 *
+	 * @return array{filters:array,context:array}
+	 */
+	private function resolve_number_filter() {
+		$provided = null !== $this->get_verified_post( 'number_filter', null );
+		$raw      = $this->get_verified_post( 'number_filter', 'all' );
+		$context  = array(
+			'requested' => 'all',
+			'resolved'  => 'all',
+			'mode'      => 'all',
+			'fell_back' => false,
+			'message'   => '',
+		);
+
+		if ( ! $provided || 'all' === $raw ) {
+			return array(
+				'filters' => array(),
+				'context' => $context,
+			);
+		}
+
+		if ( 'unattributed' === $raw ) {
+			$context['requested'] = 'unattributed';
+			$context['resolved']  = 'unattributed';
+			$context['mode']      = 'unattributed';
+
+			return array(
+				'filters' => array( 'number_mode' => 'unattributed' ),
+				'context' => $context,
+			);
+		}
+
+		if ( is_string( $raw ) && preg_match( '/^[1-9][0-9]*$/D', $raw ) ) {
+			$requested_id = (int) $raw;
+			$settings     = get_option( 'ctc_chat_settings', array() );
+			$numbers      = ! empty( $settings['whatsapp_numbers'] )
+				? ctc_chat_normalize_number_record_ids( $settings['whatsapp_numbers'] )
+				: array();
+
+			foreach ( $numbers as $number ) {
+				if ( absint( $number['id'] ?? 0 ) === $requested_id ) {
+					$resolved             = (string) $requested_id;
+					$context['requested'] = $resolved;
+					$context['resolved']  = $resolved;
+					$context['mode']      = 'number';
+
+					return array(
+						'filters' => array(
+							'number_mode' => 'number',
+							'number_id'   => $requested_id,
+						),
+						'context' => $context,
+					);
+				}
+			}
+		}
+
+		$context['requested'] = 'invalid';
+		$context['fell_back'] = true;
+		$context['message']   = __( 'The selected WhatsApp number is no longer available. Showing all numbers.', 'aicoso-click-to-chat' );
+
+		return array(
+			'filters' => array(),
+			'context' => $context,
+		);
 	}
 
 	/**
@@ -114,8 +190,9 @@ class CTC_Chat_Analytics_Admin {
 	 * KPI endpoint.
 	 */
 	public function ajax_kpis() {
-		$request = $this->verify_request();
-		$data    = $this->analytics->get_kpis( $request['start_date'], $request['end_date'], $request['compare'] );
+		$request                = $this->verify_request();
+		$data                   = $this->analytics->get_kpis( $request['start_date'], $request['end_date'], $request['compare'], $request['analytics_filters'] );
+		$data['filter_context'] = $request['filter_context'];
 		wp_send_json_success( $data );
 	}
 
@@ -128,7 +205,8 @@ class CTC_Chat_Analytics_Admin {
 		if ( ! in_array( $grouping, array( 'day', 'week', 'month' ), true ) ) {
 			$grouping = 'day';
 		}
-		$data = $this->analytics->get_trend( $request['start_date'], $request['end_date'], $grouping );
+		$data                   = $this->analytics->get_trend( $request['start_date'], $request['end_date'], $grouping, $request['analytics_filters'] );
+		$data['filter_context'] = $request['filter_context'];
 		wp_send_json_success( $data );
 	}
 
@@ -136,8 +214,9 @@ class CTC_Chat_Analytics_Admin {
 	 * Funnel endpoint.
 	 */
 	public function ajax_funnel() {
-		$request = $this->verify_request();
-		$data    = $this->analytics->get_funnel( $request['start_date'], $request['end_date'] );
+		$request                = $this->verify_request();
+		$data                   = $this->analytics->get_funnel( $request['start_date'], $request['end_date'], $request['analytics_filters'] );
+		$data['filter_context'] = $request['filter_context'];
 		wp_send_json_success( $data );
 	}
 
@@ -145,8 +224,9 @@ class CTC_Chat_Analytics_Admin {
 	 * Top products endpoint.
 	 */
 	public function ajax_top_products() {
-		$request = $this->verify_request();
-		$data    = $this->analytics->get_top_products( $request['start_date'], $request['end_date'] );
+		$request                = $this->verify_request();
+		$data                   = $this->analytics->get_top_products( $request['start_date'], $request['end_date'], 5, $request['analytics_filters'] );
+		$data['filter_context'] = $request['filter_context'];
 		wp_send_json_success( $data );
 	}
 
@@ -154,8 +234,9 @@ class CTC_Chat_Analytics_Admin {
 	 * Top numbers endpoint.
 	 */
 	public function ajax_top_numbers() {
-		$request = $this->verify_request();
-		$data    = $this->analytics->get_top_numbers( $request['start_date'], $request['end_date'] );
+		$request                = $this->verify_request();
+		$data                   = $this->analytics->get_top_numbers( $request['start_date'], $request['end_date'], 5, $request['analytics_filters'] );
+		$data['filter_context'] = $request['filter_context'];
 		wp_send_json_success( $data );
 	}
 

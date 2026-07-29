@@ -18,8 +18,12 @@ if ( $analytics_enabled ) {
 	$analytics_has_data = $analytics->has_click_data();
 }
 
-$default_end       = wp_date( 'Y-m-d' );
-$default_start     = wp_date( 'Y-m-d', strtotime( '-29 days' ) );
+$default_end        = wp_date( 'Y-m-d' );
+$default_start      = wp_date( 'Y-m-d', strtotime( '-29 days' ) );
+$dashboard_settings = get_option( 'ctc_chat_settings', array() );
+$dashboard_numbers  = ! empty( $dashboard_settings['whatsapp_numbers'] )
+	? ctc_chat_normalize_number_record_ids( $dashboard_settings['whatsapp_numbers'] )
+	: array();
 ?>
 
 <div class="ctc-analytics" data-ctc-analytics="dashboard" data-enabled="<?php echo $analytics_enabled ? '1' : '0'; ?>">
@@ -50,6 +54,23 @@ $default_start     = wp_date( 'Y-m-d', strtotime( '-29 days' ) );
 			<button type="button" class="button" data-range-preset="90" aria-pressed="false"><?php esc_html_e( 'Last 90 days', 'aicoso-click-to-chat' ); ?></button>
 		</div>
 		<div class="ctc-analytics-toolbar__custom">
+			<label class="ctc-analytics-field ctc-analytics-field--number">
+				<span class="ctc-analytics-field__label"><?php esc_html_e( 'WhatsApp number', 'aicoso-click-to-chat' ); ?></span>
+				<select id="ctc-analytics-number">
+					<option value="all" selected><?php esc_html_e( 'All numbers', 'aicoso-click-to-chat' ); ?></option>
+					<?php foreach ( $dashboard_numbers as $dashboard_number ) : ?>
+						<?php
+						$number_id   = absint( $dashboard_number['id'] ?? 0 );
+						$number_name = ! empty( $dashboard_number['name'] ) ? $dashboard_number['name'] : __( 'WhatsApp', 'aicoso-click-to-chat' );
+						$number_mask = ctc_chat_mask_phone_number( $dashboard_number['number'] ?? '' );
+						?>
+						<?php if ( $number_id ) : ?>
+							<option value="<?php echo esc_attr( (string) $number_id ); ?>"><?php echo esc_html( $number_name . ' (' . $number_mask . ')' ); ?></option>
+						<?php endif; ?>
+					<?php endforeach; ?>
+					<option value="unattributed"><?php esc_html_e( 'Unattributed', 'aicoso-click-to-chat' ); ?></option>
+				</select>
+			</label>
 			<label class="ctc-analytics-field">
 				<span class="ctc-analytics-field__label"><?php esc_html_e( 'From', 'aicoso-click-to-chat' ); ?></span>
 				<input type="date" id="ctc-analytics-start" value="<?php echo esc_attr( $default_start ); ?>">
@@ -67,6 +88,7 @@ $default_start     = wp_date( 'Y-m-d', strtotime( '-29 days' ) );
 			</div>
 		</div>
 	</div>
+	<div id="ctc-analytics-filter-notice" class="ctc-analytics-filter-notice" aria-live="polite" aria-atomic="true" hidden></div>
 
 	<div class="ctc-analytics-kpis" id="ctc-analytics-kpis" aria-live="polite">
 		<div class="ctc-analytics-loading"><?php esc_html_e( 'Loading metrics…', 'aicoso-click-to-chat' ); ?></div>

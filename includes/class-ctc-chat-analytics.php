@@ -38,15 +38,17 @@ class CTC_Chat_Analytics {
 	 * @param string $start_date Start date Y-m-d.
 	 * @param string $end_date   End date Y-m-d.
 	 * @param bool   $compare    Include comparison period.
+	 * @param array  $filters    Optional dashboard filters.
 	 * @return array
 	 */
-	public function get_kpis( $start_date, $end_date, $compare = true ) {
+	public function get_kpis( $start_date, $end_date, $compare = true, $filters = array() ) {
 		$range         = ctc_chat_analytics_parse_range( $start_date, $end_date );
-		$current       = $this->get_kpi_values( $range['start'], $range['end'] );
+		$current       = $this->get_kpi_values( $range['start'], $range['end'], $filters );
 		$compare_range = ctc_chat_analytics_compare_range( $start_date, $end_date );
 		$previous      = $compare ? $this->get_kpi_values(
 			ctc_chat_analytics_parse_range( $compare_range['start'], $compare_range['end'] )['start'],
-			ctc_chat_analytics_parse_range( $compare_range['start'], $compare_range['end'] )['end']
+			ctc_chat_analytics_parse_range( $compare_range['start'], $compare_range['end'] )['end'],
+			$filters
 		) : array();
 
 		$currency = function_exists( 'get_woocommerce_currency' ) ? get_woocommerce_currency() : '';
@@ -115,13 +117,14 @@ class CTC_Chat_Analytics {
 	 *
 	 * @param string $start_utc Start datetime UTC.
 	 * @param string $end_utc   End datetime UTC.
+	 * @param array  $filters   Optional dashboard filters.
 	 * @return array
 	 */
-	private function get_kpi_values( $start_utc, $end_utc ) {
+	private function get_kpi_values( $start_utc, $end_utc, $filters = array() ) {
 		global $wpdb;
 
 		$table = ctc_chat_get_clicks_table_name();
-
+		list( $where_sql, $where_args ) = $this->build_filter_sql( $start_utc, $end_utc, $filters );
 		// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 		$totals = $wpdb->get_row(
 			$wpdb->prepare(
@@ -133,9 +136,8 @@ class CTC_Chat_Analytics {
 					SUM(CASE WHEN device_type = 'mobile' THEN 1 ELSE 0 END) AS mobile_clicks,
 					SUM(CASE WHEN device_type IN ('desktop','tablet','mobile') THEN 1 ELSE 0 END) AS known_device_clicks
 				FROM {$table}
-				WHERE clicked_at BETWEEN %s AND %s",
-				$start_utc,
-				$end_utc
+				WHERE {$where_sql}",
+				...$where_args
 			),
 			ARRAY_A
 		);
@@ -148,12 +150,11 @@ class CTC_Chat_Analytics {
 			$wpdb->prepare(
 				"SELECT button_type, COUNT(*) AS click_count
 				FROM {$table}
-				WHERE clicked_at BETWEEN %s AND %s
+				WHERE {$where_sql}
 				GROUP BY button_type
 				ORDER BY click_count DESC
 				LIMIT 1",
-				$start_utc,
-				$end_utc
+				...$where_args
 			),
 			ARRAY_A
 		);
@@ -175,22 +176,28 @@ class CTC_Chat_Analytics {
 	 * @param string $start_date Start date.
 	 * @param string $end_date   End date.
 	 * @param string $grouping   day|week|month.
+	 * @param array  $filters    Optional dashboard filters.
 	 * @return array
 	 */
-	public function get_trend( $start_date, $end_date, $grouping = 'day' ) {
+	public function get_trend( $start_date, $end_date, $grouping = 'day', $filters = array() ) {
 		global $wpdb;
 
 		$range  = ctc_chat_analytics_parse_range( $start_date, $end_date );
 		$table  = ctc_chat_get_clicks_table_name();
 		$tz     = wp_timezone();
+		list( $where_sql, $where_args ) = $this->build_filter_sql( $range['start'], $range['end'], $filters );
 
 		$rows = $wpdb->get_results(
 			$wpdb->prepare(
-				"SELECT clicked_at, is_unique FROM {$table}
-				WHERE clicked_at BETWEEN %s AND %s
-				ORDER BY clicked_at ASC",
-				$range['start'],
-				$range['end']
+				"SELECT
+					MIN(clicked_at) AS clicked_at,
+					COUNT(*) AS clicks,
+					SUM(CASE WHEN is_unique = 1 THEN 1 ELSE 0 END) AS unique_clicks
+				FROM {$table}
+				WHERE {$where_sql}
+				GROUP BY DATE(clicked_at), HOUR(clicked_at), FLOOR(MINUTE(clicked_at) / 15)
+				ORDER BY MIN(clicked_at) ASC",
+				...$where_args
 			),
 			ARRAY_A
 		);
@@ -239,10 +246,8 @@ class CTC_Chat_Analytics {
 				);
 			}
 
-			$buckets[ $key ]['clicks']++;
-			if ( ! empty( $row['is_unique'] ) ) {
-				$buckets[ $key ]['unique_clicks']++;
-			}
+			$buckets[ $key ]['clicks']        += (int) $row['clicks'];
+			$buckets[ $key ]['unique_clicks'] += (int) $row['unique_clicks'];
 		}
 
 		return array(
@@ -261,22 +266,22 @@ class CTC_Chat_Analytics {
 	 *
 	 * @param string $start_date Start date.
 	 * @param string $end_date   End date.
+	 * @param array  $filters    Optional dashboard filters.
 	 * @return array
 	 */
-	public function get_funnel( $start_date, $end_date ) {
+	public function get_funnel( $start_date, $end_date, $filters = array() ) {
 		global $wpdb;
 
 		$range = ctc_chat_analytics_parse_range( $start_date, $end_date );
 		$table = ctc_chat_get_clicks_table_name();
-
+		list( $where_sql, $where_args ) = $this->build_filter_sql( $range['start'], $range['end'], $filters );
 		$rows = $wpdb->get_results(
 			$wpdb->prepare(
 				"SELECT button_type, COUNT(*) AS click_count
 				FROM {$table}
-				WHERE clicked_at BETWEEN %s AND %s
+				WHERE {$where_sql}
 				GROUP BY button_type",
-				$range['start'],
-				$range['end']
+				...$where_args
 			),
 			ARRAY_A
 		);
@@ -320,29 +325,30 @@ class CTC_Chat_Analytics {
 	 * @param string $start_date Start date.
 	 * @param string $end_date   End date.
 	 * @param int    $limit      Limit.
+	 * @param array  $filters    Optional dashboard filters.
 	 * @return array
 	 */
-	public function get_top_products( $start_date, $end_date, $limit = 5 ) {
+	public function get_top_products( $start_date, $end_date, $limit = 5, $filters = array() ) {
 		global $wpdb;
 
 		$range = ctc_chat_analytics_parse_range( $start_date, $end_date );
 		$table = ctc_chat_get_clicks_table_name();
 		$limit = max( 1, min( 10, absint( $limit ) ) );
-
+		list( $where_sql, $where_args ) = $this->build_filter_sql( $range['start'], $range['end'], $filters );
+		$query_args                     = $where_args;
+		$query_args[]                   = $limit;
 		$rows = $wpdb->get_results(
 			$wpdb->prepare(
 				"SELECT product_id,
 					COUNT(*) AS clicks,
 					SUM(CASE WHEN is_unique = 1 THEN 1 ELSE 0 END) AS unique_clicks
 				FROM {$table}
-				WHERE clicked_at BETWEEN %s AND %s
+				WHERE {$where_sql}
 				AND product_id IS NOT NULL AND product_id > 0
 				GROUP BY product_id
 				ORDER BY clicks DESC
 				LIMIT %d",
-				$range['start'],
-				$range['end'],
-				$limit
+				...$query_args
 			),
 			ARRAY_A
 		);
@@ -379,28 +385,29 @@ class CTC_Chat_Analytics {
 	 * @param string $start_date Start date.
 	 * @param string $end_date   End date.
 	 * @param int    $limit      Limit.
+	 * @param array  $filters    Optional dashboard filters.
 	 * @return array
 	 */
-	public function get_top_numbers( $start_date, $end_date, $limit = 5 ) {
+	public function get_top_numbers( $start_date, $end_date, $limit = 5, $filters = array() ) {
 		global $wpdb;
 
 		$range = ctc_chat_analytics_parse_range( $start_date, $end_date );
 		$table = ctc_chat_get_clicks_table_name();
 		$limit = max( 1, min( 10, absint( $limit ) ) );
-
+		list( $where_sql, $where_args ) = $this->build_filter_sql( $range['start'], $range['end'], $filters );
+		$query_args                     = $where_args;
+		$query_args[]                   = $limit;
 		$rows = $wpdb->get_results(
 			$wpdb->prepare(
 				"SELECT COALESCE(number_id, 0) AS number_id,
 					COUNT(*) AS clicks,
 					SUM(CASE WHEN button_type IN ('cart','checkout','thankyou') THEN 1 ELSE 0 END) AS high_intent_clicks
 				FROM {$table}
-				WHERE clicked_at BETWEEN %s AND %s
+				WHERE {$where_sql}
 				GROUP BY COALESCE(number_id, 0)
 				ORDER BY clicks DESC
 				LIMIT %d",
-				$range['start'],
-				$range['end'],
-				$limit
+				...$query_args
 			),
 			ARRAY_A
 		);
@@ -415,16 +422,18 @@ class CTC_Chat_Analytics {
 				'masked_number'       => $number_id ? ctc_chat_get_number_display( $number_id ) : __( 'Unattributed', 'aicoso-click-to-chat' ),
 				'clicks'              => (int) $row['clicks'],
 				'high_intent_clicks'  => (int) $row['high_intent_clicks'],
-				'report_url'          => add_query_arg(
-					array(
-						'page'       => 'click-to-chat-reports',
-						'report'     => 'clicks',
-						'number_id'  => $number_id,
-						'start_date' => $start_date,
-						'end_date'   => $end_date,
-					),
-					admin_url( 'admin.php' )
-				),
+				'report_url'          => $number_id
+					? add_query_arg(
+						array(
+							'page'       => 'click-to-chat-reports',
+							'report'     => 'clicks',
+							'number_id'  => $number_id,
+							'start_date' => $start_date,
+							'end_date'   => $end_date,
+						),
+						admin_url( 'admin.php' )
+					)
+					: '',
 			);
 		}
 
@@ -661,7 +670,9 @@ class CTC_Chat_Analytics {
 			}
 		}
 
-		if ( ! empty( $filters['number_id'] ) ) {
+		if ( isset( $filters['number_mode'] ) && 'unattributed' === $filters['number_mode'] ) {
+			$clauses[] = '(number_id IS NULL OR number_id = 0)';
+		} elseif ( ! empty( $filters['number_id'] ) ) {
 			$clauses[] = 'number_id = %d';
 			$args[]    = absint( $filters['number_id'] );
 		}
