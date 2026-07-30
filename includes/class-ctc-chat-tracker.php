@@ -234,7 +234,7 @@ class CTC_Chat_Tracker {
 		$table = ctc_chat_get_clicks_table_name();
 		$since = gmdate( 'Y-m-d H:i:s', time() - MINUTE_IN_SECONDS );
 
-		// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+		// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter -- Plugin-owned table identifier.
 		$count = (int) $wpdb->get_var(
 			$wpdb->prepare(
 				"SELECT COUNT(*) FROM {$table} WHERE visitor_key = %s AND clicked_at >= %s",
@@ -263,7 +263,7 @@ class CTC_Chat_Tracker {
 		$table = ctc_chat_get_clicks_table_name();
 		$since = gmdate( 'Y-m-d H:i:s', time() - ( $dedupe_hours * HOUR_IN_SECONDS ) );
 
-		// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+		// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter -- Plugin-owned table identifier.
 		$existing = (int) $wpdb->get_var(
 			$wpdb->prepare(
 				"SELECT COUNT(*) FROM {$table}

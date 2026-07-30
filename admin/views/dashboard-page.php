@@ -10,6 +10,8 @@ if ( ! defined( 'WPINC' ) ) {
 	die;
 }
 
+// phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound -- View variables are scoped to the including renderer.
+
 $analytics_enabled  = ctc_chat_analytics_is_enabled();
 $analytics_has_data = false;
 

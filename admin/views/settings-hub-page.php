@@ -10,6 +10,8 @@ if ( ! defined( 'WPINC' ) ) {
 	die;
 }
 
+// phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound -- View variables are scoped to the including renderer.
+
 $current_section = $this->get_current_settings_section();
 $current_tab     = $this->get_current_settings_tab();
 ?>

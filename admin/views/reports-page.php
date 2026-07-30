@@ -10,11 +10,15 @@ if ( ! defined( 'WPINC' ) ) {
 	die;
 }
 
+// phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound -- View variables are scoped to the including renderer.
+
 $current_report = $this->get_current_report();
+// phpcs:disable WordPress.Security.NonceVerification.Recommended -- These sanitized GET values only select report display filters.
 $default_end    = isset( $_GET['end_date'] ) ? sanitize_text_field( wp_unslash( $_GET['end_date'] ) ) : wp_date( 'Y-m-d' );
 $default_start  = isset( $_GET['start_date'] ) ? sanitize_text_field( wp_unslash( $_GET['start_date'] ) ) : wp_date( 'Y-m-d', strtotime( '-29 days' ) );
 $product_id     = isset( $_GET['product_id'] ) ? absint( $_GET['product_id'] ) : 0;
 $number_id      = isset( $_GET['number_id'] ) ? absint( $_GET['number_id'] ) : 0;
+// phpcs:enable WordPress.Security.NonceVerification.Recommended
 ?>
 
 <div class="ctc-analytics" data-ctc-analytics="reports" data-report="<?php echo esc_attr( $current_report ); ?>" data-product-id="<?php echo esc_attr( (string) $product_id ); ?>" data-number-id="<?php echo esc_attr( (string) $number_id ); ?>">

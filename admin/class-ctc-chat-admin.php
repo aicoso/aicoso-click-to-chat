@@ -109,10 +109,11 @@ class CTC_Chat_Admin {
 		$valid_sections = $this->get_settings_section_slugs();
 		$section        = 'general';
 
-		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Section selection is display-only.
+		// phpcs:disable WordPress.Security.NonceVerification.Recommended -- Section selection is display-only.
 		if ( isset( $_GET['ctc-settings-tab'] ) ) {
 			$section = sanitize_text_field( wp_unslash( $_GET['ctc-settings-tab'] ) );
 		}
+		// phpcs:enable WordPress.Security.NonceVerification.Recommended
 
 		return in_array( $section, $valid_sections, true ) ? $section : 'general';
 	}
@@ -244,13 +245,14 @@ class CTC_Chat_Admin {
 		$valid_reports = $this->get_report_slugs();
 		$report        = 'clicks';
 
-		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Tab selection is display-only.
+		// phpcs:disable WordPress.Security.NonceVerification.Recommended -- Report selection is display-only.
 		if ( isset( $_GET['report'] ) ) {
 			$candidate = sanitize_key( wp_unslash( $_GET['report'] ) );
 			if ( in_array( $candidate, $valid_reports, true ) ) {
 				$report = $candidate;
 			}
 		}
+		// phpcs:enable WordPress.Security.NonceVerification.Recommended
 
 		return $report;
 	}
@@ -434,6 +436,7 @@ class CTC_Chat_Admin {
 	 * @return void
 	 */
 	public function maybe_redirect_legacy_admin_pages() {
+		// phpcs:disable WordPress.Security.NonceVerification.Recommended -- Legacy deep links are display-only redirects.
 		if ( ! is_admin() || ! isset( $_GET['page'] ) ) {
 			return;
 		}
@@ -462,7 +465,6 @@ class CTC_Chat_Admin {
 				break;
 		}
 
-		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Legacy deep links are display-only redirects.
 		if ( empty( $args ) && 'click-to-chat' === $page && ( isset( $_GET['ctc-tab'] ) || isset( $_GET['tab'] ) ) ) {
 			$tab  = isset( $_GET['ctc-tab'] ) ? sanitize_text_field( wp_unslash( $_GET['ctc-tab'] ) ) : sanitize_text_field( wp_unslash( $_GET['tab'] ) );
 			$args = array(
@@ -476,6 +478,7 @@ class CTC_Chat_Admin {
 			wp_safe_redirect( add_query_arg( $args, admin_url( 'admin.php' ) ) );
 			exit;
 		}
+		// phpcs:enable WordPress.Security.NonceVerification.Recommended
 	}
 
 	/**
@@ -629,13 +632,14 @@ class CTC_Chat_Admin {
 		$valid_tabs = $this->get_settings_tab_slugs();
 		$tab        = 'general';
 
-		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Tab selection is display-only.
+		// phpcs:disable WordPress.Security.NonceVerification.Recommended -- Tab selection is display-only.
 		if ( isset( $_GET['ctc-tab'] ) ) {
 			$tab = sanitize_text_field( wp_unslash( $_GET['ctc-tab'] ) );
 		} elseif ( isset( $_GET['tab'] ) ) {
 			// Legacy query parameter kept for backward compatibility.
 			$tab = sanitize_text_field( wp_unslash( $_GET['tab'] ) );
 		}
+		// phpcs:enable WordPress.Security.NonceVerification.Recommended
 
 		return in_array( $tab, $valid_tabs, true ) ? $tab : 'general';
 	}

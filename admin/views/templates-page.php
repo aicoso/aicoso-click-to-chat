@@ -11,6 +11,8 @@ if ( ! defined( 'WPINC' ) ) {
 	die;
 }
 
+// phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound -- View variables are scoped to the including renderer.
+
 // Include settings class.
 require_once plugin_dir_path( __DIR__ ) . 'class-ctc-chat-settings.php';
 

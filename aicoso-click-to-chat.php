@@ -16,7 +16,7 @@
  * Description:       Enable customers to order products directly through WhatsApp with a single click. Add WhatsApp buttons to product pages, shop pages, cart, and checkout.
  * Version:           1.0.3
  * Requires at least: 6.2
- * Tested up to:      6.8
+ * Tested up to:      7.0
  * Requires PHP:      7.4
  * Author:            AICOSO
  * Author URI:        https://aicoso.com/

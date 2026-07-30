@@ -25,7 +25,8 @@ class CTC_Chat_Analytics {
 
 		$table = ctc_chat_get_clicks_table_name();
 
-		// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+		// Table identifier comes from the plugin-owned table-name helper.
+		// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter
 		$has_data = $wpdb->get_var( "SELECT 1 FROM {$table} LIMIT 1" );
 		// phpcs:enable
 
@@ -125,7 +126,9 @@ class CTC_Chat_Analytics {
 
 		$table = ctc_chat_get_clicks_table_name();
 		list( $where_sql, $where_args ) = $this->build_filter_sql( $start_utc, $end_utc, $filters );
-		// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+		// Identifiers come from plugin-owned helpers/allowlists; build_filter_sql() creates each placeholder with its matching argument.
+		// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter
+		// phpcs:disable WordPress.DB.PreparedSQLPlaceholders.UnfinishedPrepare, WordPress.DB.PreparedSQLPlaceholders.ReplacementsWrongNumber
 		$totals = $wpdb->get_row(
 			$wpdb->prepare(
 				"SELECT

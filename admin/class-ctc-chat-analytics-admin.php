@@ -177,13 +177,14 @@ class CTC_Chat_Analytics_Admin {
 	 * @return mixed
 	 */
 	private function get_request_value( $key, $fallback = null ) {
-		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Caller verifies nonce.
+		// phpcs:disable WordPress.Security.NonceVerification.Recommended, WordPress.Security.NonceVerification.Missing -- Caller verifies nonce.
 		if ( ! isset( $_REQUEST[ $key ] ) ) {
 			return $fallback;
 		}
 
-		// phpcs:ignore WordPress.Security.NonceVerification.Missing, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Sanitized by callers.
+		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Sanitized by callers.
 		return wp_unslash( $_REQUEST[ $key ] );
+		// phpcs:enable WordPress.Security.NonceVerification.Recommended, WordPress.Security.NonceVerification.Missing
 	}
 
 	/**
@@ -319,6 +320,7 @@ class CTC_Chat_Analytics_Admin {
 			);
 		}
 
+		// phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fclose -- Required for the php://output CSV stream; WP_Filesystem is not applicable.
 		fclose( $output );
 		exit;
 	}
