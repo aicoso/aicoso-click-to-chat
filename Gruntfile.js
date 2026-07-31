@@ -23,7 +23,7 @@ module.exports = function(grunt) {
 
 		// Use the PHP from node-wp-i18n
 		const makepotScript = path.join(__dirname, 'node_modules', 'node-wp-i18n', 'bin', 'php', 'node-makepot.php');
-		const outputFile = path.join(__dirname, 'languages', 'click-to-chat.pot');
+		const outputFile = path.join(__dirname, 'languages', 'aicoso-click-to-chat.pot');
 
 		// Ensure languages directory exists
 		if (!fs.existsSync(path.join(__dirname, 'languages'))) {
@@ -31,12 +31,12 @@ module.exports = function(grunt) {
 		}
 
 		try {
-			const cmd = `${phpPath} "${makepotScript}" wp-plugin "${__dirname}" "${outputFile}" click-to-chat click-to-chat.php "node_modules/.*,vendor/.*,.git/.*,.github/.*,build/.*,tests/.*"`;
+			const cmd = `${phpPath} "${makepotScript}" wp-plugin "${__dirname}" "${outputFile}" aicoso-click-to-chat aicoso-click-to-chat.php "node_modules/.*,vendor/.*,.git/.*,.github/.*,build/.*,tests/.*" ""`;
 
 			grunt.log.writeln(`Running: ${cmd}`);
 			execSync(cmd, { stdio: 'inherit' });
 
-			grunt.log.ok('POT file generated successfully at languages/click-to-chat.pot');
+			grunt.log.ok('POT file generated successfully at languages/aicoso-click-to-chat.pot');
 			done(true);
 		} catch (error) {
 			grunt.log.error('Failed to generate POT file');
