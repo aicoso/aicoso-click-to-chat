@@ -1,6 +1,7 @@
 [CmdletBinding()]
 param(
-	[string] $OutputPath
+	[string] $OutputPath,
+	[switch] $Flat
 )
 
 $ErrorActionPreference = 'Stop'
@@ -16,7 +17,8 @@ if ( -not $versionLine ) {
 $version = $versionLine.Matches[0].Groups[1].Value
 
 if ( -not $OutputPath ) {
-	$OutputPath = Join-Path $pluginRoot "build\$pluginSlug-$version.zip"
+	$archiveName = if ( $Flat ) { "$pluginSlug.zip" } else { "$pluginSlug-$version.zip" }
+	$OutputPath = Join-Path $pluginRoot "build\$archiveName"
 }
 
 $outputFullPath = [System.IO.Path]::GetFullPath($OutputPath)
@@ -83,7 +85,34 @@ try {
 		Remove-Item -LiteralPath $outputFullPath
 	}
 
-	Compress-Archive -LiteralPath $stagingPlugin -DestinationPath $outputFullPath -CompressionLevel Optimal
+	Add-Type -AssemblyName System.IO.Compression
+	Add-Type -AssemblyName System.IO.Compression.FileSystem
+
+	$archive = [System.IO.Compression.ZipFile]::Open(
+		$outputFullPath,
+		[System.IO.Compression.ZipArchiveMode]::Create
+	)
+
+	try {
+		Get-ChildItem -LiteralPath $stagingPlugin -Recurse -File | ForEach-Object {
+			$relativePath = $_.FullName.Substring($stagingPlugin.Length).TrimStart([System.IO.Path]::DirectorySeparatorChar, [System.IO.Path]::AltDirectorySeparatorChar)
+			$entryPath = $relativePath.Replace([char] 92, [char] 47)
+
+			if ( -not $Flat ) {
+				$entryPath = "$pluginSlug/$entryPath"
+			}
+
+			[System.IO.Compression.ZipFileExtensions]::CreateEntryFromFile(
+				$archive,
+				$_.FullName,
+				$entryPath,
+				[System.IO.Compression.CompressionLevel]::Optimal
+			) | Out-Null
+		}
+	} finally {
+		$archive.Dispose()
+	}
+
 	Write-Output $outputFullPath
 } finally {
 	if ( Test-Path -LiteralPath $buildRoot ) {
