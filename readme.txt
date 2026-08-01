@@ -185,8 +185,10 @@ Yes, you can set exclusion rules based on products, categories, tags, or pages.
 == Changelog ==
 
 = 1.0.3 =
-* Add an Analytics Dashboard filter for All numbers, a specific masked WhatsApp number, or Unattributed clicks, including safe fallback when a selected number is removed.
-* Preserve existing Click to Chat settings during plugin updates and initialize only missing defaults.
+* Added an Analytics Dashboard filter for All numbers, one masked configured number, or Unattributed clicks, with safe fallback if the selected number is removed.
+* Improved dashboard usability with KPI help text, accessible notices, comparison labels, preset handling, unavailable-data states, chart presentation, and responsive behavior.
+* Preserved existing Click to Chat settings during plugin updates and initialized only missing defaults.
+* Improved WordPress Plugin Check compliance, cross-platform release packaging, PHPCS dependency handling, line-ending consistency, and translation template generation.
 
 = 1.0.1 =
 * Compatibility with latest WP (6.8) and WC (10.3)
@@ -197,7 +199,7 @@ Yes, you can set exclusion rules based on products, categories, tags, or pages.
 == Upgrade Notice ==
 
 = 1.0.3 =
-* Existing Click to Chat settings are migrated safely during update; no manual reconfiguration is required.
+* Adds number-filtered click analytics and safely preserves existing Click to Chat settings during update; no manual reconfiguration is required.
 
 = 1.0.1 =
 * Compatibility with latest WP (6.8) and WC (10.3)

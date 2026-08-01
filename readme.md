@@ -1,162 +1,131 @@
-# Click to Chat for WooCommerce
+# AICOSO Click to Chat
 
-![Click to Chat](assets/banner-772x250.png)
+AICOSO Click to Chat connects WooCommerce stores with customers through configurable WhatsApp buttons. Store managers can place buttons throughout the shopping journey, use dynamic message templates, route conversations to different WhatsApp numbers, and review privacy-conscious click analytics.
 
-## Description
+## Compatibility
 
-Click to Chat enables customers to order products directly through WhatsApp with a single click. This plugin adds WhatsApp buttons to product pages, shop pages, cart, checkout, and more, allowing your customers to easily inquire about products or complete their purchase via WhatsApp.
+- Requires WordPress 6.2 or newer; tested up to WordPress 7.0
+- Requires WooCommerce 8.2 or newer; tested up to WooCommerce 10.3.5
+- Requires PHP 7.4 or newer
+- Current version: 1.0.3
 
-### Key Features
+## Key features
 
-- **Multiple Button Placements**: Add WhatsApp buttons to single product pages, shop/category pages, cart, checkout, thank you pages, and a floating button option
-- **Customizable Appearance**: Fully customize button colors, text, and styling to match your store's design
-- **Smart Message Templates**: Pre-filled messages with product details, prices, variations, and more
-- **Multiple WhatsApp Numbers**: Assign different WhatsApp numbers to specific products or categories
-- **Conditional Display**: Show or hide buttons based on products, categories, tags, or pages
-- **Shortcode Support**: Use shortcodes to place WhatsApp buttons anywhere on your site
-- **Mobile-Friendly**: Optimized for all devices with responsive design
+- Place WhatsApp buttons on product, shop, cart, checkout, thank-you, and floating-button locations.
+- Customize button text, colors, icon visibility, positioning, and responsive presentation.
+- Create message templates for products, variations, shop pages, cart and checkout details, order confirmations, and floating buttons.
+- Configure multiple WhatsApp numbers and assign them to products, categories, tags, or general enquiries.
+- Hide buttons on selected pages, posts, products, categories, or tags.
+- Add buttons anywhere with the `[ctc_chat_button]` shortcode.
+- Review click KPIs, trends, intent funnel, top products, and top WhatsApp numbers in the Analytics Dashboard.
+- Filter the entire dashboard by All numbers, one configured number, or Unattributed clicks.
 
 ## Installation
 
-1. Upload the `click-to-chat` folder to the `/wp-content/plugins/` directory
-2. Activate the plugin through the 'Plugins' menu in WordPress
-3. Go to Click to Chat settings to configure your WhatsApp number and button options
-
-## Requirements
-
-- WordPress 6.2 or higher
-- WooCommerce 8.2 or higher
-- PHP 7.4 or higher
+1. Upload the `aicoso-click-to-chat` directory to `/wp-content/plugins/`, or upload the plugin ZIP from **Plugins > Add New Plugin**.
+2. Activate **AICOSO Click to Chat** from the WordPress Plugins screen.
+3. Open the Click to Chat settings and configure at least one WhatsApp number.
+4. Configure button placement, appearance, templates, exclusions, and analytics as required.
 
 ## Configuration
 
-### 1. WhatsApp Numbers
+### WhatsApp numbers
 
-Add one or more WhatsApp numbers in the plugin settings. You can:
-- Set a default number for all products
-- Assign specific numbers to particular products or categories
-- Add a name and description for each number
+Add one or more WhatsApp numbers, choose a default number, and optionally assign specific numbers to products, categories, or tags. Each number can have an administrator-facing name and description.
 
-### 2. Button Settings
+### Button appearance and placement
 
-Customize how your WhatsApp buttons look:
-- Button text
-- Background and text colors
-- Show/hide WhatsApp icon
-- Add custom CSS for advanced styling
+Configure the button text, colors, icon visibility, and supported storefront positions. Available placements include product pages, shop/category listings, cart, checkout, thank-you pages, and a floating button.
 
-### 3. Button Placement
+### Message templates
 
-Control where WhatsApp buttons appear:
+Templates can include relevant product, variation, cart, checkout, order, and page details. The plugin generates the WhatsApp URL locally and does not require a WhatsApp Business API account.
 
-#### Single Product Pages
-- Below add to cart button
-- Below price
-- Above add to cart button
-- Above title
-- Below short description
+### Exclusions
 
-#### Shop/Category Pages
-- Enable/disable buttons on shop pages
-- Choose button position
+Hide buttons on selected pages, posts, products, product categories, or product tags.
 
-#### Cart & Checkout
-- Enable/disable buttons on cart page
-- Enable/disable buttons on checkout page
-- Enable/disable buttons on thank you/order confirmation page
+## Analytics Dashboard
 
-#### Floating Button
-- Enable/disable floating button
-- Choose position (bottom right, bottom left, etc.)
+The Analytics Dashboard reports recorded WhatsApp button clicks, unique clicks, high-intent placements, click trends, intent stages, top products, and top WhatsApp numbers.
 
-### 4. Message Templates
+The number filter scopes every dashboard section consistently:
 
-Customize the pre-filled messages for different scenarios:
+- **All numbers** includes all recorded clicks, including historical clicks for numbers that were later removed.
+- **A configured number** includes only clicks attributed to that stable number identity and displays a masked number label.
+- **Unattributed** includes older or fallback click records without a stored number identity.
 
-- **Single Product**: Includes product name, price, and URL
-- **Product Variations**: Includes selected variation details
-- **Shop/Category**: Includes category name and current page URL
-- **Cart/Checkout**: Includes cart items list, subtotal, and total
-- **Order Confirmation**: Includes order number, date, and items list
-- **Floating Button**: Includes current page URL
-
-### 5. Exclusions
-
-Set conditions to hide WhatsApp buttons on specific:
-- Pages
-- Posts
-- Product categories
-- Product tags
+If a selected number is removed while the dashboard is open, the dashboard returns safely to All numbers and displays a notice. Analytics represent button-click activity only; they do not claim completed sales or rewrite historical attribution.
 
 ## Shortcodes
 
-Use these shortcodes to add WhatsApp buttons anywhere on your site:
+Basic button:
 
-### Basic Product Button
-```
-[ctc_button]
-```
-
-### Button for Specific Product
-```
-[ctc_button product_id="123"]
+```text
+[ctc_chat_button]
 ```
 
-### Custom Button Text
-```
-[ctc_button text="Contact us about this product"]
+Button for a specific product:
+
+```text
+[ctc_chat_button product_id="123"]
 ```
 
-## Frequently Asked Questions
+Cart-style button:
+
+```text
+[ctc_chat_button type="cart"]
+```
+
+Custom button text:
+
+```text
+[ctc_chat_button text="Contact Us"]
+```
+
+## Frequently asked questions
 
 ### Does this plugin require a WhatsApp Business API account?
-No, this plugin uses the standard WhatsApp URL scheme that works with regular WhatsApp accounts.
 
-### Can I use multiple WhatsApp numbers for different products?
-Yes, you can add multiple WhatsApp numbers and assign them to specific products or categories.
+No. The plugin uses standard WhatsApp URLs and works with regular or business WhatsApp accounts.
 
-### Will the button work on mobile devices?
-Yes, the button will open the WhatsApp app on mobile devices and the WhatsApp Web interface on desktop computers.
+### Can different products use different WhatsApp numbers?
 
-### Can I customize the message that is sent?
-Yes, you can fully customize the message templates for all button types in the plugin settings.
+Yes. Multiple numbers can be assigned to specific products, categories, or tags, with a default number used as a fallback.
 
-### Is the plugin compatible with WPML/Polylang?
-Yes, all text elements are translation-ready.
+### Does the plugin send analytics data to an external service?
 
-## Screenshots
+No. Click analytics are stored and processed within the WordPress installation.
 
-1. WhatsApp button on product page
-2. Admin settings - General configuration
-3. Admin settings - Button appearance
-4. Admin settings - Message templates
-5. WhatsApp numbers management
-6. Floating WhatsApp button
+### Can I customize the generated message?
+
+Yes. Message templates can be customized for the supported button and page contexts.
+
+### Is the plugin translation-ready?
+
+Yes. User-facing strings use the `aicoso-click-to-chat` text domain, and the translation template is provided in `languages/aicoso-click-to-chat.pot`.
 
 ## Changelog
 
+### 1.0.3
+
+- Added an Analytics Dashboard filter for All numbers, one masked configured number, or Unattributed clicks, with safe fallback if the selected number is removed.
+- Improved dashboard usability with KPI help text, accessible notices, comparison labels, preset handling, unavailable-data states, chart presentation, and responsive behavior.
+- Preserved existing Click to Chat settings during plugin updates and initialized only missing defaults.
+- Improved WordPress Plugin Check compliance, cross-platform release packaging, PHPCS dependency handling, line-ending consistency, and translation template generation.
+
+### 1.0.1
+
+- Updated compatibility for WordPress 6.8 and WooCommerce 10.3.
+
 ### 1.0.0
-* Initial release
+
+- Initial release.
 
 ## Support
 
-If you have any questions or need assistance, please contact us at support@aicoso.com or visit [our website](https://aicoso.com/).
+For support, visit [aicoso.com](https://aicoso.com/) or contact support@aicoso.com.
 
 ## License
 
-This plugin is licensed under the GPL v2 or later.
-
-```
-Click to Chat is free software: you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation, either version 2 of the License, or
-any later version.
-
-Click to Chat is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with Click to Chat. If not, see https://www.gnu.org/licenses/gpl-2.0.html.
-```
+Licensed under the GNU General Public License v3.0 (`GPL-3.0`). See [LICENSE](LICENSE) for the complete license text.
