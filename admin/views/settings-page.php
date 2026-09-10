@@ -352,6 +352,77 @@ $current_tab        = $this->get_current_settings_tab();
 
 		<?php
 		$this->render_settings_card_open(
+			esc_html__( 'Back-in-Stock Alerts (Notify Me on WhatsApp)', 'aicoso-click-to-chat' ),
+			array(
+				'description' => esc_html__( 'Convert missed sales into leads by letting customers request WhatsApp alerts for out-of-stock products.', 'aicoso-click-to-chat' ),
+				'icon'        => 'dashicons-bell',
+			)
+		);
+		?>
+		<table class="form-table" role="presentation">
+			<tr>
+				<th scope="row"><?php esc_html_e( 'Enable alert', 'aicoso-click-to-chat' ); ?></th>
+				<td>
+					<label for="ctc_chat_stock_enabled">
+						<input type="checkbox" name="ctc_chat_back_in_stock[enabled]" id="ctc_chat_stock_enabled" value="1" <?php checked( ! empty( $settings['back_in_stock']['enabled'] ) ); ?>>
+						<?php esc_html_e( 'Show "Notify Me on WhatsApp" button when a product or variation is out of stock', 'aicoso-click-to-chat' ); ?>
+					</label>
+				</td>
+			</tr>
+			<tr class="ctc-chat-stock-row<?php echo empty( $settings['back_in_stock']['enabled'] ) ? ' ctc-chat-hidden' : ''; ?>">
+				<th scope="row"><label for="ctc_chat_stock_button_text"><?php esc_html_e( 'Button Text', 'aicoso-click-to-chat' ); ?></label></th>
+				<td>
+					<input type="text" name="ctc_chat_back_in_stock[button_text]" id="ctc_chat_stock_button_text" value="<?php echo esc_attr( $settings['back_in_stock']['button_text'] ?? esc_html__( 'Notify Me on WhatsApp 🔔', 'aicoso-click-to-chat' ) ); ?>" class="regular-text">
+				</td>
+			</tr>
+			<tr class="ctc-chat-stock-row<?php echo empty( $settings['back_in_stock']['enabled'] ) ? ' ctc-chat-hidden' : ''; ?>">
+				<th scope="row"><label for="ctc_chat_stock_bg_color"><?php esc_html_e( 'Button Background Color', 'aicoso-click-to-chat' ); ?></label></th>
+				<td>
+					<input type="text" name="ctc_chat_back_in_stock[bg_color]" id="ctc_chat_stock_bg_color" value="<?php echo esc_attr( $settings['back_in_stock']['bg_color'] ?? '#ff9800' ); ?>" class="ctc-chat-color-field" data-default-color="#ff9800">
+					<div class="ctc-chat-stock-color-swatches" style="margin-top: 8px; display: flex; gap: 8px; align-items: center;">
+						<span style="font-size: 12px; color: #64748b;"><?php esc_html_e( 'Popular presets:', 'aicoso-click-to-chat' ); ?></span>
+						<button type="button" class="button button-small ctc-stock-swatch" data-bg="#ff9800" data-text="#ffffff" style="background:#ff9800;color:#fff;border:none;padding:2px 8px;font-weight:600;"><?php esc_html_e( 'Amber', 'aicoso-click-to-chat' ); ?></button>
+						<button type="button" class="button button-small ctc-stock-swatch" data-bg="#f97316" data-text="#ffffff" style="background:#f97316;color:#fff;border:none;padding:2px 8px;font-weight:600;"><?php esc_html_e( 'Orange', 'aicoso-click-to-chat' ); ?></button>
+						<button type="button" class="button button-small ctc-stock-swatch" data-bg="#dc2626" data-text="#ffffff" style="background:#dc2626;color:#fff;border:none;padding:2px 8px;font-weight:600;"><?php esc_html_e( 'Red', 'aicoso-click-to-chat' ); ?></button>
+						<button type="button" class="button button-small ctc-stock-swatch" data-bg="#25D366" data-text="#ffffff" style="background:#25D366;color:#fff;border:none;padding:2px 8px;font-weight:600;"><?php esc_html_e( 'Green', 'aicoso-click-to-chat' ); ?></button>
+						<button type="button" class="button button-small ctc-stock-swatch" data-bg="#2563eb" data-text="#ffffff" style="background:#2563eb;color:#fff;border:none;padding:2px 8px;font-weight:600;"><?php esc_html_e( 'Blue', 'aicoso-click-to-chat' ); ?></button>
+						<button type="button" class="button button-small ctc-stock-swatch" data-bg="#1e293b" data-text="#ffffff" style="background:#1e293b;color:#fff;border:none;padding:2px 8px;font-weight:600;"><?php esc_html_e( 'Dark', 'aicoso-click-to-chat' ); ?></button>
+					</div>
+				</td>
+			</tr>
+			<tr class="ctc-chat-stock-row<?php echo empty( $settings['back_in_stock']['enabled'] ) ? ' ctc-chat-hidden' : ''; ?>">
+				<th scope="row"><label for="ctc_chat_stock_text_color"><?php esc_html_e( 'Button Text Color', 'aicoso-click-to-chat' ); ?></label></th>
+				<td>
+					<input type="text" name="ctc_chat_back_in_stock[text_color]" id="ctc_chat_stock_text_color" value="<?php echo esc_attr( $settings['back_in_stock']['text_color'] ?? '#ffffff' ); ?>" class="ctc-chat-color-field" data-default-color="#ffffff">
+				</td>
+			</tr>
+			<tr class="ctc-chat-stock-row<?php echo empty( $settings['back_in_stock']['enabled'] ) ? ' ctc-chat-hidden' : ''; ?>">
+				<th scope="row"><?php esc_html_e( 'Button Live Preview', 'aicoso-click-to-chat' ); ?></th>
+				<td>
+					<div class="ctc-chat-stock-preview-box" style="padding: 16px 20px; background: #f8fafc; border: 1px dashed #cbd5e1; border-radius: 8px; display: inline-flex; align-items: center;">
+						<a href="#" class="ctc-chat-whatsapp-button ctc-chat-button-stock" id="ctc-chat-stock-preview-btn" style="background-color: <?php echo esc_attr( $settings['back_in_stock']['bg_color'] ?? '#ff9800' ); ?> !important; color: <?php echo esc_attr( $settings['back_in_stock']['text_color'] ?? '#ffffff' ); ?> !important; text-decoration: none; cursor: default;" onclick="return false;">
+							<span class="ctc-chat-whatsapp-icon">
+								<svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M17.498 14.382c-.301-.15-1.767-.867-2.04-.966-.273-.101-.473-.15-.673.15-.197.295-.771.964-.944 1.162-.175.195-.349.21-.646.075-.3-.15-1.263-.465-2.403-1.485-.888-.795-1.484-1.77-1.66-2.07-.174-.3-.019-.465.13-.615.136-.135.301-.345.451-.523.146-.181.194-.301.297-.496.1-.21.049-.375-.025-.524-.075-.15-.672-1.62-.922-2.206-.24-.584-.487-.51-.672-.51-.172-.015-.371-.015-.571-.015-.2 0-.523.074-.797.359-.273.3-1.045 1.02-1.045 2.475s1.07 2.865 1.219 3.075c.149.195 2.105 3.195 5.1 4.485.714.3 1.27.48 1.704.629.714.227 1.365.195 1.88.121.574-.091 1.767-.721 2.016-1.426.255-.705.255-1.29.18-1.425-.074-.135-.27-.21-.57-.345m-5.446 7.443h-.016c-1.77 0-3.524-.48-5.055-1.38l-.36-.214-3.75.975 1.005-3.645-.239-.375c-.99-1.576-1.516-3.391-1.516-5.26 0-5.445 4.455-9.885 9.942-9.885 2.654 0 5.145 1.035 7.021 2.91 1.875 1.859 2.909 4.35 2.909 6.99-.004 5.444-4.46 9.885-9.935 9.885M20.52 3.449C18.24 1.245 15.24 0 12.045 0 5.463 0 .104 5.334.101 11.893c0 2.096.549 4.14 1.595 5.945L0 24l6.335-1.652c1.746.943 3.71 1.444 5.71 1.447h.006c6.585 0 11.946-5.336 11.949-11.896 0-3.176-1.24-6.165-3.495-8.411"/></svg>
+							</span>
+							<span class="ctc-chat-button-text"><?php echo esc_html( $settings['back_in_stock']['button_text'] ?? esc_html__( 'Notify Me on WhatsApp 🔔', 'aicoso-click-to-chat' ) ); ?></span>
+						</a>
+					</div>
+				</td>
+			</tr>
+			<tr class="ctc-chat-stock-row<?php echo empty( $settings['back_in_stock']['enabled'] ) ? ' ctc-chat-hidden' : ''; ?>">
+				<th scope="row"><label for="ctc_chat_stock_message"><?php esc_html_e( 'WhatsApp Message Template', 'aicoso-click-to-chat' ); ?></label></th>
+				<td>
+					<textarea name="ctc_chat_back_in_stock[message]" id="ctc_chat_stock_message" rows="4" class="large-text"><?php echo esc_textarea( $settings['back_in_stock']['message'] ?? esc_html__( "Hello! I noticed that *{product_name}* (SKU: {product_sku}) is currently out of stock.\n\nPlease notify me via WhatsApp as soon as it is back in stock!\nLink: {product_url}", 'aicoso-click-to-chat' ) ); ?></textarea>
+					<p class="description">
+						<?php esc_html_e( 'Available tokens: {product_name}, {product_sku}, {variation_details}, {product_url}', 'aicoso-click-to-chat' ); ?>
+					</p>
+				</td>
+			</tr>
+		</table>
+		<?php $this->render_settings_card_close(); ?>
+
+		<?php
+		$this->render_settings_card_open(
 			esc_html__( 'Floating Button', 'aicoso-click-to-chat' ),
 			array(
 				'description' => esc_html__( 'Keep a persistent WhatsApp entry point visible on every page.', 'aicoso-click-to-chat' ),

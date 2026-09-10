@@ -29,6 +29,9 @@
         // Initialize position field toggles
         initPositionToggles();
 
+        // Initialize back-in-stock alerts live customizer and swatches
+        initStockAlertCustomizer();
+
         // Initialize catalog mode and advanced options
         initAdvancedOptions();
 
@@ -105,16 +108,70 @@
                 change: function(event, ui) {
                     // Update the input field value and trigger change
                     if (ui.color) {
-                        $(event.target).val(ui.color.toString());
+                        const val = ui.color.toString();
+                        $(event.target).val(val);
                         $(event.target).trigger('change');
+
+                        if ($(event.target).attr('id') === 'ctc_chat_stock_bg_color') {
+                            $('#ctc-chat-stock-preview-btn').css('background-color', val);
+                        } else if ($(event.target).attr('id') === 'ctc_chat_stock_text_color') {
+                            $('#ctc-chat-stock-preview-btn').css('color', val);
+                        }
                     }
                 },
-                clear: function(event, ui) {
+                clear: function(event) {
                     // Clear the input field value and trigger change
                     $(event.target).val('');
                     $(event.target).trigger('change');
+
+                    if ($(event.target).attr('id') === 'ctc_chat_stock_bg_color') {
+                        $('#ctc-chat-stock-preview-btn').css('background-color', '#ff9800');
+                    } else if ($(event.target).attr('id') === 'ctc_chat_stock_text_color') {
+                        $('#ctc-chat-stock-preview-btn').css('color', '#ffffff');
+                    }
                 }
             });
+        });
+    }
+
+    /**
+     * Initialize Back-in-Stock alerts customizer swatches and live preview
+     */
+    function initStockAlertCustomizer() {
+        const $previewBtn = $('#ctc-chat-stock-preview-btn');
+        if (!$previewBtn.length) {
+            return;
+        }
+
+        // Live update preview text
+        $('#ctc_chat_stock_button_text').on('input change', function() {
+            const txt = $(this).val() || 'Notify Me on WhatsApp 🔔';
+            $previewBtn.find('.ctc-chat-button-text').text(txt);
+        });
+
+        // Quick swatch click
+        $(document).on('click', '.ctc-stock-swatch', function(e) {
+            e.preventDefault();
+            const bg = $(this).data('bg');
+            const text = $(this).data('text');
+
+            if (bg) {
+                const $bgInput = $('#ctc_chat_stock_bg_color');
+                $bgInput.val(bg);
+                try {
+                    $bgInput.wpColorPicker('color', bg);
+                } catch (err) {}
+                $previewBtn.css('background-color', bg);
+            }
+
+            if (text) {
+                const $textInput = $('#ctc_chat_stock_text_color');
+                $textInput.val(text);
+                try {
+                    $textInput.wpColorPicker('color', text);
+                } catch (err) {}
+                $previewBtn.css('color', text);
+            }
         });
     }
 
@@ -847,12 +904,22 @@
             }
         });
 
+        // Toggle back in stock alert settings
+        $('#ctc_chat_stock_enabled').on('change', function() {
+            if ($(this).is(':checked')) {
+                $('.ctc-chat-stock-row').removeClass('ctc-chat-hidden');
+            } else {
+                $('.ctc-chat-stock-row').addClass('ctc-chat-hidden');
+            }
+        });
+
         // Initialize position toggles on page load
         $('#ctc_chat_cart_page_enabled').trigger('change');
         $('#ctc_chat_checkout_page_enabled').trigger('change');
         $('#ctc_chat_single_product_enabled').trigger('change');
         $('#ctc_chat_shop_page_enabled').trigger('change');
         $('#ctc_chat_nudge_enabled').trigger('change');
+        $('#ctc_chat_stock_enabled').trigger('change');
     }
 
     /**

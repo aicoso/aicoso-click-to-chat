@@ -102,6 +102,11 @@ class CTC_Chat_Button_Display {
 			add_action( 'wp_footer', array( $this, 'display_floating_button' ) );
 		}
 
+		// Back in stock notification hook.
+		if ( isset( $this->settings['back_in_stock']['enabled'] ) && $this->settings['back_in_stock']['enabled'] ) {
+			add_action( 'woocommerce_single_product_summary', array( $this, 'display_back_in_stock_button' ), 31 );
+		}
+
 		$hooks_registered = true;
 	}
 
@@ -248,6 +253,12 @@ class CTC_Chat_Button_Display {
 			return;
 		}
 
+		// If product is out of stock and back-in-stock alerts are enabled, delegate to back-in-stock button.
+		if ( ! $product->is_in_stock() && ! empty( $this->settings['back_in_stock']['enabled'] ) ) {
+			$this->display_back_in_stock_button();
+			return;
+		}
+
 		// Check if button has already been displayed for this product.
 		if ( isset( self::$buttons_displayed[ 'product_' . $product->get_id() ] ) ) {
 			return;
@@ -293,6 +304,64 @@ class CTC_Chat_Button_Display {
 		echo '</div>';
 
 		// Mark this button as displayed.
+		self::$buttons_displayed[ 'product_' . $product->get_id() ] = true;
+	}
+
+	/**
+	 * Display WhatsApp Back-in-Stock Alert button for out-of-stock products.
+	 */
+	public function display_back_in_stock_button() {
+		global $product;
+
+		if ( ! $product || ! is_a( $product, 'WC_Product' ) ) {
+			return;
+		}
+
+		// Only show if product is not in stock and back in stock alert is enabled.
+		if ( $product->is_in_stock() || empty( $this->settings['back_in_stock']['enabled'] ) ) {
+			return;
+		}
+
+		// Check if button has already been displayed.
+		if ( isset( self::$buttons_displayed[ 'stock_' . $product->get_id() ] ) || isset( self::$buttons_displayed[ 'product_' . $product->get_id() ] ) ) {
+			return;
+		}
+
+		// Respect per-product hide setting.
+		if ( $this->link_generator->is_product_button_hidden( $product->get_id() ) ) {
+			return;
+		}
+
+		// Check if the product should be excluded.
+		if ( $this->is_excluded( $product->get_id() ) ) {
+			return;
+		}
+
+		$whatsapp_url = $this->link_generator->get_back_in_stock_url( $product->get_id() );
+		if ( empty( $whatsapp_url ) ) {
+			return;
+		}
+
+		$stock_settings = $this->settings['back_in_stock'];
+		$button_text    = ! empty( $stock_settings['button_text'] ) ? $stock_settings['button_text'] : __( 'Notify Me on WhatsApp 🔔', 'aicoso-click-to-chat' );
+		$bg_color       = ! empty( $stock_settings['bg_color'] ) ? $stock_settings['bg_color'] : '#ff9800';
+		$text_color     = ! empty( $stock_settings['text_color'] ) ? $stock_settings['text_color'] : '#ffffff';
+
+		echo '<div class="ctc-chat-stock-button-container">';
+		CTC_Chat_Button_Renderer::render(
+			$whatsapp_url,
+			'stock',
+			array(
+				'text'          => $button_text,
+				'bg_color'      => $bg_color,
+				'text_color'    => $text_color,
+				'extra_classes' => array( 'ctc-chat-button-stock' ),
+				'context'       => $this->build_product_context( $product ),
+			)
+		);
+		echo '</div>';
+
+		self::$buttons_displayed[ 'stock_' . $product->get_id() ]   = true;
 		self::$buttons_displayed[ 'product_' . $product->get_id() ] = true;
 	}
 

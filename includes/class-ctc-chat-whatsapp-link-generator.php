@@ -304,6 +304,62 @@ class CTC_Chat_WhatsApp_Link_Generator {
 	}
 
 	/**
+	 * Generate a WhatsApp URL for out-of-stock back-in-stock notifications.
+	 *
+	 * @param int   $product_id Product ID.
+	 * @param array $variations Optional variation attributes.
+	 * @return string WhatsApp URL.
+	 */
+	public function get_back_in_stock_url( $product_id, $variations = array() ) {
+		if ( ! function_exists( 'wc_get_product' ) ) {
+			return '';
+		}
+
+		$product = wc_get_product( $product_id );
+		if ( ! $product || ! is_a( $product, 'WC_Product' ) ) {
+			return '';
+		}
+
+		$whatsapp_number = $this->get_whatsapp_number( $product_id, null, is_page() ? get_the_ID() : null );
+		if ( empty( $whatsapp_number ) ) {
+			return '';
+		}
+
+		$whatsapp_number = preg_replace( '/[^0-9]/', '', $whatsapp_number );
+
+		$template = ! empty( $this->settings['back_in_stock']['message'] )
+			? $this->settings['back_in_stock']['message']
+			: "Hello! I noticed that *{product_name}* (SKU: {product_sku}) is currently out of stock.\n\nPlease notify me via WhatsApp as soon as it is back in stock!\nLink: {product_url}";
+
+		$product_name = method_exists( $product, 'get_name' ) ? $product->get_name() : '';
+		$product_sku  = method_exists( $product, 'get_sku' ) && $product->get_sku() ? $product->get_sku() : 'N/A';
+		$product_url  = function_exists( 'get_permalink' ) ? get_permalink( $product->get_id() ) : '';
+
+		$variation_details = '';
+		if ( ! empty( $variations ) && is_array( $variations ) ) {
+			$details = array();
+			foreach ( $variations as $tax => $val ) {
+				$label = function_exists( 'wc_attribute_label' ) ? wc_attribute_label( str_replace( 'attribute_', '', $tax ), $product ) : $tax;
+				$details[] = $label . ': ' . $val;
+			}
+			$variation_details = implode( ', ', $details );
+		}
+
+		$replacements = array(
+			'{product_name}'      => $product_name,
+			'{product_sku}'       => $product_sku,
+			'{variation_details}' => $variation_details ? '(' . $variation_details . ')' : '',
+			'{product_url}'       => $product_url,
+		);
+
+		foreach ( $replacements as $key => $val ) {
+			$template = str_replace( $key, $val, $template );
+		}
+
+		return $this->build_whatsapp_url( $whatsapp_number, $template );
+	}
+
+	/**
 	 * Generate a WhatsApp URL for the shop/category pages.
 	 *
 	 * @param int|null $category_id Optional category ID.

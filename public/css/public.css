@@ -680,3 +680,29 @@
         left: 15px;
     }
 }
+
+/* ==========================================================================
+   Back-in-Stock Alerts (Notify Me on WhatsApp)
+   ========================================================================== */
+.ctc-chat-stock-button-container {
+    margin: 15px 0;
+    display: block;
+    clear: both;
+}
+
+.ctc-chat-button-stock {
+    background-color: #ff9800 !important;
+    color: #ffffff !important;
+    font-weight: 600;
+    border-radius: 6px;
+    transition: all 0.25s ease;
+    box-shadow: 0 2px 8px rgba(255, 152, 0, 0.25);
+}
+
+.ctc-chat-button-stock:hover {
+    background-color: #f57c00 !important;
+    color: #ffffff !important;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 14px rgba(255, 152, 0, 0.4);
+}
+

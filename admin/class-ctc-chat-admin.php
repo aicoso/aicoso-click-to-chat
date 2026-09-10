@@ -1254,6 +1254,19 @@ class CTC_Chat_Admin {
 			);
 		}
 
+		// Sanitize and update back in stock alert settings.
+		if ( isset( $_POST['ctc_chat_back_in_stock'] ) && is_array( $_POST['ctc_chat_back_in_stock'] ) ) {
+			// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Fields sanitized individually below.
+			$stock_post = wp_unslash( $_POST['ctc_chat_back_in_stock'] );
+			$settings['back_in_stock'] = array(
+				'enabled'     => isset( $stock_post['enabled'] ) ? true : false,
+				'button_text' => isset( $stock_post['button_text'] ) ? sanitize_text_field( $stock_post['button_text'] ) : esc_html__( 'Notify Me on WhatsApp 🔔', 'aicoso-click-to-chat' ),
+				'bg_color'    => isset( $stock_post['bg_color'] ) && sanitize_hex_color( $stock_post['bg_color'] ) ? sanitize_hex_color( $stock_post['bg_color'] ) : '#ff9800',
+				'text_color'  => isset( $stock_post['text_color'] ) && sanitize_hex_color( $stock_post['text_color'] ) ? sanitize_hex_color( $stock_post['text_color'] ) : '#ffffff',
+				'message'     => isset( $stock_post['message'] ) ? sanitize_textarea_field( $stock_post['message'] ) : esc_html__( "Hello! I noticed that *{product_name}* (SKU: {product_sku}) is currently out of stock.\n\nPlease notify me via WhatsApp as soon as it is back in stock!\nLink: {product_url}", 'aicoso-click-to-chat' ),
+			);
+		}
+
 		// Sanitize and update floating button settings.
 		if ( isset( $_POST['ctc_chat_floating_button'] ) && is_array( $_POST['ctc_chat_floating_button'] ) ) {
 			// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Each field is sanitized individually below.

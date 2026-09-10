@@ -57,6 +57,10 @@ class CTC_Chat_Public {
 		// AJAX handlers for variation URLs.
 		add_action( 'wp_ajax_ctc_chat_get_variation_url', array( $this, 'ajax_get_variation_url' ) );
 		add_action( 'wp_ajax_nopriv_ctc_chat_get_variation_url', array( $this, 'ajax_get_variation_url' ) );
+
+		// AJAX handlers for back-in-stock alert URLs.
+		add_action( 'wp_ajax_ctc_chat_get_stock_url', array( $this, 'ajax_get_stock_url' ) );
+		add_action( 'wp_ajax_nopriv_ctc_chat_get_stock_url', array( $this, 'ajax_get_stock_url' ) );
 	}
 
 	/**
@@ -139,6 +143,15 @@ class CTC_Chat_Public {
 			}
 		}
 
+		// Back in stock notification settings.
+		$stock_settings = isset( $this->settings['back_in_stock'] ) ? $this->settings['back_in_stock'] : array();
+		$localize_data['stock'] = array(
+			'enabled'     => ! empty( $stock_settings['enabled'] ),
+			'button_text' => ! empty( $stock_settings['button_text'] ) ? esc_html( $stock_settings['button_text'] ) : esc_html__( 'Notify Me on WhatsApp 🔔', 'aicoso-click-to-chat' ),
+			'bg_color'    => ! empty( $stock_settings['bg_color'] ) ? sanitize_hex_color( $stock_settings['bg_color'] ) : '#ff9800',
+			'text_color'  => ! empty( $stock_settings['text_color'] ) ? sanitize_hex_color( $stock_settings['text_color'] ) : '#ffffff',
+		);
+
 		wp_localize_script( 'ctc-chat-public-script', 'ctc_chat_public', $localize_data );
 
 		if ( ctc_chat_analytics_is_enabled() ) {
@@ -215,10 +228,10 @@ class CTC_Chat_Public {
 			return true;
 		}
 
-		// Load on single product pages if enabled.
+		// Load on single product pages if enabled or if back in stock alert is enabled.
 		if ( is_product() &&
-			 isset( $this->settings['single_product']['enabled'] ) &&
-			 $this->settings['single_product']['enabled'] ) {
+			 ( ( isset( $this->settings['single_product']['enabled'] ) && $this->settings['single_product']['enabled'] ) ||
+			   ! empty( $this->settings['back_in_stock']['enabled'] ) ) ) {
 			return true;
 		}
 
@@ -601,5 +614,31 @@ class CTC_Chat_Public {
 				'order_total' => $order_total,
 			)
 		);
+	}
+
+	/**
+	 * AJAX handler to get back-in-stock alert WhatsApp URL for out-of-stock variations.
+	 */
+	public function ajax_get_stock_url() {
+		if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['nonce'] ) ), 'ctc_chat_public_nonce' ) ) {
+			wp_send_json_error( array( 'message' => __( 'Security check failed.', 'aicoso-click-to-chat' ) ) );
+		}
+
+		$product_id = isset( $_POST['product_id'] ) ? intval( $_POST['product_id'] ) : 0;
+		$variations = isset( $_POST['variations'] ) ? array_map( 'sanitize_text_field', wp_unslash( $_POST['variations'] ) ) : array();
+
+		if ( ! $product_id ) {
+			wp_send_json_error( array( 'message' => __( 'Invalid product ID.', 'aicoso-click-to-chat' ) ) );
+		}
+
+		require_once CTC_CHAT_PLUGIN_DIR . 'includes/class-ctc-chat-whatsapp-link-generator.php';
+		$link_generator = new CTC_Chat_WhatsApp_Link_Generator();
+		$whatsapp_url   = $link_generator->get_back_in_stock_url( $product_id, $variations );
+
+		if ( empty( $whatsapp_url ) ) {
+			wp_send_json_error( array( 'message' => __( 'Could not generate WhatsApp URL.', 'aicoso-click-to-chat' ) ) );
+		}
+
+		wp_send_json_success( array( 'url' => $whatsapp_url ) );
 	}
 }

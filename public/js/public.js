@@ -91,6 +91,9 @@
         }
 
         const originalUrl = $productButton.attr('href');
+        const originalText = $productButton.find('.ctc-chat-button-text').text();
+        const originalBg = $productButton.css('background-color');
+        const originalColor = $productButton.css('color');
         const parentProductId = $('input[name="product_id"]').val();
 
         if (!parentProductId) {
@@ -115,6 +118,50 @@
         function getSelectedQuantity() {
             const $qtyInput = $('form.cart input[name="quantity"]');
             return $qtyInput.length ? Math.max(1, parseInt($qtyInput.val(), 10) || 1) : 1;
+        }
+
+        function setOutOfStockState() {
+            if (!window.ctc_chat_public || !ctc_chat_public.stock || !ctc_chat_public.stock.enabled) {
+                return;
+            }
+
+            $productButton.addClass('ctc-chat-button-stock');
+            $productButton.find('.ctc-chat-button-text').text(ctc_chat_public.stock.button_text);
+            if (ctc_chat_public.stock.bg_color) {
+                $productButton.css('background-color', ctc_chat_public.stock.bg_color);
+            }
+            if (ctc_chat_public.stock.text_color) {
+                $productButton.css('color', ctc_chat_public.stock.text_color);
+            }
+
+            $.ajax({
+                url: ctc_chat_public.ajaxurl,
+                type: 'POST',
+                data: {
+                    action: 'ctc_chat_get_stock_url',
+                    product_id: parentProductId,
+                    variations: collectVariationData(),
+                    nonce: ctc_chat_public.nonce
+                },
+                success: function(response) {
+                    if (response.success && response.data.url) {
+                        $productButton.attr('href', response.data.url);
+                    }
+                }
+            });
+        }
+
+        function restoreInStockState() {
+            $productButton.removeClass('ctc-chat-button-stock');
+            if (originalText) {
+                $productButton.find('.ctc-chat-button-text').text(originalText);
+            }
+            if (originalBg) {
+                $productButton.css('background-color', originalBg);
+            }
+            if (originalColor) {
+                $productButton.css('color', originalColor);
+            }
         }
 
         function updateVariationUrl() {
@@ -144,7 +191,12 @@
             if (variation && variation.variation_id) {
                 $productButton.attr('data-ctc-variation-id', variation.variation_id);
             }
-            updateVariationUrl();
+            if (variation && !variation.is_in_stock && window.ctc_chat_public && ctc_chat_public.stock && ctc_chat_public.stock.enabled) {
+                setOutOfStockState();
+            } else {
+                restoreInStockState();
+                updateVariationUrl();
+            }
         });
 
         $variationForm.on('show_variation', function() {
@@ -152,6 +204,7 @@
         });
 
         $variationForm.on('reset_data hide_variation', function() {
+            restoreInStockState();
             $productButton.attr('href', originalUrl);
             $productButton.removeAttr('data-ctc-variation-id');
         });
