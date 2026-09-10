@@ -838,11 +838,21 @@
             }
         });
 
+        // Toggle cart/checkout nudge settings
+        $('#ctc_chat_nudge_enabled').on('change', function() {
+            if ($(this).is(':checked')) {
+                $('.ctc-chat-nudge-row').removeClass('ctc-chat-hidden');
+            } else {
+                $('.ctc-chat-nudge-row').addClass('ctc-chat-hidden');
+            }
+        });
+
         // Initialize position toggles on page load
         $('#ctc_chat_cart_page_enabled').trigger('change');
         $('#ctc_chat_checkout_page_enabled').trigger('change');
         $('#ctc_chat_single_product_enabled').trigger('change');
         $('#ctc_chat_shop_page_enabled').trigger('change');
+        $('#ctc_chat_nudge_enabled').trigger('change');
     }
 
     /**

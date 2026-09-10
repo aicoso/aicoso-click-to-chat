@@ -153,6 +153,14 @@ function ctc_chat_get_default_settings() {
 			'enabled'  => false,
 			'position' => 'bottom_right',
 		),
+		'cart_checkout_nudge' => array(
+			'enabled'     => false,
+			'trigger'     => 'both',
+			'delay'       => 20,
+			'title'       => esc_html__( 'Need help with your order?', 'aicoso-click-to-chat' ),
+			'message'     => esc_html__( 'Have questions about payment, shipping, or need assistance? Chat with us on WhatsApp!', 'aicoso-click-to-chat' ),
+			'button_text' => esc_html__( 'Chat with Support 💬', 'aicoso-click-to-chat' ),
+		),
 		'message_templates' => array(
 			'single_product' => esc_html__( "Hello! I'm interested in the product: *{product_name}*\nPrice: {price}\nURL: {product_url}\n\nDo you have this item in stock? I'd like to get more information.", 'aicoso-click-to-chat' ),
 			'shop'           => esc_html__( "Hello! I'm browsing your products at {current_page_url} and have a question.", 'aicoso-click-to-chat' ),

@@ -102,6 +102,32 @@ class CTC_Chat_Public {
 			'nonce'   => wp_create_nonce( 'ctc_chat_public_nonce' ),
 		);
 
+		// Check if abandonment nudge is active on cart or checkout.
+		$nudge_settings = isset( $this->settings['cart_checkout_nudge'] ) ? $this->settings['cart_checkout_nudge'] : array();
+		if ( ! empty( $nudge_settings['enabled'] ) && ( is_cart() || ( is_checkout() && ! is_wc_endpoint_url( 'order-received' ) ) ) ) {
+			require_once CTC_CHAT_PLUGIN_DIR . 'includes/class-ctc-chat-whatsapp-link-generator.php';
+			$link_generator = new CTC_Chat_WhatsApp_Link_Generator();
+			$nudge_url      = $link_generator->get_cart_url();
+
+			$cart_total = '';
+			if ( function_exists( 'WC' ) && WC()->cart && method_exists( WC()->cart, 'get_total' ) ) {
+				$cart_total = wp_strip_all_tags( wc_price( WC()->cart->get_total( 'edit' ) ) );
+			}
+
+			if ( ! empty( $nudge_url ) ) {
+				$localize_data['nudge'] = array(
+					'enabled'     => true,
+					'trigger'     => isset( $nudge_settings['trigger'] ) ? $nudge_settings['trigger'] : 'both',
+					'delay'       => isset( $nudge_settings['delay'] ) ? max( 3, absint( $nudge_settings['delay'] ) ) : 20,
+					'title'       => ! empty( $nudge_settings['title'] ) ? esc_html( $nudge_settings['title'] ) : esc_html__( 'Need help with your order?', 'aicoso-click-to-chat' ),
+					'message'     => ! empty( $nudge_settings['message'] ) ? esc_html( $nudge_settings['message'] ) : esc_html__( 'Have questions about payment, shipping, or need assistance? Chat with us on WhatsApp!', 'aicoso-click-to-chat' ),
+					'button_text' => ! empty( $nudge_settings['button_text'] ) ? esc_html( $nudge_settings['button_text'] ) : esc_html__( 'Chat with Support 💬', 'aicoso-click-to-chat' ),
+					'cart_total'  => $cart_total,
+					'url'         => $nudge_url,
+				);
+			}
+		}
+
 		wp_localize_script( 'ctc-chat-public-script', 'ctc_chat_public', $localize_data );
 
 		if ( ctc_chat_analytics_is_enabled() ) {
@@ -203,6 +229,12 @@ class CTC_Chat_Public {
 		if ( is_wc_endpoint_url( 'order-received' ) &&
 			 isset( $this->settings['thankyou_page']['enabled'] ) &&
 			 $this->settings['thankyou_page']['enabled'] ) {
+			return true;
+		}
+
+		// Load on cart or checkout if abandonment nudge is enabled.
+		if ( ( is_cart() || ( is_checkout() && ! is_wc_endpoint_url( 'order-received' ) ) ) &&
+			 ! empty( $this->settings['cart_checkout_nudge']['enabled'] ) ) {
 			return true;
 		}
 

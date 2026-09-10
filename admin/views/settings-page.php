@@ -287,6 +287,56 @@ $current_tab        = $this->get_current_settings_tab();
 					</label>
 				</td>
 			</tr>
+			<tr>
+				<th scope="row" colspan="2" style="padding-top: 25px; border-top: 1px solid #eee;">
+					<h4 style="margin: 0 0 5px; font-size: 15px;"><?php esc_html_e( 'Cart & Checkout Abandonment Nudge', 'aicoso-click-to-chat' ); ?></h4>
+					<p class="description"><?php esc_html_e( 'Display a subtle, high-converting slide-in chat prompt when customers hesitate or attempt to leave the Cart or Checkout.', 'aicoso-click-to-chat' ); ?></p>
+				</th>
+			</tr>
+			<tr>
+				<th scope="row"><?php esc_html_e( 'Enable nudge', 'aicoso-click-to-chat' ); ?></th>
+				<td>
+					<label for="ctc_chat_nudge_enabled">
+						<input type="checkbox" name="ctc_chat_cart_checkout_nudge[enabled]" id="ctc_chat_nudge_enabled" value="1" <?php checked( ! empty( $settings['cart_checkout_nudge']['enabled'] ) ); ?>>
+						<?php esc_html_e( 'Enable behavioral slide-in chat prompt on Cart & Checkout', 'aicoso-click-to-chat' ); ?>
+					</label>
+				</td>
+			</tr>
+			<tr class="ctc-chat-nudge-row<?php echo empty( $settings['cart_checkout_nudge']['enabled'] ) ? ' ctc-chat-hidden' : ''; ?>">
+				<th scope="row"><label for="ctc_chat_nudge_trigger"><?php esc_html_e( 'Trigger Type', 'aicoso-click-to-chat' ); ?></label></th>
+				<td>
+					<select name="ctc_chat_cart_checkout_nudge[trigger]" id="ctc_chat_nudge_trigger">
+						<option value="both" <?php selected( $settings['cart_checkout_nudge']['trigger'] ?? 'both', 'both' ); ?>><?php esc_html_e( 'Inactivity & Exit-Intent (Recommended)', 'aicoso-click-to-chat' ); ?></option>
+						<option value="inactivity" <?php selected( $settings['cart_checkout_nudge']['trigger'] ?? '', 'inactivity' ); ?>><?php esc_html_e( 'Inactivity only', 'aicoso-click-to-chat' ); ?></option>
+						<option value="exit_intent" <?php selected( $settings['cart_checkout_nudge']['trigger'] ?? '', 'exit_intent' ); ?>><?php esc_html_e( 'Exit-Intent only (Desktop)', 'aicoso-click-to-chat' ); ?></option>
+					</select>
+				</td>
+			</tr>
+			<tr class="ctc-chat-nudge-row<?php echo empty( $settings['cart_checkout_nudge']['enabled'] ) ? ' ctc-chat-hidden' : ''; ?>">
+				<th scope="row"><label for="ctc_chat_nudge_delay"><?php esc_html_e( 'Inactivity Delay (Seconds)', 'aicoso-click-to-chat' ); ?></label></th>
+				<td>
+					<input type="number" name="ctc_chat_cart_checkout_nudge[delay]" id="ctc_chat_nudge_delay" value="<?php echo esc_attr( (string) ( $settings['cart_checkout_nudge']['delay'] ?? 20 ) ); ?>" min="3" max="300" step="1" style="width: 80px;">
+					<span class="description"><?php esc_html_e( 'Seconds of customer inactivity before prompting (default: 20s).', 'aicoso-click-to-chat' ); ?></span>
+				</td>
+			</tr>
+			<tr class="ctc-chat-nudge-row<?php echo empty( $settings['cart_checkout_nudge']['enabled'] ) ? ' ctc-chat-hidden' : ''; ?>">
+				<th scope="row"><label for="ctc_chat_nudge_title"><?php esc_html_e( 'Nudge Title', 'aicoso-click-to-chat' ); ?></label></th>
+				<td>
+					<input type="text" name="ctc_chat_cart_checkout_nudge[title]" id="ctc_chat_nudge_title" value="<?php echo esc_attr( $settings['cart_checkout_nudge']['title'] ?? esc_html__( 'Need help with your order?', 'aicoso-click-to-chat' ) ); ?>" class="regular-text">
+				</td>
+			</tr>
+			<tr class="ctc-chat-nudge-row<?php echo empty( $settings['cart_checkout_nudge']['enabled'] ) ? ' ctc-chat-hidden' : ''; ?>">
+				<th scope="row"><label for="ctc_chat_nudge_message"><?php esc_html_e( 'Nudge Message', 'aicoso-click-to-chat' ); ?></label></th>
+				<td>
+					<textarea name="ctc_chat_cart_checkout_nudge[message]" id="ctc_chat_nudge_message" rows="3" class="large-text"><?php echo esc_textarea( $settings['cart_checkout_nudge']['message'] ?? esc_html__( 'Have questions about payment, shipping, or need assistance? Chat with us on WhatsApp!', 'aicoso-click-to-chat' ) ); ?></textarea>
+				</td>
+			</tr>
+			<tr class="ctc-chat-nudge-row<?php echo empty( $settings['cart_checkout_nudge']['enabled'] ) ? ' ctc-chat-hidden' : ''; ?>">
+				<th scope="row"><label for="ctc_chat_nudge_button_text"><?php esc_html_e( 'Button Text', 'aicoso-click-to-chat' ); ?></label></th>
+				<td>
+					<input type="text" name="ctc_chat_cart_checkout_nudge[button_text]" id="ctc_chat_nudge_button_text" value="<?php echo esc_attr( $settings['cart_checkout_nudge']['button_text'] ?? esc_html__( 'Chat with Support 💬', 'aicoso-click-to-chat' ) ); ?>" class="regular-text">
+				</td>
+			</tr>
 		</table>
 		<?php $this->render_settings_card_close(); ?>
 
