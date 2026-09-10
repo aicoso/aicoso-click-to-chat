@@ -109,8 +109,18 @@ class CTC_Chat_Public {
 			$link_generator = new CTC_Chat_WhatsApp_Link_Generator();
 			$nudge_url      = $link_generator->get_cart_url();
 
+			if ( empty( $nudge_url ) ) {
+				$nudge_url = $link_generator->get_floating_url();
+			}
+			if ( empty( $nudge_url ) ) {
+				$wa_num = $link_generator->get_whatsapp_number();
+				if ( ! empty( $wa_num ) ) {
+					$nudge_url = 'https://wa.me/' . preg_replace( '/[^0-9]/', '', $wa_num );
+				}
+			}
+
 			$cart_total = '';
-			if ( function_exists( 'WC' ) && WC()->cart && method_exists( WC()->cart, 'get_total' ) ) {
+			if ( function_exists( 'WC' ) && WC()->cart && method_exists( WC()->cart, 'get_total' ) && ! WC()->cart->is_empty() ) {
 				$cart_total = wp_strip_all_tags( wc_price( WC()->cart->get_total( 'edit' ) ) );
 			}
 
@@ -119,6 +129,7 @@ class CTC_Chat_Public {
 					'enabled'     => true,
 					'trigger'     => isset( $nudge_settings['trigger'] ) ? $nudge_settings['trigger'] : 'both',
 					'delay'       => isset( $nudge_settings['delay'] ) ? max( 3, absint( $nudge_settings['delay'] ) ) : 20,
+					'frequency'   => isset( $nudge_settings['frequency'] ) ? $nudge_settings['frequency'] : 'reappear',
 					'title'       => ! empty( $nudge_settings['title'] ) ? esc_html( $nudge_settings['title'] ) : esc_html__( 'Need help with your order?', 'aicoso-click-to-chat' ),
 					'message'     => ! empty( $nudge_settings['message'] ) ? esc_html( $nudge_settings['message'] ) : esc_html__( 'Have questions about payment, shipping, or need assistance? Chat with us on WhatsApp!', 'aicoso-click-to-chat' ),
 					'button_text' => ! empty( $nudge_settings['button_text'] ) ? esc_html( $nudge_settings['button_text'] ) : esc_html__( 'Chat with Support 💬', 'aicoso-click-to-chat' ),

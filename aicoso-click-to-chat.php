@@ -157,6 +157,7 @@ function ctc_chat_get_default_settings() {
 			'enabled'     => false,
 			'trigger'     => 'both',
 			'delay'       => 20,
+			'frequency'   => 'reappear',
 			'title'       => esc_html__( 'Need help with your order?', 'aicoso-click-to-chat' ),
 			'message'     => esc_html__( 'Have questions about payment, shipping, or need assistance? Chat with us on WhatsApp!', 'aicoso-click-to-chat' ),
 			'button_text' => esc_html__( 'Chat with Support 💬', 'aicoso-click-to-chat' ),

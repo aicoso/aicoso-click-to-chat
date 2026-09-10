@@ -211,15 +211,18 @@
 
         const config = ctc_chat_public.nudge;
         const storageKey = 'ctc_nudge_dismissed';
+        const isOncePerSession = (config.frequency === 'once_per_session');
 
-        // Check if user dismissed it in this session
-        try {
-            if (sessionStorage.getItem(storageKey) === '1') {
-                return;
-            }
-        } catch (e) {}
+        // Check if user dismissed it in this session (only enforced if once_per_session)
+        if (isOncePerSession) {
+            try {
+                if (sessionStorage.getItem(storageKey) === '1') {
+                    return;
+                }
+            } catch (e) {}
+        }
 
-        let nudgeShown = false;
+        let nudgeVisible = false;
         let inactivityTimer = null;
         let $nudge = null;
 
@@ -262,17 +265,24 @@
             $('body').append(nudgeHtml);
             $nudge = $('#ctc-abandonment-nudge');
 
+            if ($('.ctc-chat-floating-button-container').length) {
+                $nudge.addClass('ctc-nudge-has-floating');
+            }
+
             // Handle dismiss
             $nudge.on('click', '.ctc-nudge-close', function(e) {
                 e.preventDefault();
-                $nudge.removeClass('ctc-nudge-show');
-                try {
-                    sessionStorage.setItem(storageKey, '1');
-                } catch (err) {}
+                hideNudge();
+                if (isOncePerSession) {
+                    try {
+                        sessionStorage.setItem(storageKey, '1');
+                    } catch (err) {}
+                }
             });
 
             // Handle CTA click
             $nudge.on('click', '.ctc-nudge-btn', function() {
+                hideNudge();
                 try {
                     sessionStorage.setItem(storageKey, '1');
                 } catch (err) {}
@@ -281,19 +291,22 @@
             return $nudge;
         }
 
-        function triggerNudge() {
-            if (nudgeShown) {
+        function showNudge() {
+            if (nudgeVisible) {
                 return;
             }
-            try {
-                if (sessionStorage.getItem(storageKey) === '1') {
-                    return;
-                }
-            } catch (e) {}
+            if (isOncePerSession) {
+                try {
+                    if (sessionStorage.getItem(storageKey) === '1') {
+                        return;
+                    }
+                } catch (e) {}
+            }
 
-            nudgeShown = true;
+            nudgeVisible = true;
             if (inactivityTimer) {
                 clearTimeout(inactivityTimer);
+                inactivityTimer = null;
             }
 
             const $element = renderNudge();
@@ -302,31 +315,47 @@
             }, 50);
         }
 
+        function hideNudge() {
+            nudgeVisible = false;
+            if ($nudge) {
+                $nudge.removeClass('ctc-nudge-show');
+            }
+            // If re-appearance is allowed and inactivity trigger is active, restart inactivity timer
+            if (!isOncePerSession && (triggerType === 'inactivity' || triggerType === 'both')) {
+                resetInactivityTimer();
+            }
+        }
+
         const triggerType = config.trigger || 'both';
+        const delayMs = Math.max(3, parseInt(config.delay, 10) || 20) * 1000;
+
+        function resetInactivityTimer() {
+            if (nudgeVisible) {
+                return;
+            }
+            if (inactivityTimer) {
+                clearTimeout(inactivityTimer);
+            }
+            inactivityTimer = setTimeout(function() {
+                showNudge();
+            }, delayMs);
+        }
 
         // 1. Inactivity trigger
         if (triggerType === 'inactivity' || triggerType === 'both') {
-            const delayMs = Math.max(3, parseInt(config.delay, 10) || 20) * 1000;
-
-            function resetInactivityTimer() {
-                if (nudgeShown) {
-                    return;
-                }
-                if (inactivityTimer) {
-                    clearTimeout(inactivityTimer);
-                }
-                inactivityTimer = setTimeout(triggerNudge, delayMs);
-            }
-
             resetInactivityTimer();
-            $(document).on('mousemove keydown scroll touchstart', resetInactivityTimer);
+            $(document).on('mousemove keydown scroll touchstart', function() {
+                if (!nudgeVisible) {
+                    resetInactivityTimer();
+                }
+            });
         }
 
         // 2. Exit intent trigger
         if (triggerType === 'exit_intent' || triggerType === 'both') {
             $(document).on('mouseleave', function(e) {
-                if (e.clientY <= 0 && !nudgeShown) {
-                    triggerNudge();
+                if (e.clientY <= 0 && !nudgeVisible) {
+                    showNudge();
                 }
             });
         }

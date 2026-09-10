@@ -320,6 +320,16 @@ $current_tab        = $this->get_current_settings_tab();
 				</td>
 			</tr>
 			<tr class="ctc-chat-nudge-row<?php echo empty( $settings['cart_checkout_nudge']['enabled'] ) ? ' ctc-chat-hidden' : ''; ?>">
+				<th scope="row"><label for="ctc_chat_nudge_frequency"><?php esc_html_e( 'Display Frequency', 'aicoso-click-to-chat' ); ?></label></th>
+				<td>
+					<select name="ctc_chat_cart_checkout_nudge[frequency]" id="ctc_chat_nudge_frequency">
+						<option value="reappear" <?php selected( $settings['cart_checkout_nudge']['frequency'] ?? 'reappear', 'reappear' ); ?>><?php esc_html_e( 'Re-appear on inactivity (prompts again after inactivity)', 'aicoso-click-to-chat' ); ?></option>
+						<option value="once_per_session" <?php selected( $settings['cart_checkout_nudge']['frequency'] ?? '', 'once_per_session' ); ?>><?php esc_html_e( 'Show only once per session (suppress once dismissed)', 'aicoso-click-to-chat' ); ?></option>
+					</select>
+					<p class="description"><?php esc_html_e( 'Controls whether the nudge will prompt again if the customer remains inactive after closing, or only shows once per browser visit.', 'aicoso-click-to-chat' ); ?></p>
+				</td>
+			</tr>
+			<tr class="ctc-chat-nudge-row<?php echo empty( $settings['cart_checkout_nudge']['enabled'] ) ? ' ctc-chat-hidden' : ''; ?>">
 				<th scope="row"><label for="ctc_chat_nudge_title"><?php esc_html_e( 'Nudge Title', 'aicoso-click-to-chat' ); ?></label></th>
 				<td>
 					<input type="text" name="ctc_chat_cart_checkout_nudge[title]" id="ctc_chat_nudge_title" value="<?php echo esc_attr( $settings['cart_checkout_nudge']['title'] ?? esc_html__( 'Need help with your order?', 'aicoso-click-to-chat' ) ); ?>" class="regular-text">

@@ -492,13 +492,17 @@
     box-shadow: 0 12px 35px rgba(0, 0, 0, 0.16), 0 4px 12px rgba(0, 0, 0, 0.08);
     border: 1px solid rgba(0, 0, 0, 0.06);
     padding: 18px 20px;
-    z-index: 99998;
+    z-index: 999999;
     opacity: 0;
     transform: translateY(30px) scale(0.96);
     pointer-events: none;
     transition: opacity 0.35s cubic-bezier(0.16, 1, 0.3, 1), transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
     font-family: inherit;
     box-sizing: border-box;
+}
+
+.ctc-abandonment-nudge.ctc-nudge-has-floating {
+    bottom: 95px;
 }
 
 .ctc-abandonment-nudge.ctc-nudge-show {

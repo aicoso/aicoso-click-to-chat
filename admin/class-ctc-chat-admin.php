@@ -1247,6 +1247,7 @@ class CTC_Chat_Admin {
 				'enabled'     => isset( $nudge_post['enabled'] ) ? true : false,
 				'trigger'     => isset( $nudge_post['trigger'] ) && in_array( $nudge_post['trigger'], array( 'inactivity', 'exit_intent', 'both' ), true ) ? $nudge_post['trigger'] : 'both',
 				'delay'       => isset( $nudge_post['delay'] ) ? max( 3, min( 300, absint( $nudge_post['delay'] ) ) ) : 20,
+				'frequency'   => isset( $nudge_post['frequency'] ) && in_array( $nudge_post['frequency'], array( 'reappear', 'once_per_session' ), true ) ? $nudge_post['frequency'] : 'reappear',
 				'title'       => isset( $nudge_post['title'] ) ? sanitize_text_field( $nudge_post['title'] ) : esc_html__( 'Need help with your order?', 'aicoso-click-to-chat' ),
 				'message'     => isset( $nudge_post['message'] ) ? sanitize_textarea_field( $nudge_post['message'] ) : esc_html__( 'Have questions about payment, shipping, or need assistance? Chat with us on WhatsApp!', 'aicoso-click-to-chat' ),
 				'button_text' => isset( $nudge_post['button_text'] ) ? sanitize_text_field( $nudge_post['button_text'] ) : esc_html__( 'Chat with Support 💬', 'aicoso-click-to-chat' ),
