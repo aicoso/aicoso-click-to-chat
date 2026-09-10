@@ -112,7 +112,13 @@
             return variationData;
         }
 
+        function getSelectedQuantity() {
+            const $qtyInput = $('form.cart input[name="quantity"]');
+            return $qtyInput.length ? Math.max(1, parseInt($qtyInput.val(), 10) || 1) : 1;
+        }
+
         function updateVariationUrl() {
+            const quantity = getSelectedQuantity();
             $.ajax({
                 url: ctc_chat_public.ajaxurl,
                 type: 'POST',
@@ -120,11 +126,15 @@
                     action: 'ctc_chat_get_variation_url',
                     product_id: parentProductId,
                     variations: collectVariationData(),
+                    quantity: quantity,
                     nonce: ctc_chat_public.nonce
                 },
                 success: function(response) {
                     if (response.success && response.data.url) {
                         $productButton.attr('href', response.data.url);
+                        if (response.data.order_total) {
+                            $productButton.attr('data-ctc-cart-total', response.data.order_total);
+                        }
                     }
                 }
             });
@@ -145,11 +155,56 @@
             $productButton.attr('href', originalUrl);
             $productButton.removeAttr('data-ctc-variation-id');
         });
+
+        // Watch for quantity changes in the variation form
+        $variationForm.on('change input', 'input[name="quantity"]', function() {
+            updateVariationUrl();
+        });
+    }
+
+    /**
+     * Initialize quantity change watcher for simple products.
+     */
+    function initSimpleProductQuantityWatcher() {
+        const $cartForm = $('form.cart:not(.variations_form)');
+        const $productButton = $('.ctc-chat-whatsapp-button[data-ctc-button-type="product"], .ctc-chat-button-product');
+        if (!$cartForm.length || !$productButton.length) {
+            return;
+        }
+
+        const productId = $productButton.data('ctc-product-id');
+        if (!productId) {
+            return;
+        }
+
+        $cartForm.on('change input', 'input[name="quantity"]', function() {
+            const qty = Math.max(1, parseInt($(this).val(), 10) || 1);
+            $.ajax({
+                url: ctc_chat_public.ajaxurl,
+                type: 'POST',
+                data: {
+                    action: 'ctc_chat_get_variation_url',
+                    product_id: productId,
+                    variations: {},
+                    quantity: qty,
+                    nonce: ctc_chat_public.nonce
+                },
+                success: function(response) {
+                    if (response.success && response.data.url) {
+                        $productButton.attr('href', response.data.url);
+                        if (response.data.order_total) {
+                            $productButton.attr('data-ctc-cart-total', response.data.order_total);
+                        }
+                    }
+                }
+            });
+        });
     }
 
     // Initialize when document is ready
     $(document).ready(function() {
         initClickToChat();
+        initSimpleProductQuantityWatcher();
     });
 
 })(jQuery);

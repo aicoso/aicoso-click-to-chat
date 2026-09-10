@@ -128,6 +128,10 @@ class CTC_Chat_Button_Display {
 				}
 				break;
 
+			case 'next_to_add_to_cart':
+				add_action( 'woocommerce_after_add_to_cart_button', array( $this, 'display_single_product_button' ) );
+				break;
+
 			case 'before_add_to_cart':
 				add_action( 'woocommerce_before_add_to_cart_button', array( $this, 'display_single_product_button' ) );
 				break;
@@ -605,6 +609,8 @@ class CTC_Chat_Button_Display {
 			'template_type' => $template_type,
 			'number_id'     => $this->link_generator->get_number_id( $product_id, $category_id, $page_id ),
 			'product_id'    => $product_id,
+			'cart_total'    => (float) $product->get_price(),
+			'cart_currency' => function_exists( 'get_woocommerce_currency' ) ? get_woocommerce_currency() : '',
 		);
 	}
 

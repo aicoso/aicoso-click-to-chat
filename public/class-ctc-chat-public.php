@@ -528,9 +528,10 @@ class CTC_Chat_Public {
 			wp_send_json_error( array( 'message' => __( 'Security check failed.', 'aicoso-click-to-chat' ) ) );
 		}
 
-		// Get product ID and variations.
+		// Get product ID, variations, and quantity.
 		$product_id = isset( $_POST['product_id'] ) ? intval( $_POST['product_id'] ) : 0;
 		$variations = isset( $_POST['variations'] ) ? array_map( 'sanitize_text_field', wp_unslash( $_POST['variations'] ) ) : array();
+		$quantity   = isset( $_POST['quantity'] ) ? max( 1, intval( $_POST['quantity'] ) ) : 1;
 
 		if ( ! $product_id ) {
 			wp_send_json_error( array( 'message' => __( 'Invalid product ID.', 'aicoso-click-to-chat' ) ) );
@@ -539,13 +540,23 @@ class CTC_Chat_Public {
 		// Initialize link generator.
 		$link_generator = new CTC_Chat_WhatsApp_Link_Generator();
 
-		// Generate WhatsApp URL with variations.
-		$whatsapp_url = $link_generator->get_product_url( $product_id, $variations );
+		// Generate WhatsApp URL with variations and quantity.
+		$whatsapp_url = $link_generator->get_product_url( $product_id, $variations, $quantity );
 
 		if ( empty( $whatsapp_url ) ) {
 			wp_send_json_error( array( 'message' => __( 'Could not generate WhatsApp URL.', 'aicoso-click-to-chat' ) ) );
 		}
 
-		wp_send_json_success( array( 'url' => $whatsapp_url ) );
+		$product     = function_exists( 'wc_get_product' ) ? wc_get_product( $product_id ) : null;
+		$unit_price  = ( $product && method_exists( $product, 'get_price' ) ) ? (float) $product->get_price() : 0;
+		$order_total = $unit_price * $quantity;
+
+		wp_send_json_success(
+			array(
+				'url'         => $whatsapp_url,
+				'quantity'    => $quantity,
+				'order_total' => $order_total,
+			)
+		);
 	}
 }

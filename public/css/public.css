@@ -449,3 +449,31 @@
     display: flex !important;
     justify-content: center;
 }
+
+/* Next to Add to Cart Button (Inline) */
+.ctc-chat-position-next-to-add-to-cart {
+    display: inline-flex;
+    vertical-align: middle;
+    margin-left: 10px;
+}
+
+.ctc-chat-position-next-to-add-to-cart .ctc-chat-whatsapp-button {
+    height: 100%;
+}
+
+.rtl .ctc-chat-position-next-to-add-to-cart {
+    margin-left: 0;
+    margin-right: 10px;
+}
+
+@media (max-width: 768px) {
+    .ctc-chat-position-next-to-add-to-cart {
+        display: block;
+        margin-left: 0;
+        margin-top: 10px;
+        width: 100%;
+    }
+    .ctc-chat-position-next-to-add-to-cart .ctc-chat-whatsapp-button {
+        width: 100%;
+    }
+}

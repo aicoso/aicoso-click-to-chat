@@ -573,6 +573,7 @@ class CTC_Chat_Settings {
 	 */
 	public function get_product_position_options() {
 		return array(
+			'next_to_add_to_cart'   => esc_html__( 'Next to Add to Cart button (Inline)', 'aicoso-click-to-chat' ),
 			'after_add_to_cart'     => esc_html__( 'Below add to cart button', 'aicoso-click-to-chat' ),
 			'before_add_to_cart'    => esc_html__( 'Above add to cart button', 'aicoso-click-to-chat' ),
 			'after_price'           => esc_html__( 'Below price', 'aicoso-click-to-chat' ),
@@ -622,7 +623,10 @@ class CTC_Chat_Settings {
 			case 'single_product':
 				$placeholders = array(
 					'{product_name}' => esc_html__( 'Product name', 'aicoso-click-to-chat' ),
-					'{price}'        => esc_html__( 'Product price', 'aicoso-click-to-chat' ),
+					'{product_sku}'  => esc_html__( 'Product SKU', 'aicoso-click-to-chat' ),
+					'{price}'        => esc_html__( 'Unit price', 'aicoso-click-to-chat' ),
+					'{quantity}'     => esc_html__( 'Selected quantity', 'aicoso-click-to-chat' ),
+					'{order_total}'  => esc_html__( 'Order total (Price × Quantity)', 'aicoso-click-to-chat' ),
 					'{product_url}'  => esc_html__( 'Product URL', 'aicoso-click-to-chat' ),
 				);
 				break;
@@ -637,8 +641,11 @@ class CTC_Chat_Settings {
 			case 'variations':
 				$placeholders = array(
 					'{product_name}'      => esc_html__( 'Product name', 'aicoso-click-to-chat' ),
+					'{product_sku}'       => esc_html__( 'Product/Variation SKU', 'aicoso-click-to-chat' ),
 					'{variation_details}' => esc_html__( 'Selected variation details', 'aicoso-click-to-chat' ),
-					'{variation_price}'   => esc_html__( 'Selected variation price', 'aicoso-click-to-chat' ),
+					'{variation_price}'   => esc_html__( 'Variation unit price', 'aicoso-click-to-chat' ),
+					'{quantity}'          => esc_html__( 'Selected quantity', 'aicoso-click-to-chat' ),
+					'{order_total}'       => esc_html__( 'Order total (Price × Quantity)', 'aicoso-click-to-chat' ),
 					'{product_url}'       => esc_html__( 'Product URL', 'aicoso-click-to-chat' ),
 				);
 				break;

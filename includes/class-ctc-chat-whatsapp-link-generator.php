@@ -248,10 +248,11 @@ class CTC_Chat_WhatsApp_Link_Generator {
 	 *
 	 * @param int   $product_id  The product ID.
 	 * @param array $variations  The selected variations (optional).
+	 * @param int   $quantity    The product quantity.
 	 * @return string The generated WhatsApp URL.
 	 */
-	public function get_product_url( $product_id, $variations = array() ) {
-		// Check if WooCommerce is active and function exists.
+	public function get_product_url( $product_id = null, $variations = array(), $quantity = 1 ) {
+		// Check if WooCommerce is active.
 		if ( ! function_exists( 'wc_get_product' ) ) {
 			return '';
 		}
@@ -293,9 +294,9 @@ class CTC_Chat_WhatsApp_Link_Generator {
 
 		// Prepare the message.
 		if ( empty( $variations ) ) {
-			$message = $this->prepare_single_product_message( $product );
+			$message = $this->prepare_single_product_message( $product, $quantity );
 		} else {
-			$message = $this->prepare_variation_message( $product, $variations );
+			$message = $this->prepare_variation_message( $product, $variations, $quantity );
 		}
 
 		// Build the WhatsApp URL.
@@ -527,10 +528,11 @@ class CTC_Chat_WhatsApp_Link_Generator {
 	/**
 	 * Prepare message for a single product.
 	 *
-	 * @param WC_Product $product The product object.
+	 * @param WC_Product $product  The product object.
+	 * @param int        $quantity Optional product quantity.
 	 * @return string The prepared message.
 	 */
-	private function prepare_single_product_message( $product ) {
+	private function prepare_single_product_message( $product, $quantity = 1 ) {
 		// Check if product is valid.
 		if ( ! is_object( $product ) || ! $product instanceof WC_Product ) {
 			return '';
@@ -552,9 +554,9 @@ class CTC_Chat_WhatsApp_Link_Generator {
 		}
 
 		// Get product data safely.
-		$product_name = '';
+		$product_name  = '';
 		$product_price = 0;
-		$product_url = '';
+		$product_url   = '';
 
 		if ( method_exists( $product, 'get_name' ) ) {
 			$product_name = $product->get_name();
@@ -568,10 +570,17 @@ class CTC_Chat_WhatsApp_Link_Generator {
 			$product_url = get_permalink( $product->get_id() );
 		}
 
+		$quantity     = max( 1, absint( $quantity ) );
+		$total_price  = (float) $product_price * $quantity;
+		$product_sku  = method_exists( $product, 'get_sku' ) && $product->get_sku() ? $product->get_sku() : 'N/A';
+
 		// Build replacements for single product template.
 		$replacements = array(
 			'{product_name}' => $product_name,
+			'{product_sku}'  => $product_sku,
 			'{price}'        => wp_strip_all_tags( wc_price( $product_price ) ),
+			'{quantity}'     => (string) $quantity,
+			'{order_total}'  => wp_strip_all_tags( wc_price( $total_price ) ),
 			'{product_url}'  => $product_url,
 		);
 
@@ -683,11 +692,19 @@ class CTC_Chat_WhatsApp_Link_Generator {
 			$formatted_price = '$' . $variation_price;
 		}
 
+		$quantity      = max( 1, absint( $quantity ) );
+		$total_price   = (float) $variation_price * $quantity;
+		$variation_sku = ( $variation && method_exists( $variation, 'get_sku' ) && $variation->get_sku() ) ? $variation->get_sku() : ( method_exists( $product, 'get_sku' ) && $product->get_sku() ? $product->get_sku() : 'N/A' );
+
 		// Replace placeholders.
 		$replacements = array(
 			'{product_name}'      => $product_name,
+			'{product_sku}'       => $variation_sku,
 			'{variation_details}' => $variation_details,
 			'{variation_price}'   => $formatted_price,
+			'{price}'             => $formatted_price,
+			'{quantity}'          => (string) $quantity,
+			'{order_total}'       => wp_strip_all_tags( wc_price( $total_price ) ),
 			'{product_url}'       => $product_url,
 		);
 
