@@ -150,6 +150,10 @@ function ctc_chat_normalize_number_record_ids( $numbers ) {
 		$normalized[] = $number_data;
 	}
 
+	if ( empty( $default_id ) && ! empty( $normalized ) ) {
+		$default_id = $normalized[0]['id'];
+	}
+
 	if ( $default_id ) {
 		foreach ( $normalized as &$number_data ) {
 			$number_data['is_default'] = absint( $number_data['id'] ) === $default_id;

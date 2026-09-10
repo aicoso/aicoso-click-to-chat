@@ -157,9 +157,11 @@ class CTC_Chat_WhatsApp_Link_Generator {
 			}
 		}
 
-		// Step 3: If all numbers have assignments and none match, return empty.
-		// This means no WhatsApp button should be shown on unassigned pages.
-		// unless a number is explicitly marked as default.
+		// Step 3: Fallback to the first configured number.
+		if ( ! empty( $this->settings['whatsapp_numbers'][0]['number'] ) ) {
+			return $this->settings['whatsapp_numbers'][0]['number'];
+		}
+
 		return '';
 	}
 
@@ -509,8 +511,11 @@ class CTC_Chat_WhatsApp_Link_Generator {
 	 * @return string The complete WhatsApp URL.
 	 */
 	private function build_whatsapp_url( $number, $message ) {
+		// Normalize line breaks to standard Unix \n so Windows \r\n does not result in stray %0D.
+		$normalized_message = str_replace( array( "\r\n", "\r" ), "\n", $message );
+
 		// Decode HTML entities in the message.
-		$decoded_message = html_entity_decode( $message, ENT_QUOTES | ENT_HTML5, 'UTF-8' );
+		$decoded_message = html_entity_decode( $normalized_message, ENT_QUOTES | ENT_HTML5, 'UTF-8' );
 
 		// URL encode the message (rawurlencode will properly handle newlines as %0A).
 		$encoded_message = rawurlencode( $decoded_message );

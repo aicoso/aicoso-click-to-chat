@@ -161,6 +161,7 @@ class CTC_Chat_Admin {
 			'config_exclusions'       => 'dashicons-hidden',
 			// Message template cards.
 			'template_product'        => 'dashicons-products',
+			'template_shop'           => 'dashicons-store',
 			'template_variations'     => 'dashicons-randomize',
 			'template_cart'           => 'dashicons-cart',
 			'template_thankyou'       => 'dashicons-saved',
@@ -1474,14 +1475,15 @@ class CTC_Chat_Admin {
 		// Process submitted templates.
 		if ( isset( $_POST['ctc_chat_templates'] ) && is_array( $_POST['ctc_chat_templates'] ) ) {
 			// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Each field is sanitized individually below.
-			$ctc_templates     = wp_unslash( $_POST['ctc_chat_templates'] );
-			$message_templates = array(
-				'single_product' => isset( $ctc_templates['single_product'] ) ? sanitize_textarea_field( $ctc_templates['single_product'] ) : '',
-				'shop'           => isset( $ctc_templates['shop'] ) ? sanitize_textarea_field( $ctc_templates['shop'] ) : '',
-				'cart_checkout'  => isset( $ctc_templates['cart_checkout'] ) ? sanitize_textarea_field( $ctc_templates['cart_checkout'] ) : '',
-				'thank_you'      => isset( $ctc_templates['thank_you'] ) ? sanitize_textarea_field( $ctc_templates['thank_you'] ) : '',
-				'floating'       => isset( $ctc_templates['floating'] ) ? sanitize_textarea_field( $ctc_templates['floating'] ) : '',
-				'variations'     => isset( $ctc_templates['variations'] ) ? sanitize_textarea_field( $ctc_templates['variations'] ) : '',
+			$ctc_templates      = wp_unslash( $_POST['ctc_chat_templates'] );
+			$existing_templates = isset( $settings['message_templates'] ) && is_array( $settings['message_templates'] ) ? $settings['message_templates'] : array();
+			$message_templates  = array(
+				'single_product' => isset( $ctc_templates['single_product'] ) ? sanitize_textarea_field( $ctc_templates['single_product'] ) : ( $existing_templates['single_product'] ?? '' ),
+				'shop'           => isset( $ctc_templates['shop'] ) ? sanitize_textarea_field( $ctc_templates['shop'] ) : ( $existing_templates['shop'] ?? '' ),
+				'cart_checkout'  => isset( $ctc_templates['cart_checkout'] ) ? sanitize_textarea_field( $ctc_templates['cart_checkout'] ) : ( $existing_templates['cart_checkout'] ?? '' ),
+				'thank_you'      => isset( $ctc_templates['thank_you'] ) ? sanitize_textarea_field( $ctc_templates['thank_you'] ) : ( $existing_templates['thank_you'] ?? '' ),
+				'floating'       => isset( $ctc_templates['floating'] ) ? sanitize_textarea_field( $ctc_templates['floating'] ) : ( $existing_templates['floating'] ?? '' ),
+				'variations'     => isset( $ctc_templates['variations'] ) ? sanitize_textarea_field( $ctc_templates['variations'] ) : ( $existing_templates['variations'] ?? '' ),
 			);
 
 			// Update message templates in settings.

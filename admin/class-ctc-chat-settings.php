@@ -627,6 +627,13 @@ class CTC_Chat_Settings {
 				);
 				break;
 
+			case 'shop':
+				$placeholders = array(
+					'{current_page_url}' => esc_html__( 'Current shop or category page URL', 'aicoso-click-to-chat' ),
+					'{category_name}'    => esc_html__( 'Product category name (if on category page)', 'aicoso-click-to-chat' ),
+				);
+				break;
+
 			case 'variations':
 				$placeholders = array(
 					'{product_name}'      => esc_html__( 'Product name', 'aicoso-click-to-chat' ),

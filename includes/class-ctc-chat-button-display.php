@@ -240,12 +240,12 @@ class CTC_Chat_Button_Display {
 	public function display_single_product_button() {
 		global $product;
 
-		// Check if button has already been displayed for this product.
-		if ( isset( self::$buttons_displayed[ 'product_' . $product->get_id() ] ) ) {
+		if ( ! $product || ! is_a( $product, 'WC_Product' ) ) {
 			return;
 		}
 
-		if ( ! $product ) {
+		// Check if button has already been displayed for this product.
+		if ( isset( self::$buttons_displayed[ 'product_' . $product->get_id() ] ) ) {
 			return;
 		}
 
@@ -298,12 +298,12 @@ class CTC_Chat_Button_Display {
 	public function display_shop_button() {
 		global $product;
 
-		// Check if button has already been displayed for this product.
-		if ( isset( self::$buttons_displayed[ 'shop_' . $product->get_id() ] ) ) {
+		if ( ! $product || ! is_a( $product, 'WC_Product' ) ) {
 			return;
 		}
 
-		if ( ! $product ) {
+		// Check if button has already been displayed for this product.
+		if ( isset( self::$buttons_displayed[ 'shop_' . $product->get_id() ] ) ) {
 			return;
 		}
 

@@ -12,6 +12,8 @@ if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
 
 delete_option( 'ctc_chat_settings' );
 delete_option( 'ctc_chat_db_version' );
+delete_option( 'ctc_chat_settings_schema_version' );
+delete_option( 'ctc_chat_settings_migration_error' );
 
 global $wpdb;
 
