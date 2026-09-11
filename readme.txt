@@ -6,7 +6,7 @@ Tested up to: 7.0
 Requires PHP: 7.4
 WC requires at least: 8.2
 WC tested up to: 10.3.5
-Stable tag: 1.0.3
+Stable tag: 1.2.1
 License: GPL-3.0
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -184,6 +184,23 @@ Yes, you can set exclusion rules based on products, categories, tags, or pages.
 
 == Changelog ==
 
+= 1.2.1 =
+* Added "Order on WhatsApp" direct button for single product pages with live quantity and variation selector sync.
+* Added Cart and Checkout conversational ordering with itemized totals and tax breakdowns.
+* Added Smart Cart & Checkout Abandonment Nudges with exit-intent and configurable inactivity triggers.
+* Added "Notify Me on WhatsApp" lead capture for out-of-stock products and dynamically selected variable attributes.
+* Added "Chat to Unlock Discount" coupon engine with promotional badges, teaser chips, and auto-applied message tokens.
+* Added 1-Click "Track My Order on WhatsApp" on Thank You page, My Account Order Details, and My Account Orders list.
+* Added Desktop "Scan QR Code to Chat" modal with real-time QR generation and WhatsApp Web fallback.
+* Added GDPR & Privacy Compliance mode supporting pre-chat consent prompts, policy disclaimers, and telemetry IP anonymization.
+* Added Live Visual Customizer with real-time WYSIWYG button preview and interactive Desktop/Mobile device switcher.
+* Added Custom CSS editor under Advanced Options for fine-grained frontend style overrides.
+* Fixed WhatsApp newline stripping (`%0A`) in chat URLs.
+* Fixed multi-number routing default fallback selection.
+* Fixed null product check guard before accessing WooCommerce product methods.
+* Fixed missing Shop template handling in admin template settings.
+* Fixed XSS vulnerability in analytics reports table through HTML entity escaping.
+
 = 1.0.3 =
 * Added an Analytics Dashboard filter for All numbers, one masked configured number, or Unattributed clicks, with safe fallback if the selected number is removed.
 * Improved dashboard usability with KPI help text, accessible notices, comparison labels, preset handling, unavailable-data states, chart presentation, and responsive behavior.
@@ -197,6 +214,9 @@ Yes, you can set exclusion rules based on products, categories, tags, or pages.
 * Initial release
 
 == Upgrade Notice ==
+
+= 1.2.1 =
+* Major feature release: adds Order on WhatsApp direct buy, abandonment nudges, back-in-stock alerts, coupon discounts, order tracking, desktop QR code modal, GDPR privacy compliance mode, and live visual preview customizer.
 
 = 1.0.3 =
 * Adds number-filtered click analytics and safely preserves existing Click to Chat settings during update; no manual reconfiguration is required.

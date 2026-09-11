@@ -7,7 +7,7 @@ AICOSO Click to Chat connects WooCommerce stores with customers through configur
 - Requires WordPress 6.2 or newer; tested up to WordPress 7.0
 - Requires WooCommerce 8.2 or newer; tested up to WooCommerce 10.3.5
 - Requires PHP 7.4 or newer
-- Current version: 1.0.3
+- Current version: 1.2.1
 
 ## Key features
 
@@ -106,6 +106,20 @@ Yes. Message templates can be customized for the supported button and page conte
 Yes. User-facing strings use the `aicoso-click-to-chat` text domain, and the translation template is provided in `languages/aicoso-click-to-chat.pot`.
 
 ## Changelog
+
+### 1.2.1
+
+- **Order on WhatsApp**: Direct purchase button on single product pages with live variation and quantity watcher.
+- **Cart & Checkout Conversational Commerce**: Added WhatsApp buttons for cart and checkout with itemized breakdown templates.
+- **Abandonment Rescue Nudges**: Smart inactivity timer and exit-intent prompts on Cart & Checkout pages.
+- **Back in Stock Alerts**: "Notify Me on WhatsApp" lead capture for out-of-stock products and dynamically selected variable attributes.
+- **Coupon Engine**: "Chat to Unlock Discount" promotional badges, teasers, and coupon token injection.
+- **1-Click Order Tracking**: Instant tracking cards on Thank You page, My Account > View Order, and My Account > Orders list.
+- **Desktop QR Modal**: Scan to Chat QR code modal on desktop with instant generation and WhatsApp Web fallback.
+- **GDPR & Privacy Suite**: Pre-chat consent modal/inline notice and IP telemetry anonymization (IPv4/IPv6 masking).
+- **Live Visual Customizer**: Real-time WYSIWYG button customizer with interactive Desktop & Mobile device viewport switcher.
+- **Custom CSS Editor**: Dedicated stylesheet editor under Advanced Options for frontend tailoring.
+- **Bug Fixes**: Fixed WhatsApp newline stripping (`%0A`), multi-number routing default fallback, null product checks, and XSS prevention in analytics table.
 
 ### 1.0.3
 

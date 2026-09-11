@@ -4,7 +4,7 @@
  * This file contains all the JavaScript for the public-facing aspects of the plugin.
  */
 
-(function($) {
+(function ($) {
     'use strict';
 
     /**
@@ -23,7 +23,7 @@
      */
     function initFloatingButton() {
         const $floatingButton = $('.ctc-chat-floating-button-container');
-        
+
         if (!$floatingButton.length) {
             return;
         }
@@ -35,7 +35,7 @@
         });
 
         // Show the button with a slight delay for better page load appearance
-        setTimeout(function() {
+        setTimeout(function () {
             $floatingButton.css({
                 'transition': 'all 0.3s ease',
                 'transform': 'scale(1)',
@@ -44,9 +44,9 @@
         }, 500);
 
         // Handle scroll behavior
-        $(window).on('scroll', function() {
+        $(window).on('scroll', function () {
             const scrollTop = $(window).scrollTop();
-            
+
             // Show/hide button based on scroll position
             if (scrollTop > 300) {
                 if (!$floatingButton.hasClass('ctc-chat-button-visible')) {
@@ -61,10 +61,10 @@
 
         // Add hover effect to floating button
         $floatingButton.hover(
-            function() {
+            function () {
                 $(this).css('transform', 'scale(1.1)');
             },
-            function() {
+            function () {
                 $(this).css('transform', 'scale(1)');
             }
         );
@@ -103,7 +103,7 @@
         function collectVariationData() {
             const variationData = {};
 
-            $variationForm.find('.variations select, .variations input[type="radio"]:checked').each(function() {
+            $variationForm.find('.variations select, .variations input[type="radio"]:checked').each(function () {
                 const name = $(this).attr('name');
                 const value = $(this).val();
 
@@ -143,7 +143,7 @@
                     variations: collectVariationData(),
                     nonce: ctc_chat_public.nonce
                 },
-                success: function(response) {
+                success: function (response) {
                     if (response.success && response.data.url) {
                         $productButton.attr('href', response.data.url);
                     }
@@ -176,7 +176,7 @@
                     quantity: quantity,
                     nonce: ctc_chat_public.nonce
                 },
-                success: function(response) {
+                success: function (response) {
                     if (response.success && response.data.url) {
                         $productButton.attr('href', response.data.url);
                         if (response.data.order_total) {
@@ -187,7 +187,7 @@
             });
         }
 
-        $variationForm.on('found_variation', function(event, variation) {
+        $variationForm.on('found_variation', function (event, variation) {
             if (variation && variation.variation_id) {
                 $productButton.attr('data-ctc-variation-id', variation.variation_id);
             }
@@ -199,18 +199,18 @@
             }
         });
 
-        $variationForm.on('show_variation', function() {
+        $variationForm.on('show_variation', function () {
             updateVariationUrl();
         });
 
-        $variationForm.on('reset_data hide_variation', function() {
+        $variationForm.on('reset_data hide_variation', function () {
             restoreInStockState();
             $productButton.attr('href', originalUrl);
             $productButton.removeAttr('data-ctc-variation-id');
         });
 
         // Watch for quantity changes in the variation form
-        $variationForm.on('change input', 'input[name="quantity"]', function() {
+        $variationForm.on('change input', 'input[name="quantity"]', function () {
             updateVariationUrl();
         });
     }
@@ -230,7 +230,7 @@
             return;
         }
 
-        $cartForm.on('change input', 'input[name="quantity"]', function() {
+        $cartForm.on('change input', 'input[name="quantity"]', function () {
             const qty = Math.max(1, parseInt($(this).val(), 10) || 1);
             $.ajax({
                 url: ctc_chat_public.ajaxurl,
@@ -242,7 +242,7 @@
                     quantity: qty,
                     nonce: ctc_chat_public.nonce
                 },
-                success: function(response) {
+                success: function (response) {
                     if (response.success && response.data.url) {
                         $productButton.attr('href', response.data.url);
                         if (response.data.order_total) {
@@ -272,7 +272,7 @@
                 if (sessionStorage.getItem(storageKey) === '1') {
                     return;
                 }
-            } catch (e) {}
+            } catch (e) { }
         }
 
         let nudgeVisible = false;
@@ -323,22 +323,22 @@
             }
 
             // Handle dismiss
-            $nudge.on('click', '.ctc-nudge-close', function(e) {
+            $nudge.on('click', '.ctc-nudge-close', function (e) {
                 e.preventDefault();
                 hideNudge();
                 if (isOncePerSession) {
                     try {
                         sessionStorage.setItem(storageKey, '1');
-                    } catch (err) {}
+                    } catch (err) { }
                 }
             });
 
             // Handle CTA click
-            $nudge.on('click', '.ctc-nudge-btn', function() {
+            $nudge.on('click', '.ctc-nudge-btn', function () {
                 hideNudge();
                 try {
                     sessionStorage.setItem(storageKey, '1');
-                } catch (err) {}
+                } catch (err) { }
             });
 
             return $nudge;
@@ -353,7 +353,7 @@
                     if (sessionStorage.getItem(storageKey) === '1') {
                         return;
                     }
-                } catch (e) {}
+                } catch (e) { }
             }
 
             nudgeVisible = true;
@@ -363,7 +363,7 @@
             }
 
             const $element = renderNudge();
-            setTimeout(function() {
+            setTimeout(function () {
                 $element.addClass('ctc-nudge-show');
             }, 50);
         }
@@ -389,7 +389,7 @@
             if (inactivityTimer) {
                 clearTimeout(inactivityTimer);
             }
-            inactivityTimer = setTimeout(function() {
+            inactivityTimer = setTimeout(function () {
                 showNudge();
             }, delayMs);
         }
@@ -397,7 +397,7 @@
         // 1. Inactivity trigger
         if (triggerType === 'inactivity' || triggerType === 'both') {
             resetInactivityTimer();
-            $(document).on('mousemove keydown scroll touchstart', function() {
+            $(document).on('mousemove keydown scroll touchstart', function () {
                 if (!nudgeVisible) {
                     resetInactivityTimer();
                 }
@@ -406,7 +406,7 @@
 
         // 2. Exit intent trigger
         if (triggerType === 'exit_intent' || triggerType === 'both') {
-            $(document).on('mouseleave', function(e) {
+            $(document).on('mouseleave', function (e) {
                 if (e.clientY <= 0 && !nudgeVisible) {
                     showNudge();
                 }
@@ -414,11 +414,320 @@
         }
     }
 
+    /**
+     * Initialize order tracking actions (My Account orders table)
+     */
+    function initOrderTrackingActions() {
+        // Ensure only one tracking card exists in the DOM if multiple hooks fired
+        if ($('.ctc-chat-order-tracking-card').length > 1) {
+            $('.ctc-chat-order-tracking-card:gt(0)').remove();
+        }
+
+        // Ensure My Account order tracking action links open safely in a new tab
+        $(document).on('click', 'a.ctc_track_whatsapp', function () {
+            $(this).attr('target', '_blank').attr('rel', 'noopener noreferrer');
+        });
+    }
+
+    /**
+     * Initialize Coupon Engine floating teaser chip
+     */
+    function initCouponTeaser() {
+        const $teaser = $('.ctc-chat-coupon-teaser');
+        if (!$teaser.length) {
+            return;
+        }
+
+        // Check if user previously dismissed in this session
+        if (sessionStorage.getItem('ctc_coupon_dismissed') === '1') {
+            $teaser.hide();
+            return;
+        }
+
+        // Animate entrance after 800ms
+        setTimeout(function () {
+            $teaser.addClass('ctc-coupon-visible');
+        }, 800);
+
+        // Dismiss button handler
+        $teaser.on('click', '.ctc-chat-coupon-close', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+            $teaser.removeClass('ctc-coupon-visible').fadeOut(250);
+            sessionStorage.setItem('ctc_coupon_dismissed', '1');
+        });
+    }
+
+    /**
+     * Initialize Desktop "Scan QR Code to Chat" button-side popover
+     */
+    function initDesktopQrPopover() {
+        if (typeof ctc_chat_public === 'undefined' || !ctc_chat_public.qr_modal || !ctc_chat_public.qr_modal.enabled) {
+            return;
+        }
+
+        const $popover = $('#ctc-chat-qr-popover');
+        if (!$popover.length) {
+            return;
+        }
+
+        function closeQrPopover() {
+            $popover.removeClass('ctc-qr-popover-open').attr('aria-hidden', 'true');
+            $(document).off('click.ctcQrPopover');
+        }
+
+        function isMobileClient() {
+            const ua = (navigator.userAgent || navigator.vendor || window.opera || '').toLowerCase();
+            const isMobileUA = /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/i.test(ua);
+            return isMobileUA && window.innerWidth <= 768;
+        }
+
+        // Close on close button click
+        $popover.on('click', '.ctc-chat-qr-close', function (e) {
+            e.preventDefault();
+            closeQrPopover();
+        });
+
+        // Close on Escape key
+        $(document).on('keydown', function (e) {
+            if ((e.key === 'Escape' || e.keyCode === 27) && $popover.hasClass('ctc-qr-popover-open')) {
+                closeQrPopover();
+            }
+        });
+
+        // Close popover shortly after clicking WhatsApp Web action
+        $popover.on('click', '#ctc-chat-qr-web-action', function () {
+            setTimeout(closeQrPopover, 400);
+        });
+
+        // Intercept WhatsApp clicks on desktop devices
+        $(document).on('click', 'a[href*="wa.me"], a[href*="whatsapp.com"], a[href*="api.whatsapp.com"], a[href*="web.whatsapp.com"], .ctc-chat-whatsapp-button, .ctc-chat-button, .ctc-chat-order-btn, .ctc-chat-nudge-btn, .ctc-chat-coupon-link, .ctc-chat-product-coupon-badge a, a.ctc_track_whatsapp', function (e) {
+            // Never intercept clicks inside the QR popover itself
+            if ($(this).closest('#ctc-chat-qr-popover').length) {
+                return;
+            }
+
+            // Do not intercept close buttons or disabled buttons
+            if ($(this).hasClass('ctc-chat-coupon-close') || $(this).hasClass('ctc-nudge-close') || $(this).is('.disabled, [disabled]')) {
+                return;
+            }
+
+            // Only pass through on actual mobile devices with <= 768px width
+            if (isMobileClient()) {
+                return;
+            }
+
+            // Extract target WhatsApp URL
+            let targetUrl = $(this).attr('href');
+            if (!targetUrl || targetUrl === '#' || targetUrl.indexOf('javascript:') === 0) {
+                targetUrl = $(this).find('a[href]').attr('href') || $(this).closest('a[href]').attr('href') || $(this).data('url') || $(this).data('href');
+            }
+
+            if (!targetUrl || (targetUrl.indexOf('wa.me') === -1 && targetUrl.indexOf('whatsapp.com') === -1)) {
+                return;
+            }
+
+            // Intercept standard navigation on desktop
+            e.preventDefault();
+            e.stopPropagation();
+
+            // Populate canvas target with high-resolution offline SVG QR code
+            const qrTarget = document.getElementById('ctc-chat-qr-canvas-target');
+            if (qrTarget) {
+                qrTarget.innerHTML = '';
+                let rendered = false;
+                try {
+                    const qrGen = (typeof window.qrcode === 'function') ? window.qrcode : (typeof qrcode === 'function' ? qrcode : null);
+                    if (qrGen) {
+                        const qr = qrGen(0, 'M');
+                        qr.addData(targetUrl);
+                        qr.make();
+                        qrTarget.innerHTML = qr.createSvgTag({ cellSize: 3, margin: 0 });
+                        rendered = true;
+                    }
+                } catch (err) {
+                    console.warn('CTC QR SVG generation warning:', err);
+                }
+
+                // Bulletproof image fallback if SVG generation had any constraint
+                if (!rendered || !qrTarget.hasChildNodes()) {
+                    qrTarget.innerHTML = '<img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=' + encodeURIComponent(targetUrl) + '" alt="WhatsApp QR Code" width="145" height="145" style="display:block;margin:0 auto;max-width:100%;height:auto;" />';
+                }
+            }
+
+            // Update WhatsApp Web fallback link
+            const $webLink = $('#ctc-chat-qr-web-action');
+            if ($webLink.length) {
+                $webLink.attr('href', targetUrl);
+            }
+
+            // Position popover card neatly near the clicked button
+            const $clickedBtn = $(this);
+            const isFloating = $clickedBtn.closest('.ctc-chat-floating-button-container').length > 0;
+
+            if (isFloating) {
+                $popover.removeClass('ctc-qr-inline-docked').addClass('ctc-qr-floating-docked');
+                $popover.css({ top: '', left: '', right: '', bottom: '' });
+            } else {
+                $popover.removeClass('ctc-qr-floating-docked').addClass('ctc-qr-inline-docked');
+                const rect = this.getBoundingClientRect();
+                const popoverWidth = 260;
+                const popoverHeight = 285;
+                let top = rect.top + window.scrollY - popoverHeight - 12;
+                let left = rect.left + window.scrollX + (rect.width / 2) - (popoverWidth / 2);
+
+                if (rect.top - popoverHeight < 15) {
+                    top = rect.bottom + window.scrollY + 12;
+                }
+                if (left < 15) left = 15;
+                if (left + popoverWidth > window.innerWidth - 15) {
+                    left = window.innerWidth - popoverWidth - 15;
+                }
+
+                $popover.css({
+                    top: top + 'px',
+                    left: left + 'px',
+                    bottom: 'auto',
+                    right: 'auto'
+                });
+            }
+
+            // Display popover
+            $popover.addClass('ctc-qr-popover-open').attr('aria-hidden', 'false');
+
+            // Attach outside click listener to dismiss without a blocking screen backdrop
+            setTimeout(function () {
+                $(document).off('click.ctcQrPopover').on('click.ctcQrPopover', function (evt) {
+                    if (!$(evt.target).closest('#ctc-chat-qr-popover, a[href*="wa.me"], a[href*="whatsapp.com"], .ctc-chat-whatsapp-button').length) {
+                        closeQrPopover();
+                    }
+                });
+            }, 60);
+        });
+    }
+
+    /**
+     * Initialize GDPR & Privacy Compliance Consent Mode
+     */
+    function initPrivacyConsent() {
+        const privacy = (typeof ctc_chat_public !== 'undefined' && ctc_chat_public.privacy) ? ctc_chat_public.privacy : null;
+        if (!privacy || !privacy.enabled) {
+            return;
+        }
+
+        const $prompt = $('#ctc-chat-privacy-prompt');
+        let pendingAction = null;
+
+        function hasConsented() {
+            try {
+                return localStorage.getItem('ctc_chat_gdpr_consented') === '1';
+            } catch (e) {
+                return false;
+            }
+        }
+
+        function setConsented() {
+            try {
+                localStorage.setItem('ctc_chat_gdpr_consented', '1');
+            } catch (e) {
+                // Ignore localStorage errors
+            }
+        }
+
+        function openPrompt(callback) {
+            pendingAction = callback;
+            $prompt.addClass('ctc-privacy-prompt-open').attr('aria-hidden', 'false');
+            $('body').addClass('ctc-privacy-modal-active');
+        }
+
+        function closePrompt() {
+            $prompt.removeClass('ctc-privacy-prompt-open').attr('aria-hidden', 'true');
+            $('body').removeClass('ctc-privacy-modal-active');
+            pendingAction = null;
+        }
+
+        // Agree button click
+        $('#ctc-chat-privacy-agree').on('click', function (e) {
+            e.preventDefault();
+            setConsented();
+            const action = pendingAction;
+            closePrompt();
+            if (typeof action === 'function') {
+                action();
+            }
+        });
+
+        // Cancel button and backdrop click
+        $('#ctc-chat-privacy-cancel, .ctc-chat-privacy-backdrop').on('click', function (e) {
+            e.preventDefault();
+            closePrompt();
+        });
+
+        // Close on Escape key
+        $(document).on('keydown', function (e) {
+            if (e.key === 'Escape' && $prompt.hasClass('ctc-privacy-prompt-open')) {
+                closePrompt();
+            }
+        });
+
+        // Intercept clicks before consent if consent_mode is 'prompt'
+        if (privacy.consent_mode === 'prompt') {
+            $(document).on('click', 'a[href*="wa.me"], a[href*="whatsapp.com"], a[href*="api.whatsapp.com"], a[href*="web.whatsapp.com"], .ctc-chat-whatsapp-button, .ctc-chat-button, .ctc-chat-order-btn, .ctc-chat-nudge-btn, .ctc-chat-coupon-link, .ctc-chat-product-coupon-badge a, a.ctc_track_whatsapp', function (e) {
+                // Do not intercept actions inside privacy prompt or QR popover
+                if ($(this).closest('#ctc-chat-privacy-prompt, #ctc-chat-qr-popover').length) {
+                    return;
+                }
+
+                // Do not intercept close or disabled buttons
+                if ($(this).hasClass('ctc-chat-coupon-close') || $(this).hasClass('ctc-nudge-close') || $(this).is('.disabled, [disabled]')) {
+                    return;
+                }
+
+                if (hasConsented()) {
+                    return; // Consented, pass through
+                }
+
+                // Intercept and open prompt
+                e.preventDefault();
+                e.stopPropagation();
+                e.stopImmediatePropagation();
+
+                const $target = $(this);
+                openPrompt(function () {
+                    const rawEl = $target[0];
+                    if (rawEl && typeof rawEl.click === 'function') {
+                        rawEl.click();
+                    } else {
+                        $target.trigger('click');
+                    }
+                });
+            });
+        }
+
+        // Ensure inline notices for dynamic elements if consent_mode is 'inline_notice'
+        if (privacy.consent_mode === 'inline_notice' && privacy.notice_html) {
+            function ensureInlineNotices() {
+                $('.ctc-chat-whatsapp-button:not(.ctc-chat-floating-button-container .ctc-chat-whatsapp-button)').each(function () {
+                    const $btn = $(this);
+                    if (!$btn.next('.ctc-chat-inline-privacy-notice').length && !$btn.parent().find('.ctc-chat-inline-privacy-notice').length) {
+                        $btn.after('<div class="ctc-chat-inline-privacy-notice"><span class="ctc-chat-privacy-lock">🔒</span> ' + privacy.notice_html + '</div>');
+                    }
+                });
+            }
+            ensureInlineNotices();
+            $(document).on('found_variation reset_data', ensureInlineNotices);
+        }
+    }
+
     // Initialize when document is ready
-    $(document).ready(function() {
+    $(document).ready(function () {
+        initPrivacyConsent();
         initClickToChat();
         initSimpleProductQuantityWatcher();
         initAbandonmentNudge();
+        initOrderTrackingActions();
+        initCouponTeaser();
+        initDesktopQrPopover();
     });
 
 })(jQuery);

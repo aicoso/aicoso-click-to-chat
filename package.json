@@ -1,6 +1,6 @@
 {
   "name": "aicoso-click-to-chat",
-  "version": "1.0.3",
+  "version": "1.2.1",
   "description": "WordPress plugin for WhatsApp integration with WooCommerce",
   "main": "aicoso-click-to-chat.php",
   "scripts": {

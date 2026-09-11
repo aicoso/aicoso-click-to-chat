@@ -561,6 +561,105 @@ class CTC_Chat_WhatsApp_Link_Generator {
 	}
 
 	/**
+	 * Get the discount description for a coupon code.
+	 *
+	 * @param string $coupon_code The coupon code.
+	 * @return string
+	 */
+	public function get_coupon_discount_description( $coupon_code ) {
+		$coupon_code = trim( $coupon_code );
+		if ( ! empty( $coupon_code ) && class_exists( 'WC_Coupon' ) ) {
+			try {
+				$coupon = new WC_Coupon( $coupon_code );
+				if ( $coupon->get_id() ) {
+					$amount = $coupon->get_amount();
+					$type   = $coupon->get_discount_type();
+					if ( 'percent' === $type ) {
+						return $amount . '% OFF';
+					} elseif ( 'fixed_cart' === $type || 'fixed_product' === $type ) {
+						return function_exists( 'wc_price' ) ? wp_strip_all_tags( wc_price( $amount ) ) . ' OFF' : '$' . $amount . ' OFF';
+					}
+				}
+			} catch ( Exception $e ) {
+				// Silently handle exception.
+			}
+		}
+
+		return ! empty( $this->settings['coupon_engine']['custom_discount'] )
+			? $this->settings['coupon_engine']['custom_discount']
+			: 'Special Discount';
+	}
+
+	/**
+	 * Generate WhatsApp URL for claiming a discount coupon.
+	 *
+	 * @param int|null $product_id Optional product ID if on product page.
+	 * @return string The generated WhatsApp URL.
+	 */
+	public function get_coupon_claim_url( $product_id = null ) {
+		$coupon_settings = isset( $this->settings['coupon_engine'] ) ? $this->settings['coupon_engine'] : array();
+		$coupon_code     = ! empty( $coupon_settings['coupon_code'] ) ? $coupon_settings['coupon_code'] : 'SPECIAL';
+		$discount_amount = $this->get_coupon_discount_description( $coupon_code );
+
+		$default_message = "🎁 *Special Discount Claim*\n\nHello! I'd like to claim my discount coupon: *{coupon_code}* ({discount_amount})\n\n*Product:* {product_name}\n*Page:* {current_page_url}\n\nCan you please assist me with applying this discount to my order? Thank you!";
+
+		$message_template = ! empty( $coupon_settings['message'] )
+			? $coupon_settings['message']
+			: $default_message;
+
+		// Convert any literal escaped newlines to real newlines.
+		$message_template = str_replace( array( '\r\n', '\n', "\\r\\n", "\\n" ), "\n", $message_template );
+
+		// Replace tokens.
+		$product_name = '';
+		$product_sku  = '';
+		if ( $product_id && function_exists( 'wc_get_product' ) ) {
+			$product = wc_get_product( $product_id );
+			if ( $product ) {
+				$product_name = $product->get_name();
+				$product_sku  = $product->get_sku();
+			}
+		}
+
+		// If product_name is empty, remove any line mentioning {product_name} so we do not leave an empty "*Product:* " line.
+		if ( empty( $product_name ) ) {
+			$message_template = preg_replace( '/^[^\n]*\{product_name\}[^\n]*\n?/m', '', $message_template );
+		}
+
+		$current_url = ( isset( $_SERVER['HTTPS'] ) && 'on' === $_SERVER['HTTPS'] ? 'https' : 'http' ) . '://';
+		$current_url .= isset( $_SERVER['HTTP_HOST'] ) ? sanitize_text_field( wp_unslash( $_SERVER['HTTP_HOST'] ) ) : '';
+		$current_url .= isset( $_SERVER['REQUEST_URI'] ) ? sanitize_text_field( wp_unslash( $_SERVER['REQUEST_URI'] ) ) : '';
+
+		$replacements = array(
+			'{coupon_code}'      => $coupon_code,
+			'{discount_amount}'  => $discount_amount,
+			'{discount_value}'   => $discount_amount,
+			'{product_name}'     => $product_name,
+			'{product_sku}'      => $product_sku,
+			'{current_page_url}' => $current_url,
+		);
+
+		foreach ( $replacements as $placeholder => $value ) {
+			$message_template = str_replace( $placeholder, $value, $message_template );
+		}
+
+		// Ensure proper spacing before URL/Page if it was cramped in previous template versions.
+		$message_template = preg_replace( '/(?<!\n)\nPage:/', "\n\nPage:", $message_template );
+		$message_template = preg_replace( '/(?<!\n)\n\*Page:\*/', "\n\n*Page:*", $message_template );
+
+		// Normalize multiple consecutive line breaks down to double line breaks.
+		$message_template = preg_replace( "/\n{3,}/", "\n\n", trim( $message_template ) );
+
+		$whatsapp_number = $this->get_whatsapp_number( $product_id );
+		if ( empty( $whatsapp_number ) ) {
+			return '';
+		}
+
+		$whatsapp_number = preg_replace( '/[^0-9]/', '', $whatsapp_number );
+		return $this->build_whatsapp_url( $whatsapp_number, $message_template );
+	}
+
+	/**
 	 * Build a WhatsApp URL with the provided number and message.
 	 *
 	 * @param string $number  The WhatsApp number.
@@ -1009,13 +1108,68 @@ class CTC_Chat_WhatsApp_Link_Generator {
 			// Silently handle any exceptions.
 		}
 
+		// Safely get customer name.
+		$customer_name = '';
+		try {
+			if ( method_exists( $order, 'get_formatted_billing_full_name' ) ) {
+				$customer_name = $order->get_formatted_billing_full_name();
+			}
+			if ( empty( $customer_name ) && method_exists( $order, 'get_billing_first_name' ) ) {
+				$customer_name = trim( $order->get_billing_first_name() . ' ' . $order->get_billing_last_name() );
+			}
+		} catch ( Exception $e ) {
+			// Silently handle any exceptions.
+		}
+
+		// Safely get order status name.
+		$order_status = '';
+		try {
+			if ( method_exists( $order, 'get_status' ) ) {
+				$raw_status = $order->get_status();
+				if ( function_exists( 'wc_get_order_status_name' ) ) {
+					$order_status = wc_get_order_status_name( $raw_status );
+				} else {
+					$order_status = ucfirst( $raw_status );
+				}
+			}
+		} catch ( Exception $e ) {
+			// Silently handle any exceptions.
+		}
+
+		// Safely get formatted shipping address.
+		$shipping_address = '';
+		try {
+			if ( method_exists( $order, 'get_formatted_shipping_address' ) ) {
+				$shipping_address = wp_strip_all_tags( $order->get_formatted_shipping_address() );
+			}
+			if ( empty( $shipping_address ) && method_exists( $order, 'get_formatted_billing_address' ) ) {
+				$shipping_address = wp_strip_all_tags( $order->get_formatted_billing_address() );
+			}
+		} catch ( Exception $e ) {
+			// Silently handle any exceptions.
+		}
+
+		// Safely get order view URL.
+		$order_view_url = '';
+		try {
+			if ( method_exists( $order, 'get_view_order_url' ) ) {
+				$order_view_url = $order->get_view_order_url();
+			}
+		} catch ( Exception $e ) {
+			// Silently handle any exceptions.
+		}
+
 		// Replace placeholders.
 		$replacements = array(
-			'{order_number}'      => $order_number,
-			'{order_date}'        => $order_date,
+			'{order_number}'       => $order_number,
+			'{order_date}'         => $order_date,
 			'{ordered_items_list}' => $ordered_items_list,
-			'{coupon_code}'       => $coupon_code,
-			'{order_total}'       => wp_strip_all_tags( wc_price( $order_total ) ),
+			'{coupon_code}'        => $coupon_code,
+			'{order_total}'        => wp_strip_all_tags( wc_price( $order_total ) ),
+			'{order_status}'       => $order_status,
+			'{customer_name}'      => $customer_name,
+			'{shipping_address}'   => $shipping_address,
+			'{order_view_url}'     => $order_view_url,
 		);
 
 		foreach ( $replacements as $placeholder => $value ) {

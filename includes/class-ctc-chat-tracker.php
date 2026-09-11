@@ -299,6 +299,18 @@ class CTC_Chat_Tracker {
 			$ip = sanitize_text_field( wp_unslash( $_SERVER['REMOTE_ADDR'] ) );
 		}
 
-		return filter_var( $ip, FILTER_VALIDATE_IP ) ? $ip : '';
+		if ( ! filter_var( $ip, FILTER_VALIDATE_IP ) ) {
+			return '';
+		}
+
+		// Check if IP anonymization is enabled in GDPR / Privacy settings.
+		$settings = get_option( 'ctc_chat_settings', array() );
+		if ( ! empty( $settings['privacy_compliance']['enabled'] ) && ! empty( $settings['privacy_compliance']['anonymize_ip'] ) ) {
+			if ( function_exists( 'wp_privacy_anonymize_ip' ) ) {
+				$ip = wp_privacy_anonymize_ip( $ip );
+			}
+		}
+
+		return $ip;
 	}
 }

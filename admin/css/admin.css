@@ -2236,3 +2236,353 @@ body.click-to-chat_page_click-to-chat-settings #wpbody-content,
     flex-wrap: wrap;
     gap: 8px;
 }
+
+/* ==========================================================================
+   Feature 10: Live Visual Customizer & Device Switcher
+   ========================================================================== */
+.ctc-live-customizer {
+    margin-top: 10px;
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(15, 23, 42, 0.04);
+}
+
+.ctc-customizer-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 18px;
+    background: #f8fafc;
+    border-bottom: 1px solid #e2e8f0;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.ctc-device-switcher {
+    display: inline-flex;
+    background: #e2e8f0;
+    padding: 3px;
+    border-radius: 8px;
+    gap: 2px;
+}
+
+.ctc-device-btn {
+    display: inline-flex !important;
+    align-items: center;
+    gap: 6px;
+    border: none !important;
+    background: transparent !important;
+    color: #475569 !important;
+    font-size: 13px !important;
+    font-weight: 600 !important;
+    padding: 6px 14px !important;
+    border-radius: 6px !important;
+    cursor: pointer;
+    box-shadow: none !important;
+    transition: all 0.2s ease;
+}
+
+.ctc-device-btn:hover {
+    color: #0f172a !important;
+    background: rgba(255, 255, 255, 0.5) !important;
+}
+
+.ctc-device-btn.active {
+    background: #ffffff !important;
+    color: #0f172a !important;
+    box-shadow: 0 1px 3px rgba(15, 23, 42, 0.1) !important;
+}
+
+.ctc-device-btn .dashicons {
+    font-size: 16px;
+    width: 16px;
+    height: 16px;
+    line-height: 16px;
+}
+
+.ctc-customizer-hint {
+    font-size: 12px;
+    color: #64748b;
+    font-weight: 500;
+}
+
+.ctc-preview-viewport-container {
+    padding: 30px 20px;
+    background: #f1f5f9;
+    min-height: 440px;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    overflow-x: auto;
+}
+
+/* Desktop Mockup */
+.ctc-mockup-desktop {
+    width: 100%;
+    max-width: 720px;
+    background: #ffffff;
+    border-radius: 10px;
+    border: 1px solid #cbd5e1;
+    box-shadow: 0 12px 28px rgba(15, 23, 42, 0.08);
+    overflow: hidden;
+}
+
+.ctc-mockup-browser-header {
+    background: #e2e8f0;
+    padding: 8px 14px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    border-bottom: 1px solid #cbd5e1;
+}
+
+.ctc-mockup-dots {
+    display: flex;
+    gap: 6px;
+}
+
+.ctc-mockup-dots .dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    display: inline-block;
+}
+
+.ctc-mockup-dots .dot-red { background: #ef4444; }
+.ctc-mockup-dots .dot-yellow { background: #f59e0b; }
+.ctc-mockup-dots .dot-green { background: #10b981; }
+
+.ctc-mockup-address-bar {
+    flex: 1;
+    background: #ffffff;
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 11px;
+    color: #64748b;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    border: 1px solid #d1d5db;
+}
+
+.ctc-mockup-address-bar .dashicons {
+    font-size: 13px;
+    width: 13px;
+    height: 13px;
+    color: #10b981;
+}
+
+.ctc-mockup-content {
+    padding: 24px;
+    background: #ffffff;
+}
+
+.ctc-mockup-product-page {
+    display: flex;
+    gap: 24px;
+    align-items: flex-start;
+}
+
+.ctc-mockup-product-image {
+    width: 190px;
+    height: 190px;
+    background: #f8fafc;
+    border: 1px dashed #cbd5e1;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.ctc-mockup-img-placeholder .dashicons {
+    font-size: 48px;
+    width: 48px;
+    height: 48px;
+    color: #94a3b8;
+}
+
+.ctc-mockup-product-details {
+    flex: 1;
+}
+
+.ctc-mockup-badge {
+    display: inline-block;
+    padding: 2px 8px;
+    background: #dcfce7;
+    color: #15803d;
+    font-size: 11px;
+    font-weight: 700;
+    border-radius: 10px;
+    margin-bottom: 6px;
+    text-transform: uppercase;
+}
+
+.ctc-mockup-title {
+    margin: 0 0 6px !important;
+    font-size: 18px !important;
+    font-weight: 700 !important;
+    color: #0f172a !important;
+}
+
+.ctc-mockup-price {
+    font-size: 17px;
+    font-weight: 700;
+    color: #2563eb;
+    margin-bottom: 10px;
+}
+
+.ctc-mockup-desc {
+    font-size: 12.5px;
+    color: #64748b;
+    line-height: 1.5;
+    margin: 0 0 16px !important;
+}
+
+.ctc-mockup-actions {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.ctc-mockup-cart-btn {
+    padding: 9px 18px;
+    background: #f1f5f9;
+    color: #94a3b8;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: not-allowed;
+}
+
+/* Mobile Mockup */
+.ctc-mockup-mobile {
+    width: 320px;
+    background: #0f172a;
+    border-radius: 36px;
+    padding: 12px;
+    box-shadow: 0 20px 45px rgba(15, 23, 42, 0.22);
+    margin: 0 auto;
+}
+
+.ctc-mockup-phone-notch {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    height: 18px;
+    margin-bottom: 6px;
+}
+
+.ctc-phone-speaker {
+    width: 48px;
+    height: 4px;
+    background: #334155;
+    border-radius: 3px;
+}
+
+.ctc-phone-camera {
+    width: 8px;
+    height: 8px;
+    background: #1e293b;
+    border: 1.5px solid #334155;
+    border-radius: 50%;
+}
+
+.ctc-mockup-phone-screen {
+    background: #ffffff;
+    border-radius: 26px;
+    overflow: hidden;
+    padding-bottom: 20px;
+}
+
+.ctc-phone-status-bar {
+    display: flex;
+    justify-content: space-between;
+    padding: 6px 14px;
+    font-size: 11px;
+    font-weight: 600;
+    color: #0f172a;
+    background: #f8fafc;
+}
+
+.ctc-phone-browser-nav {
+    padding: 6px 12px;
+    background: #e2e8f0;
+    font-size: 11px;
+    color: #475569;
+    text-align: center;
+    border-bottom: 1px solid #cbd5e1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+}
+
+.ctc-phone-browser-nav .dashicons {
+    font-size: 12px;
+    width: 12px;
+    height: 12px;
+}
+
+.ctc-phone-body {
+    padding: 16px;
+    text-align: center;
+}
+
+.ctc-phone-img-placeholder {
+    width: 100%;
+    height: 140px;
+    background: #f8fafc;
+    border: 1px dashed #cbd5e1;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 12px;
+}
+
+.ctc-phone-img-placeholder .dashicons {
+    font-size: 36px;
+    width: 36px;
+    height: 36px;
+    color: #94a3b8;
+}
+
+.ctc-phone-title {
+    font-size: 15px;
+    font-weight: 700;
+    color: #0f172a;
+    margin-bottom: 4px;
+}
+
+.ctc-phone-price {
+    font-size: 15px;
+    font-weight: 700;
+    color: #2563eb;
+    margin-bottom: 12px;
+}
+
+.ctc-phone-cart-btn {
+    width: 100%;
+    padding: 8px;
+    background: #f1f5f9;
+    color: #94a3b8;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 600;
+    margin-bottom: 8px;
+    cursor: not-allowed;
+}
+
+.ctc-preview-mobile-btn {
+    width: 100% !important;
+    box-sizing: border-box !important;
+    justify-content: center !important;
+}
+
