@@ -89,7 +89,7 @@ class CTC_Chat_Button_Renderer {
 			<span class="ctc-chat-button-text"><?php echo esc_html( $args['text'] ); ?></span>
 		</a>
 		<?php
-		// GDPR Privacy Compliance Inline Notice
+		// GDPR Privacy Compliance Inline Notice.
 		$settings = get_option( 'ctc_chat_settings', array() );
 		$privacy  = isset( $settings['privacy_compliance'] ) ? $settings['privacy_compliance'] : array();
 		if ( ! empty( $privacy['enabled'] ) && ( $privacy['consent_mode'] ?? 'prompt' ) === 'inline_notice' && 'floating' !== $type ) {

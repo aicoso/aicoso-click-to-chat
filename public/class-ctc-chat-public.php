@@ -717,7 +717,7 @@ class CTC_Chat_Public {
 			$custom_css = trim( $this->settings['advanced']['custom_css'] );
 			if ( '' !== $custom_css ) {
 				echo "\n<!-- AICOSO Click to Chat Custom CSS -->\n";
-				echo "<style id=\"ctc-chat-custom-css\">\n" . wp_strip_all_tags( $custom_css ) . "\n</style>\n";
+				echo '<style id="ctc-chat-custom-css">' . "\n" . wp_strip_all_tags( $custom_css ) . "\n</style>\n"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- wp_strip_all_tags strips HTML tags from user custom CSS.
 			}
 		}
 	}

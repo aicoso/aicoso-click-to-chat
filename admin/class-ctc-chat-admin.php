@@ -1235,6 +1235,7 @@ class CTC_Chat_Admin {
 		);
 
 		// Sanitize and update thank you / order tracking page settings.
+		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Fields sanitized individually below.
 		$thankyou_post = isset( $_POST['ctc_chat_thankyou_page'] ) && is_array( $_POST['ctc_chat_thankyou_page'] ) ? wp_unslash( $_POST['ctc_chat_thankyou_page'] ) : array();
 		$settings['thankyou_page'] = array(
 			'enabled'               => isset( $thankyou_post['enabled'] ) ? true : false,
@@ -1738,7 +1739,7 @@ class CTC_Chat_Admin {
 						}
 					}
 				} catch ( Exception $e ) {
-					// Silently handle exception.
+					unset( $e );
 				}
 			}
 			$list[] = array(
