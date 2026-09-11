@@ -87,7 +87,7 @@ if ( ! empty( $whatsapp_numbers ) ) {
 						<!-- Default Number Checkbox -->
 						<div class="ctc-chat-default-section">
 							<label class="ctc-chat-checkbox-option">
-								<input type="checkbox" name="ctc_numbers[0][is_default]" id="ctc_numbers_default_1" value="1" class="ctc-chat-default-checkbox" />
+								<input type="checkbox" name="ctc_numbers[0][is_default]" id="ctc_numbers_default_1" value="1" checked="checked" class="ctc-chat-default-checkbox" />
 								<span><?php esc_html_e( 'Use as Default Number', 'aicoso-click-to-chat' ); ?></span>
 							</label>
 							<span class="ctc-chat-field-help"><?php esc_html_e( 'This number will be used as fallback for pages/products without specific assignments', 'aicoso-click-to-chat' ); ?></span>
@@ -150,7 +150,7 @@ if ( ! empty( $whatsapp_numbers ) ) {
 						</div>
 
 						<div class="ctc-chat-number-body">
-							<input type="hidden" name="ctc_chat_numbers[<?php echo esc_attr( $index ); ?>][id]" value="<?php echo esc_attr( $number['id'] ); ?>" />
+							<input type="hidden" name="ctc_numbers[<?php echo esc_attr( $index ); ?>][id]" value="<?php echo esc_attr( $number['id'] ); ?>" />
 
 							<div class="ctc-chat-fields-grid">
 								<div class="ctc-chat-field-group">

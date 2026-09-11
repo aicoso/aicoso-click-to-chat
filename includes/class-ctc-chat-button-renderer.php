@@ -65,8 +65,15 @@ class CTC_Chat_Button_Renderer {
 		$button_style = 'background-color: ' . esc_attr( $args['bg_color'] ) . '; color: ' . esc_attr( $args['text_color'] ) . ';';
 		$data_attrs   = self::build_data_attributes( $type, $context );
 
+		// esc_url() in WordPress core strips %0a and %0d, destroying WhatsApp line breaks.
+		// Protect %0A with a temporary token that survives esc_url(), then restore %0A.
+		$nl_token     = '__CTC_NL_TOKEN__';
+		$tokenized    = str_ireplace( '%0a', $nl_token, $url );
+		$sanitized    = esc_url( $tokenized );
+		$escaped_link = str_replace( $nl_token, '%0A', $sanitized );
+
 		?>
-		<a href="<?php echo esc_url( $url ); ?>"
+		<a href="<?php echo $escaped_link; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Escaped via esc_url with newline token preservation ?>"
 			class="<?php echo esc_attr( implode( ' ', $button_classes ) ); ?>"
 			style="<?php echo esc_attr( $button_style ); ?>"
 			target="_blank"

@@ -130,12 +130,20 @@
             });
         }
 
-        $variationForm.on('found_variation show_variation', function() {
+        $variationForm.on('found_variation', function(event, variation) {
+            if (variation && variation.variation_id) {
+                $productButton.attr('data-ctc-variation-id', variation.variation_id);
+            }
+            updateVariationUrl();
+        });
+
+        $variationForm.on('show_variation', function() {
             updateVariationUrl();
         });
 
         $variationForm.on('reset_data hide_variation', function() {
             $productButton.attr('href', originalUrl);
+            $productButton.removeAttr('data-ctc-variation-id');
         });
     }
 
