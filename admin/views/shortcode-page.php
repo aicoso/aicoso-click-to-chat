@@ -11,103 +11,27 @@ if ( ! defined( 'WPINC' ) ) {
 	die;
 }
 
+// phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound -- View variables are scoped to the including renderer.
+
 // Get plugin settings.
-$ctc_chat_settings = get_option( 'ctc_chat_settings', array() );
+$settings = get_option( 'ctc_chat_settings', array() );
 
 // Get button settings for defaults.
-$ctc_chat_button_settings = isset( $ctc_chat_settings['ctc_chat_button_settings'] ) ? $ctc_chat_settings['ctc_chat_button_settings'] : array();
-$ctc_chat_default_text = isset( $ctc_chat_button_settings['ctc_chat_text'] ) ? $ctc_chat_button_settings['ctc_chat_text'] : esc_html__( 'Order via WhatsApp', 'aicoso-click-to-chat' );
-$ctc_chat_default_bg_color = isset( $ctc_chat_button_settings['ctc_chat_bg_color'] ) ? $ctc_chat_button_settings['ctc_chat_bg_color'] : '#25D366';
-$ctc_chat_default_text_color = isset( $ctc_chat_button_settings['ctc_chat_text_color'] ) ? $ctc_chat_button_settings['ctc_chat_text_color'] : '#ffffff';
+$button_settings = isset( $settings['button_settings'] ) ? $settings['button_settings'] : array();
+$default_text = isset( $button_settings['text'] ) ? $button_settings['text'] : esc_html__( 'Order via WhatsApp', 'aicoso-click-to-chat' );
+$default_bg_color = isset( $button_settings['bg_color'] ) ? $button_settings['bg_color'] : '#25D366';
+$default_text_color = isset( $button_settings['text_color'] ) ? $button_settings['text_color'] : '#ffffff';
 
 // Get WhatsApp numbers.
-$ctc_chat_whatsapp_numbers = isset( $ctc_chat_settings['ctc_chat_whatsapp_numbers'] ) ? $ctc_chat_settings['ctc_chat_whatsapp_numbers'] : array();
+$whatsapp_numbers = isset( $settings['whatsapp_numbers'] ) ? $settings['whatsapp_numbers'] : array();
 ?>
 
-<div class="wrap ctc-chat-admin-container">
-	<div class="ctc-chat-admin-header">
-		<span class="ctc-chat-admin-logo dashicons dashicons-whatsapp"></span>
-		<h1 class="ctc-chat-admin-heading"><?php esc_html_e( 'WhatsApp Button Shortcode Builder', 'aicoso-click-to-chat' ); ?></h1>
-	</div>
-
-	<!-- Quick Instructions -->
-	<div class="ctc-chat-instructions-banner">
-		<h2><span class="dashicons dashicons-editor-code"></span> <?php esc_html_e( 'How to Use Shortcodes', 'aicoso-click-to-chat' ); ?></h2>
-		<p><?php esc_html_e( 'Create custom WhatsApp buttons and place them anywhere on your site using shortcodes.', 'aicoso-click-to-chat' ); ?></p>
-		<div class="ctc-chat-quick-steps">
-			<div class="ctc-chat-step">
-				<span class="ctc-chat-step-number">1</span>
-				<span><?php esc_html_e( 'Configure your button below', 'aicoso-click-to-chat' ); ?></span>
-			</div>
-			<div class="ctc-chat-step">
-				<span class="ctc-chat-step-number">2</span>
-				<span><?php esc_html_e( 'Copy the generated shortcode', 'aicoso-click-to-chat' ); ?></span>
-			</div>
-			<div class="ctc-chat-step">
-				<span class="ctc-chat-step-number">3</span>
-				<span><?php esc_html_e( 'Paste it in any post, page, or widget', 'aicoso-click-to-chat' ); ?></span>
-			</div>
-		</div>
-	</div>
-	
-	<?php
-	// Check if plugin is disabled or no numbers configured.
-	$ctc_chat_plugin_enabled = isset( $ctc_chat_settings['ctc_chat_plugin_enabled'] ) ? $ctc_chat_settings['ctc_chat_plugin_enabled'] : true;
-
-	// Check if there are any numbers with actual phone numbers configured.
-	$ctc_chat_has_valid_numbers = false;
-	if ( isset( $ctc_chat_settings['ctc_chat_whatsapp_numbers'] ) && ! empty( $ctc_chat_settings['ctc_chat_whatsapp_numbers'] ) ) {
-		foreach ( $ctc_chat_settings['ctc_chat_whatsapp_numbers'] as $ctc_chat_number ) {
-			if ( ! empty( $ctc_chat_number['ctc_chat_number'] ) ) {
-				$ctc_chat_has_valid_numbers = true;
-				break;
-			}
-		}
-	}
-
-	if ( ! $ctc_chat_plugin_enabled || ! $ctc_chat_has_valid_numbers ) :
-		?>
-	<div class="ctc-chat-admin-warning-box">
-		<?php if ( ! $ctc_chat_plugin_enabled ) : ?>
-		<div class="ctc-chat-warning-item">
-			<span class="ctc-chat-warning-icon">⚠️</span>
-			<div class="ctc-chat-warning-content">
-				<strong><?php esc_html_e( 'Warning:', 'aicoso-click-to-chat' ); ?></strong>
-				<?php
-				printf(
-					/* translators: %s: Link to Settings page */
-					esc_html__( 'The plugin is currently disabled. WhatsApp buttons will not appear on your website. %s to activate the plugin.', 'aicoso-click-to-chat' ),
-					'<a href="' . esc_url( admin_url( 'admin.php?page=click-to-chat' ) ) . '">' . esc_html__( 'Go to Settings', 'aicoso-click-to-chat' ) . '</a>'
-				);
-				?>
-			</div>
-		</div>
-		<?php endif; ?>
-
-		<?php if ( ! $ctc_chat_has_valid_numbers ) : ?>
-		<div class="ctc-chat-warning-item">
-			<span class="ctc-chat-warning-icon">⚠️</span>
-			<div class="ctc-chat-warning-content">
-				<strong><?php esc_html_e( 'Warning:', 'aicoso-click-to-chat' ); ?></strong>
-				<?php
-				printf(
-					/* translators: %s: Link to Numbers page */
-					esc_html__( 'No WhatsApp number configured! You need to add at least one WhatsApp number for the buttons to work. %s', 'aicoso-click-to-chat' ),
-					'<a href="' . esc_url( admin_url( 'admin.php?page=click-to-chat-numbers' ) ) . '">' . esc_html__( 'Add a number now →', 'aicoso-click-to-chat' ) . '</a>'
-				);
-				?>
-			</div>
-		</div>
-		<?php endif; ?>
-	</div>
-	<?php endif; ?>
-
-	<!-- Main Builder -->
-	<div class="ctc-chat-builder-wrapper">
+<!-- Main Builder -->
+<div class="ctc-chat-builder-wrapper ctc-settings-form">
 		<!-- Left Side: Configuration -->
 		<div class="ctc-chat-config-panel">
-			<h2 class="ctc-chat-panel-title"><span class="dashicons dashicons-admin-generic"></span> <?php esc_html_e( 'Button Configuration', 'aicoso-click-to-chat' ); ?></h2>
-
+			<h2 class="ctc-chat-panel-title"><span class="dashicons <?php echo esc_attr( $this->get_settings_icon( 'shortcode_panel' ) ); ?>" aria-hidden="true"></span> <?php esc_html_e( 'Button Configuration', 'aicoso-click-to-chat' ); ?></h2>
+			<div class="ctc-chat-config-panel__body">
 			<!-- Button Type Selection -->
 			<div class="ctc-chat-field-section">
 				<h3><?php esc_html_e( 'Button Type', 'aicoso-click-to-chat' ); ?></h3>
@@ -115,7 +39,7 @@ $ctc_chat_whatsapp_numbers = isset( $ctc_chat_settings['ctc_chat_whatsapp_number
 					<label class="ctc-chat-type-card">
 						<input type="radio" name="button_type" value="product" class="ctc-chat-shortcode-param" data-param="type" checked>
 						<div class="ctc-chat-type-card-inner">
-							<span class="ctc-chat-type-icon dashicons dashicons-products"></span>
+							<span class="ctc-chat-type-icon dashicons <?php echo esc_attr( $this->get_settings_icon( 'shortcode_type_product' ) ); ?>"></span>
 							<span class="ctc-chat-type-label"><?php esc_html_e( 'Product', 'aicoso-click-to-chat' ); ?></span>
 							<small><?php esc_html_e( 'For product pages', 'aicoso-click-to-chat' ); ?></small>
 						</div>
@@ -124,7 +48,7 @@ $ctc_chat_whatsapp_numbers = isset( $ctc_chat_settings['ctc_chat_whatsapp_number
 					<label class="ctc-chat-type-card">
 						<input type="radio" name="button_type" value="cart" class="ctc-chat-shortcode-param" data-param="type">
 						<div class="ctc-chat-type-card-inner">
-							<span class="ctc-chat-type-icon dashicons dashicons-cart"></span>
+							<span class="ctc-chat-type-icon dashicons <?php echo esc_attr( $this->get_settings_icon( 'shortcode_type_cart' ) ); ?>"></span>
 							<span class="ctc-chat-type-label"><?php esc_html_e( 'Cart', 'aicoso-click-to-chat' ); ?></span>
 							<small><?php esc_html_e( 'Include cart items', 'aicoso-click-to-chat' ); ?></small>
 						</div>
@@ -133,7 +57,7 @@ $ctc_chat_whatsapp_numbers = isset( $ctc_chat_settings['ctc_chat_whatsapp_number
 					<label class="ctc-chat-type-card">
 						<input type="radio" name="button_type" value="shop" class="ctc-chat-shortcode-param" data-param="type">
 						<div class="ctc-chat-type-card-inner">
-							<span class="ctc-chat-type-icon dashicons dashicons-store"></span>
+							<span class="ctc-chat-type-icon dashicons <?php echo esc_attr( $this->get_settings_icon( 'shortcode_type_shop' ) ); ?>"></span>
 							<span class="ctc-chat-type-label"><?php esc_html_e( 'Shop', 'aicoso-click-to-chat' ); ?></span>
 							<small><?php esc_html_e( 'Shop/category pages', 'aicoso-click-to-chat' ); ?></small>
 						</div>
@@ -142,7 +66,7 @@ $ctc_chat_whatsapp_numbers = isset( $ctc_chat_settings['ctc_chat_whatsapp_number
 					<label class="ctc-chat-type-card">
 						<input type="radio" name="button_type" value="floating" class="ctc-chat-shortcode-param" data-param="type">
 						<div class="ctc-chat-type-card-inner">
-							<span class="ctc-chat-type-icon dashicons dashicons-format-chat"></span>
+							<span class="ctc-chat-type-icon dashicons <?php echo esc_attr( $this->get_settings_icon( 'shortcode_type_general' ) ); ?>"></span>
 							<span class="ctc-chat-type-label"><?php esc_html_e( 'General', 'aicoso-click-to-chat' ); ?></span>
 							<small><?php esc_html_e( 'Simple contact', 'aicoso-click-to-chat' ); ?></small>
 						</div>
@@ -174,17 +98,17 @@ $ctc_chat_whatsapp_numbers = isset( $ctc_chat_settings['ctc_chat_whatsapp_number
 
 				<div class="ctc-chat-field-group">
 					<label for="ctc_chat_button_text"><?php esc_html_e( 'Button Text', 'aicoso-click-to-chat' ); ?></label>
-					<input type="text" id="ctc_chat_button_text" class="ctc-chat-shortcode-param" data-param="text" placeholder="<?php echo esc_attr( $ctc_chat_default_text ); ?>">
+					<input type="text" id="ctc_chat_button_text" class="ctc-chat-shortcode-param" data-param="text" placeholder="<?php echo esc_attr( $default_text ); ?>">
 				</div>
 
 				<div class="ctc-chat-color-fields">
 					<div class="ctc-chat-field-group">
 						<label><?php esc_html_e( 'Background', 'aicoso-click-to-chat' ); ?></label>
-						<input type="text" id="ctc_chat_bg_color" class="ctc-chat-color-field ctc-chat-shortcode-param" data-param="bg_color" value="<?php echo esc_attr( $ctc_chat_default_bg_color ); ?>">
+						<input type="text" id="ctc_chat_bg_color" class="ctc-chat-color-field ctc-chat-shortcode-param" data-param="bg_color" value="<?php echo esc_attr( $default_bg_color ); ?>">
 					</div>
 					<div class="ctc-chat-field-group">
 						<label><?php esc_html_e( 'Text Color', 'aicoso-click-to-chat' ); ?></label>
-						<input type="text" id="ctc_chat_text_color" class="ctc-chat-color-field ctc-chat-shortcode-param" data-param="text_color" value="<?php echo esc_attr( $ctc_chat_default_text_color ); ?>">
+						<input type="text" id="ctc_chat_text_color" class="ctc-chat-color-field ctc-chat-shortcode-param" data-param="text_color" value="<?php echo esc_attr( $default_text_color ); ?>">
 					</div>
 				</div>
 
@@ -222,14 +146,14 @@ $ctc_chat_whatsapp_numbers = isset( $ctc_chat_settings['ctc_chat_whatsapp_number
 					<?php esc_html_e( 'Advanced Options', 'aicoso-click-to-chat' ); ?>
 				</h3>
 				<div class="ctc-chat-advanced-content ctc-chat-hidden">
-					<?php if ( ! empty( $ctc_chat_whatsapp_numbers ) ) : ?>
+					<?php if ( ! empty( $whatsapp_numbers ) ) : ?>
 					<div class="ctc-chat-field-group">
 						<label><?php esc_html_e( 'Specific Number', 'aicoso-click-to-chat' ); ?></label>
 						<select class="ctc-chat-shortcode-param" data-param="show_number">
 							<option value=""><?php esc_html_e( 'Use default', 'aicoso-click-to-chat' ); ?></option>
-							<?php foreach ( $ctc_chat_whatsapp_numbers as $ctc_chat_number ) : ?>
-								<option value="<?php echo esc_attr( $ctc_chat_number['ctc_chat_id'] ); ?>">
-									<?php echo esc_html( $ctc_chat_number['ctc_chat_name'] . ' (' . $ctc_chat_number['ctc_chat_number'] . ')' ); ?>
+							<?php foreach ( $whatsapp_numbers as $number ) : ?>
+								<option value="<?php echo esc_attr( $number['id'] ); ?>">
+									<?php echo esc_html( $number['name'] . ' (' . $number['number'] . ')' ); ?>
 								</option>
 							<?php endforeach; ?>
 						</select>
@@ -248,12 +172,15 @@ $ctc_chat_whatsapp_numbers = isset( $ctc_chat_settings['ctc_chat_whatsapp_number
 				</div>
 			</div>
 		</div>
+		</div>
 
 		<!-- Right Side: Preview & Output -->
 		<div class="ctc-chat-preview-panel">
+			<h2 class="ctc-chat-panel-title"><span class="dashicons <?php echo esc_attr( $this->get_settings_icon( 'preview' ) ); ?>" aria-hidden="true"></span> <?php esc_html_e( 'Preview & Output', 'aicoso-click-to-chat' ); ?></h2>
+			<div class="ctc-chat-preview-panel__body">
 			<!-- Live Preview -->
 			<div class="ctc-chat-preview-section">
-				<h3><span class="dashicons dashicons-visibility"></span> <?php esc_html_e( 'Live Preview', 'aicoso-click-to-chat' ); ?></h3>
+				<h3><span class="dashicons <?php echo esc_attr( $this->get_settings_icon( 'preview' ) ); ?>"></span> <?php esc_html_e( 'Live Preview', 'aicoso-click-to-chat' ); ?></h3>
 				<div class="ctc-chat-preview-area">
 					<div id="ctc-chat-button-preview">
 						<!-- Preview will be generated here -->
@@ -263,11 +190,11 @@ $ctc_chat_whatsapp_numbers = isset( $ctc_chat_settings['ctc_chat_whatsapp_number
 
 			<!-- Generated Shortcode -->
 			<div class="ctc-chat-shortcode-section">
-				<h3><span class="dashicons dashicons-editor-code"></span> <?php esc_html_e( 'Your Shortcode', 'aicoso-click-to-chat' ); ?></h3>
+				<h3><span class="dashicons <?php echo esc_attr( $this->get_settings_icon( 'shortcode_output' ) ); ?>"></span> <?php esc_html_e( 'Your Shortcode', 'aicoso-click-to-chat' ); ?></h3>
 				<div class="ctc-chat-shortcode-box">
 					<code id="ctc-chat-generated-shortcode">[ctc_chat_button]</code>
-					<button type="button" class="ctc-chat-copy-btn" id="ctc-chat-copy-shortcode">
-						<span class="dashicons dashicons-clipboard"></span>
+					<button type="button" class="button button-secondary" id="ctc-chat-copy-shortcode">
+						<span class="dashicons <?php echo esc_attr( $this->get_settings_icon( 'shortcode_copy' ) ); ?>" aria-hidden="true"></span>
 						<span class="ctc-chat-copy-text"><?php esc_html_e( 'Copy', 'aicoso-click-to-chat' ); ?></span>
 					</button>
 				</div>
@@ -278,7 +205,7 @@ $ctc_chat_whatsapp_numbers = isset( $ctc_chat_settings['ctc_chat_whatsapp_number
 
 			<!-- Quick Examples -->
 			<div class="ctc-chat-examples-section">
-				<h3>💡 <?php esc_html_e( 'Quick Examples', 'aicoso-click-to-chat' ); ?></h3>
+				<h3><span class="dashicons <?php echo esc_attr( $this->get_settings_icon( 'shortcode_examples' ) ); ?>" aria-hidden="true"></span> <?php esc_html_e( 'Quick Examples', 'aicoso-click-to-chat' ); ?></h3>
 				<div class="ctc-chat-example-list">
 					<div class="ctc-chat-example">
 						<strong><?php esc_html_e( 'Basic button:', 'aicoso-click-to-chat' ); ?></strong>
@@ -301,7 +228,7 @@ $ctc_chat_whatsapp_numbers = isset( $ctc_chat_settings['ctc_chat_whatsapp_number
 
 			<!-- Help Tips -->
 			<div class="ctc-chat-help-section">
-				<h3><span class="dashicons dashicons-info"></span> <?php esc_html_e( 'Where to Use', 'aicoso-click-to-chat' ); ?></h3>
+				<h3><span class="dashicons <?php echo esc_attr( $this->get_settings_icon( 'shortcode_usage' ) ); ?>"></span> <?php esc_html_e( 'Where to Use', 'aicoso-click-to-chat' ); ?></h3>
 				<ul class="ctc-chat-help-list">
 					<li><span class="dashicons dashicons-yes"></span> <?php esc_html_e( 'In any WordPress post or page content', 'aicoso-click-to-chat' ); ?></li>
 					<li><span class="dashicons dashicons-yes"></span> <?php esc_html_e( 'In text widgets', 'aicoso-click-to-chat' ); ?></li>
@@ -310,6 +237,6 @@ $ctc_chat_whatsapp_numbers = isset( $ctc_chat_settings['ctc_chat_whatsapp_number
 					<li><span class="dashicons dashicons-yes"></span> <?php esc_html_e( 'Multiple buttons on the same page', 'aicoso-click-to-chat' ); ?></li>
 				</ul>
 			</div>
+			</div>
 		</div>
 	</div>
-</div>

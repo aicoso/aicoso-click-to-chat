@@ -1,0 +1,24 @@
+/**
+ * Click to Chat — wp-admin sidebar menu (global).
+ *
+ * Loaded on all admin screens so the custom SVG menu icon renders correctly.
+ */
+
+#toplevel_page_click-to-chat .wp-menu-image.dashicons-before::before {
+	content: none;
+	display: none;
+}
+
+#toplevel_page_click-to-chat .wp-menu-image img {
+	box-sizing: content-box;
+	display: block;
+	height: 20px;
+	margin: 0 auto;
+	object-fit: contain;
+	padding: 6px 0 0;
+	width: 20px;
+}
+
+#toplevel_page_click-to-chat .wp-menu-image {
+	background: none !important;
+}

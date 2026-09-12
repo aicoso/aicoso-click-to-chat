@@ -1,0 +1,458 @@
+(function ($) {
+    'use strict';
+
+    var currentRequest = 0;
+
+    function setActivePreset($active) {
+        var $presets = $('[data-range-preset]');
+        $presets.removeClass('button-primary').attr('aria-pressed', 'false');
+
+        if ($active && $active.length) {
+            $active.addClass('button-primary').attr('aria-pressed', 'true');
+        }
+    }
+
+    function applyPreset(days) {
+        var end = new Date();
+        var start = new Date();
+        start.setDate(end.getDate() - (days - 1));
+        $('#ctc-analytics-end').val(end.toISOString().slice(0, 10));
+        $('#ctc-analytics-start').val(start.toISOString().slice(0, 10));
+        refreshAll();
+    }
+
+    function renderKpis(data) {
+        if (!data || !data.total_clicks) {
+            return;
+        }
+
+        var kpiHelp = ctc_chat_analytics.i18n.kpi_help || {};
+        var cards = [
+            {
+                key: 'total_clicks',
+                label: 'WhatsApp Clicks',
+                help: kpiHelp.whatsapp_clicks || 'Total WhatsApp button clicks recorded during the selected period. Repeated clicks are included.'
+            },
+            {
+                key: 'unique_clicks',
+                label: 'Unique Clicks',
+                help: kpiHelp.unique_clicks || 'Clicks counted once per visitor, placement, product, and order within the 24-hour deduplication window.'
+            },
+            {
+                key: 'high_intent_clicks',
+                label: 'High-Intent Clicks',
+                help: kpiHelp.high_intent_clicks || 'WhatsApp clicks from Cart, Checkout, and Thank You pages during the selected period.'
+            },
+            {
+                key: 'cart_value_clicked',
+                label: 'Total Cart Value at Click',
+                format: 'currency',
+                help: kpiHelp.cart_value_clicked || 'Sum of cart totals captured when visitors clicked WhatsApp. This is not revenue or an average.'
+            },
+            {
+                key: 'mobile_share',
+                label: 'Mobile Share',
+                format: 'percent',
+                help: kpiHelp.mobile_share || 'Percentage of clicks from mobile devices among clicks with a recognized device type. When device data is unavailable, this metric is unavailable.'
+            }
+        ];
+
+        function escapeHtml(value) {
+            return $('<div>').text(value || '').html();
+        }
+
+        function renderMetricLabel(label, help, key) {
+            var tooltipId = 'ctc-kpi-help-' + key;
+            var about = ctc_chat_analytics.i18n.about || 'About';
+
+            return '<span class="ctc-analytics-kpi__label-text">' + escapeHtml(label) + '</span>'
+                + '<span class="ctc-analytics-kpi__tooltip">'
+                + '<button type="button" class="ctc-analytics-kpi__help"'
+                + ' aria-label="' + escapeHtml(about + ' ' + label) + '"'
+                + ' aria-describedby="' + tooltipId + '">'
+                + '<span class="dashicons dashicons-info-outline" aria-hidden="true"></span>'
+                + '</button>'
+                + '<span class="ctc-analytics-kpi__tooltip-content" id="' + tooltipId + '" role="tooltip">'
+                + escapeHtml(help)
+                + '</span>'
+                + '</span>';
+        }
+
+        function formatMetric(value, format) {
+            if (value === null || typeof value === 'undefined') {
+                return ctc_chat_analytics.i18n.unavailable || 'Data unavailable';
+            }
+
+            if (format === 'currency') {
+                return CtcAnalytics.formatCurrency(value);
+            }
+            if (format === 'percent') {
+                return CtcAnalytics.formatNumber(value) + '%';
+            }
+            return CtcAnalytics.formatNumber(value);
+        }
+
+        function renderComparison(metric, format) {
+            if (!data.comparison_enabled || metric.compare_value === null || typeof metric.compare_value === 'undefined') {
+                return '';
+            }
+
+            if (metric.delta_pct === null || typeof metric.delta_pct === 'undefined') {
+                return '<span class="ctc-analytics-kpi__delta ctc-analytics-kpi__delta--neutral">'
+                    + 'Prior period: ' + formatMetric(metric.compare_value, format)
+                    + '</span>';
+            }
+
+            var deltaClass = 'ctc-analytics-kpi__delta--neutral';
+            if (metric.delta_pct > 0) {
+                deltaClass = 'ctc-analytics-kpi__delta--positive';
+            } else if (metric.delta_pct < 0) {
+                deltaClass = 'ctc-analytics-kpi__delta--negative';
+            }
+
+            return '<span class="ctc-analytics-kpi__delta ' + deltaClass + '">'
+                + '<strong>' + (metric.delta_label || '\u2014') + '</strong>'
+                + ' vs prior ' + formatMetric(metric.compare_value, format)
+                + '</span>';
+        }
+
+        var html = '';
+
+        cards.forEach(function (card) {
+            var metric = data[card.key];
+            var value = formatMetric(metric.value, card.format);
+            var valueClass = metric.value === null || typeof metric.value === 'undefined'
+                ? ' ctc-analytics-kpi__value--unavailable'
+                : '';
+            var label = renderMetricLabel(card.label, card.help, card.key);
+
+            html += '<div class="ctc-analytics-kpi">';
+            html += '<span class="ctc-analytics-kpi__label">' + label + '</span>';
+            html += '<strong class="ctc-analytics-kpi__value' + valueClass + '">' + value + '</strong>';
+            html += renderComparison(metric, card.format);
+            html += '</div>';
+        });
+
+        if (data.top_placement && data.top_placement.label) {
+            html += '<div class="ctc-analytics-kpi ctc-analytics-kpi--tooltip-right">';
+            html += '<span class="ctc-analytics-kpi__label">'
+                + renderMetricLabel(
+                    'Top Placement',
+                    kpiHelp.top_placement || 'The button placement with the most WhatsApp clicks during the selected period.',
+                    'top-placement'
+                )
+                + '</span>';
+            html += '<strong class="ctc-analytics-kpi__value">' + data.top_placement.label + '</strong>';
+            html += '<span class="ctc-analytics-kpi__delta">' + CtcAnalytics.formatNumber(data.top_placement.count) + ' clicks</span>';
+            if (data.comparison_enabled && data.top_placement.compare_value !== null) {
+                html += '<span class="ctc-analytics-kpi__delta ctc-analytics-kpi__delta--neutral">'
+                    + 'Prior: ' + (data.top_placement.compare_label || '\u2014')
+                    + ' \u00b7 ' + CtcAnalytics.formatNumber(data.top_placement.compare_count) + ' clicks'
+                    + '</span>';
+            }
+            html += '</div>';
+        }
+
+        if (data.comparison_enabled && data.range) {
+            html += '<p class="ctc-analytics-kpis__comparison-period">Compared with '
+                + data.range.compare_start + ' to ' + data.range.compare_end + '</p>';
+        }
+
+        $('#ctc-analytics-kpis').html(html);
+    }
+
+    function renderTrend(payload) {
+        var $body = $('#ctc-analytics-trend .ctc-analytics-card__body');
+        if (!payload.series || !payload.series.length) {
+            $body.html('<p class="ctc-analytics-empty">' + ctc_chat_analytics.i18n.empty + '</p>');
+            return;
+        }
+
+        var max = 0;
+        payload.series.forEach(function (point) {
+            max = Math.max(max, parseInt(point.clicks, 10) || 0);
+        });
+
+        if (max < 1) {
+            $body.html('<p class="ctc-analytics-empty">' + ctc_chat_analytics.i18n.empty + '</p>');
+            return;
+        }
+
+        function getAxisMaximum(value, steps) {
+            var roughStep = value / steps;
+            var magnitude = Math.pow(10, Math.floor(Math.log(roughStep) / Math.LN10));
+            var normalized = roughStep / magnitude;
+            var rounded = normalized <= 1 ? 1
+                : (normalized <= 2 ? 2 : (normalized <= 2.5 ? 2.5 : (normalized <= 5 ? 5 : 10)));
+            return Math.max(steps, rounded * magnitude * steps);
+        }
+
+        function formatDateLabel(date, grouping) {
+            if (grouping === 'week') {
+                return date.slice(5);
+            }
+            if (grouping === 'month') {
+                return date;
+            }
+            return date.slice(5);
+        }
+
+        var tickCount = 4;
+        var axisMax = getAxisMaximum(max, tickCount);
+        var labelStep = Math.max(1, Math.ceil(payload.series.length / 7));
+        var html = '<div class="ctc-analytics-chart" role="figure" aria-label="WhatsApp clicks over time">';
+        html += '<div class="ctc-analytics-chart__y-axis" aria-hidden="true">';
+
+        for (var tick = tickCount; tick >= 0; tick--) {
+            html += '<span>' + Math.round((axisMax * tick) / tickCount) + '</span>';
+        }
+
+        html += '</div>';
+        html += '<div class="ctc-analytics-chart__scroll">';
+        html += '<div class="ctc-analytics-chart__canvas">';
+        html += '<div class="ctc-analytics-chart__plot">';
+
+        for (var grid = 0; grid <= tickCount; grid++) {
+            html += '<span class="ctc-analytics-chart__gridline" style="bottom:' + ((grid / tickCount) * 100) + '%"></span>';
+        }
+
+        html += '<div class="ctc-analytics-chart__bars">';
+        payload.series.forEach(function (point) {
+            var clicks = Math.max(0, parseInt(point.clicks, 10) || 0);
+            var height = (clicks / axisMax) * 100;
+            var date = $('<span/>').text(point.date).html();
+            var tooltip = date + ': ' + clicks + (clicks === 1 ? ' click' : ' clicks');
+            html += '<div class="ctc-analytics-chart__column">';
+            html += '<span class="ctc-analytics-chart__bar" style="height:' + height + '%"'
+                + (clicks > 0 ? ' tabindex="0"' : '')
+                + ' title="' + tooltip + '" aria-label="' + tooltip + '"></span>';
+            html += '</div>';
+        });
+        html += '</div></div>';
+        html += '<div class="ctc-analytics-chart__x-axis" aria-hidden="true">';
+        payload.series.forEach(function (point, index) {
+            var showLabel = index % labelStep === 0 || index === payload.series.length - 1;
+            var label = showLabel ? formatDateLabel(point.date, payload.grouping) : '';
+            html += '<span>' + $('<span/>').text(label).html() + '</span>';
+        });
+        html += '</div></div></div></div>';
+        $body.html(html);
+    }
+
+    function renderFunnel(payload) {
+        var $body = $('#ctc-analytics-funnel .ctc-analytics-card__body');
+        if (!payload.stages || !payload.stages.length) {
+            $body.html('<p class="ctc-analytics-empty">' + ctc_chat_analytics.i18n.empty + '</p>');
+            return;
+        }
+
+        var html = '<div class="ctc-analytics-funnel">';
+        payload.stages.forEach(function (stage, index) {
+            html += '<div class="ctc-analytics-funnel__stage">';
+            html += '<span class="ctc-analytics-funnel__label">' + stage.label + '</span>';
+            html += '<strong>' + CtcAnalytics.formatNumber(stage.count) + '</strong>';
+            html += '</div>';
+            if (index < payload.stages.length - 1) {
+                html += '<span class="ctc-analytics-funnel__arrow" aria-hidden="true">→</span>';
+            }
+        });
+        html += '</div>';
+        $body.html(html);
+    }
+
+    function renderTopTable($el, items, columns) {
+        if (!items || !items.length) {
+            $el.html('<p class="ctc-analytics-empty">' + ctc_chat_analytics.i18n.empty + '</p>');
+            return;
+        }
+
+        var html = '<table class="widefat striped ctc-analytics-table"><thead><tr>';
+        columns.forEach(function (col) {
+            html += '<th>' + col.label + '</th>';
+        });
+        html += '</tr></thead><tbody>';
+
+        items.forEach(function (item) {
+            html += '<tr>';
+            columns.forEach(function (col) {
+                var cell = col.render(item);
+                html += '<td>' + cell + '</td>';
+            });
+            html += '</tr>';
+        });
+
+        html += '</tbody></table>';
+        $el.html(html);
+    }
+
+    function showFilterNotice(message, type) {
+        var $notice = $('#ctc-analytics-filter-notice');
+
+        if (!message) {
+            $notice.prop('hidden', true).empty();
+            return;
+        }
+
+        var variant = type === 'error' ? 'error' : 'warning';
+        var icon = variant === 'error' ? 'dashicons-warning' : 'dashicons-info-outline';
+        var html = '<div class="ctc-admin-banner ctc-admin-banner--' + variant + '">'
+            + '<span class="ctc-admin-banner__icon dashicons ' + icon + '" aria-hidden="true"></span>'
+            + '<div class="ctc-admin-banner__message">'
+            + $('<span/>').text(message).html()
+            + '</div></div>';
+
+        $notice.html(html).prop('hidden', false);
+    }
+
+    function refreshAll(options) {
+        options = options || {};
+
+        if ($('[data-ctc-analytics="dashboard"]').data('enabled') !== 1) {
+            return;
+        }
+
+        var range = CtcAnalytics.getRange();
+        var requestId = ++currentRequest;
+        var outcomes = [];
+        var completed = 0;
+        var fallbackContext = null;
+
+        range.number_filter = $('#ctc-analytics-number').val() || 'all';
+
+        if (!options.keepNotice) {
+            showFilterNotice('');
+        }
+
+        CtcAnalytics.setLoading($('#ctc-analytics-kpis'));
+        CtcAnalytics.setLoading($('#ctc-analytics-trend .ctc-analytics-card__body'));
+        CtcAnalytics.setLoading($('#ctc-analytics-funnel .ctc-analytics-card__body'));
+        CtcAnalytics.setLoading($('#ctc-analytics-top-products .ctc-analytics-card__body'));
+        CtcAnalytics.setLoading($('#ctc-analytics-top-numbers .ctc-analytics-card__body'));
+
+        var requests = [
+            {
+                action: 'ctc_analytics_kpis',
+                data: range,
+                $target: $('#ctc-analytics-kpis'),
+                render: renderKpis
+            },
+            {
+                action: 'ctc_analytics_trend',
+                data: $.extend({ grouping: 'day' }, range),
+                $target: $('#ctc-analytics-trend .ctc-analytics-card__body'),
+                render: renderTrend
+            },
+            {
+                action: 'ctc_analytics_funnel',
+                data: range,
+                $target: $('#ctc-analytics-funnel .ctc-analytics-card__body'),
+                render: renderFunnel
+            },
+            {
+                action: 'ctc_analytics_top_products',
+                data: range,
+                $target: $('#ctc-analytics-top-products .ctc-analytics-card__body'),
+                render: function (data) {
+                    renderTopTable(
+                        $('#ctc-analytics-top-products .ctc-analytics-card__body'),
+                        data.items || [],
+                        [
+                            { label: 'Product', render: function (item) { return $('<span/>').text(item.name).html(); } },
+                            { label: 'Clicks', render: function (item) { return CtcAnalytics.formatNumber(item.clicks); } },
+                            { label: 'Unique', render: function (item) { return CtcAnalytics.formatNumber(item.unique_clicks); } }
+                        ]
+                    );
+                }
+            },
+            {
+                action: 'ctc_analytics_top_numbers',
+                data: range,
+                $target: $('#ctc-analytics-top-numbers .ctc-analytics-card__body'),
+                render: function (data) {
+                    renderTopTable(
+                        $('#ctc-analytics-top-numbers .ctc-analytics-card__body'),
+                        data.items || [],
+                        [
+                            { label: 'Number', render: function (item) { return $('<span/>').text(item.masked_number || item.label).html(); } },
+                            { label: 'Clicks', render: function (item) { return CtcAnalytics.formatNumber(item.clicks); } },
+                            { label: 'High-intent', render: function (item) { return CtcAnalytics.formatNumber(item.high_intent_clicks); } }
+                        ]
+                    );
+                }
+            }
+        ];
+
+        function finish(index, outcome) {
+            if (requestId !== currentRequest) {
+                return;
+            }
+
+            outcomes[index] = outcome;
+            if (outcome.ok && outcome.data.filter_context && outcome.data.filter_context.fell_back) {
+                fallbackContext = fallbackContext || outcome.data.filter_context;
+            }
+
+            completed++;
+            if (completed !== requests.length) {
+                return;
+            }
+
+            if (fallbackContext && !options.recovery) {
+                $('#ctc-analytics-number').val('all');
+                showFilterNotice(
+                    fallbackContext.message || ctc_chat_analytics.i18n.filter_unavailable,
+                    'warning'
+                );
+                refreshAll({ recovery: true, keepNotice: true });
+                return;
+            }
+
+            var failed = false;
+            requests.forEach(function (request, requestIndex) {
+                if (!outcomes[requestIndex] || !outcomes[requestIndex].ok) {
+                    failed = true;
+                    CtcAnalytics.setError(request.$target);
+                    return;
+                }
+                request.render(outcomes[requestIndex].data);
+            });
+
+            if (failed && options.recovery) {
+                showFilterNotice(ctc_chat_analytics.i18n.filter_retry_error, 'error');
+            }
+        }
+
+        requests.forEach(function (request, index) {
+            CtcAnalytics.post(request.action, request.data)
+                .done(function (result) {
+                    var response = result && result.response;
+                    if (!response || !response.success || !response.data) {
+                        finish(index, { ok: false });
+                        return;
+                    }
+                    finish(index, { ok: true, data: response.data });
+                })
+                .fail(function () {
+                    finish(index, { ok: false });
+                });
+        });
+    }
+
+    $(function () {
+        if (!$('[data-ctc-analytics="dashboard"]').length) {
+            return;
+        }
+
+        $('[data-range-preset]').on('click', function () {
+            setActivePreset($(this));
+            applyPreset(parseInt($(this).data('range-preset'), 10));
+        });
+
+        $('#ctc-analytics-start, #ctc-analytics-end').on('change', function () {
+            setActivePreset(null);
+        });
+
+        $('#ctc-analytics-apply').on('click', refreshAll);
+        refreshAll();
+    });
+})(jQuery);

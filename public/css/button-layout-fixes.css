@@ -16,48 +16,37 @@
 
 /* Prevent button text from wrapping */
 .woocommerce .ctc-whatsapp-button .ctc-button-text,
-.woocommerce .ctc-chat-whatsapp-button .ctc-chat-button-text,
-.woocommerce .ctc_chat_whatsapp_button .ctc_chat_button_text {
+.woocommerce .ctc-chat-whatsapp-button .ctc-chat-button-text {
     white-space: nowrap;
 }
 
 /* Single Product Page - Inline with Add to Cart */
+.woocommerce div.product form.cart:has(.ctc-chat-whatsapp-button) {
+    display: flex !important;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+}
+
 .single_add_to_cart_button + .ctc-chat-whatsapp-button,
 .ctc-chat-position-after-add-to-cart .ctc-chat-whatsapp-button {
     margin-left: 10px !important;
     vertical-align: middle;
 }
 
-/* Fix form layout on single products - only when WhatsApp button is present */
-.woocommerce div.product .ctc-chat-position-after-add-to-cart {
+.woocommerce div.product form.cart:has(.ctc-chat-whatsapp-button) .quantity {
+    flex: 0 0 auto;
+}
+
+.woocommerce div.product form.cart:has(.ctc-chat-whatsapp-button) button.single_add_to_cart_button {
+    flex: 0 0 auto;
+    margin-bottom: 0 !important;
+}
+
+.woocommerce div.product form.cart:has(.ctc-chat-whatsapp-button) .ctc-chat-position-after-add-to-cart {
+    flex: 0 0 auto;
     display: inline-flex;
     margin: 0 0 0 10px;
-    vertical-align: middle;
-}
-
-/* Ensure form elements don't interfere with navigation - LESS AGGRESSIVE */
-.woocommerce div.product form.cart {
-    clear: both;
-    margin: 1em 0;
-}
-
-.woocommerce div.product form.cart:after {
-    content: "";
-    display: table;
-    clear: both;
-}
-
-/* NEW: Prevent button containers from interfering with page layout */
-.woocommerce div.product .ctc-chat-whatsapp-button,
-.woocommerce div.product .ctc_chat_whatsapp_button {
-    position: relative;
-    z-index: 10;
-}
-
-/* Ensure proper spacing to avoid layout conflicts */
-.woocommerce div.product .ctc-chat-position-after-add-to-cart {
-    margin: 10px 0;
-    clear: none;
 }
 
 /* Below Add to Cart positioning */
@@ -68,11 +57,17 @@
     clear: both;
 }
 
-/* Variable products form fixes - LESS INTRUSIVE */
+/* Variable products form fixes */
+.woocommerce div.product form.variations_form .single_variation_wrap .woocommerce-variation-add-to-cart {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+}
+
 .variations_form .single_variation_wrap .ctc-chat-whatsapp-button {
-    display: inline-flex;
+    flex: 0 0 auto;
     margin: 0 0 0 10px !important;
-    vertical-align: middle;
 }
 
 /* Cart and Checkout Pages */
@@ -100,7 +95,7 @@
 /* Mobile Responsive Fixes */
 @media screen and (max-width: 768px) {
     /* Stack buttons vertically on mobile */
-    .woocommerce div.product form.cart,
+    .woocommerce div.product form.cart:has(.ctc-chat-whatsapp-button),
     .woocommerce div.product form.variations_form .single_variation_wrap .woocommerce-variation-add-to-cart {
         flex-direction: column !important;
         align-items: stretch !important;
@@ -130,8 +125,7 @@
 
 /* Ensure consistent button height */
 .woocommerce .button,
-.woocommerce .ctc-chat-whatsapp-button,
-.woocommerce .ctc_chat_whatsapp_button {
+.woocommerce .ctc-chat-whatsapp-button {
     min-height: 38px;
 }
 
@@ -140,14 +134,6 @@
     margin-bottom: 0;
 }
 
-.woocommerce ul.products li.product .ctc-chat-whatsapp-button,
-.woocommerce ul.products li.product .ctc_chat_whatsapp_button {
+.woocommerce ul.products li.product .ctc-chat-whatsapp-button {
     margin-top: 8px;
-}
-
-/* Ensure prefixed button classes work properly */
-.ctc_chat_whatsapp_button .ctc_chat_button_text {
-    display: inline-block !important;
-    font-weight: 600;
-    white-space: nowrap;
 }

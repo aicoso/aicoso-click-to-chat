@@ -22,15 +22,10 @@ jobs:
           tools: composer, cs2pr
 
       - name: Install Composer dependencies
-        run: |
-          composer require --dev squizlabs/php_codesniffer:"^3.7"
-          composer require --dev wp-coding-standards/wpcs:"^2.3"
-          composer require --dev phpcompatibility/phpcompatibility-wp:"^2.1"
-          composer require --dev dealerdirect/phpcodesniffer-composer-installer:"^0.7"
+        run: composer install --no-interaction --prefer-dist --no-progress
 
       - name: Configure PHPCS
         run: |
-          vendor/bin/phpcs --config-set installed_paths vendor/wp-coding-standards/wpcs,vendor/phpcompatibility/phpcompatibility-wp
           vendor/bin/phpcs -i
 
       - name: Run PHPCS
@@ -38,8 +33,8 @@ jobs:
           vendor/bin/phpcs --standard=./phpcs.xml --warning-severity=0 --report=checkstyle | cs2pr || true
           vendor/bin/phpcs --standard=./phpcs.xml --error-severity=1 --warning-severity=0
 
-      - name: Check PHP compatibility
+      - name: Confirm PHP compatibility tooling
         run: |
-          echo "PHP compatibility check requires PHPCompatibilityWP package."
-          echo "Skipping for now as we're using WordPress Coding Standards v2.3"
+          vendor/bin/phpcs -i | grep -q "PHPCompatibilityWP"
+          echo "PHPCompatibilityWP is installed from composer.json."
           echo "Plugin requires PHP 7.4+ as specified in readme.txt"

@@ -26,13 +26,16 @@ class CTC_Chat_WhatsApp_Link_Generator {
 	 *
 	 * @var array
 	 */
-	private $ctc_chat_settings;
+	private $settings;
 
 	/**
 	 * Constructor.
 	 */
 	public function __construct() {
-		$this->ctc_chat_settings = get_option( 'ctc_chat_settings', array() );
+		$this->settings = get_option( 'ctc_chat_settings', array() );
+		if ( ! empty( $this->settings['whatsapp_numbers'] ) ) {
+			$this->settings['whatsapp_numbers'] = ctc_chat_normalize_number_record_ids( $this->settings['whatsapp_numbers'] );
+		}
 	}
 
 	/**
@@ -43,9 +46,9 @@ class CTC_Chat_WhatsApp_Link_Generator {
 	 * @param int $page_id Optional page ID.
 	 * @return string The WhatsApp number to use.
 	 */
-	public function ctc_chat_get_whatsapp_number( $product_id = null, $category_id = null, $page_id = null ) {
+	public function get_whatsapp_number( $product_id = null, $category_id = null, $page_id = null ) {
 		// Return empty if no numbers configured.
-		if ( empty( $this->ctc_chat_settings['ctc_chat_whatsapp_numbers'] ) ) {
+		if ( empty( $this->settings['whatsapp_numbers'] ) ) {
 			return '';
 		}
 
@@ -55,29 +58,38 @@ class CTC_Chat_WhatsApp_Link_Generator {
 		if ( $product_id ) {
 			$product_id = absint( $product_id );
 
-			foreach ( $this->ctc_chat_settings['ctc_chat_whatsapp_numbers'] as $ctc_chat_number_data ) {
-				if ( ! empty( $ctc_chat_number_data['ctc_chat_assignments']['ctc_chat_products'] ) &&
-					 is_array( $ctc_chat_number_data['ctc_chat_assignments']['ctc_chat_products'] ) ) {
+			// Product meta override takes priority over global assignment rules.
+			$assigned_number_id = get_post_meta( $product_id, '_ctc_chat_assigned_number', true );
+			if ( ! empty( $assigned_number_id ) ) {
+				$assigned_number = $this->get_number_by_id( $assigned_number_id );
+				if ( ! empty( $assigned_number ) ) {
+					return $assigned_number;
+				}
+			}
+
+			foreach ( $this->settings['whatsapp_numbers'] as $number_data ) {
+				if ( ! empty( $number_data['assignments']['products'] ) &&
+					 is_array( $number_data['assignments']['products'] ) ) {
 					// Convert all stored IDs to integers for comparison.
-					$ctc_chat_assigned_products = array_map( 'absint', $ctc_chat_number_data['ctc_chat_assignments']['ctc_chat_products'] );
-					if ( in_array( $product_id, $ctc_chat_assigned_products, true ) ) {
-						return $ctc_chat_number_data['ctc_chat_number'];
+					$assigned_products = array_map( 'absint', $number_data['assignments']['products'] );
+					if ( in_array( $product_id, $assigned_products, true ) ) {
+						return $number_data['number'];
 					}
 				}
 			}
 
 			// If no direct product assignment, check product's categories.
-			$ctc_chat_terms = get_the_terms( $product_id, 'product_cat' );
-			if ( $ctc_chat_terms && ! is_wp_error( $ctc_chat_terms ) ) {
-				foreach ( $ctc_chat_terms as $term ) {
-					$ctc_chat_term_id = absint( $term->term_id );
-					foreach ( $this->ctc_chat_settings['ctc_chat_whatsapp_numbers'] as $ctc_chat_number_data ) {
-						if ( ! empty( $ctc_chat_number_data['ctc_chat_assignments']['ctc_chat_categories'] ) &&
-							 is_array( $ctc_chat_number_data['ctc_chat_assignments']['ctc_chat_categories'] ) ) {
+			$terms = get_the_terms( $product_id, 'product_cat' );
+			if ( $terms && ! is_wp_error( $terms ) ) {
+				foreach ( $terms as $term ) {
+					$term_id = absint( $term->term_id );
+					foreach ( $this->settings['whatsapp_numbers'] as $number_data ) {
+						if ( ! empty( $number_data['assignments']['categories'] ) &&
+							 is_array( $number_data['assignments']['categories'] ) ) {
 							// Convert all stored IDs to integers for comparison.
-							$ctc_chat_assigned_categories = array_map( 'absint', $ctc_chat_number_data['ctc_chat_assignments']['ctc_chat_categories'] );
-							if ( in_array( $ctc_chat_term_id, $ctc_chat_assigned_categories, true ) ) {
-								return $ctc_chat_number_data['ctc_chat_number'];
+							$assigned_categories = array_map( 'absint', $number_data['assignments']['categories'] );
+							if ( in_array( $term_id, $assigned_categories, true ) ) {
+								return $number_data['number'];
 							}
 						}
 					}
@@ -89,13 +101,13 @@ class CTC_Chat_WhatsApp_Link_Generator {
 		if ( $category_id ) {
 			$category_id = absint( $category_id );
 
-			foreach ( $this->ctc_chat_settings['ctc_chat_whatsapp_numbers'] as $ctc_chat_number_data ) {
-				if ( ! empty( $ctc_chat_number_data['ctc_chat_assignments']['ctc_chat_categories'] ) &&
-					 is_array( $ctc_chat_number_data['ctc_chat_assignments']['ctc_chat_categories'] ) ) {
+			foreach ( $this->settings['whatsapp_numbers'] as $number_data ) {
+				if ( ! empty( $number_data['assignments']['categories'] ) &&
+					 is_array( $number_data['assignments']['categories'] ) ) {
 					// Convert all stored IDs to integers for comparison.
-					$ctc_chat_assigned_categories = array_map( 'absint', $ctc_chat_number_data['ctc_chat_assignments']['ctc_chat_categories'] );
-					if ( in_array( $category_id, $ctc_chat_assigned_categories, true ) ) {
-						return $ctc_chat_number_data['ctc_chat_number'];
+					$assigned_categories = array_map( 'absint', $number_data['assignments']['categories'] );
+					if ( in_array( $category_id, $assigned_categories, true ) ) {
+						return $number_data['number'];
 					}
 				}
 			}
@@ -105,13 +117,13 @@ class CTC_Chat_WhatsApp_Link_Generator {
 		if ( $page_id ) {
 			$page_id = absint( $page_id );
 
-			foreach ( $this->ctc_chat_settings['ctc_chat_whatsapp_numbers'] as $ctc_chat_number_data ) {
-				if ( ! empty( $ctc_chat_number_data['ctc_chat_assignments']['ctc_chat_pages'] ) &&
-					 is_array( $ctc_chat_number_data['ctc_chat_assignments']['ctc_chat_pages'] ) ) {
+			foreach ( $this->settings['whatsapp_numbers'] as $number_data ) {
+				if ( ! empty( $number_data['assignments']['pages'] ) &&
+					 is_array( $number_data['assignments']['pages'] ) ) {
 					// Convert all stored IDs to integers for comparison.
-					$ctc_chat_assigned_pages = array_map( 'absint', $ctc_chat_number_data['ctc_chat_assignments']['ctc_chat_pages'] );
-					if ( in_array( $page_id, $ctc_chat_assigned_pages, true ) ) {
-						return $ctc_chat_number_data['ctc_chat_number'];
+					$assigned_pages = array_map( 'absint', $number_data['assignments']['pages'] );
+					if ( in_array( $page_id, $assigned_pages, true ) ) {
+						return $number_data['number'];
 					}
 				}
 			}
@@ -120,35 +132,115 @@ class CTC_Chat_WhatsApp_Link_Generator {
 		// No specific assignment found, now look for a default/fallback number.
 
 		// Step 1: Check if any number is explicitly marked as default.
-		foreach ( $this->ctc_chat_settings['ctc_chat_whatsapp_numbers'] as $ctc_chat_number_data ) {
-			if ( ! empty( $ctc_chat_number_data['ctc_chat_is_default'] ) ) {
-				return $ctc_chat_number_data['ctc_chat_number'];
+		foreach ( $this->settings['whatsapp_numbers'] as $number_data ) {
+			if ( ! empty( $number_data['is_default'] ) ) {
+				return $number_data['number'];
 			}
 		}
 
 		// Step 2: Look for a number with NO assignments (implicit default).
-		foreach ( $this->ctc_chat_settings['ctc_chat_whatsapp_numbers'] as $ctc_chat_number_data ) {
-			$ctc_chat_has_assignments = false;
+		foreach ( $this->settings['whatsapp_numbers'] as $number_data ) {
+			$has_assignments = false;
 
 			// Check if this number has any assignments.
-			if ( isset( $ctc_chat_number_data['ctc_chat_assignments'] ) && is_array( $ctc_chat_number_data['ctc_chat_assignments'] ) ) {
-				if ( ! empty( $ctc_chat_number_data['ctc_chat_assignments']['ctc_chat_products'] ) ||
-					 ! empty( $ctc_chat_number_data['ctc_chat_assignments']['ctc_chat_categories'] ) ||
-					 ! empty( $ctc_chat_number_data['ctc_chat_assignments']['ctc_chat_pages'] ) ) {
-					$ctc_chat_has_assignments = true;
+			if ( isset( $number_data['assignments'] ) && is_array( $number_data['assignments'] ) ) {
+				if ( ! empty( $number_data['assignments']['products'] ) ||
+					 ! empty( $number_data['assignments']['categories'] ) ||
+					 ! empty( $number_data['assignments']['pages'] ) ) {
+					$has_assignments = true;
 				}
 			}
 
 			// If this number has no assignments, use it as default.
-			if ( ! $ctc_chat_has_assignments ) {
-				return $ctc_chat_number_data['ctc_chat_number'];
+			if ( ! $has_assignments ) {
+				return $number_data['number'];
 			}
 		}
 
-		// Step 3: If all numbers have assignments and none match, return empty.
-		// This means no WhatsApp button should be shown on unassigned pages.
-		// unless a number is explicitly marked as default.
+		// Step 3: Fallback to the first configured number.
+		if ( ! empty( $this->settings['whatsapp_numbers'][0]['number'] ) ) {
+			return $this->settings['whatsapp_numbers'][0]['number'];
+		}
+
 		return '';
+	}
+
+	/**
+	 * Get configured WhatsApp number ID for context.
+	 *
+	 * @param int|null $product_id  Optional product ID.
+	 * @param int|null $category_id Optional category ID.
+	 * @param int|null $page_id     Optional page ID.
+	 * @return int
+	 */
+	public function get_number_id( $product_id = null, $category_id = null, $page_id = null ) {
+		$phone = $this->get_whatsapp_number( $product_id, $category_id, $page_id );
+
+		if ( empty( $phone ) ) {
+			return 0;
+		}
+
+		return ctc_chat_resolve_number_id_by_phone( $phone );
+	}
+
+	/**
+	 * Resolve a configured WhatsApp number by its settings ID.
+	 *
+	 * @param int|string $number_id The configured number ID.
+	 * @return string The WhatsApp number or empty string.
+	 */
+	private function get_number_by_id( $number_id ) {
+		$number_id = absint( $number_id );
+
+		if ( ! $number_id ) {
+			return '';
+		}
+
+		$numbers = ctc_chat_normalize_number_record_ids( $this->settings['whatsapp_numbers'] );
+		foreach ( $numbers as $number_data ) {
+			if ( absint( $number_data['id'] ) === $number_id && ! empty( $number_data['number'] ) ) {
+				return $number_data['number'];
+			}
+		}
+
+		return '';
+	}
+
+	/**
+	 * Check whether the WhatsApp button is hidden for a product.
+	 *
+	 * @param int $product_id Product ID.
+	 * @return bool
+	 */
+	public function is_product_button_hidden( $product_id ) {
+		$product_id = absint( $product_id );
+
+		if ( ! $product_id ) {
+			return false;
+		}
+
+		return '1' === get_post_meta( $product_id, '_ctc_chat_hide_button', true );
+	}
+
+	/**
+	 * Get the message template for a product, including per-product overrides.
+	 *
+	 * @param int    $product_id   Product ID.
+	 * @param string $template_key Settings template key.
+	 * @param string $fallback     Fallback template text.
+	 * @return string
+	 */
+	private function get_product_message_template( $product_id, $template_key, $fallback = '' ) {
+		$custom_message = get_post_meta( absint( $product_id ), '_ctc_chat_custom_message', true );
+		if ( ! empty( $custom_message ) ) {
+			return $custom_message;
+		}
+
+		if ( isset( $this->settings['message_templates'][ $template_key ] ) && '' !== $this->settings['message_templates'][ $template_key ] ) {
+			return $this->settings['message_templates'][ $template_key ];
+		}
+
+		return $fallback;
 	}
 
 	/**
@@ -156,58 +248,115 @@ class CTC_Chat_WhatsApp_Link_Generator {
 	 *
 	 * @param int   $product_id  The product ID.
 	 * @param array $variations  The selected variations (optional).
+	 * @param int   $quantity    The product quantity.
 	 * @return string The generated WhatsApp URL.
 	 */
-	public function ctc_chat_get_product_url( $product_id, $variations = array() ) {
-		// Check if WooCommerce is active and function exists.
+	public function get_product_url( $product_id = null, $variations = array(), $quantity = 1 ) {
+		// Check if WooCommerce is active.
 		if ( ! function_exists( 'wc_get_product' ) ) {
 			return '';
 		}
 
-		$ctc_chat_product = wc_get_product( $product_id );
+		$product = wc_get_product( $product_id );
 
-		if ( ! $ctc_chat_product || ! is_object( $ctc_chat_product ) || ! $ctc_chat_product instanceof WC_Product ) {
+		if ( ! $product || ! is_object( $product ) || ! $product instanceof WC_Product ) {
 			return '';
 		}
 
 		// Get the WhatsApp number to use.
 		// When on shop/category pages, also check for page/category specific assignments.
-		$ctc_chat_page_id = null;
-		$ctc_chat_category_id = null;
+		$page_id = null;
+		$category_id = null;
 
 		// Check if we're on shop page.
 		if ( function_exists( 'is_shop' ) && is_shop() ) {
-			$ctc_chat_page_id = wc_get_page_id( 'shop' );
+			$page_id = wc_get_page_id( 'shop' );
 		} elseif ( function_exists( 'is_product_category' ) && is_product_category() ) {
 			// Check if we're on a category page.
-			$ctc_chat_category = get_queried_object();
-			if ( $ctc_chat_category && isset( $ctc_chat_category->term_id ) ) {
-				$ctc_chat_category_id = $ctc_chat_category->term_id;
+			$category = get_queried_object();
+			if ( $category && isset( $category->term_id ) ) {
+				$category_id = $category->term_id;
 			}
 		} elseif ( is_page() ) {
 			// Check if we're on any other page.
-			$ctc_chat_page_id = get_the_ID();
+			$page_id = get_the_ID();
 		}
 
 		// Get the appropriate number considering all contexts.
-		$ctc_chat_whatsapp_number = $this->ctc_chat_get_whatsapp_number( $product_id, $ctc_chat_category_id, $ctc_chat_page_id );
+		$whatsapp_number = $this->get_whatsapp_number( $product_id, $category_id, $page_id );
 
-		if ( empty( $ctc_chat_whatsapp_number ) ) {
+		if ( empty( $whatsapp_number ) ) {
 			return '';
 		}
 
 		// Format the WhatsApp number (remove any non-numeric characters).
-		$ctc_chat_whatsapp_number = preg_replace( '/[^0-9]/', '', $ctc_chat_whatsapp_number );
+		$whatsapp_number = preg_replace( '/[^0-9]/', '', $whatsapp_number );
 
 		// Prepare the message.
 		if ( empty( $variations ) ) {
-			$ctc_chat_message = $this->ctc_chat_prepare_single_product_message( $ctc_chat_product );
+			$message = $this->prepare_single_product_message( $product, $quantity );
 		} else {
-			$ctc_chat_message = $this->ctc_chat_prepare_variation_message( $ctc_chat_product, $variations );
+			$message = $this->prepare_variation_message( $product, $variations, $quantity );
 		}
 
 		// Build the WhatsApp URL.
-		return $this->ctc_chat_build_whatsapp_url( $ctc_chat_whatsapp_number, $ctc_chat_message );
+		return $this->build_whatsapp_url( $whatsapp_number, $message );
+	}
+
+	/**
+	 * Generate a WhatsApp URL for out-of-stock back-in-stock notifications.
+	 *
+	 * @param int   $product_id Product ID.
+	 * @param array $variations Optional variation attributes.
+	 * @return string WhatsApp URL.
+	 */
+	public function get_back_in_stock_url( $product_id, $variations = array() ) {
+		if ( ! function_exists( 'wc_get_product' ) ) {
+			return '';
+		}
+
+		$product = wc_get_product( $product_id );
+		if ( ! $product || ! is_a( $product, 'WC_Product' ) ) {
+			return '';
+		}
+
+		$whatsapp_number = $this->get_whatsapp_number( $product_id, null, is_page() ? get_the_ID() : null );
+		if ( empty( $whatsapp_number ) ) {
+			return '';
+		}
+
+		$whatsapp_number = preg_replace( '/[^0-9]/', '', $whatsapp_number );
+
+		$template = ! empty( $this->settings['back_in_stock']['message'] )
+			? $this->settings['back_in_stock']['message']
+			: "Hello! I noticed that *{product_name}* (SKU: {product_sku}) is currently out of stock.\n\nPlease notify me via WhatsApp as soon as it is back in stock!\nLink: {product_url}";
+
+		$product_name = method_exists( $product, 'get_name' ) ? $product->get_name() : '';
+		$product_sku  = method_exists( $product, 'get_sku' ) && $product->get_sku() ? $product->get_sku() : 'N/A';
+		$product_url  = function_exists( 'get_permalink' ) ? get_permalink( $product->get_id() ) : '';
+
+		$variation_details = '';
+		if ( ! empty( $variations ) && is_array( $variations ) ) {
+			$details = array();
+			foreach ( $variations as $tax => $val ) {
+				$label = function_exists( 'wc_attribute_label' ) ? wc_attribute_label( str_replace( 'attribute_', '', $tax ), $product ) : $tax;
+				$details[] = $label . ': ' . $val;
+			}
+			$variation_details = implode( ', ', $details );
+		}
+
+		$replacements = array(
+			'{product_name}'      => $product_name,
+			'{product_sku}'       => $product_sku,
+			'{variation_details}' => $variation_details ? '(' . $variation_details . ')' : '',
+			'{product_url}'       => $product_url,
+		);
+
+		foreach ( $replacements as $key => $val ) {
+			$template = str_replace( $key, $val, $template );
+		}
+
+		return $this->build_whatsapp_url( $whatsapp_number, $template );
 	}
 
 	/**
@@ -216,51 +365,51 @@ class CTC_Chat_WhatsApp_Link_Generator {
 	 * @param int|null $category_id Optional category ID.
 	 * @return string The generated WhatsApp URL.
 	 */
-	public function ctc_chat_get_shop_url( $category_id = null ) {
+	public function get_shop_url( $category_id = null ) {
 		// Get the current page ID if we're on shop page.
-		$ctc_chat_page_id = null;
+		$page_id = null;
 		if ( function_exists( 'is_shop' ) && is_shop() ) {
-			$ctc_chat_page_id = wc_get_page_id( 'shop' );
+			$page_id = wc_get_page_id( 'shop' );
 		} elseif ( is_page() ) {
-			$ctc_chat_page_id = get_the_ID();
+			$page_id = get_the_ID();
 		}
 
 		// Get the WhatsApp number.
-		$ctc_chat_whatsapp_number = $this->ctc_chat_get_whatsapp_number( null, $category_id, $ctc_chat_page_id );
+		$whatsapp_number = $this->get_whatsapp_number( null, $category_id, $page_id );
 
-		if ( empty( $ctc_chat_whatsapp_number ) ) {
+		if ( empty( $whatsapp_number ) ) {
 			return '';
 		}
 
 		// Format the WhatsApp number.
-		$ctc_chat_whatsapp_number = preg_replace( '/[^0-9]/', '', $ctc_chat_whatsapp_number );
+		$whatsapp_number = preg_replace( '/[^0-9]/', '', $whatsapp_number );
 
 		// Get the message template. for shop page.
-		$ctc_chat_message_template = isset( $this->ctc_chat_settings['ctc_chat_message_templates']['ctc_chat_shop'] ) ?
-						   $this->ctc_chat_settings['ctc_chat_message_templates']['ctc_chat_shop'] :
+		$message_template = isset( $this->settings['message_templates']['shop'] ) ?
+						   $this->settings['message_templates']['shop'] :
 						   'Hi, I\'m interested in your products.';
 
 		// Replace placeholders. if any.
-		$ctc_chat_message = $ctc_chat_message_template;
+		$message = $message_template;
 
 		// Replace {current_page_url} placeholder.
-		if ( strpos( $ctc_chat_message, '{current_page_url}' ) !== false ) {
-			$ctc_chat_current_url = ( isset( $_SERVER['HTTPS'] ) && 'on' === $_SERVER['HTTPS'] ? 'https' : 'http' ) . '://';
-			$ctc_chat_current_url .= isset( $_SERVER['HTTP_HOST'] ) ? sanitize_text_field( wp_unslash( $_SERVER['HTTP_HOST'] ) ) : '';
-			$ctc_chat_current_url .= isset( $_SERVER['REQUEST_URI'] ) ? sanitize_text_field( wp_unslash( $_SERVER['REQUEST_URI'] ) ) : '';
-			$ctc_chat_message = str_replace( '{current_page_url}', $ctc_chat_current_url, $ctc_chat_message );
+		if ( strpos( $message, '{current_page_url}' ) !== false ) {
+			$current_url = ( isset( $_SERVER['HTTPS'] ) && 'on' === $_SERVER['HTTPS'] ? 'https' : 'http' ) . '://';
+			$current_url .= isset( $_SERVER['HTTP_HOST'] ) ? sanitize_text_field( wp_unslash( $_SERVER['HTTP_HOST'] ) ) : '';
+			$current_url .= isset( $_SERVER['REQUEST_URI'] ) ? sanitize_text_field( wp_unslash( $_SERVER['REQUEST_URI'] ) ) : '';
+			$message = str_replace( '{current_page_url}', $current_url, $message );
 		}
 
 		// Replace {category_name} placeholder if we have a category.
-		if ( $category_id && strpos( $ctc_chat_message, '{category_name}' ) !== false ) {
-			$ctc_chat_category = get_term( $category_id, 'product_cat' );
-			if ( $ctc_chat_category && ! is_wp_error( $ctc_chat_category ) ) {
-				$ctc_chat_message = str_replace( '{category_name}', $ctc_chat_category->name, $ctc_chat_message );
+		if ( $category_id && strpos( $message, '{category_name}' ) !== false ) {
+			$category = get_term( $category_id, 'product_cat' );
+			if ( $category && ! is_wp_error( $category ) ) {
+				$message = str_replace( '{category_name}', $category->name, $message );
 			}
 		}
 
 		// Build and return the WhatsApp URL.
-		return $this->ctc_chat_build_whatsapp_url( $ctc_chat_whatsapp_number, $ctc_chat_message );
+		return $this->build_whatsapp_url( $whatsapp_number, $message );
 	}
 
 	/**
@@ -268,58 +417,42 @@ class CTC_Chat_WhatsApp_Link_Generator {
 	 *
 	 * @return string The generated WhatsApp URL.
 	 */
-	public function ctc_chat_get_cart_url() {
+	public function get_cart_url() {
 		// Check if WooCommerce is active.
 		if ( ! function_exists( 'WC' ) ) {
 			return '';
 		}
 
-		// Check if WC() is available.
-		try {
-			$wc_instance = WC();
-			if ( ! $wc_instance ) {
-				return '';
-			}
-		} catch ( Exception $e ) {
-			return '';
-		}
-
 		// Check if cart is available.
-		if ( ! $wc_instance->cart || ! is_object( $wc_instance->cart ) ) {
+		if ( ! WC()->cart || ! is_object( WC()->cart ) ) {
 			return '';
 		}
 
 		// Check if we're on a specific page (cart page might have a page ID).
-		$ctc_chat_page_id = null;
+		$page_id = null;
 		if ( is_page() ) {
-			$ctc_chat_page_id = get_the_ID();
+			$page_id = get_the_ID();
 		}
 
 		// Get the WhatsApp number (will check page assignments if on a page).
-		$ctc_chat_whatsapp_number = $this->ctc_chat_get_whatsapp_number( null, null, $ctc_chat_page_id );
+		$whatsapp_number = $this->get_whatsapp_number( null, null, $page_id );
 
-		if ( empty( $ctc_chat_whatsapp_number ) ) {
+		if ( empty( $whatsapp_number ) ) {
 			return '';
 		}
 
 		// Format the WhatsApp number.
-		$ctc_chat_whatsapp_number = preg_replace( '/[^0-9]/', '', $ctc_chat_whatsapp_number );
+		$whatsapp_number = preg_replace( '/[^0-9]/', '', $whatsapp_number );
 
 		// Get the message template - using 'cart_checkout' as per the settings.
-		$ctc_chat_message_template = isset( $this->ctc_chat_settings['ctc_chat_message_templates']['ctc_chat_cart_checkout'] ) ?
-						   $this->ctc_chat_settings['ctc_chat_message_templates']['ctc_chat_cart_checkout'] : '';
-
-		// If no template, create a default cart message.
-		if ( empty( $ctc_chat_message_template ) ) {
-			$ctc_chat_message_template = esc_html__( 'Hello! I need help with my cart on your website.', 'aicoso-click-to-chat' );
-		}
+		$message_template = isset( $this->settings['message_templates']['cart_checkout'] ) ?
+						   $this->settings['message_templates']['cart_checkout'] : '';
 
 		// Replace placeholders.
-		$ctc_chat_message = $this->ctc_chat_replace_cart_placeholders( $ctc_chat_message_template );
-		$ctc_chat_message = $this->ctc_chat_replace_general_placeholders( $ctc_chat_message );
+		$message = $this->replace_cart_placeholders( $message_template );
 
 		// Build and return the WhatsApp URL.
-		return $this->ctc_chat_build_whatsapp_url( $ctc_chat_whatsapp_number, $ctc_chat_message );
+		return $this->build_whatsapp_url( $whatsapp_number, $message );
 	}
 
 	/**
@@ -328,45 +461,45 @@ class CTC_Chat_WhatsApp_Link_Generator {
 	 * @param int $order_id The order ID.
 	 * @return string The generated WhatsApp URL.
 	 */
-	public function ctc_chat_get_thankyou_url( $order_id ) {
+	public function get_thankyou_url( $order_id ) {
 		// Check if WooCommerce is active.
 		if ( ! function_exists( 'wc_get_order' ) ) {
 			return '';
 		}
 
 		// Get the order.
-		$ctc_chat_order = wc_get_order( $order_id );
+		$order = wc_get_order( $order_id );
 
 		// Check if order is valid.
-		if ( ! $ctc_chat_order || ! is_object( $ctc_chat_order ) || ! $ctc_chat_order instanceof WC_Order ) {
+		if ( ! $order || ! is_object( $order ) || ! $order instanceof WC_Order ) {
 			return '';
 		}
 
 		// Check if we're on a specific page (thank you page might have a page ID).
-		$ctc_chat_page_id = null;
+		$page_id = null;
 		if ( is_page() ) {
-			$ctc_chat_page_id = get_the_ID();
+			$page_id = get_the_ID();
 		}
 
 		// Get the WhatsApp number (will check page assignments if on a page).
-		$ctc_chat_whatsapp_number = $this->ctc_chat_get_whatsapp_number( null, null, $ctc_chat_page_id );
+		$whatsapp_number = $this->get_whatsapp_number( null, null, $page_id );
 
-		if ( empty( $ctc_chat_whatsapp_number ) ) {
+		if ( empty( $whatsapp_number ) ) {
 			return '';
 		}
 
 		// Format the WhatsApp number.
-		$ctc_chat_whatsapp_number = preg_replace( '/[^0-9]/', '', $ctc_chat_whatsapp_number );
+		$whatsapp_number = preg_replace( '/[^0-9]/', '', $whatsapp_number );
 
 		// Get the message template.
-		$ctc_chat_message_template = isset( $this->ctc_chat_settings['ctc_chat_message_templates']['ctc_chat_thank_you'] ) ?
-						   $this->ctc_chat_settings['ctc_chat_message_templates']['ctc_chat_thank_you'] : '';
+		$message_template = isset( $this->settings['message_templates']['thank_you'] ) ?
+						   $this->settings['message_templates']['thank_you'] : '';
 
 		// Replace placeholders.
-		$ctc_chat_message = $this->ctc_chat_replace_order_placeholders( $ctc_chat_message_template, $ctc_chat_order );
+		$message = $this->replace_order_placeholders( $message_template, $order );
 
 		// Build and return the WhatsApp URL.
-		return $this->ctc_chat_build_whatsapp_url( $ctc_chat_whatsapp_number, $ctc_chat_message );
+		return $this->build_whatsapp_url( $whatsapp_number, $message );
 	}
 
 	/**
@@ -374,57 +507,156 @@ class CTC_Chat_WhatsApp_Link_Generator {
 	 *
 	 * @return string The generated WhatsApp URL.
 	 */
-	public function ctc_chat_get_floating_url() {
+	public function get_floating_url() {
 		// Get current context for number selection.
-		$ctc_chat_page_id = null;
-		$ctc_chat_category_id = null;
-		$ctc_chat_product_id = null;
+		$page_id = null;
+		$category_id = null;
+		$product_id = null;
 
 		// Check if we're on a product page.
 		if ( function_exists( 'is_product' ) && is_product() ) {
 			global $product;
 			if ( $product && is_object( $product ) ) {
-				$ctc_chat_product_id = $product->get_id();
+				$product_id = $product->get_id();
 			}
 			// Check if we're on shop page.
 		} elseif ( function_exists( 'is_shop' ) && is_shop() ) {
-			$ctc_chat_page_id = wc_get_page_id( 'shop' );
+			$page_id = wc_get_page_id( 'shop' );
 			// Check if we're on a category page.
 		} elseif ( function_exists( 'is_product_category' ) && is_product_category() ) {
-			$ctc_chat_category = get_queried_object();
-			if ( $ctc_chat_category && isset( $ctc_chat_category->term_id ) ) {
-				$ctc_chat_category_id = $ctc_chat_category->term_id;
+			$category = get_queried_object();
+			if ( $category && isset( $category->term_id ) ) {
+				$category_id = $category->term_id;
 			}
 			// Check if we're on cart page.
 		} elseif ( function_exists( 'is_cart' ) && is_cart() ) {
-			$ctc_chat_page_id = wc_get_page_id( 'cart' );
+			$page_id = wc_get_page_id( 'cart' );
 			// Check if we're on checkout page.
 		} elseif ( function_exists( 'is_checkout' ) && is_checkout() ) {
-			$ctc_chat_page_id = wc_get_page_id( 'checkout' );
+			$page_id = wc_get_page_id( 'checkout' );
 			// Check if we're on any other page.
 		} elseif ( is_page() ) {
-			$ctc_chat_page_id = get_the_ID();
+			$page_id = get_the_ID();
 		}
 
 		// Get the WhatsApp number considering all contexts.
-		$ctc_chat_whatsapp_number = $this->ctc_chat_get_whatsapp_number( $ctc_chat_product_id, $ctc_chat_category_id, $ctc_chat_page_id );
+		$whatsapp_number = $this->get_whatsapp_number( $product_id, $category_id, $page_id );
 
-		if ( empty( $ctc_chat_whatsapp_number ) ) {
+		if ( empty( $whatsapp_number ) ) {
 			return '';
 		}
 
 		// Format the WhatsApp number.
-		$ctc_chat_whatsapp_number = preg_replace( '/[^0-9]/', '', $ctc_chat_whatsapp_number );
+		$whatsapp_number = preg_replace( '/[^0-9]/', '', $whatsapp_number );
 
 		// Get the message template.
-		$ctc_chat_message_template = isset( $this->ctc_chat_settings['ctc_chat_message_templates']['ctc_chat_floating'] ) ?
-						   $this->ctc_chat_settings['ctc_chat_message_templates']['ctc_chat_floating'] : '';
+		$message_template = isset( $this->settings['message_templates']['floating'] ) ?
+						   $this->settings['message_templates']['floating'] : '';
 
 		// Replace placeholders.
-		$ctc_chat_message = $this->ctc_chat_replace_general_placeholders( $ctc_chat_message_template );
+		$message = $this->replace_general_placeholders( $message_template );
 
 		// Build and return the WhatsApp URL.
-		return $this->ctc_chat_build_whatsapp_url( $ctc_chat_whatsapp_number, $ctc_chat_message );
+		return $this->build_whatsapp_url( $whatsapp_number, $message );
+	}
+
+	/**
+	 * Get the discount description for a coupon code.
+	 *
+	 * @param string $coupon_code The coupon code.
+	 * @return string
+	 */
+	public function get_coupon_discount_description( $coupon_code ) {
+		$coupon_code = trim( $coupon_code );
+		if ( ! empty( $coupon_code ) && class_exists( 'WC_Coupon' ) ) {
+			try {
+				$coupon = new WC_Coupon( $coupon_code );
+				if ( $coupon->get_id() ) {
+					$amount = $coupon->get_amount();
+					$type   = $coupon->get_discount_type();
+					if ( 'percent' === $type ) {
+						return $amount . '% OFF';
+					} elseif ( 'fixed_cart' === $type || 'fixed_product' === $type ) {
+						return function_exists( 'wc_price' ) ? wp_strip_all_tags( wc_price( $amount ) ) . ' OFF' : '$' . $amount . ' OFF';
+					}
+				}
+			} catch ( Exception $e ) {
+				// Silently handle exception.
+			}
+		}
+
+		return ! empty( $this->settings['coupon_engine']['custom_discount'] )
+			? $this->settings['coupon_engine']['custom_discount']
+			: 'Special Discount';
+	}
+
+	/**
+	 * Generate WhatsApp URL for claiming a discount coupon.
+	 *
+	 * @param int|null $product_id Optional product ID if on product page.
+	 * @return string The generated WhatsApp URL.
+	 */
+	public function get_coupon_claim_url( $product_id = null ) {
+		$coupon_settings = isset( $this->settings['coupon_engine'] ) ? $this->settings['coupon_engine'] : array();
+		$coupon_code     = ! empty( $coupon_settings['coupon_code'] ) ? $coupon_settings['coupon_code'] : 'SPECIAL';
+		$discount_amount = $this->get_coupon_discount_description( $coupon_code );
+
+		$default_message = "🎁 *Special Discount Claim*\n\nHello! I'd like to claim my discount coupon: *{coupon_code}* ({discount_amount})\n\n*Product:* {product_name}\n*Page:* {current_page_url}\n\nCan you please assist me with applying this discount to my order? Thank you!";
+
+		$message_template = ! empty( $coupon_settings['message'] )
+			? $coupon_settings['message']
+			: $default_message;
+
+		// Convert any literal escaped newlines to real newlines.
+		$message_template = str_replace( array( '\r\n', '\n', "\\r\\n", "\\n" ), "\n", $message_template );
+
+		// Replace tokens.
+		$product_name = '';
+		$product_sku  = '';
+		if ( $product_id && function_exists( 'wc_get_product' ) ) {
+			$product = wc_get_product( $product_id );
+			if ( $product ) {
+				$product_name = $product->get_name();
+				$product_sku  = $product->get_sku();
+			}
+		}
+
+		// If product_name is empty, remove any line mentioning {product_name} so we do not leave an empty "*Product:* " line.
+		if ( empty( $product_name ) ) {
+			$message_template = preg_replace( '/^[^\n]*\{product_name\}[^\n]*\n?/m', '', $message_template );
+		}
+
+		$current_url = ( isset( $_SERVER['HTTPS'] ) && 'on' === $_SERVER['HTTPS'] ? 'https' : 'http' ) . '://';
+		$current_url .= isset( $_SERVER['HTTP_HOST'] ) ? sanitize_text_field( wp_unslash( $_SERVER['HTTP_HOST'] ) ) : '';
+		$current_url .= isset( $_SERVER['REQUEST_URI'] ) ? sanitize_text_field( wp_unslash( $_SERVER['REQUEST_URI'] ) ) : '';
+
+		$replacements = array(
+			'{coupon_code}'      => $coupon_code,
+			'{discount_amount}'  => $discount_amount,
+			'{discount_value}'   => $discount_amount,
+			'{product_name}'     => $product_name,
+			'{product_sku}'      => $product_sku,
+			'{current_page_url}' => $current_url,
+		);
+
+		foreach ( $replacements as $placeholder => $value ) {
+			$message_template = str_replace( $placeholder, $value, $message_template );
+		}
+
+		// Ensure proper spacing before URL/Page if it was cramped in previous template versions.
+		$message_template = preg_replace( '/(?<!\n)\nPage:/', "\n\nPage:", $message_template );
+		$message_template = preg_replace( '/(?<!\n)\n\*Page:\*/', "\n\n*Page:*", $message_template );
+
+		// Normalize multiple consecutive line breaks down to double line breaks.
+		$message_template = preg_replace( "/\n{3,}/", "\n\n", trim( $message_template ) );
+
+		$whatsapp_number = $this->get_whatsapp_number( $product_id );
+		if ( empty( $whatsapp_number ) ) {
+			return '';
+		}
+
+		$whatsapp_number = preg_replace( '/[^0-9]/', '', $whatsapp_number );
+		return $this->build_whatsapp_url( $whatsapp_number, $message_template );
 	}
 
 	/**
@@ -434,24 +666,28 @@ class CTC_Chat_WhatsApp_Link_Generator {
 	 * @param string $message The message to send.
 	 * @return string The complete WhatsApp URL.
 	 */
-	private function ctc_chat_build_whatsapp_url( $number, $message ) {
+	private function build_whatsapp_url( $number, $message ) {
+		// Normalize line breaks to standard Unix \n so Windows \r\n does not result in stray %0D.
+		$normalized_message = str_replace( array( "\r\n", "\r" ), "\n", $message );
+
 		// Decode HTML entities in the message.
-		$ctc_chat_decoded_message = html_entity_decode( $message, ENT_QUOTES | ENT_HTML5, 'UTF-8' );
+		$decoded_message = html_entity_decode( $normalized_message, ENT_QUOTES | ENT_HTML5, 'UTF-8' );
 
 		// URL encode the message (rawurlencode will properly handle newlines as %0A).
-		$ctc_chat_encoded_message = rawurlencode( $ctc_chat_decoded_message );
+		$encoded_message = rawurlencode( $decoded_message );
 
 		// Build the WhatsApp URL.
-		return 'https://wa.me/' . $number . '?text=' . $ctc_chat_encoded_message;
+		return 'https://wa.me/' . $number . '?text=' . $encoded_message;
 	}
 
 	/**
 	 * Prepare message for a single product.
 	 *
-	 * @param WC_Product $product The product object.
+	 * @param WC_Product $product  The product object.
+	 * @param int        $quantity Optional product quantity.
 	 * @return string The prepared message.
 	 */
-	private function ctc_chat_prepare_single_product_message( $product ) {
+	private function prepare_single_product_message( $product, $quantity = 1 ) {
 		// Check if product is valid.
 		if ( ! is_object( $product ) || ! $product instanceof WC_Product ) {
 			return '';
@@ -459,48 +695,55 @@ class CTC_Chat_WhatsApp_Link_Generator {
 
 		// Always use single_product template for individual products.
 		// This ensures consistency when clicking on product-specific WhatsApp buttons.
-		$ctc_chat_template_key = 'ctc_chat_single_product';
+		$template_key = 'single_product';
 
-		// Get the message template. with fallback.
-		$ctc_chat_message_template = '';
-		if ( isset( $this->ctc_chat_settings['ctc_chat_message_templates'][ $ctc_chat_template_key ] ) ) {
-			$ctc_chat_message_template = $this->ctc_chat_settings['ctc_chat_message_templates'][ $ctc_chat_template_key ];
-		}
+		// Get the message template with product override and fallback.
+		$message_template = $this->get_product_message_template(
+			$product->get_id(),
+			$template_key,
+			"Hello! I'm interested in the product: *{product_name}*\nPrice: {price}\nURL: {product_url}\n\nDo you have this item in stock? I'd like to get more information."
+		);
 
-		// If no template is set, use default template.
-		if ( empty( $ctc_chat_message_template ) ) {
-			$ctc_chat_message_template = "Hello! I'm interested in the product: *{product_name}*\nPrice: {price}\nURL: {product_url}\n\nDo you have this item in stock? I'd like to get more information.";
+		if ( empty( $message_template ) ) {
+			return '';
 		}
 
 		// Get product data safely.
-		$ctc_chat_product_name = '';
-		$ctc_chat_product_price = 0;
-		$ctc_chat_product_url = '';
+		$product_name  = '';
+		$product_price = 0;
+		$product_url   = '';
 
 		if ( method_exists( $product, 'get_name' ) ) {
-			$ctc_chat_product_name = $product->get_name();
+			$product_name = $product->get_name();
 		}
 
 		if ( method_exists( $product, 'get_price' ) ) {
-			$ctc_chat_product_price = $product->get_price();
+			$product_price = $product->get_price();
 		}
 
 		if ( method_exists( $product, 'get_id' ) && function_exists( 'get_permalink' ) ) {
-			$ctc_chat_product_url = get_permalink( $product->get_id() );
+			$product_url = get_permalink( $product->get_id() );
 		}
+
+		$quantity     = max( 1, absint( $quantity ) );
+		$total_price  = (float) $product_price * $quantity;
+		$product_sku  = method_exists( $product, 'get_sku' ) && $product->get_sku() ? $product->get_sku() : 'N/A';
 
 		// Build replacements for single product template.
-		$ctc_chat_replacements = array(
-			'{product_name}' => $ctc_chat_product_name,
-			'{price}'        => wp_strip_all_tags( wc_price( $ctc_chat_product_price ) ),
-			'{product_url}'  => $ctc_chat_product_url,
+		$replacements = array(
+			'{product_name}' => $product_name,
+			'{product_sku}'  => $product_sku,
+			'{price}'        => wp_strip_all_tags( wc_price( $product_price ) ),
+			'{quantity}'     => (string) $quantity,
+			'{order_total}'  => wp_strip_all_tags( wc_price( $total_price ) ),
+			'{product_url}'  => $product_url,
 		);
 
-		foreach ( $ctc_chat_replacements as $ctc_chat_placeholder => $ctc_chat_value ) {
-			$ctc_chat_message_template = str_replace( $ctc_chat_placeholder, $ctc_chat_value, $ctc_chat_message_template );
+		foreach ( $replacements as $placeholder => $value ) {
+			$message_template = str_replace( $placeholder, $value, $message_template );
 		}
 
-		return $ctc_chat_message_template;
+		return $message_template;
 	}
 
 	/**
@@ -510,7 +753,7 @@ class CTC_Chat_WhatsApp_Link_Generator {
 	 * @param array      $variations The selected variations.
 	 * @return string The prepared message.
 	 */
-	private function ctc_chat_prepare_variation_message( $product, $variations ) {
+	private function prepare_variation_message( $product, $variations ) {
 		// Check if product is valid.
 		if ( ! is_object( $product ) || ! $product instanceof WC_Product ) {
 			return '';
@@ -521,58 +764,65 @@ class CTC_Chat_WhatsApp_Link_Generator {
 			$variations = array();
 		}
 
-		// Get the message template.
-		$ctc_chat_message_template = isset( $this->ctc_chat_settings['ctc_chat_message_templates']['ctc_chat_variations'] ) ?
-						   $this->ctc_chat_settings['ctc_chat_message_templates']['ctc_chat_variations'] : '';
+		// Get the message template, including per-product overrides.
+		$message_template = $this->get_product_message_template(
+			$product->get_id(),
+			'variations',
+			"Hello! I'm interested in the product: *{product_name}*\nSelected options: {variation_details}\nPrice: {variation_price}\nURL: {product_url}\n\nIs this combination available for immediate shipping?"
+		);
+
+		if ( empty( $message_template ) ) {
+			return '';
+		}
 
 		// Get variation details safely.
-		$ctc_chat_variation_details = '';
+		$variation_details = '';
 		if ( function_exists( 'wc_attribute_label' ) ) {
 			foreach ( $variations as $attribute => $value ) {
 				if ( is_string( $attribute ) && is_string( $value ) ) {
 					$attribute_label = wc_attribute_label( str_replace( 'attribute_', '', $attribute ), $product );
-					$ctc_chat_variation_details .= $attribute_label . ': ' . $value . ', ';
+					$variation_details .= $attribute_label . ': ' . $value . ', ';
 				}
 			}
-			$ctc_chat_variation_details = rtrim( $ctc_chat_variation_details, ', ' );
+			$variation_details = rtrim( $variation_details, ', ' );
 		}
 
 		// Get product data safely.
-		$ctc_chat_product_name = '';
-		$ctc_chat_product_price = 0;
-		$ctc_chat_product_url = '';
-		$ctc_chat_variation_price = 0;
+		$product_name = '';
+		$product_price = 0;
+		$product_url = '';
+		$variation_price = 0;
 
 		if ( method_exists( $product, 'get_name' ) ) {
-			$ctc_chat_product_name = $product->get_name();
+			$product_name = $product->get_name();
 		}
 
 		if ( method_exists( $product, 'get_price' ) ) {
-			$ctc_chat_product_price = $product->get_price();
-			$ctc_chat_variation_price = $ctc_chat_product_price;
+			$product_price = $product->get_price();
+			$variation_price = $product_price;
 		}
 
 		if ( method_exists( $product, 'get_id' ) && function_exists( 'get_permalink' ) ) {
-			$ctc_chat_product_url = get_permalink( $product->get_id() );
+			$product_url = get_permalink( $product->get_id() );
 		}
 
 		// Try to get the variation price if possible.
 		if ( method_exists( $product, 'is_type' ) && $product->is_type( 'variable' ) && function_exists( 'wc_get_product' ) ) {
 			// Use the recommended method to find matching variation.
-			$ctc_chat_variation_id = 0;
+			$variation_id = 0;
 
 			// Find matching variation using WooCommerce's data store API.
 			if ( function_exists( 'WC' ) ) {
 				try {
 					// Use the WC_Product_Data_Store_CPT approach which is the modern method.
 					if ( class_exists( 'WC_Product_Data_Store_CPT' ) ) {
-						$ctc_chat_data_store = new WC_Product_Data_Store_CPT();
-						$ctc_chat_variation_id = $ctc_chat_data_store->find_matching_product_variation( $product, $variations );
+						$data_store = new WC_Product_Data_Store_CPT();
+						$variation_id = $data_store->find_matching_product_variation( $product, $variations );
 					} elseif ( class_exists( 'WC_Data_Store' ) ) {
 						// Alternative approach using WC_Data_Store.
-						$ctc_chat_data_store = WC_Data_Store::load( 'product' );
-						if ( is_object( $ctc_chat_data_store ) && method_exists( $ctc_chat_data_store, 'find_matching_product_variation' ) ) {
-							$ctc_chat_variation_id = $ctc_chat_data_store->find_matching_product_variation( $product, $variations );
+						$data_store = WC_Data_Store::load( 'product' );
+						if ( is_object( $data_store ) && method_exists( $data_store, 'find_matching_product_variation' ) ) {
+							$variation_id = $data_store->find_matching_product_variation( $product, $variations );
 						}
 					}
 				} catch ( Exception $e ) {
@@ -580,36 +830,44 @@ class CTC_Chat_WhatsApp_Link_Generator {
 				}
 			}
 
-			if ( $ctc_chat_variation_id ) {
-				$ctc_chat_variation = wc_get_product( $ctc_chat_variation_id );
-				if ( $ctc_chat_variation && is_object( $ctc_chat_variation ) && method_exists( $ctc_chat_variation, 'get_price' ) ) {
-					$ctc_chat_variation_price = $ctc_chat_variation->get_price();
+			if ( $variation_id ) {
+				$variation = wc_get_product( $variation_id );
+				if ( $variation && is_object( $variation ) && method_exists( $variation, 'get_price' ) ) {
+					$variation_price = $variation->get_price();
 				}
 			}
 		}
 
 		// Format price with proper currency symbol.
 		if ( function_exists( 'wc_price' ) ) {
-			$ctc_chat_formatted_price = html_entity_decode( wp_strip_all_tags( wc_price( $ctc_chat_variation_price ) ), ENT_QUOTES | ENT_HTML5, 'UTF-8' );
+			$formatted_price = html_entity_decode( wp_strip_all_tags( wc_price( $variation_price ) ), ENT_QUOTES | ENT_HTML5, 'UTF-8' );
 		} elseif ( function_exists( 'get_woocommerce_currency_symbol' ) ) {
-			$ctc_chat_formatted_price = get_woocommerce_currency_symbol() . $ctc_chat_variation_price;
+			$formatted_price = get_woocommerce_currency_symbol() . $variation_price;
 		} else {
-			$ctc_chat_formatted_price = '$' . $ctc_chat_variation_price;
+			$formatted_price = '$' . $variation_price;
 		}
+
+		$quantity      = max( 1, absint( $quantity ) );
+		$total_price   = (float) $variation_price * $quantity;
+		$variation_sku = ( $variation && method_exists( $variation, 'get_sku' ) && $variation->get_sku() ) ? $variation->get_sku() : ( method_exists( $product, 'get_sku' ) && $product->get_sku() ? $product->get_sku() : 'N/A' );
 
 		// Replace placeholders.
-		$ctc_chat_replacements = array(
-			'{product_name}'      => $ctc_chat_product_name,
-			'{variation_details}' => $ctc_chat_variation_details,
-			'{variation_price}'   => $ctc_chat_formatted_price,
-			'{product_url}'       => $ctc_chat_product_url,
+		$replacements = array(
+			'{product_name}'      => $product_name,
+			'{product_sku}'       => $variation_sku,
+			'{variation_details}' => $variation_details,
+			'{variation_price}'   => $formatted_price,
+			'{price}'             => $formatted_price,
+			'{quantity}'          => (string) $quantity,
+			'{order_total}'       => wp_strip_all_tags( wc_price( $total_price ) ),
+			'{product_url}'       => $product_url,
 		);
 
-		foreach ( $ctc_chat_replacements as $ctc_chat_placeholder => $ctc_chat_value ) {
-			$ctc_chat_message_template = str_replace( $ctc_chat_placeholder, $ctc_chat_value, $ctc_chat_message_template );
+		foreach ( $replacements as $placeholder => $value ) {
+			$message_template = str_replace( $placeholder, $value, $message_template );
 		}
 
-		return $ctc_chat_message_template;
+		return $message_template;
 	}
 
 
@@ -619,7 +877,7 @@ class CTC_Chat_WhatsApp_Link_Generator {
 	 * @param string $message_template The message template.
 	 * @return string The message with replaced placeholders.
 	 */
-	private function ctc_chat_replace_cart_placeholders( $message_template ) {
+	private function replace_cart_placeholders( $message_template ) {
 		// Check if WooCommerce and cart are available.
 		if ( ! function_exists( 'WC' ) || ! WC()->cart || ! is_object( WC()->cart ) ) {
 			return $message_template;
@@ -731,7 +989,7 @@ class CTC_Chat_WhatsApp_Link_Generator {
 	 * @param WC_Order $order            The order object.
 	 * @return string The message with replaced placeholders.
 	 */
-	private function ctc_chat_replace_order_placeholders( $message_template, $order ) {
+	private function replace_order_placeholders( $message_template, $order ) {
 		// Check if order is valid.
 		if ( ! is_object( $order ) || ! $order instanceof WC_Order ) {
 			return $message_template;
@@ -850,13 +1108,68 @@ class CTC_Chat_WhatsApp_Link_Generator {
 			// Silently handle any exceptions.
 		}
 
+		// Safely get customer name.
+		$customer_name = '';
+		try {
+			if ( method_exists( $order, 'get_formatted_billing_full_name' ) ) {
+				$customer_name = $order->get_formatted_billing_full_name();
+			}
+			if ( empty( $customer_name ) && method_exists( $order, 'get_billing_first_name' ) ) {
+				$customer_name = trim( $order->get_billing_first_name() . ' ' . $order->get_billing_last_name() );
+			}
+		} catch ( Exception $e ) {
+			// Silently handle any exceptions.
+		}
+
+		// Safely get order status name.
+		$order_status = '';
+		try {
+			if ( method_exists( $order, 'get_status' ) ) {
+				$raw_status = $order->get_status();
+				if ( function_exists( 'wc_get_order_status_name' ) ) {
+					$order_status = wc_get_order_status_name( $raw_status );
+				} else {
+					$order_status = ucfirst( $raw_status );
+				}
+			}
+		} catch ( Exception $e ) {
+			// Silently handle any exceptions.
+		}
+
+		// Safely get formatted shipping address.
+		$shipping_address = '';
+		try {
+			if ( method_exists( $order, 'get_formatted_shipping_address' ) ) {
+				$shipping_address = wp_strip_all_tags( $order->get_formatted_shipping_address() );
+			}
+			if ( empty( $shipping_address ) && method_exists( $order, 'get_formatted_billing_address' ) ) {
+				$shipping_address = wp_strip_all_tags( $order->get_formatted_billing_address() );
+			}
+		} catch ( Exception $e ) {
+			// Silently handle any exceptions.
+		}
+
+		// Safely get order view URL.
+		$order_view_url = '';
+		try {
+			if ( method_exists( $order, 'get_view_order_url' ) ) {
+				$order_view_url = $order->get_view_order_url();
+			}
+		} catch ( Exception $e ) {
+			// Silently handle any exceptions.
+		}
+
 		// Replace placeholders.
 		$replacements = array(
-			'{order_number}'      => $order_number,
-			'{order_date}'        => $order_date,
+			'{order_number}'       => $order_number,
+			'{order_date}'         => $order_date,
 			'{ordered_items_list}' => $ordered_items_list,
-			'{coupon_code}'       => $coupon_code,
-			'{order_total}'       => wp_strip_all_tags( wc_price( $order_total ) ),
+			'{coupon_code}'        => $coupon_code,
+			'{order_total}'        => wp_strip_all_tags( wc_price( $order_total ) ),
+			'{order_status}'       => $order_status,
+			'{customer_name}'      => $customer_name,
+			'{shipping_address}'   => $shipping_address,
+			'{order_view_url}'     => $order_view_url,
 		);
 
 		foreach ( $replacements as $placeholder => $value ) {
@@ -872,72 +1185,20 @@ class CTC_Chat_WhatsApp_Link_Generator {
 	 * @param string $message_template The message template.
 	 * @return string The message with replaced placeholders.
 	 */
-	private function ctc_chat_replace_general_placeholders( $message_template ) {
+	private function replace_general_placeholders( $message_template ) {
 		// Replace placeholders.
-		$ctc_chat_current_url = ( isset( $_SERVER['HTTPS'] ) && 'on' === $_SERVER['HTTPS'] ? 'https' : 'http' ) . '://';
-		$ctc_chat_current_url .= isset( $_SERVER['HTTP_HOST'] ) ? sanitize_text_field( wp_unslash( $_SERVER['HTTP_HOST'] ) ) : '';
-		$ctc_chat_current_url .= isset( $_SERVER['REQUEST_URI'] ) ? sanitize_text_field( wp_unslash( $_SERVER['REQUEST_URI'] ) ) : '';
+		$current_url = ( isset( $_SERVER['HTTPS'] ) && 'on' === $_SERVER['HTTPS'] ? 'https' : 'http' ) . '://';
+		$current_url .= isset( $_SERVER['HTTP_HOST'] ) ? sanitize_text_field( wp_unslash( $_SERVER['HTTP_HOST'] ) ) : '';
+		$current_url .= isset( $_SERVER['REQUEST_URI'] ) ? sanitize_text_field( wp_unslash( $_SERVER['REQUEST_URI'] ) ) : '';
 
-		$ctc_chat_replacements = array(
-			'{current_page_url}' => esc_url( $ctc_chat_current_url ),
+		$replacements = array(
+			'{current_page_url}' => esc_url( $current_url ),
 		);
 
-		foreach ( $ctc_chat_replacements as $ctc_chat_placeholder => $ctc_chat_value ) {
-			$message_template = str_replace( $ctc_chat_placeholder, $ctc_chat_value, $message_template );
+		foreach ( $replacements as $placeholder => $value ) {
+			$message_template = str_replace( $placeholder, $value, $message_template );
 		}
 
 		return $message_template;
 	}
-
-	/**
-	 * Generate a WhatsApp URL for the checkout page.
-	 *
-	 * @return string The generated WhatsApp URL.
-	 */
-	public function ctc_chat_get_checkout_url() {
-		// Check if WooCommerce is active.
-		if ( ! function_exists( 'WC' ) ) {
-			return '';
-		}
-
-		// Check if cart is available (for checkout, we still need cart contents).
-		if ( ! WC()->cart || ! is_object( WC()->cart ) ) {
-			return '';
-		}
-
-		// Check if we're on a specific page (checkout page might have a page ID).
-		$ctc_chat_page_id = null;
-		if ( is_page() ) {
-			$ctc_chat_page_id = get_the_ID();
-		}
-
-		// Get the WhatsApp number (will check page assignments if on a page).
-		$ctc_chat_whatsapp_number = $this->ctc_chat_get_whatsapp_number( null, null, $ctc_chat_page_id );
-
-		if ( empty( $ctc_chat_whatsapp_number ) ) {
-			return '';
-		}
-
-		// Format the WhatsApp number.
-		$ctc_chat_whatsapp_number = preg_replace( '/[^0-9]/', '', $ctc_chat_whatsapp_number );
-
-		// Get the message template - using same template as cart for checkout.
-		$ctc_chat_message_template = isset( $this->ctc_chat_settings['ctc_chat_message_templates']['ctc_chat_cart_checkout'] ) ?
-						   $this->ctc_chat_settings['ctc_chat_message_templates']['ctc_chat_cart_checkout'] : '';
-
-		// If no template, create a default checkout message.
-		if ( empty( $ctc_chat_message_template ) ) {
-			$ctc_chat_message_template = esc_html__( "Hello! I'd like to complete my purchase of:\n{cart_items_list}\n---------------------\nSubtotal: {cart_subtotal}\nTax: {tax_amount}\nShipping: {shipping_method} - {shipping_cost}\nTotal: {cart_total}\n\nI have a few questions before finalizing my order.", 'aicoso-click-to-chat' );
-		}
-
-		// Replace placeholders.
-		$ctc_chat_message = $this->ctc_chat_replace_cart_placeholders( $ctc_chat_message_template );
-		$ctc_chat_message = $this->ctc_chat_replace_general_placeholders( $ctc_chat_message );
-
-		// Build and return the WhatsApp URL.
-		return $this->ctc_chat_build_whatsapp_url( $ctc_chat_whatsapp_number, $ctc_chat_message );
-	}
 }
-
-// Initialize the class.
-new CTC_Chat_WhatsApp_Link_Generator();

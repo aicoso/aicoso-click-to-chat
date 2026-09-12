@@ -10,170 +10,247 @@
     /**
      * Initialize the admin functionality
      */
-    function ctc_chat_init_admin() {
-        // Initialize tabs
-        ctc_chat_init_tabs();
-
+    function initAdmin() {
         // Initialize color pickers
-        ctc_chat_init_color_pickers();
+        initColorPickers();
 
         // Initialize WhatsApp number management
-        ctc_chat_init_numbers_management();
+        initNumbersManagement();
 
         // Initialize message template previews
-        ctc_chat_init_message_templates();
+        initMessageTemplates();
 
         // Initialize shortcode generator
-        ctc_chat_init_shortcode_generator();
+        initShortcodeGenerator();
 
         // Initialize select2 for multiselect dropdowns
-        ctc_chat_init_select2();
+        initSelect2();
 
         // Initialize position field toggles
-        ctc_chat_init_position_toggles();
+        initPositionToggles();
+
+        // Initialize back-in-stock alerts live customizer and swatches
+        initStockAlertCustomizer();
+
+        // Initialize coupon engine live customizer and swatches
+        initCouponEngineCustomizer();
 
         // Initialize catalog mode and advanced options
-        ctc_chat_init_advanced_options();
+        initAdvancedOptions();
 
-        // Initialize the hidden field with the current tab value
-        if ($('#ctc_chat_current_tab').length && $('.ctc-chat-settings-nav-item.active').length) {
-            const currentTab = $('.ctc-chat-settings-nav-item.active').data('tab') || 'general';
-            $('#ctc_chat_current_tab').val(currentTab);
-        }
+        // Initialize Live Visual Customizer & Preview
+        initLiveVisualCustomizer();
+
+        // Lean tab progress feedback (matches affiliate admin pattern)
+        initTabLoadingProgress();
+
+        // Initialize plugin-native dismissible banners.
+        initAdminBanners();
     }
 
     /**
-     * Initialize tab navigation
+     * Dismiss plugin-native admin banners.
      */
-    function ctc_chat_init_tabs() {
-        // Settings page tab navigation (button style)
-        $('.ctc-chat-settings-nav-item').on('click', function(e) {
-            e.preventDefault();
-
-            // Get the target tab
-            const targetTab = $(this).data('tab');
-
-            // Update active tab
-            $('.ctc-chat-settings-nav-item').removeClass('active');
-            $(this).addClass('active');
-
-            // Show the target tab content
-            $('.ctc-chat-settings-panel').removeClass('active').hide();
-            $('#ctc-chat-settings-' + targetTab).addClass('active').show();
-
-            // Update the hidden field for form submission
-            $('#ctc_chat_current_tab').val(targetTab);
-
-            // Update the tab parameter in the URL
-            const url = new URL(window.location);
-            url.searchParams.set('tab', targetTab);
-            window.history.pushState({}, '', url);
+    function initAdminBanners() {
+        $(document).on('click', '.ctc-admin-banner__dismiss', function () {
+            $(this).closest('.ctc-admin-banner').remove();
         });
+    }
 
-        // New settings page tabs (alternate style)
-        $('.ctc-chat-tab-nav-item').on('click', function(e) {
-            e.preventDefault();
+    /**
+     * Show a slim progress bar while settings tabs navigate.
+     */
+    function initTabLoadingProgress() {
+        let tabProgressTimer = null;
 
-            // Get the target tab
-            const targetTab = $(this).data('tab');
+        function startTabProgress($container) {
+            let progress = 8;
+            let step = 0;
 
-            // Update active tab
-            $('.ctc-chat-tab-nav-item').removeClass('active');
-            $(this).addClass('active');
-
-            // Show the target tab content
-            $('.ctc-chat-settings-tab-content').removeClass('active').hide();
-            $('#' + targetTab).addClass('active').show();
-
-            // Update the tab parameter in the URL
-            const url = new URL(window.location);
-            url.searchParams.set('tab', targetTab);
-            window.history.pushState({}, '', url);
-        });
-
-        // Legacy tab support (for backwards compatibility)
-        $('.ctc-chat-admin-tabs .nav-tab').on('click', function(e) {
-            e.preventDefault();
-
-            // Get the target tab
-            const targetTab = $(this).data('tab');
-
-            // Update active tab
-            $('.ctc-chat-admin-tabs .nav-tab').removeClass('nav-tab-active');
-            $(this).addClass('nav-tab-active');
-
-            // Show the target tab content
-            $('.ctc-chat-admin-tab-content').hide();
-            $('#' + targetTab).show();
-
-            // Update the tab parameter in the URL
-            const url = new URL(window.location);
-            url.searchParams.set('tab', targetTab);
-            window.history.pushState({}, '', url);
-        });
-
-        // Show the active tab on page load
-        const urlParams = new URLSearchParams(window.location.search);
-        const activeTab = urlParams.get('tab');
-
-        if (activeTab) {
-            // Try settings page tabs first
-            if ($('.ctc-chat-settings-nav-item[data-tab="' + activeTab + '"]').length) {
-                $('.ctc-chat-settings-nav-item[data-tab="' + activeTab + '"]').trigger('click');
+            if (!$container.length) {
+                return;
             }
-            // Try new tabs
-            else if ($('.ctc-chat-tab-nav-item[data-tab="' + activeTab + '"]').length) {
-                $('.ctc-chat-tab-nav-item[data-tab="' + activeTab + '"]').trigger('click');
-            }
-            // Fall back to legacy tabs
-            else if ($('.ctc-chat-admin-tabs .nav-tab[data-tab="' + activeTab + '"]').length) {
-                $('.ctc-chat-admin-tabs .nav-tab[data-tab="' + activeTab + '"]').trigger('click');
-            }
-        } else {
-            // Default to the first tab
-            if ($('.ctc-chat-settings-nav-item:first').length) {
-                $('.ctc-chat-settings-nav-item:first').trigger('click');
-            } else if ($('.ctc-chat-tab-nav-item:first').length) {
-                $('.ctc-chat-tab-nav-item:first').trigger('click');
-            } else if ($('.ctc-chat-admin-tabs .nav-tab:first').length) {
-                $('.ctc-chat-admin-tabs .nav-tab:first').trigger('click');
-            }
+
+            window.clearInterval(tabProgressTimer);
+            $container.addClass('ctc-tab-loading').css('--ctc-tab-progress-scale', progress / 100);
+
+            tabProgressTimer = window.setInterval(function() {
+                const remaining = 96 - progress;
+
+                step += 1;
+                progress += Math.max(0.12, remaining * (step < 8 ? 0.16 : 0.055));
+
+                if (progress > 96) {
+                    progress = 96;
+                }
+
+                $container.css('--ctc-tab-progress-scale', (progress / 100).toFixed(4));
+            }, 140);
         }
 
-        // Initialize the hidden field with the current tab value
-        if ($('#ctc_chat_current_tab').length && $('.ctc-chat-settings-nav-item.active').length) {
-            const currentTab = $('.ctc-chat-settings-nav-item.active').data('tab') || 'general';
-            $('#ctc_chat_current_tab').val(currentTab);
+        function handleTabNavigationClick(event) {
+            const href = this.getAttribute('href') || '';
+
+            if (!href || '#' === href || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) {
+                return;
+            }
+
+            const $container = $(this).closest('.ctc_tablinks.subsubsub, .ctc-settings-split__nav');
+
+            startTabProgress($container);
         }
+
+        $(document).on('click', '.ctc_tablinks.subsubsub a', handleTabNavigationClick);
+        $(document).on('click', '.ctc-settings-split-nav a', handleTabNavigationClick);
     }
 
     /**
      * Initialize color pickers
      */
-    function ctc_chat_init_color_pickers() {
+    function initColorPickers() {
         $('.ctc-chat-color-field').each(function() {
             const $input = $(this);
             $input.wpColorPicker({
                 change: function(event, ui) {
                     // Update the input field value and trigger change
                     if (ui.color) {
-                        $(event.target).val(ui.color.toString());
+                        const val = ui.color.toString();
+                        $(event.target).val(val);
                         $(event.target).trigger('change');
+
+                        if ($(event.target).attr('id') === 'ctc_chat_stock_bg_color') {
+                            $('#ctc-chat-stock-preview-btn').css('background-color', val);
+                        } else if ($(event.target).attr('id') === 'ctc_chat_stock_text_color') {
+                            $('#ctc-chat-stock-preview-btn').css('color', val);
+                        } else if ($(event.target).attr('id') === 'ctc_chat_coupon_badge_bg') {
+                            $('#ctc-chat-coupon-preview-chip').css('background-color', val);
+                        } else if ($(event.target).attr('id') === 'ctc_chat_coupon_badge_color') {
+                            $('#ctc-chat-coupon-preview-chip').css('color', val);
+                        } else if ($(event.target).attr('id') === 'ctc_chat_button_bg_color') {
+                            $('.ctc-preview-button-target').css('background-color', val);
+                        } else if ($(event.target).attr('id') === 'ctc_chat_button_text_color') {
+                            $('.ctc-preview-button-target').css('color', val);
+                        }
                     }
                 },
-                clear: function(event, ui) {
+                clear: function(event) {
                     // Clear the input field value and trigger change
                     $(event.target).val('');
                     $(event.target).trigger('change');
+
+                    if ($(event.target).attr('id') === 'ctc_chat_stock_bg_color') {
+                        $('#ctc-chat-stock-preview-btn').css('background-color', '#ff9800');
+                    } else if ($(event.target).attr('id') === 'ctc_chat_stock_text_color') {
+                        $('#ctc-chat-stock-preview-btn').css('color', '#ffffff');
+                    } else if ($(event.target).attr('id') === 'ctc_chat_coupon_badge_bg') {
+                        $('#ctc-chat-coupon-preview-chip').css('background-color', '#e11d48');
+                    } else if ($(event.target).attr('id') === 'ctc_chat_coupon_badge_color') {
+                        $('#ctc-chat-coupon-preview-chip').css('color', '#ffffff');
+                    } else if ($(event.target).attr('id') === 'ctc_chat_button_bg_color') {
+                        $('.ctc-preview-button-target').css('background-color', '#25D366');
+                    } else if ($(event.target).attr('id') === 'ctc_chat_button_text_color') {
+                        $('.ctc-preview-button-target').css('color', '#ffffff');
+                    }
                 }
             });
         });
     }
 
     /**
+     * Initialize Back-in-Stock alerts customizer swatches and live preview
+     */
+    function initStockAlertCustomizer() {
+        const $previewBtn = $('#ctc-chat-stock-preview-btn');
+        if (!$previewBtn.length) {
+            return;
+        }
+
+        // Live update preview text
+        $('#ctc_chat_stock_button_text').on('input change', function() {
+            const txt = $(this).val() || 'Notify Me on WhatsApp 🔔';
+            $previewBtn.find('.ctc-chat-button-text').text(txt);
+        });
+
+        // Quick swatch click
+        $(document).on('click', '.ctc-stock-swatch', function(e) {
+            e.preventDefault();
+            const bg = $(this).data('bg');
+            const text = $(this).data('text');
+
+            if (bg) {
+                const $bgInput = $('#ctc_chat_stock_bg_color');
+                $bgInput.val(bg);
+                try {
+                    $bgInput.wpColorPicker('color', bg);
+                } catch (err) {}
+                $previewBtn.css('background-color', bg);
+            }
+
+            if (text) {
+                const $textInput = $('#ctc_chat_stock_text_color');
+                $textInput.val(text);
+                try {
+                    $textInput.wpColorPicker('color', text);
+                } catch (err) {}
+                $previewBtn.css('color', text);
+            }
+        });
+    }
+
+    /**
+     * Initialize Coupon Engine customizer swatches, coupon select, and live preview
+     */
+    function initCouponEngineCustomizer() {
+        const $previewChip = $('#ctc-chat-coupon-preview-chip');
+        if (!$previewChip.length) {
+            return;
+        }
+
+        // Live update preview text
+        $('#ctc_chat_coupon_badge_text').on('input change', function() {
+            const txt = $(this).val() || '🎁 Chat to get 10% OFF!';
+            $('#ctc-chat-coupon-preview-text').text(txt);
+        });
+
+        // Quick swatch click
+        $(document).on('click', '.ctc-coupon-swatch', function(e) {
+            e.preventDefault();
+            const bg = $(this).data('bg');
+            const text = $(this).data('text');
+
+            if (bg) {
+                const $bgInput = $('#ctc_chat_coupon_badge_bg');
+                $bgInput.val(bg);
+                try {
+                    $bgInput.wpColorPicker('color', bg);
+                } catch (err) {}
+                $previewChip.css('background-color', bg);
+            }
+
+            if (text) {
+                const $textInput = $('#ctc_chat_coupon_badge_color');
+                $textInput.val(text);
+                try {
+                    $textInput.wpColorPicker('color', text);
+                } catch (err) {}
+                $previewChip.css('color', text);
+            }
+        });
+
+        // When a WooCommerce coupon is selected, optionally suggest discount label
+        $('#ctc_chat_coupon_select').on('change', function() {
+            const selectedText = $(this).find('option:selected').text();
+            const match = selectedText.match(/\(([^)]+)\)/);
+            if (match && match[1] && !$('#ctc_chat_coupon_custom_discount').val()) {
+                $('#ctc_chat_coupon_custom_discount').val(match[1]);
+            }
+        });
+    }
+
+    /**
      * Initialize color pickers specifically for the shortcode generator
      */
-    function ctc_chat_init_shortcode_color_pickers() {
+    function initShortcodeColorPickers() {
         // Initialize color pickers for shortcode generator fields with real-time preview
         $('#ctc_chat_bg_color, #ctc_chat_text_color').wpColorPicker({
             change: function(event, ui) {
@@ -182,15 +259,15 @@
                     $(event.target).val(ui.color.toString());
                 }
                 // Immediately update the preview when color changes
-                ctc_chat_generate_improved_shortcode();
-                ctc_chat_update_improved_preview();
+                generateImprovedShortcode();
+                updateImprovedPreview();
             },
             clear: function(event, ui) {
                 // Clear the input field value
                 $(event.target).val('');
                 // Update the preview when color is cleared
-                ctc_chat_generate_improved_shortcode();
-                ctc_chat_update_improved_preview();
+                generateImprovedShortcode();
+                updateImprovedPreview();
             }
         });
     }
@@ -198,7 +275,7 @@
     /**
      * Initialize WhatsApp number management
      */
-    function ctc_chat_init_numbers_management() {
+    function initNumbersManagement() {
         // Handle expand/collapse functionality - updated for new classes
         $(document).on('click', '.ctc-chat-number-toggle', function() {
             const $card = $(this).closest('.ctc-chat-number-item, .ctc-chat-number-card');
@@ -266,7 +343,7 @@
             $('#ctc-chat-numbers-container').append(html);
             
             // Initialize select2 for the new selects
-            ctc_chat_init_select2();
+            initSelect2();
             
             // Update the next ID
             $('#ctc-chat-next-number-id').val(nextId + 1);
@@ -307,10 +384,10 @@
         $('.ctc-chat-number-item:first .ctc-chat-number-content, .ctc-chat-number-card:first .ctc-chat-number-body').show();
         
         // Initialize select2 for existing selects
-        ctc_chat_init_select2();
+        initSelect2();
         
         // Helper function to update indices for all numbers - updated for new classes
-        function ctc_chat_update_number_indices() {
+        function updateNumberIndices() {
             $('.ctc-chat-number-item, .ctc-chat-number-card').each(function(index) {
                 const id = $(this).data('id');
                 
@@ -327,7 +404,7 @@
     /**
      * Initialize Select2 for various select inputs
      */
-    function ctc_chat_init_select2() {
+    function initSelect2() {
         // Page select
         $('.ctc-chat-page-select').select2({
             ajax: {
@@ -336,7 +413,7 @@
                 delay: 250,
                 data: function(params) {
                     return {
-                        action: 'ctc_chat_ajax_search_pages',
+                        action: 'ctc_chat_search_pages',
                         term: params.term || '',
                         nonce: ctc_chat_admin.nonce
                     };
@@ -361,7 +438,7 @@
                 delay: 250,
                 data: function(params) {
                     return {
-                        action: 'ctc_chat_ajax_search_posts',
+                        action: 'ctc_chat_search_posts',
                         term: params.term || '',
                         nonce: ctc_chat_admin.nonce
                     };
@@ -386,7 +463,7 @@
                 delay: 250,
                 data: function(params) {
                     return {
-                        action: 'ctc_chat_ajax_search_categories',
+                        action: 'ctc_chat_search_categories',
                         term: params.term || '',
                         nonce: ctc_chat_admin.nonce
                     };
@@ -411,7 +488,7 @@
                 delay: 250,
                 data: function(params) {
                     return {
-                        action: 'ctc_chat_ajax_search_tags',
+                        action: 'ctc_chat_search_tags',
                         term: params.term || '',
                         nonce: ctc_chat_admin.nonce
                     };
@@ -436,7 +513,7 @@
                 delay: 250,
                 data: function(params) {
                     return {
-                        action: 'ctc_chat_ajax_search_products',
+                        action: 'ctc_chat_search_products',
                         term: params.term || '',
                         nonce: ctc_chat_admin.nonce
                     };
@@ -457,7 +534,7 @@
     /**
      * Initialize message template previews
      */
-    function ctc_chat_init_message_templates() {
+    function initMessageTemplates() {
         // Preview template - updated to work with both old and new class names
         $('.ctc-chat-template-preview-button, .ctc-chat-preview-btn').on('click', function() {
             const $button = $(this);
@@ -475,7 +552,7 @@
                 url: ctc_chat_admin.ajaxurl,
                 type: 'POST',
                 data: {
-                    action: 'ctc_chat_ajax_preview_message',
+                    action: 'ctc_chat_preview_message',
                     template_type: templateType,
                     template_content: templateContent,
                     nonce: ctc_chat_admin.nonce
@@ -518,7 +595,7 @@
             const placeholder = $(this).text();
             const $textarea = $(this).closest('.ctc-chat-template-item, .ctc-chat-template-card').find('.ctc-chat-template-textarea');
             
-            ctc_chat_insert_at_cursor($textarea[0], placeholder);
+            insertAtCursor($textarea[0], placeholder);
             
             return false;
         });
@@ -527,11 +604,11 @@
     /**
      * Initialize shortcode generator
      */
-    function ctc_chat_init_shortcode_generator() {
+    function initShortcodeGenerator() {
         // New improved shortcode builder
 
         // Initialize color pickers for shortcode generator
-        ctc_chat_init_shortcode_color_pickers();
+        initShortcodeColorPickers();
 
         // Handle button type selection
         $('input[name="button_type"]').on('change', function() {
@@ -541,8 +618,8 @@
             } else {
                 $('.ctc-chat-product-options').removeClass('ctc-chat-visible').addClass('ctc-chat-hidden');
             }
-            ctc_chat_generate_improved_shortcode();
-            ctc_chat_update_improved_preview();
+            generateImprovedShortcode();
+            updateImprovedPreview();
         });
 
         // Handle product source selection
@@ -552,23 +629,23 @@
             } else {
                 $('.ctc-chat-product-id-field').removeClass('ctc-chat-visible').addClass('ctc-chat-hidden');
             }
-            ctc_chat_generate_improved_shortcode();
+            generateImprovedShortcode();
         });
 
         // Handle all parameter changes
         $('.ctc-chat-shortcode-param').on('change input', function() {
-            ctc_chat_generate_improved_shortcode();
-            ctc_chat_update_improved_preview();
+            generateImprovedShortcode();
+            updateImprovedPreview();
         });
 
         // Initialize on page load
-        ctc_chat_generate_improved_shortcode();
-        ctc_chat_update_improved_preview();
+        generateImprovedShortcode();
+        updateImprovedPreview();
 
         // Handle copy button
         $('#ctc-chat-copy-shortcode').on('click', function() {
             const shortcode = $('#ctc-chat-generated-shortcode').text();
-            ctc_chat_copy_to_clipboard(shortcode);
+            copyToClipboard(shortcode);
 
             // Show success message
             $('.ctc-chat-copy-success').removeClass('ctc-chat-hidden').addClass('ctc-chat-visible');
@@ -594,17 +671,17 @@
         });
 
         // Initialize on load
-        ctc_chat_generate_improved_shortcode();
-        ctc_chat_update_improved_preview();
+        generateImprovedShortcode();
+        updateImprovedPreview();
 
         // Legacy support - keep old functionality
         $('.ctc-chat-shortcode-form select, .ctc-chat-shortcode-form input').on('change', function() {
-            ctc_chat_generate_shortcode();
+            generateShortcode();
         });
 
         $(document).on('click', '.ctc-chat-copy-shortcode', function() {
             const shortcode = $('.ctc-chat-shortcode-code').text();
-            ctc_chat_copy_to_clipboard(shortcode);
+            copyToClipboard(shortcode);
             return false;
         });
     }
@@ -612,7 +689,7 @@
     /**
      * Generate improved shortcode
      */
-    function ctc_chat_generate_improved_shortcode() {
+    function generateImprovedShortcode() {
         let shortcode = '[ctc_chat_button';
 
         // Get all parameters
@@ -688,7 +765,7 @@
     /**
      * Update improved preview
      */
-    function ctc_chat_update_improved_preview() {
+    function updateImprovedPreview() {
         const text = $('#ctc_chat_button_text').val() || ctc_chat_admin.default_button_text || 'Order via WhatsApp';
         const bgColor = $('#ctc_chat_bg_color').val() || '#25D366';
         const textColor = $('#ctc_chat_text_color').val() || '#ffffff';
@@ -708,7 +785,7 @@
             previewHtml += '</span>';
         }
 
-        previewHtml += '<span class="ctc-chat-button-text">' + ctc_chat_escape_html(text) + '</span>';
+        previewHtml += '<span class="ctc-chat-button-text">' + escapeHtml(text) + '</span>';
         previewHtml += '</a>';
         previewHtml += '</div>';
 
@@ -718,7 +795,7 @@
     /**
      * Escape HTML
      */
-    function ctc_chat_escape_html(text) {
+    function escapeHtml(text) {
         const div = document.createElement('div');
         div.textContent = text;
         return div.innerHTML;
@@ -727,7 +804,7 @@
     /**
      * Generate shortcode based on form values (Legacy)
      */
-    function ctc_chat_generate_shortcode() {
+    function generateShortcode() {
         const $form = $('.ctc-chat-shortcode-form');
         const productId = $form.find('#shortcode_product_id').val();
         const current = $form.find('#shortcode_current').is(':checked') ? 'yes' : 'no';
@@ -742,7 +819,7 @@
         const cssClass = $form.find('#shortcode_css_class').val();
         
         // Build the shortcode
-        let shortcode = '[ctc_chat_button';
+        let shortcode = '[whatsapp_button';
         
         if (productId) {
             shortcode += ' product_id="' + productId + '"';
@@ -782,13 +859,13 @@
         $('.ctc-chat-shortcode-code').text(shortcode);
         
         // Update the preview
-        ctc_chat_update_shortcode_preview();
+        updateShortcodePreview();
     }
 
     /**
      * Update the shortcode preview
      */
-    function ctc_chat_update_shortcode_preview() {
+    function updateShortcodePreview() {
         const $form = $('.ctc-chat-shortcode-form');
         const text = $form.find('#shortcode_text').val() || ctc_chat_admin.default_button_text;
         const bgColor = $form.find('#shortcode_bg_color').val() || '#25D366';
@@ -798,24 +875,24 @@
         const align = $form.find('#shortcode_align').val();
         
         // Create button HTML
-        let buttonHtml = '<div class="ctc_chat_shortcode_container">';
-        buttonHtml += '<a href="#" class="ctc_chat_whatsapp_button ctc_chat_button_size_' + size;
+        let buttonHtml = '<div class="ctc-shortcode-container">';
+        buttonHtml += '<a href="#" class="ctc-whatsapp-button ctc-button-size-' + size;
 
         if (icon) {
-            buttonHtml += ' ctc_chat_button_with_icon';
+            buttonHtml += ' ctc-button-with-icon';
         }
 
         buttonHtml += '" style="background-color: ' + bgColor + '; color: ' + textColor + ';">';
 
         if (icon) {
-            buttonHtml += '<span class="ctc_chat_whatsapp_icon">';
+            buttonHtml += '<span class="ctc-whatsapp-icon">';
             buttonHtml += '<svg viewBox="0 0 24 24" width="24" height="24">';
             buttonHtml += '<path fill="currentColor" d="M17.498 14.382c-.301-.15-1.767-.867-2.04-.966-.273-.101-.473-.15-.673.15-.197.295-.771.964-.944 1.162-.175.195-.349.21-.646.075-.3-.15-1.263-.465-2.403-1.485-.888-.795-1.484-1.77-1.66-2.07-.174-.3-.019-.465.13-.615.136-.135.301-.345.451-.523.146-.181.194-.301.297-.496.1-.21.049-.375-.025-.524-.075-.15-.672-1.62-.922-2.206-.24-.584-.487-.51-.672-.51-.172-.015-.371-.015-.571-.015-.2 0-.523.074-.797.359-.273.3-1.045 1.02-1.045 2.475s1.07 2.865 1.219 3.075c.149.195 2.105 3.195 5.1 4.485.714.3 1.27.48 1.704.629.714.227 1.365.195 1.88.121.574-.091 1.767-.721 2.016-1.426.255-.705.255-1.29.18-1.425-.074-.135-.27-.21-.57-.345m-5.446 7.443h-.016c-1.77 0-3.524-.48-5.055-1.38l-.36-.214-3.75.975 1.005-3.645-.239-.375c-.99-1.576-1.516-3.391-1.516-5.26 0-5.445 4.455-9.885 9.942-9.885 2.654 0 5.145 1.035 7.021 2.91 1.875 1.859 2.909 4.35 2.909 6.99-.004 5.444-4.46 9.885-9.935 9.885M20.52 3.449C18.24 1.245 15.24 0 12.045 0 5.463 0 .104 5.334.101 11.893c0 2.096.549 4.14 1.595 5.945L0 24l6.335-1.652c1.746.943 3.71 1.444 5.71 1.447h.006c6.585 0 11.946-5.336 11.949-11.896 0-3.176-1.24-6.165-3.495-8.411"/>';
             buttonHtml += '</svg>';
             buttonHtml += '</span>';
         }
 
-        buttonHtml += '<span class="ctc_chat_button_text">' + text + '</span>';
+        buttonHtml += '<span class="ctc-button-text">' + text + '</span>';
         buttonHtml += '</a>';
         buttonHtml += '</div>';
         
@@ -826,7 +903,7 @@
     /**
      * Helper function to insert text at cursor position in textarea
      */
-    function ctc_chat_insert_at_cursor(field, text) {
+    function insertAtCursor(field, text) {
         // IE support
         if (document.selection) {
             field.focus();
@@ -854,7 +931,7 @@
     /**
      * Initialize position field toggles
      */
-    function ctc_chat_init_position_toggles() {
+    function initPositionToggles() {
         // Toggle cart position field
         $('#ctc_chat_cart_page_enabled').on('change', function() {
             if ($(this).is(':checked')) {
@@ -890,17 +967,67 @@
             }
         });
 
+        // Toggle cart/checkout nudge settings
+        $('#ctc_chat_nudge_enabled').on('change', function() {
+            if ($(this).is(':checked')) {
+                $('.ctc-chat-nudge-row').removeClass('ctc-chat-hidden');
+            } else {
+                $('.ctc-chat-nudge-row').addClass('ctc-chat-hidden');
+            }
+        });
+
+        // Toggle back in stock alert settings
+        $('#ctc_chat_stock_enabled').on('change', function() {
+            if ($(this).is(':checked')) {
+                $('.ctc-chat-stock-row').removeClass('ctc-chat-hidden');
+            } else {
+                $('.ctc-chat-stock-row').addClass('ctc-chat-hidden');
+            }
+        });
+
+        // Toggle coupon engine settings
+        $('#ctc_chat_coupon_enabled').on('change', function() {
+            if ($(this).is(':checked')) {
+                $('.ctc-chat-coupon-row').removeClass('ctc-chat-hidden');
+            } else {
+                $('.ctc-chat-coupon-row').addClass('ctc-chat-hidden');
+            }
+        });
+
+        // Toggle desktop QR modal settings
+        $('#ctc_chat_qr_modal_enabled').on('change', function() {
+            if ($(this).is(':checked')) {
+                $('.ctc-chat-qr-modal-row').removeClass('ctc-chat-hidden');
+            } else {
+                $('.ctc-chat-qr-modal-row').addClass('ctc-chat-hidden');
+            }
+        });
+
+        // Toggle GDPR & Privacy compliance settings
+        $('#ctc_chat_privacy_enabled').on('change', function() {
+            if ($(this).is(':checked')) {
+                $('.ctc-chat-privacy-row').removeClass('ctc-chat-hidden');
+            } else {
+                $('.ctc-chat-privacy-row').addClass('ctc-chat-hidden');
+            }
+        });
+
         // Initialize position toggles on page load
         $('#ctc_chat_cart_page_enabled').trigger('change');
         $('#ctc_chat_checkout_page_enabled').trigger('change');
         $('#ctc_chat_single_product_enabled').trigger('change');
         $('#ctc_chat_shop_page_enabled').trigger('change');
+        $('#ctc_chat_nudge_enabled').trigger('change');
+        $('#ctc_chat_stock_enabled').trigger('change');
+        $('#ctc_chat_coupon_enabled').trigger('change');
+        $('#ctc_chat_qr_modal_enabled').trigger('change');
+        $('#ctc_chat_privacy_enabled').trigger('change');
     }
 
     /**
      * Initialize advanced options functionality
      */
-    function ctc_chat_init_advanced_options() {
+    function initAdvancedOptions() {
         // Handle catalog mode toggle
         $('#ctc_chat_catalog_mode').on('change', function() {
             if ($(this).is(':checked')) {
@@ -932,7 +1059,7 @@
     /**
      * Helper function to copy text to clipboard
      */
-    function ctc_chat_copy_to_clipboard(text) {
+    function copyToClipboard(text) {
         const textarea = document.createElement('textarea');
         textarea.value = text;
         textarea.setAttribute('readonly', '');
@@ -953,9 +1080,66 @@
         return success;
     }
 
+    /**
+     * Initialize Live Visual Customizer with real-time sync and device switcher
+     */
+    function initLiveVisualCustomizer() {
+        const $customizer = $('.ctc-live-customizer');
+        if (!$customizer.length) {
+            return;
+        }
+
+        // Device Switcher (Desktop vs Mobile)
+        $(document).on('click', '.ctc-device-btn', function(e) {
+            e.preventDefault();
+            const device = $(this).data('device');
+            $('.ctc-device-btn').removeClass('active');
+            $(this).addClass('active');
+
+            $('#ctc-preview-container').attr('data-active-device', device);
+            if (device === 'mobile') {
+                $('.ctc-mockup-desktop').hide();
+                $('.ctc-mockup-mobile').fadeIn(200);
+            } else {
+                $('.ctc-mockup-mobile').hide();
+                $('.ctc-mockup-desktop').fadeIn(200);
+            }
+        });
+
+        // Live text sync
+        $('#ctc_chat_button_text').on('input change', function() {
+            const val = $(this).val() || 'Order via WhatsApp';
+            $('.ctc-preview-button-text').text(val);
+        });
+
+        // Live icon sync
+        $('#ctc_chat_button_icon').on('change', function() {
+            if ($(this).is(':checked')) {
+                $('.ctc-preview-button-target .ctc-chat-whatsapp-icon').show();
+            } else {
+                $('.ctc-preview-button-target .ctc-chat-whatsapp-icon').hide();
+            }
+        });
+
+        // Direct input sync for color fields
+        $('#ctc_chat_button_bg_color').on('input change', function() {
+            const val = $(this).val();
+            if (val) {
+                $('.ctc-preview-button-target').css('background-color', val);
+            }
+        });
+
+        $('#ctc_chat_button_text_color').on('input change', function() {
+            const val = $(this).val();
+            if (val) {
+                $('.ctc-preview-button-target').css('color', val);
+            }
+        });
+    }
+
     // Initialize when document is ready
     $(document).ready(function() {
-        ctc_chat_init_admin();
+        initAdmin();
     });
 
 })(jQuery);

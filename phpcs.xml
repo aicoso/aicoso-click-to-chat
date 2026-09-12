@@ -41,7 +41,14 @@
         <!-- Exclude alignment warnings (cosmetic only) -->
         <exclude name="Generic.Formatting.MultipleStatementAlignment"/>
         <exclude name="WordPress.Arrays.MultipleStatementAlignment"/>
+
+        <!-- Replaced or obsolete in PHPCS 3.13+ -->
+        <exclude name="Generic.Functions.CallTimePassByReference"/>
+        <exclude name="Squiz.WhiteSpace.LanguageConstructSpacing"/>
     </rule>
+
+    <!-- Replacement for the deprecated Squiz spacing sniff -->
+    <rule ref="Generic.WhiteSpace.LanguageConstructSpacing"/>
 
     <!-- Main plugin file is allowed to have mixed structure (functions + class) -->
     <rule ref="WordPress.Files.FileName">
