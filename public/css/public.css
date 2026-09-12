@@ -449,3 +449,856 @@
     display: flex !important;
     justify-content: center;
 }
+
+/* Next to Add to Cart Button (Inline) */
+.ctc-chat-position-next-to-add-to-cart {
+    display: inline-flex;
+    vertical-align: middle;
+    margin-left: 10px;
+}
+
+.ctc-chat-position-next-to-add-to-cart .ctc-chat-whatsapp-button {
+    height: 100%;
+}
+
+.rtl .ctc-chat-position-next-to-add-to-cart {
+    margin-left: 0;
+    margin-right: 10px;
+}
+
+@media (max-width: 768px) {
+    .ctc-chat-position-next-to-add-to-cart {
+        display: block;
+        margin-left: 0;
+        margin-top: 10px;
+        width: 100%;
+    }
+    .ctc-chat-position-next-to-add-to-cart .ctc-chat-whatsapp-button {
+        width: 100%;
+    }
+}
+
+/* ==========================================================================
+   Cart & Checkout Abandonment Nudge
+   ========================================================================== */
+.ctc-abandonment-nudge {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    width: 350px;
+    max-width: calc(100vw - 40px);
+    background: #ffffff;
+    border-radius: 14px;
+    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.16), 0 4px 12px rgba(0, 0, 0, 0.08);
+    border: 1px solid rgba(0, 0, 0, 0.06);
+    padding: 18px 20px;
+    z-index: 999999;
+    opacity: 0;
+    transform: translateY(30px) scale(0.96);
+    pointer-events: none;
+    transition: opacity 0.35s cubic-bezier(0.16, 1, 0.3, 1), transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    font-family: inherit;
+    box-sizing: border-box;
+}
+
+.ctc-abandonment-nudge.ctc-nudge-has-floating {
+    bottom: 95px;
+}
+
+.ctc-abandonment-nudge.ctc-nudge-show {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    pointer-events: auto;
+}
+
+.ctc-abandonment-nudge .ctc-nudge-close {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    background: transparent;
+    border: none;
+    font-size: 18px;
+    line-height: 1;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    cursor: pointer;
+    color: #9ca3af;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    transition: color 0.2s, background-color 0.2s;
+}
+
+.ctc-abandonment-nudge .ctc-nudge-close:hover {
+    color: #111827;
+    background-color: #f3f4f6;
+}
+
+.ctc-nudge-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 10px;
+    padding-right: 20px;
+}
+
+.ctc-nudge-avatar-wrap {
+    position: relative;
+    flex-shrink: 0;
+}
+
+.ctc-nudge-avatar {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #25D366 0%, #128C7E 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #ffffff;
+    box-shadow: 0 3px 8px rgba(37, 211, 102, 0.35);
+}
+
+.ctc-nudge-avatar svg {
+    width: 22px;
+    height: 22px;
+    fill: #ffffff;
+}
+
+.ctc-nudge-online-dot {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 11px;
+    height: 11px;
+    background-color: #10B981;
+    border: 2px solid #ffffff;
+    border-radius: 50%;
+}
+
+.ctc-nudge-header-text {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+}
+
+.ctc-nudge-title {
+    margin: 0;
+    font-size: 15px;
+    font-weight: 700;
+    color: #1f2937;
+    line-height: 1.3;
+}
+
+.ctc-nudge-badge {
+    display: inline-flex;
+    align-items: center;
+    font-size: 11px;
+    font-weight: 600;
+    color: #047857;
+    background: #d1fae5;
+    padding: 2px 7px;
+    border-radius: 10px;
+    width: fit-content;
+    margin-top: 2px;
+}
+
+.ctc-nudge-body {
+    margin-bottom: 14px;
+}
+
+.ctc-nudge-message {
+    margin: 0;
+    font-size: 13px;
+    line-height: 1.45;
+    color: #4b5563;
+}
+
+.ctc-nudge-footer {
+    display: block;
+}
+
+.ctc-nudge-btn {
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 10px 16px;
+    background: #25D366;
+    color: #ffffff !important;
+    font-size: 14px;
+    font-weight: 600;
+    text-align: center;
+    text-decoration: none !important;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(37, 211, 102, 0.3);
+    transition: all 0.2s ease;
+}
+
+.ctc-nudge-btn:hover {
+    background: #20bd5a;
+    box-shadow: 0 6px 14px rgba(37, 211, 102, 0.4);
+    transform: translateY(-1px);
+    color: #ffffff !important;
+}
+
+.ctc-nudge-wa-icon {
+    flex-shrink: 0;
+}
+
+/* RTL Support */
+.rtl .ctc-abandonment-nudge {
+    right: auto;
+    left: 30px;
+}
+
+.rtl .ctc-abandonment-nudge .ctc-nudge-close {
+    right: auto;
+    left: 12px;
+}
+
+.rtl .ctc-nudge-header {
+    padding-right: 0;
+    padding-left: 20px;
+}
+
+@media (max-width: 480px) {
+    .ctc-abandonment-nudge {
+        bottom: 20px;
+        right: 15px;
+        left: 15px;
+        width: auto;
+        max-width: none;
+    }
+    .rtl .ctc-abandonment-nudge {
+        right: 15px;
+        left: 15px;
+    }
+}
+
+/* ==========================================================================
+   Back-in-Stock Alerts (Notify Me on WhatsApp)
+   ========================================================================== */
+.ctc-chat-stock-button-container {
+    margin: 15px 0;
+    display: block;
+    clear: both;
+}
+
+.ctc-chat-button-stock {
+    background-color: #ff9800 !important;
+    color: #ffffff !important;
+    font-weight: 600;
+    border-radius: 6px;
+    transition: all 0.25s ease;
+    box-shadow: 0 2px 8px rgba(255, 152, 0, 0.25);
+}
+
+.ctc-chat-button-stock:hover {
+    background-color: #f57c00 !important;
+    color: #ffffff !important;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 14px rgba(255, 152, 0, 0.4);
+}
+/* ==========================================================================
+   Order Tracking & My Account Views
+   ========================================================================== */
+.ctc-chat-order-tracking-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 18px;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-left: 4px solid #25D366;
+    border-radius: 10px;
+    padding: 20px 24px;
+    margin: 30px 0;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+/* Guard against multiple renders on the same page */
+.ctc-chat-order-tracking-card ~ .ctc-chat-order-tracking-card {
+    display: none !important;
+}
+
+.ctc-chat-order-tracking-content {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex: 1 1 300px;
+}
+
+.ctc-chat-order-tracking-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+    background: #e6f9ed;
+    color: #25D366;
+    flex-shrink: 0;
+}
+
+.ctc-chat-order-tracking-text {
+    flex: 1;
+}
+
+.ctc-chat-order-tracking-title {
+    margin: 0 0 4px 0 !important;
+    font-size: 16px !important;
+    font-weight: 600 !important;
+    color: #1e293b !important;
+    line-height: 1.3 !important;
+}
+
+.ctc-chat-order-tracking-desc {
+    margin: 0 !important;
+    font-size: 13.5px !important;
+    color: #64748b !important;
+    line-height: 1.4 !important;
+}
+
+.ctc-chat-order-tracking-action {
+    flex-shrink: 0;
+}
+
+.ctc-chat-order-tracking-action .ctc-chat-whatsapp-button {
+    margin: 0 !important;
+    padding: 12px 22px !important;
+    font-size: 14.5px !important;
+    font-weight: 600 !important;
+    border-radius: 7px !important;
+    white-space: nowrap !important;
+    box-shadow: 0 3px 10px rgba(37, 211, 102, 0.25) !important;
+    transition: all 0.2s ease !important;
+}
+
+.ctc-chat-order-tracking-action .ctc-chat-whatsapp-button:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 5px 14px rgba(37, 211, 102, 0.35) !important;
+}
+
+/* My Account Orders Table Action Button */
+.woocommerce-orders-table .button.ctc_track_whatsapp,
+.woocommerce-MyAccount-orders .button.ctc_track_whatsapp,
+.woocommerce-table--order-downloads .button.ctc_track_whatsapp {
+    background-color: #25D366 !important;
+    color: #ffffff !important;
+    border-color: #25D366 !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 5px !important;
+    margin-left: 4px !important;
+    font-size: 13px !important;
+    border-radius: 4px !important;
+    transition: all 0.2s ease !important;
+}
+
+.woocommerce-orders-table .button.ctc_track_whatsapp:hover,
+.woocommerce-MyAccount-orders .button.ctc_track_whatsapp:hover,
+.woocommerce-table--order-downloads .button.ctc_track_whatsapp:hover {
+    background-color: #1ebe5d !important;
+    border-color: #1ebe5d !important;
+    color: #ffffff !important;
+    transform: translateY(-1px) !important;
+    box-shadow: 0 2px 6px rgba(37, 211, 102, 0.3) !important;
+}
+
+@media (max-width: 640px) {
+    .ctc-chat-order-tracking-card {
+        flex-direction: column;
+        align-items: stretch;
+        padding: 16px;
+    }
+
+    .ctc-chat-order-tracking-action {
+        width: 100%;
+    }
+
+    .ctc-chat-order-tracking-action .ctc-chat-whatsapp-button {
+        width: 100%;
+        justify-content: center;
+    }
+}
+
+/* ==========================================================================
+   Chat to Unlock Discount (Coupon Engine)
+   ========================================================================== */
+.ctc-chat-coupon-teaser {
+    position: absolute;
+    bottom: calc(100% + 12px);
+    right: 0;
+    z-index: 10001;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    border-radius: 24px;
+    border: 1px solid rgba(255, 255, 255, 0.32);
+    background-image: linear-gradient(180deg, rgba(255, 255, 255, 0.16) 0%, rgba(0, 0, 0, 0.06) 100%);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.18), 0 2px 6px rgba(0, 0, 0, 0.08);
+    font-size: 13.5px;
+    font-weight: 600;
+    letter-spacing: 0.1px;
+    white-space: nowrap;
+    opacity: 0;
+    transform: translateY(8px) scale(0.95);
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    cursor: pointer;
+}
+
+.ctc-chat-coupon-teaser:hover {
+    filter: brightness(1.05);
+    transform: translateY(-2px) scale(1.02);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.22);
+}
+
+.ctc-chat-floating-bottom_left .ctc-chat-coupon-teaser,
+.ctc-chat-floating-top_left .ctc-chat-coupon-teaser {
+    right: auto;
+    left: 0;
+}
+
+.ctc-chat-floating-top_right .ctc-chat-coupon-teaser,
+.ctc-chat-floating-top_left .ctc-chat-coupon-teaser {
+    bottom: auto;
+    top: calc(100% + 12px);
+}
+
+.ctc-chat-coupon-teaser.ctc-coupon-visible {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    animation: ctc-coupon-gentle-pulse 3s infinite ease-in-out;
+}
+
+@keyframes ctc-coupon-gentle-pulse {
+    0%, 100% {
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.18), 0 2px 6px rgba(0, 0, 0, 0.08);
+    }
+    50% {
+        box-shadow: 0 8px 26px rgba(0, 0, 0, 0.28), 0 3px 8px rgba(0, 0, 0, 0.12);
+        transform: translateY(-2px);
+    }
+}
+
+.ctc-chat-coupon-link {
+    text-decoration: none !important;
+    color: inherit !important;
+    display: inline-flex;
+    align-items: center;
+}
+
+.ctc-chat-coupon-close {
+    background: none !important;
+    border: none !important;
+    padding: 0 2px !important;
+    margin: 0 !important;
+    color: inherit !important;
+    font-size: 16px !important;
+    line-height: 1 !important;
+    cursor: pointer !important;
+    opacity: 0.7;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.ctc-chat-coupon-close:hover {
+    opacity: 1;
+    transform: scale(1.15);
+}
+
+/* Single Product Coupon Badge */
+.ctc-chat-product-coupon-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 7px 16px;
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.32);
+    background-image: linear-gradient(180deg, rgba(255, 255, 255, 0.16) 0%, rgba(0, 0, 0, 0.06) 100%);
+    font-size: 13.5px;
+    font-weight: 600;
+    margin-bottom: 12px;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.12);
+    transition: all 0.25s ease;
+    cursor: pointer;
+}
+
+.ctc-chat-product-coupon-badge:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.18);
+    filter: brightness(1.05);
+}
+
+.ctc-chat-product-coupon-badge a {
+    text-decoration: none !important;
+    color: inherit !important;
+}
+
+/* ==========================================================================
+   Desktop "Scan QR Code to Chat" Button-Side Popover
+   ========================================================================== */
+
+#ctc-chat-qr-popover {
+    display: none;
+    z-index: 999999;
+    box-sizing: border-box;
+}
+
+#ctc-chat-qr-popover.ctc-qr-popover-open {
+    display: block !important;
+}
+
+/* Docked with floating button in bottom corner */
+#ctc-chat-qr-popover.ctc-qr-floating-docked {
+    position: fixed !important;
+    bottom: 92px !important;
+    right: 25px !important;
+    left: auto !important;
+    top: auto !important;
+}
+
+.ctc-chat-floating-bottom_left ~ #ctc-chat-qr-popover.ctc-qr-floating-docked,
+.ctc-chat-floating-top_left ~ #ctc-chat-qr-popover.ctc-qr-floating-docked {
+    right: auto !important;
+    left: 25px !important;
+}
+
+/* Docked next to inline buttons */
+#ctc-chat-qr-popover.ctc-qr-inline-docked {
+    position: absolute !important;
+}
+
+.ctc-chat-qr-card {
+    position: relative;
+    background: #ffffff;
+    color: #0f172a;
+    border-radius: 18px;
+    padding: 16px 16px 14px;
+    width: 255px;
+    box-sizing: border-box;
+    box-shadow: 0 16px 40px -4px rgba(0, 0, 0, 0.22), 0 0 0 1px rgba(0, 0, 0, 0.08);
+    text-align: center;
+    animation: ctcQrPopoverIn 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.ctc-chat-qr-close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 24px;
+    height: 24px;
+    background: #f1f5f9 !important;
+    border: none !important;
+    border-radius: 50% !important;
+    color: #64748b !important;
+    font-size: 16px !important;
+    line-height: 22px !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    cursor: pointer !important;
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+}
+
+.ctc-chat-qr-close:hover {
+    background: #e2e8f0 !important;
+    color: #0f172a !important;
+    transform: rotate(90deg);
+}
+
+.ctc-chat-qr-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-align: left;
+    margin-bottom: 12px;
+    padding-right: 22px;
+}
+
+.ctc-chat-qr-icon-wrap {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: #e6f9ed;
+    color: #25D366;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.ctc-chat-qr-heading {
+    margin: 0 !important;
+    font-size: 13.5px !important;
+    font-weight: 700 !important;
+    color: #0f172a !important;
+    line-height: 1.25 !important;
+}
+
+.ctc-chat-qr-subtext {
+    margin: 2px 0 0 !important;
+    font-size: 11px !important;
+    color: #64748b !important;
+    line-height: 1.2 !important;
+}
+
+.ctc-chat-qr-code-wrapper {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 10px;
+    margin-bottom: 10px;
+}
+
+.ctc-chat-qr-canvas-target {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 145px;
+    background: #ffffff;
+    border-radius: 8px;
+    padding: 8px;
+    box-sizing: border-box;
+}
+
+.ctc-chat-qr-canvas-target svg {
+    display: block !important;
+    max-width: 140px !important;
+    width: 100% !important;
+    height: auto !important;
+    margin: 0 auto !important;
+    shape-rendering: crispEdges !important;
+}
+
+.ctc-chat-qr-canvas-target img {
+    display: block !important;
+    max-width: 140px !important;
+    width: 100% !important;
+    height: auto !important;
+    margin: 0 auto !important;
+}
+
+.ctc-chat-qr-footer {
+    border-top: 1px solid #f1f5f9;
+    padding-top: 10px;
+}
+
+.ctc-chat-qr-web-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11.5px !important;
+    font-weight: 600 !important;
+    color: #128C7E !important;
+    text-decoration: none !important;
+    transition: all 0.2s ease;
+    padding: 4px 8px;
+    border-radius: 6px;
+}
+
+.ctc-chat-qr-web-btn:hover {
+    background: #e6f9ed;
+    color: #075E54 !important;
+    text-decoration: none !important;
+}
+
+@keyframes ctcQrPopoverIn {
+    from {
+        opacity: 0;
+        transform: scale(0.92) translateY(8px);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+/* Mobile bypass: never show popover on mobile */
+@media (max-width: 768px) {
+    #ctc-chat-qr-popover {
+        display: none !important;
+    }
+}
+
+/* ==========================================================================
+   Feature 9: GDPR & Privacy Compliance Mode
+   ========================================================================== */
+#ctc-chat-privacy-prompt {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 9999999;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    padding: 20px;
+}
+
+#ctc-chat-privacy-prompt.ctc-privacy-prompt-open {
+    display: flex !important;
+}
+
+.ctc-chat-privacy-backdrop {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(15, 23, 42, 0.6);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    animation: ctcFadeIn 0.2s ease;
+}
+
+.ctc-chat-privacy-card {
+    position: relative;
+    z-index: 2;
+    background: #ffffff;
+    color: #0f172a;
+    border-radius: 20px;
+    padding: 26px 24px 22px;
+    max-width: 420px;
+    width: 100%;
+    box-sizing: border-box;
+    box-shadow: 0 24px 50px -12px rgba(15, 23, 42, 0.35), 0 0 0 1px rgba(0, 0, 0, 0.06);
+    text-align: center;
+    animation: ctcPrivacyModalIn 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.ctc-chat-privacy-icon-wrap {
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    background: #e6f9ed;
+    color: #128C7E;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 16px;
+    box-shadow: 0 4px 12px rgba(18, 140, 126, 0.15);
+}
+
+.ctc-chat-privacy-title {
+    margin: 0 0 10px !important;
+    font-size: 18px !important;
+    font-weight: 700 !important;
+    color: #0f172a !important;
+    line-height: 1.3 !important;
+}
+
+.ctc-chat-privacy-body {
+    font-size: 13.5px;
+    line-height: 1.55;
+    color: #475569;
+    margin-bottom: 22px;
+    text-align: center;
+}
+
+.ctc-chat-privacy-body a.ctc-privacy-link {
+    color: #128C7E !important;
+    font-weight: 600 !important;
+    text-decoration: underline !important;
+    transition: color 0.15s ease;
+}
+
+.ctc-chat-privacy-body a.ctc-privacy-link:hover {
+    color: #075E54 !important;
+}
+
+.ctc-chat-privacy-actions {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+.ctc-chat-privacy-btn {
+    flex: 1;
+    padding: 10px 18px !important;
+    border-radius: 10px !important;
+    font-size: 13.5px !important;
+    font-weight: 600 !important;
+    cursor: pointer !important;
+    border: none !important;
+    transition: all 0.2s ease !important;
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+}
+
+.ctc-chat-privacy-cancel {
+    background: #f1f5f9 !important;
+    color: #475569 !important;
+}
+
+.ctc-chat-privacy-cancel:hover {
+    background: #e2e8f0 !important;
+    color: #0f172a !important;
+}
+
+.ctc-chat-privacy-agree {
+    background: #25D366 !important;
+    color: #ffffff !important;
+    box-shadow: 0 4px 14px rgba(37, 211, 102, 0.3) !important;
+}
+
+.ctc-chat-privacy-agree:hover {
+    background: #1ebe5d !important;
+    transform: translateY(-1px);
+    box-shadow: 0 6px 18px rgba(37, 211, 102, 0.4) !important;
+}
+
+/* Inline disclaimer beneath buttons */
+.ctc-chat-inline-privacy-notice {
+    display: block;
+    font-size: 11px;
+    line-height: 1.4;
+    color: #64748b;
+    margin-top: 7px;
+    margin-bottom: 4px;
+    text-align: inherit;
+}
+
+.ctc-chat-inline-privacy-notice .ctc-chat-privacy-lock {
+    font-size: 10px;
+    margin-right: 3px;
+    opacity: 0.8;
+}
+
+.ctc-chat-inline-privacy-notice a.ctc-privacy-link {
+    color: #128C7E !important;
+    text-decoration: underline !important;
+    font-weight: 500;
+}
+
+.ctc-chat-inline-privacy-notice a.ctc-privacy-link:hover {
+    color: #075E54 !important;
+}
+
+@keyframes ctcPrivacyModalIn {
+    from {
+        opacity: 0;
+        transform: scale(0.92) translateY(12px);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+

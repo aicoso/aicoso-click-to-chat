@@ -92,14 +92,28 @@ class CTC_Chat_Button_Display {
 			$this->add_checkout_page_hooks();
 		}
 
-		// Thank you page hooks.
-		if ( isset( $this->settings['thankyou_page']['enabled'] ) && $this->settings['thankyou_page']['enabled'] ) {
+		// Thank you / Order Tracking page hooks.
+		if ( ! empty( $this->settings['thankyou_page']['enabled'] ) ) {
 			add_action( 'woocommerce_thankyou', array( $this, 'display_thankyou_button' ) );
+		}
+
+		// My Account order tracking hooks.
+		if ( ! empty( $this->settings['thankyou_page']['my_account_view_order'] ) ) {
+			add_action( 'woocommerce_order_details_after_order_table', array( $this, 'display_view_order_tracking_button' ) );
+		}
+
+		if ( ! empty( $this->settings['thankyou_page']['my_account_orders'] ) ) {
+			add_filter( 'woocommerce_my_account_my_orders_actions', array( $this, 'add_my_orders_tracking_action' ), 10, 2 );
 		}
 
 		// Floating button.
 		if ( isset( $this->settings['floating_button']['enabled'] ) && $this->settings['floating_button']['enabled'] ) {
 			add_action( 'wp_footer', array( $this, 'display_floating_button' ) );
+		}
+
+		// Back in stock notification hook.
+		if ( isset( $this->settings['back_in_stock']['enabled'] ) && $this->settings['back_in_stock']['enabled'] ) {
+			add_action( 'woocommerce_single_product_summary', array( $this, 'display_back_in_stock_button' ), 31 );
 		}
 
 		$hooks_registered = true;
@@ -126,6 +140,10 @@ class CTC_Chat_Button_Display {
 					// Normal case: after add to cart form.
 					add_action( 'woocommerce_after_add_to_cart_form', array( $this, 'display_single_product_button' ) );
 				}
+				break;
+
+			case 'next_to_add_to_cart':
+				add_action( 'woocommerce_after_add_to_cart_button', array( $this, 'display_single_product_button' ) );
 				break;
 
 			case 'before_add_to_cart':
@@ -244,6 +262,12 @@ class CTC_Chat_Button_Display {
 			return;
 		}
 
+		// If product is out of stock and back-in-stock alerts are enabled, delegate to back-in-stock button.
+		if ( ! $product->is_in_stock() && ! empty( $this->settings['back_in_stock']['enabled'] ) ) {
+			$this->display_back_in_stock_button();
+			return;
+		}
+
 		// Check if button has already been displayed for this product.
 		if ( isset( self::$buttons_displayed[ 'product_' . $product->get_id() ] ) ) {
 			return;
@@ -281,6 +305,9 @@ class CTC_Chat_Button_Display {
 
 		// Wrap button with position-specific container.
 		echo '<div class="' . esc_attr( $position_class ) . '">';
+		if ( ! empty( $this->settings['coupon_engine']['enabled'] ) && ! empty( $this->settings['coupon_engine']['show_on_product'] ) ) {
+			$this->render_product_coupon_badge( $product->get_id() );
+		}
 		$this->render_button(
 			$whatsapp_url,
 			'product',
@@ -289,6 +316,64 @@ class CTC_Chat_Button_Display {
 		echo '</div>';
 
 		// Mark this button as displayed.
+		self::$buttons_displayed[ 'product_' . $product->get_id() ] = true;
+	}
+
+	/**
+	 * Display WhatsApp Back-in-Stock Alert button for out-of-stock products.
+	 */
+	public function display_back_in_stock_button() {
+		global $product;
+
+		if ( ! $product || ! is_a( $product, 'WC_Product' ) ) {
+			return;
+		}
+
+		// Only show if product is not in stock and back in stock alert is enabled.
+		if ( $product->is_in_stock() || empty( $this->settings['back_in_stock']['enabled'] ) ) {
+			return;
+		}
+
+		// Check if button has already been displayed.
+		if ( isset( self::$buttons_displayed[ 'stock_' . $product->get_id() ] ) || isset( self::$buttons_displayed[ 'product_' . $product->get_id() ] ) ) {
+			return;
+		}
+
+		// Respect per-product hide setting.
+		if ( $this->link_generator->is_product_button_hidden( $product->get_id() ) ) {
+			return;
+		}
+
+		// Check if the product should be excluded.
+		if ( $this->is_excluded( $product->get_id() ) ) {
+			return;
+		}
+
+		$whatsapp_url = $this->link_generator->get_back_in_stock_url( $product->get_id() );
+		if ( empty( $whatsapp_url ) ) {
+			return;
+		}
+
+		$stock_settings = $this->settings['back_in_stock'];
+		$button_text    = ! empty( $stock_settings['button_text'] ) ? $stock_settings['button_text'] : __( 'Notify Me on WhatsApp 🔔', 'aicoso-click-to-chat' );
+		$bg_color       = ! empty( $stock_settings['bg_color'] ) ? $stock_settings['bg_color'] : '#ff9800';
+		$text_color     = ! empty( $stock_settings['text_color'] ) ? $stock_settings['text_color'] : '#ffffff';
+
+		echo '<div class="ctc-chat-stock-button-container">';
+		CTC_Chat_Button_Renderer::render(
+			$whatsapp_url,
+			'stock',
+			array(
+				'text'          => $button_text,
+				'bg_color'      => $bg_color,
+				'text_color'    => $text_color,
+				'extra_classes' => array( 'ctc-chat-button-stock' ),
+				'context'       => $this->build_product_context( $product ),
+			)
+		);
+		echo '</div>';
+
+		self::$buttons_displayed[ 'stock_' . $product->get_id() ]   = true;
 		self::$buttons_displayed[ 'product_' . $product->get_id() ] = true;
 	}
 
@@ -475,13 +560,59 @@ class CTC_Chat_Button_Display {
 	}
 
 	/**
-	 * Display WhatsApp button on thank you page
+	 * Display WhatsApp button on thank you page.
 	 *
 	 * @param int $order_id The order ID.
 	 */
 	public function display_thankyou_button( $order_id ) {
-		// Check if button has already been displayed for this order.
-		if ( isset( self::$buttons_displayed[ 'thankyou_' . $order_id ] ) ) {
+		if ( ! $order_id && function_exists( 'is_wc_endpoint_url' ) && is_wc_endpoint_url( 'order-received' ) ) {
+			global $wp;
+			$order_id = isset( $wp->query_vars['order-received'] ) ? absint( $wp->query_vars['order-received'] ) : 0;
+		}
+
+		$this->display_order_tracking_card( $order_id, false );
+	}
+
+	/**
+	 * Display WhatsApp order tracking card on My Account > View Order page.
+	 *
+	 * @param WC_Order|int $order The order object or ID.
+	 */
+	public function display_view_order_tracking_button( $order ) {
+		if ( empty( $this->settings['thankyou_page']['my_account_view_order'] ) ) {
+			return;
+		}
+
+		// Never render on the Thank You / Order Received page (handled exclusively by display_thankyou_button).
+		if ( function_exists( 'is_wc_endpoint_url' ) && is_wc_endpoint_url( 'order-received' ) ) {
+			return;
+		}
+
+		// Only render on My Account > View Order endpoint.
+		if ( function_exists( 'is_wc_endpoint_url' ) && ! is_wc_endpoint_url( 'view-order' ) ) {
+			return;
+		}
+
+		$order_id = is_object( $order ) && method_exists( $order, 'get_id' ) ? $order->get_id() : ( is_numeric( $order ) ? absint( $order ) : 0 );
+		if ( $order_id > 0 ) {
+			$this->display_order_tracking_card( $order_id, true );
+		}
+	}
+
+	/**
+	 * Display WhatsApp order tracking card.
+	 *
+	 * @param int  $order_id      The order ID.
+	 * @param bool $is_view_order Whether rendering on My Account view-order.
+	 */
+	public function display_order_tracking_card( $order_id, $is_view_order = false ) {
+		$order_id = absint( $order_id );
+		if ( ! $order_id ) {
+			return;
+		}
+
+		// Strictly ensure only ONE tracking card is displayed per page load.
+		if ( ! empty( self::$buttons_displayed['order_tracking_rendered'] ) || isset( self::$buttons_displayed[ 'order_tracking_' . $order_id ] ) ) {
 			return;
 		}
 
@@ -490,24 +621,78 @@ class CTC_Chat_Button_Display {
 			return;
 		}
 
+		// Mark displayed immediately to prevent any re-entrant hook or duplicate call.
+		self::$buttons_displayed['order_tracking_rendered']       = true;
+		self::$buttons_displayed[ 'order_tracking_' . $order_id ] = true;
+
 		// Get the WhatsApp URL.
 		$whatsapp_url = $this->link_generator->get_thankyou_url( $order_id );
-
 		if ( empty( $whatsapp_url ) ) {
 			return;
 		}
 
-		// Display the button.
-		echo '<div class="ctc-chat-thankyou-button-container">';
-		$this->render_button(
+		$button_text = ! empty( $this->settings['thankyou_page']['button_text'] )
+			? $this->settings['thankyou_page']['button_text']
+			: esc_html__( 'Track My Order on WhatsApp 🚚', 'aicoso-click-to-chat' );
+
+		$card_title = esc_html__( 'Need live updates on this order?', 'aicoso-click-to-chat' );
+		$card_desc  = esc_html__( 'Connect directly with our support team on WhatsApp for instant shipping updates and tracking.', 'aicoso-click-to-chat' );
+
+		echo '<div class="ctc-chat-order-tracking-card">';
+		echo '  <div class="ctc-chat-order-tracking-content">';
+		echo '    <div class="ctc-chat-order-tracking-icon" aria-hidden="true">';
+		echo '      <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13"></rect><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon><circle cx="5.5" cy="18.5" r="2.5"></circle><circle cx="18.5" cy="18.5" r="2.5"></circle></svg>';
+		echo '    </div>';
+		echo '    <div class="ctc-chat-order-tracking-text">';
+		echo '      <h4 class="ctc-chat-order-tracking-title">' . esc_html( $card_title ) . '</h4>';
+		echo '      <p class="ctc-chat-order-tracking-desc">' . esc_html( $card_desc ) . '</p>';
+		echo '    </div>';
+		echo '  </div>';
+		echo '  <div class="ctc-chat-order-tracking-action">';
+		CTC_Chat_Button_Renderer::render(
 			$whatsapp_url,
 			'thankyou',
-			$this->build_thankyou_context( $order_id )
+			array(
+				'text'          => $button_text,
+				'extra_classes' => array( 'ctc-chat-tracking-button' ),
+				'context'       => $this->build_thankyou_context( $order_id ),
+			)
 		);
+		echo '  </div>';
 		echo '</div>';
+	}
 
-		// Mark this button as displayed.
-		self::$buttons_displayed[ 'thankyou_' . $order_id ] = true;
+	/**
+	 * Add WhatsApp Tracking action to My Account > Orders list.
+	 *
+	 * @param array    $actions Order action buttons.
+	 * @param WC_Order $order   WooCommerce Order object.
+	 * @return array
+	 */
+	public function add_my_orders_tracking_action( $actions, $order ) {
+		if ( empty( $this->settings['thankyou_page']['my_account_orders'] ) ) {
+			return $actions;
+		}
+
+		if ( ! is_object( $order ) || ! method_exists( $order, 'get_id' ) ) {
+			return $actions;
+		}
+
+		$order_id = $order->get_id();
+		$whatsapp_url = $this->link_generator->get_thankyou_url( $order_id );
+
+		if ( ! empty( $whatsapp_url ) ) {
+			$button_text = ! empty( $this->settings['thankyou_page']['button_text'] )
+				? $this->settings['thankyou_page']['button_text']
+				: esc_html__( 'Track on WhatsApp 🚚', 'aicoso-click-to-chat' );
+
+			$actions['ctc_track_whatsapp'] = array(
+				'url'  => $whatsapp_url,
+				'name' => $button_text,
+			);
+		}
+
+		return $actions;
 	}
 
 	/**
@@ -540,6 +725,9 @@ class CTC_Chat_Button_Display {
 
 		// Display the button.
 		echo '<div class="ctc-chat-floating-button-container ' . esc_attr( $position_class ) . '">';
+		if ( ! empty( $this->settings['coupon_engine']['enabled'] ) && ! empty( $this->settings['coupon_engine']['show_on_floating'] ) ) {
+			$this->render_floating_coupon_teaser();
+		}
 		$this->render_button(
 			$whatsapp_url,
 			'floating',
@@ -549,6 +737,73 @@ class CTC_Chat_Button_Display {
 
 		// Mark this button as displayed.
 		self::$buttons_displayed['floating'] = true;
+	}
+
+	/**
+	 * Render floating coupon discount teaser chip.
+	 */
+	private function render_floating_coupon_teaser() {
+		$coupon_url = $this->link_generator->get_coupon_claim_url();
+		if ( empty( $coupon_url ) ) {
+			return;
+		}
+
+		$badge_text = ! empty( $this->settings['coupon_engine']['badge_text'] )
+			? $this->settings['coupon_engine']['badge_text']
+			: esc_html__( '🎁 Chat to get 10% OFF!', 'aicoso-click-to-chat' );
+
+		$badge_bg = ! empty( $this->settings['coupon_engine']['badge_bg'] )
+			? $this->settings['coupon_engine']['badge_bg']
+			: '#ff4757';
+
+		$badge_color = ! empty( $this->settings['coupon_engine']['badge_color'] )
+			? $this->settings['coupon_engine']['badge_color']
+			: '#ffffff';
+
+		$coupon_code = ! empty( $this->settings['coupon_engine']['coupon_code'] )
+			? $this->settings['coupon_engine']['coupon_code']
+			: '';
+
+		echo '<div class="ctc-chat-coupon-teaser" style="background-color: ' . esc_attr( $badge_bg ) . '; color: ' . esc_attr( $badge_color ) . ';">';
+		echo '  <a href="' . esc_url( $coupon_url ) . '" class="ctc-chat-coupon-link" target="_blank" rel="noopener noreferrer" data-ctc-button-type="coupon" data-ctc-template-type="coupon" data-ctc-coupon-code="' . esc_attr( $coupon_code ) . '" style="color: ' . esc_attr( $badge_color ) . ';">';
+		echo '    <span class="ctc-chat-coupon-text">' . esc_html( $badge_text ) . '</span>';
+		echo '  </a>';
+		echo '  <button type="button" class="ctc-chat-coupon-close" aria-label="' . esc_attr__( 'Dismiss discount offer', 'aicoso-click-to-chat' ) . '" style="color: ' . esc_attr( $badge_color ) . ';">&times;</button>';
+		echo '</div>';
+	}
+
+	/**
+	 * Render coupon discount badge on single product page.
+	 *
+	 * @param int $product_id Product ID.
+	 */
+	private function render_product_coupon_badge( $product_id ) {
+		$coupon_url = $this->link_generator->get_coupon_claim_url( $product_id );
+		if ( empty( $coupon_url ) ) {
+			return;
+		}
+
+		$badge_text = ! empty( $this->settings['coupon_engine']['badge_text'] )
+			? $this->settings['coupon_engine']['badge_text']
+			: esc_html__( '🎁 Chat to get 10% OFF!', 'aicoso-click-to-chat' );
+
+		$badge_bg = ! empty( $this->settings['coupon_engine']['badge_bg'] )
+			? $this->settings['coupon_engine']['badge_bg']
+			: '#ff4757';
+
+		$badge_color = ! empty( $this->settings['coupon_engine']['badge_color'] )
+			? $this->settings['coupon_engine']['badge_color']
+			: '#ffffff';
+
+		$coupon_code = ! empty( $this->settings['coupon_engine']['coupon_code'] )
+			? $this->settings['coupon_engine']['coupon_code']
+			: '';
+
+		echo '<div class="ctc-chat-product-coupon-badge" style="background-color: ' . esc_attr( $badge_bg ) . '; color: ' . esc_attr( $badge_color ) . ';">';
+		echo '  <a href="' . esc_url( $coupon_url ) . '" target="_blank" rel="noopener noreferrer" data-ctc-button-type="coupon" data-ctc-template-type="coupon" data-ctc-product-id="' . esc_attr( $product_id ) . '" data-ctc-coupon-code="' . esc_attr( $coupon_code ) . '" style="color: ' . esc_attr( $badge_color ) . ';">';
+		echo esc_html( $badge_text );
+		echo '  </a>';
+		echo '</div>';
 	}
 
 	/**
@@ -605,6 +860,8 @@ class CTC_Chat_Button_Display {
 			'template_type' => $template_type,
 			'number_id'     => $this->link_generator->get_number_id( $product_id, $category_id, $page_id ),
 			'product_id'    => $product_id,
+			'cart_total'    => (float) $product->get_price(),
+			'cart_currency' => function_exists( 'get_woocommerce_currency' ) ? get_woocommerce_currency() : '',
 		);
 	}
 

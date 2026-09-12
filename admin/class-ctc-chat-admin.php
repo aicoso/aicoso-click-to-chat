@@ -1234,10 +1234,60 @@ class CTC_Chat_Admin {
 			'position' => $ctc_checkout_page_position,
 		);
 
-		// Sanitize and update thank you page settings.
+		// Sanitize and update thank you / order tracking page settings.
+		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Fields sanitized individually below.
+		$thankyou_post = isset( $_POST['ctc_chat_thankyou_page'] ) && is_array( $_POST['ctc_chat_thankyou_page'] ) ? wp_unslash( $_POST['ctc_chat_thankyou_page'] ) : array();
 		$settings['thankyou_page'] = array(
-			'enabled' => isset( $_POST['ctc_chat_thankyou_page']['enabled'] ) ? true : false,
+			'enabled'               => isset( $thankyou_post['enabled'] ) ? true : false,
+			'my_account_orders'     => isset( $thankyou_post['my_account_orders'] ) ? true : false,
+			'my_account_view_order' => isset( $thankyou_post['my_account_view_order'] ) ? true : false,
+			'button_text'           => ! empty( $thankyou_post['button_text'] ) ? sanitize_text_field( $thankyou_post['button_text'] ) : esc_html__( 'Track My Order on WhatsApp 🚚', 'aicoso-click-to-chat' ),
 		);
+
+		// Sanitize and update cart/checkout abandonment nudge settings.
+		if ( isset( $_POST['ctc_chat_cart_checkout_nudge'] ) && is_array( $_POST['ctc_chat_cart_checkout_nudge'] ) ) {
+			// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Fields sanitized individually below.
+			$nudge_post = wp_unslash( $_POST['ctc_chat_cart_checkout_nudge'] );
+			$settings['cart_checkout_nudge'] = array(
+				'enabled'     => isset( $nudge_post['enabled'] ) ? true : false,
+				'trigger'     => isset( $nudge_post['trigger'] ) && in_array( $nudge_post['trigger'], array( 'inactivity', 'exit_intent', 'both' ), true ) ? $nudge_post['trigger'] : 'both',
+				'delay'       => isset( $nudge_post['delay'] ) ? max( 3, min( 300, absint( $nudge_post['delay'] ) ) ) : 20,
+				'frequency'   => isset( $nudge_post['frequency'] ) && in_array( $nudge_post['frequency'], array( 'reappear', 'once_per_session' ), true ) ? $nudge_post['frequency'] : 'reappear',
+				'title'       => isset( $nudge_post['title'] ) ? sanitize_text_field( $nudge_post['title'] ) : esc_html__( 'Need help with your order?', 'aicoso-click-to-chat' ),
+				'message'     => isset( $nudge_post['message'] ) ? sanitize_textarea_field( $nudge_post['message'] ) : esc_html__( 'Have questions about payment, shipping, or need assistance? Chat with us on WhatsApp!', 'aicoso-click-to-chat' ),
+				'button_text' => isset( $nudge_post['button_text'] ) ? sanitize_text_field( $nudge_post['button_text'] ) : esc_html__( 'Chat with Support 💬', 'aicoso-click-to-chat' ),
+			);
+		}
+
+		// Sanitize and update back in stock alert settings.
+		if ( isset( $_POST['ctc_chat_back_in_stock'] ) && is_array( $_POST['ctc_chat_back_in_stock'] ) ) {
+			// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Fields sanitized individually below.
+			$stock_post = wp_unslash( $_POST['ctc_chat_back_in_stock'] );
+			$settings['back_in_stock'] = array(
+				'enabled'     => isset( $stock_post['enabled'] ) ? true : false,
+				'button_text' => isset( $stock_post['button_text'] ) ? sanitize_text_field( $stock_post['button_text'] ) : esc_html__( 'Notify Me on WhatsApp 🔔', 'aicoso-click-to-chat' ),
+				'bg_color'    => isset( $stock_post['bg_color'] ) && sanitize_hex_color( $stock_post['bg_color'] ) ? sanitize_hex_color( $stock_post['bg_color'] ) : '#ff9800',
+				'text_color'  => isset( $stock_post['text_color'] ) && sanitize_hex_color( $stock_post['text_color'] ) ? sanitize_hex_color( $stock_post['text_color'] ) : '#ffffff',
+				'message'     => isset( $stock_post['message'] ) ? sanitize_textarea_field( $stock_post['message'] ) : esc_html__( "Hello! I noticed that *{product_name}* (SKU: {product_sku}) is currently out of stock.\n\nPlease notify me via WhatsApp as soon as it is back in stock!\nLink: {product_url}", 'aicoso-click-to-chat' ),
+			);
+		}
+
+		// Sanitize and update coupon engine settings.
+		if ( isset( $_POST['ctc_chat_coupon_engine'] ) && is_array( $_POST['ctc_chat_coupon_engine'] ) ) {
+			// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Fields sanitized individually below.
+			$coupon_post = wp_unslash( $_POST['ctc_chat_coupon_engine'] );
+			$settings['coupon_engine'] = array(
+				'enabled'          => isset( $coupon_post['enabled'] ) ? true : false,
+				'coupon_code'      => isset( $coupon_post['coupon_code'] ) ? sanitize_text_field( $coupon_post['coupon_code'] ) : '',
+				'custom_discount'  => isset( $coupon_post['custom_discount'] ) ? sanitize_text_field( $coupon_post['custom_discount'] ) : '',
+				'badge_text'       => isset( $coupon_post['badge_text'] ) ? sanitize_text_field( $coupon_post['badge_text'] ) : esc_html__( '🎁 Chat to get 10% OFF!', 'aicoso-click-to-chat' ),
+				'badge_bg'         => isset( $coupon_post['badge_bg'] ) && sanitize_hex_color( $coupon_post['badge_bg'] ) ? sanitize_hex_color( $coupon_post['badge_bg'] ) : '#e11d48',
+				'badge_color'      => isset( $coupon_post['badge_color'] ) && sanitize_hex_color( $coupon_post['badge_color'] ) ? sanitize_hex_color( $coupon_post['badge_color'] ) : '#ffffff',
+				'show_on_floating' => isset( $coupon_post['show_on_floating'] ) ? true : false,
+				'show_on_product'  => isset( $coupon_post['show_on_product'] ) ? true : false,
+				'message'          => isset( $coupon_post['message'] ) ? sanitize_textarea_field( $coupon_post['message'] ) : esc_html__( "🎁 *Special Discount Claim*\n\nHello! I'd like to claim my discount coupon: *{coupon_code}* ({discount_amount})\n\n*Product:* {product_name}\n*Page:* {current_page_url}\n\nCan you please assist me with applying this discount to my order? Thank you!", 'aicoso-click-to-chat' ),
+			);
+		}
 
 		// Sanitize and update floating button settings.
 		if ( isset( $_POST['ctc_chat_floating_button'] ) && is_array( $_POST['ctc_chat_floating_button'] ) ) {
@@ -1305,6 +1355,7 @@ class CTC_Chat_Admin {
 
 		// Sanitize and update advanced settings.
 		$catalog_mode = isset( $_POST['ctc_chat_advanced']['catalog_mode'] ) ? true : false;
+		$custom_css   = isset( $_POST['ctc_chat_advanced']['custom_css'] ) ? wp_strip_all_tags( wp_unslash( $_POST['ctc_chat_advanced']['custom_css'] ) ) : '';
 
 		// If catalog mode is enabled, force all hide options to be true.
 		if ( $catalog_mode ) {
@@ -1313,6 +1364,7 @@ class CTC_Chat_Admin {
 				'hide_proceed_checkout' => true,
 				'hide_place_order'      => true,
 				'catalog_mode'          => true,
+				'custom_css'            => $custom_css,
 			);
 		} else {
 			// Otherwise, check individual options.
@@ -1321,10 +1373,43 @@ class CTC_Chat_Admin {
 				'hide_proceed_checkout' => isset( $_POST['ctc_chat_advanced']['hide_proceed_checkout'] ) ? true : false,
 				'hide_place_order'      => isset( $_POST['ctc_chat_advanced']['hide_place_order'] ) ? true : false,
 				'catalog_mode'          => false,
+				'custom_css'            => $custom_css,
 			);
 		}
 
 		$settings['advanced'] = $advanced;
+
+		// Sanitize and update desktop QR modal settings.
+		if ( isset( $_POST['ctc_chat_qr_modal'] ) && is_array( $_POST['ctc_chat_qr_modal'] ) ) {
+			// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Fields sanitized individually below.
+			$qr_post = wp_unslash( $_POST['ctc_chat_qr_modal'] );
+			$settings['qr_modal'] = array(
+				'enabled'       => isset( $qr_post['enabled'] ) ? true : false,
+				'title'         => isset( $qr_post['title'] ) ? sanitize_text_field( $qr_post['title'] ) : esc_html__( 'Scan to Chat on WhatsApp', 'aicoso-click-to-chat' ),
+				'description'   => isset( $qr_post['description'] ) ? sanitize_textarea_field( $qr_post['description'] ) : esc_html__( 'Point your phone camera or WhatsApp QR scanner at this code to start chatting instantly.', 'aicoso-click-to-chat' ),
+				'show_web_link' => isset( $qr_post['show_web_link'] ) ? true : false,
+			);
+		}
+
+		// Sanitize and update GDPR & Privacy Compliance settings.
+		if ( isset( $_POST['ctc_chat_privacy_compliance'] ) && is_array( $_POST['ctc_chat_privacy_compliance'] ) ) {
+			// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Fields sanitized individually below.
+			$privacy_post = wp_unslash( $_POST['ctc_chat_privacy_compliance'] );
+			$consent_mode = isset( $privacy_post['consent_mode'] ) && in_array( $privacy_post['consent_mode'], array( 'prompt', 'inline_notice' ), true )
+				? $privacy_post['consent_mode']
+				: 'prompt';
+
+			$settings['privacy_compliance'] = array(
+				'enabled'           => isset( $privacy_post['enabled'] ),
+				'consent_mode'      => $consent_mode,
+				'notice_text'       => isset( $privacy_post['notice_text'] ) ? sanitize_textarea_field( $privacy_post['notice_text'] ) : '',
+				'link_text'         => isset( $privacy_post['link_text'] ) ? sanitize_text_field( $privacy_post['link_text'] ) : esc_html__( 'Privacy Policy', 'aicoso-click-to-chat' ),
+				'custom_policy_url' => isset( $privacy_post['custom_policy_url'] ) ? esc_url_raw( trim( $privacy_post['custom_policy_url'] ) ) : '',
+				'anonymize_ip'      => isset( $privacy_post['anonymize_ip'] ),
+				'agree_button'      => isset( $privacy_post['agree_button'] ) ? sanitize_text_field( $privacy_post['agree_button'] ) : esc_html__( 'Accept & Chat', 'aicoso-click-to-chat' ),
+				'cancel_button'     => isset( $privacy_post['cancel_button'] ) ? sanitize_text_field( $privacy_post['cancel_button'] ) : esc_html__( 'Cancel', 'aicoso-click-to-chat' ),
+			);
+		}
 
 		$retention_days = isset( $_POST['ctc_chat_analytics']['retention_days'] ) ? absint( $_POST['ctc_chat_analytics']['retention_days'] ) : 365;
 		$retention_days = max( 30, min( 730, $retention_days ) );
@@ -1613,5 +1698,56 @@ class CTC_Chat_Admin {
 		} else {
 			delete_post_meta( $post_id, '_ctc_chat_custom_message' );
 		}
+	}
+
+	/**
+	 * Get published WooCommerce coupons list.
+	 *
+	 * @return array
+	 */
+	public static function get_available_coupons() {
+		if ( ! class_exists( 'WooCommerce' ) ) {
+			return array();
+		}
+
+		$coupons = get_posts(
+			array(
+				'post_type'      => 'shop_coupon',
+				'post_status'    => 'publish',
+				'posts_per_page' => 100,
+				'orderby'        => 'title',
+				'order'          => 'ASC',
+			)
+		);
+
+		$list = array();
+		foreach ( $coupons as $post ) {
+			$code = $post->post_title;
+			$discount_desc = '';
+			if ( class_exists( 'WC_Coupon' ) ) {
+				try {
+					$coupon = new WC_Coupon( $code );
+					if ( $coupon->get_id() ) {
+						$amount = $coupon->get_amount();
+						$type   = $coupon->get_discount_type();
+						if ( 'percent' === $type ) {
+							$discount_desc = $amount . '% OFF';
+						} elseif ( 'fixed_cart' === $type || 'fixed_product' === $type ) {
+							$discount_desc = function_exists( 'wc_price' ) ? wp_strip_all_tags( wc_price( $amount ) ) . ' OFF' : '$' . $amount . ' OFF';
+						} else {
+							$discount_desc = $amount;
+						}
+					}
+				} catch ( Exception $e ) {
+					unset( $e );
+				}
+			}
+			$list[] = array(
+				'code'        => $code,
+				'description' => $discount_desc,
+			);
+		}
+
+		return $list;
 	}
 }

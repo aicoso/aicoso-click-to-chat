@@ -14,7 +14,7 @@
  * Plugin Name:       AICOSO Click to Chat
  * Plugin URI:        https://wordpress.org/plugins/aicoso-click-to-chat/
  * Description:       Enable customers to order products directly through WhatsApp with a single click. Add WhatsApp buttons to product pages, shop pages, cart, and checkout.
- * Version:           1.0.3
+ * Version:           1.2.1
  * Requires at least: 6.2
  * Tested up to:      7.0
  * Requires PHP:      7.4
@@ -34,7 +34,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 // Define plugin constants.
-define( 'CTC_CHAT_VERSION', '1.0.3' );
+define( 'CTC_CHAT_VERSION', '1.2.1' );
 define( 'CTC_CHAT_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 define( 'CTC_CHAT_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 define( 'CTC_CHAT_PLUGIN_BASENAME', plugin_basename( __FILE__ ) );
@@ -147,17 +147,47 @@ function ctc_chat_get_default_settings() {
 			'position' => 'after_payment',
 		),
 		'thankyou_page'     => array(
-			'enabled' => false,
+			'enabled'               => false,
+			'my_account_orders'     => false,
+			'my_account_view_order' => false,
+			'button_text'           => esc_html__( 'Track My Order on WhatsApp 🚚', 'aicoso-click-to-chat' ),
 		),
 		'floating_button'   => array(
 			'enabled'  => false,
 			'position' => 'bottom_right',
 		),
+		'cart_checkout_nudge' => array(
+			'enabled'     => false,
+			'trigger'     => 'both',
+			'delay'       => 20,
+			'frequency'   => 'reappear',
+			'title'       => esc_html__( 'Need help with your order?', 'aicoso-click-to-chat' ),
+			'message'     => esc_html__( 'Have questions about payment, shipping, or need assistance? Chat with us on WhatsApp!', 'aicoso-click-to-chat' ),
+			'button_text' => esc_html__( 'Chat with Support 💬', 'aicoso-click-to-chat' ),
+		),
+		'back_in_stock'       => array(
+			'enabled'     => false,
+			'button_text' => esc_html__( 'Notify Me on WhatsApp 🔔', 'aicoso-click-to-chat' ),
+			'bg_color'    => '#ff9800',
+			'text_color'  => '#ffffff',
+			'message'     => esc_html__( "Hello! I noticed that *{product_name}* (SKU: {product_sku}) is currently out of stock.\n\nPlease notify me via WhatsApp as soon as it is back in stock!\nLink: {product_url}", 'aicoso-click-to-chat' ),
+		),
+		'coupon_engine'       => array(
+			'enabled'          => false,
+			'coupon_code'      => '',
+			'custom_discount'  => '',
+			'badge_text'       => esc_html__( '🎁 Chat to get 10% OFF!', 'aicoso-click-to-chat' ),
+			'badge_bg'         => '#e11d48',
+			'badge_color'      => '#ffffff',
+			'show_on_floating' => true,
+			'show_on_product'  => true,
+			'message'          => esc_html__( "🎁 *Special Discount Claim*\n\nHello! I'd like to claim my discount coupon: *{coupon_code}* ({discount_amount})\n\n*Product:* {product_name}\n*Page:* {current_page_url}\n\nCan you please assist me with applying this discount to my order? Thank you!", 'aicoso-click-to-chat' ),
+		),
 		'message_templates' => array(
 			'single_product' => esc_html__( "Hello! I'm interested in the product: *{product_name}*\nPrice: {price}\nURL: {product_url}\n\nDo you have this item in stock? I'd like to get more information.", 'aicoso-click-to-chat' ),
 			'shop'           => esc_html__( "Hello! I'm browsing your products at {current_page_url} and have a question.", 'aicoso-click-to-chat' ),
 			'cart_checkout'  => esc_html__( "Hello! I'd like to complete my purchase of:\n{cart_items_list}\n---------------------\nSubtotal: {cart_subtotal}\nTax: {tax_amount}\nShipping: {shipping_method} - {shipping_cost}\nTotal: {cart_total}\n\nI have a few questions before finalizing my order.", 'aicoso-click-to-chat' ),
-			'thank_you'      => esc_html__( "Hello! I've just placed order #{order_number} on {order_date}.\nMy order includes:\n{ordered_items_list}\n---------------------\nApplied Coupon: {coupon_code}\nTotal: {order_total}\n\nI'd like to confirm when this will be shipped.", 'aicoso-click-to-chat' ),
+			'thank_you'      => esc_html__( "Hello! I'd like to check the status of my order #{order_number} (placed on {order_date}).\nCustomer: {customer_name}\nCurrent Status: {order_status}\n\nItems:\n{ordered_items_list}\nTotal: {order_total}\n\nCould you please provide a tracking update? Thank you!", 'aicoso-click-to-chat' ),
 			'floating'       => esc_html__( 'Hello! I was browsing your website at {current_page_url} and have a question.', 'aicoso-click-to-chat' ),
 			'variations'     => esc_html__( "Hello! I'm interested in the product: *{product_name}*\nSelected options: {variation_details}\nPrice: {variation_price}\nURL: {product_url}\n\nIs this combination available for immediate shipping?", 'aicoso-click-to-chat' ),
 		),
@@ -173,6 +203,23 @@ function ctc_chat_get_default_settings() {
 			'hide_proceed_checkout' => false,
 			'hide_place_order'      => false,
 			'catalog_mode'          => false,
+			'custom_css'            => '',
+		),
+		'qr_modal'          => array(
+			'enabled'       => true,
+			'title'         => esc_html__( 'Scan to Chat on WhatsApp', 'aicoso-click-to-chat' ),
+			'description'   => esc_html__( 'Point your phone camera or WhatsApp QR scanner at this code to start chatting instantly.', 'aicoso-click-to-chat' ),
+			'show_web_link' => true,
+		),
+		'privacy_compliance' => array(
+			'enabled'           => false,
+			'consent_mode'      => 'prompt',
+			'notice_text'       => esc_html__( 'By chatting with us on WhatsApp, you agree to our {privacy_policy_link} and consent to communication regarding your inquiry.', 'aicoso-click-to-chat' ),
+			'link_text'         => esc_html__( 'Privacy Policy', 'aicoso-click-to-chat' ),
+			'custom_policy_url' => '',
+			'anonymize_ip'      => true,
+			'agree_button'      => esc_html__( 'Accept & Chat', 'aicoso-click-to-chat' ),
+			'cancel_button'     => esc_html__( 'Cancel', 'aicoso-click-to-chat' ),
 		),
 		'analytics'         => array(
 			'enabled'            => true,

@@ -16,7 +16,7 @@
         return {
             action: 'ctc_chat_track_click',
             nonce: window.ctc_chat_tracking.nonce,
-            button_type: readData(button, 'data-ctc-button-type', 'unknown'),
+            button_type: readData(button, 'data-ctc-button-type', (button.classList && button.classList.contains('ctc_track_whatsapp')) ? 'thankyou' : 'unknown'),
             template_type: readData(button, 'data-ctc-template-type', ''),
             number_id: readData(button, 'data-ctc-number-id', '0'),
             product_id: readData(button, 'data-ctc-product-id', '0'),
@@ -77,7 +77,7 @@
             return;
         }
 
-        var button = event.target.closest('.ctc-chat-whatsapp-button');
+        var button = event.target.closest('.ctc-chat-whatsapp-button, a.ctc_track_whatsapp, .ctc-chat-coupon-link, .ctc-chat-product-coupon-badge a');
         if (!button) {
             return;
         }

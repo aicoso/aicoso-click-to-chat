@@ -60,7 +60,7 @@ function ctc_chat_analytics_is_enabled() {
  * @return string[]
  */
 function ctc_chat_get_allowed_button_types() {
-	return array( 'product', 'shop', 'cart', 'checkout', 'thankyou', 'floating', 'shortcode' );
+	return array( 'product', 'shop', 'cart', 'checkout', 'thankyou', 'floating', 'shortcode', 'coupon' );
 }
 
 /**
@@ -69,7 +69,7 @@ function ctc_chat_get_allowed_button_types() {
  * @return string[]
  */
 function ctc_chat_get_allowed_template_types() {
-	return array( 'single_product', 'variations', 'shop', 'cart_checkout', 'thank_you', 'floating', 'custom' );
+	return array( 'single_product', 'variations', 'shop', 'cart_checkout', 'thank_you', 'floating', 'custom', 'coupon' );
 }
 
 /**
@@ -87,6 +87,7 @@ function ctc_chat_get_button_type_label( $button_type ) {
 		'thankyou'  => __( 'Thank you', 'aicoso-click-to-chat' ),
 		'floating'  => __( 'Floating', 'aicoso-click-to-chat' ),
 		'shortcode' => __( 'Shortcode', 'aicoso-click-to-chat' ),
+		'coupon'    => __( 'Coupon / Discount', 'aicoso-click-to-chat' ),
 	);
 
 	return isset( $labels[ $button_type ] ) ? $labels[ $button_type ] : ucfirst( $button_type );

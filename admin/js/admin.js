@@ -29,8 +29,17 @@
         // Initialize position field toggles
         initPositionToggles();
 
+        // Initialize back-in-stock alerts live customizer and swatches
+        initStockAlertCustomizer();
+
+        // Initialize coupon engine live customizer and swatches
+        initCouponEngineCustomizer();
+
         // Initialize catalog mode and advanced options
         initAdvancedOptions();
+
+        // Initialize Live Visual Customizer & Preview
+        initLiveVisualCustomizer();
 
         // Lean tab progress feedback (matches affiliate admin pattern)
         initTabLoadingProgress();
@@ -105,16 +114,136 @@
                 change: function(event, ui) {
                     // Update the input field value and trigger change
                     if (ui.color) {
-                        $(event.target).val(ui.color.toString());
+                        const val = ui.color.toString();
+                        $(event.target).val(val);
                         $(event.target).trigger('change');
+
+                        if ($(event.target).attr('id') === 'ctc_chat_stock_bg_color') {
+                            $('#ctc-chat-stock-preview-btn').css('background-color', val);
+                        } else if ($(event.target).attr('id') === 'ctc_chat_stock_text_color') {
+                            $('#ctc-chat-stock-preview-btn').css('color', val);
+                        } else if ($(event.target).attr('id') === 'ctc_chat_coupon_badge_bg') {
+                            $('#ctc-chat-coupon-preview-chip').css('background-color', val);
+                        } else if ($(event.target).attr('id') === 'ctc_chat_coupon_badge_color') {
+                            $('#ctc-chat-coupon-preview-chip').css('color', val);
+                        } else if ($(event.target).attr('id') === 'ctc_chat_button_bg_color') {
+                            $('.ctc-preview-button-target').css('background-color', val);
+                        } else if ($(event.target).attr('id') === 'ctc_chat_button_text_color') {
+                            $('.ctc-preview-button-target').css('color', val);
+                        }
                     }
                 },
-                clear: function(event, ui) {
+                clear: function(event) {
                     // Clear the input field value and trigger change
                     $(event.target).val('');
                     $(event.target).trigger('change');
+
+                    if ($(event.target).attr('id') === 'ctc_chat_stock_bg_color') {
+                        $('#ctc-chat-stock-preview-btn').css('background-color', '#ff9800');
+                    } else if ($(event.target).attr('id') === 'ctc_chat_stock_text_color') {
+                        $('#ctc-chat-stock-preview-btn').css('color', '#ffffff');
+                    } else if ($(event.target).attr('id') === 'ctc_chat_coupon_badge_bg') {
+                        $('#ctc-chat-coupon-preview-chip').css('background-color', '#e11d48');
+                    } else if ($(event.target).attr('id') === 'ctc_chat_coupon_badge_color') {
+                        $('#ctc-chat-coupon-preview-chip').css('color', '#ffffff');
+                    } else if ($(event.target).attr('id') === 'ctc_chat_button_bg_color') {
+                        $('.ctc-preview-button-target').css('background-color', '#25D366');
+                    } else if ($(event.target).attr('id') === 'ctc_chat_button_text_color') {
+                        $('.ctc-preview-button-target').css('color', '#ffffff');
+                    }
                 }
             });
+        });
+    }
+
+    /**
+     * Initialize Back-in-Stock alerts customizer swatches and live preview
+     */
+    function initStockAlertCustomizer() {
+        const $previewBtn = $('#ctc-chat-stock-preview-btn');
+        if (!$previewBtn.length) {
+            return;
+        }
+
+        // Live update preview text
+        $('#ctc_chat_stock_button_text').on('input change', function() {
+            const txt = $(this).val() || 'Notify Me on WhatsApp 🔔';
+            $previewBtn.find('.ctc-chat-button-text').text(txt);
+        });
+
+        // Quick swatch click
+        $(document).on('click', '.ctc-stock-swatch', function(e) {
+            e.preventDefault();
+            const bg = $(this).data('bg');
+            const text = $(this).data('text');
+
+            if (bg) {
+                const $bgInput = $('#ctc_chat_stock_bg_color');
+                $bgInput.val(bg);
+                try {
+                    $bgInput.wpColorPicker('color', bg);
+                } catch (err) {}
+                $previewBtn.css('background-color', bg);
+            }
+
+            if (text) {
+                const $textInput = $('#ctc_chat_stock_text_color');
+                $textInput.val(text);
+                try {
+                    $textInput.wpColorPicker('color', text);
+                } catch (err) {}
+                $previewBtn.css('color', text);
+            }
+        });
+    }
+
+    /**
+     * Initialize Coupon Engine customizer swatches, coupon select, and live preview
+     */
+    function initCouponEngineCustomizer() {
+        const $previewChip = $('#ctc-chat-coupon-preview-chip');
+        if (!$previewChip.length) {
+            return;
+        }
+
+        // Live update preview text
+        $('#ctc_chat_coupon_badge_text').on('input change', function() {
+            const txt = $(this).val() || '🎁 Chat to get 10% OFF!';
+            $('#ctc-chat-coupon-preview-text').text(txt);
+        });
+
+        // Quick swatch click
+        $(document).on('click', '.ctc-coupon-swatch', function(e) {
+            e.preventDefault();
+            const bg = $(this).data('bg');
+            const text = $(this).data('text');
+
+            if (bg) {
+                const $bgInput = $('#ctc_chat_coupon_badge_bg');
+                $bgInput.val(bg);
+                try {
+                    $bgInput.wpColorPicker('color', bg);
+                } catch (err) {}
+                $previewChip.css('background-color', bg);
+            }
+
+            if (text) {
+                const $textInput = $('#ctc_chat_coupon_badge_color');
+                $textInput.val(text);
+                try {
+                    $textInput.wpColorPicker('color', text);
+                } catch (err) {}
+                $previewChip.css('color', text);
+            }
+        });
+
+        // When a WooCommerce coupon is selected, optionally suggest discount label
+        $('#ctc_chat_coupon_select').on('change', function() {
+            const selectedText = $(this).find('option:selected').text();
+            const match = selectedText.match(/\(([^)]+)\)/);
+            if (match && match[1] && !$('#ctc_chat_coupon_custom_discount').val()) {
+                $('#ctc_chat_coupon_custom_discount').val(match[1]);
+            }
         });
     }
 
@@ -838,11 +967,61 @@
             }
         });
 
+        // Toggle cart/checkout nudge settings
+        $('#ctc_chat_nudge_enabled').on('change', function() {
+            if ($(this).is(':checked')) {
+                $('.ctc-chat-nudge-row').removeClass('ctc-chat-hidden');
+            } else {
+                $('.ctc-chat-nudge-row').addClass('ctc-chat-hidden');
+            }
+        });
+
+        // Toggle back in stock alert settings
+        $('#ctc_chat_stock_enabled').on('change', function() {
+            if ($(this).is(':checked')) {
+                $('.ctc-chat-stock-row').removeClass('ctc-chat-hidden');
+            } else {
+                $('.ctc-chat-stock-row').addClass('ctc-chat-hidden');
+            }
+        });
+
+        // Toggle coupon engine settings
+        $('#ctc_chat_coupon_enabled').on('change', function() {
+            if ($(this).is(':checked')) {
+                $('.ctc-chat-coupon-row').removeClass('ctc-chat-hidden');
+            } else {
+                $('.ctc-chat-coupon-row').addClass('ctc-chat-hidden');
+            }
+        });
+
+        // Toggle desktop QR modal settings
+        $('#ctc_chat_qr_modal_enabled').on('change', function() {
+            if ($(this).is(':checked')) {
+                $('.ctc-chat-qr-modal-row').removeClass('ctc-chat-hidden');
+            } else {
+                $('.ctc-chat-qr-modal-row').addClass('ctc-chat-hidden');
+            }
+        });
+
+        // Toggle GDPR & Privacy compliance settings
+        $('#ctc_chat_privacy_enabled').on('change', function() {
+            if ($(this).is(':checked')) {
+                $('.ctc-chat-privacy-row').removeClass('ctc-chat-hidden');
+            } else {
+                $('.ctc-chat-privacy-row').addClass('ctc-chat-hidden');
+            }
+        });
+
         // Initialize position toggles on page load
         $('#ctc_chat_cart_page_enabled').trigger('change');
         $('#ctc_chat_checkout_page_enabled').trigger('change');
         $('#ctc_chat_single_product_enabled').trigger('change');
         $('#ctc_chat_shop_page_enabled').trigger('change');
+        $('#ctc_chat_nudge_enabled').trigger('change');
+        $('#ctc_chat_stock_enabled').trigger('change');
+        $('#ctc_chat_coupon_enabled').trigger('change');
+        $('#ctc_chat_qr_modal_enabled').trigger('change');
+        $('#ctc_chat_privacy_enabled').trigger('change');
     }
 
     /**
@@ -899,6 +1078,63 @@
         }
 
         return success;
+    }
+
+    /**
+     * Initialize Live Visual Customizer with real-time sync and device switcher
+     */
+    function initLiveVisualCustomizer() {
+        const $customizer = $('.ctc-live-customizer');
+        if (!$customizer.length) {
+            return;
+        }
+
+        // Device Switcher (Desktop vs Mobile)
+        $(document).on('click', '.ctc-device-btn', function(e) {
+            e.preventDefault();
+            const device = $(this).data('device');
+            $('.ctc-device-btn').removeClass('active');
+            $(this).addClass('active');
+
+            $('#ctc-preview-container').attr('data-active-device', device);
+            if (device === 'mobile') {
+                $('.ctc-mockup-desktop').hide();
+                $('.ctc-mockup-mobile').fadeIn(200);
+            } else {
+                $('.ctc-mockup-mobile').hide();
+                $('.ctc-mockup-desktop').fadeIn(200);
+            }
+        });
+
+        // Live text sync
+        $('#ctc_chat_button_text').on('input change', function() {
+            const val = $(this).val() || 'Order via WhatsApp';
+            $('.ctc-preview-button-text').text(val);
+        });
+
+        // Live icon sync
+        $('#ctc_chat_button_icon').on('change', function() {
+            if ($(this).is(':checked')) {
+                $('.ctc-preview-button-target .ctc-chat-whatsapp-icon').show();
+            } else {
+                $('.ctc-preview-button-target .ctc-chat-whatsapp-icon').hide();
+            }
+        });
+
+        // Direct input sync for color fields
+        $('#ctc_chat_button_bg_color').on('input change', function() {
+            const val = $(this).val();
+            if (val) {
+                $('.ctc-preview-button-target').css('background-color', val);
+            }
+        });
+
+        $('#ctc_chat_button_text_color').on('input change', function() {
+            const val = $(this).val();
+            if (val) {
+                $('.ctc-preview-button-target').css('color', val);
+            }
+        });
     }
 
     // Initialize when document is ready

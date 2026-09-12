@@ -57,6 +57,19 @@ class CTC_Chat_Public {
 		// AJAX handlers for variation URLs.
 		add_action( 'wp_ajax_ctc_chat_get_variation_url', array( $this, 'ajax_get_variation_url' ) );
 		add_action( 'wp_ajax_nopriv_ctc_chat_get_variation_url', array( $this, 'ajax_get_variation_url' ) );
+
+		// AJAX handlers for back-in-stock alert URLs.
+		add_action( 'wp_ajax_ctc_chat_get_stock_url', array( $this, 'ajax_get_stock_url' ) );
+		add_action( 'wp_ajax_nopriv_ctc_chat_get_stock_url', array( $this, 'ajax_get_stock_url' ) );
+
+		// Output Custom CSS from Advanced settings.
+		add_action( 'wp_head', array( $this, 'output_custom_css' ), 99 );
+
+		// Render desktop QR modal in footer if enabled.
+		add_action( 'wp_footer', array( $this, 'render_qr_modal' ) );
+
+		// Render GDPR Privacy Consent modal in footer if enabled.
+		add_action( 'wp_footer', array( $this, 'render_privacy_prompt' ) );
 	}
 
 	/**
@@ -87,11 +100,27 @@ class CTC_Chat_Public {
 			CTC_CHAT_VERSION
 		);
 
+		$script_deps = array( 'jquery' );
+		$qr_settings = isset( $this->settings['qr_modal'] ) ? $this->settings['qr_modal'] : array();
+		$qr_enabled  = ! isset( $qr_settings['enabled'] ) ? true : ! empty( $qr_settings['enabled'] );
+
+		// Desktop QR code generator script.
+		if ( $qr_enabled ) {
+			wp_enqueue_script(
+				'ctc-chat-qrcode',
+				CTC_CHAT_PLUGIN_URL . 'public/js/qrcode.min.js',
+				array(),
+				CTC_CHAT_VERSION,
+				true
+			);
+			$script_deps[] = 'ctc-chat-qrcode';
+		}
+
 		// Register and enqueue JavaScript.
 		wp_enqueue_script(
 			'ctc-chat-public-script',
 			CTC_CHAT_PLUGIN_URL . 'public/js/public.js',
-			array( 'jquery' ),
+			$script_deps,
 			CTC_CHAT_VERSION,
 			true
 		);
@@ -100,6 +129,82 @@ class CTC_Chat_Public {
 		$localize_data = array(
 			'ajaxurl' => admin_url( 'admin-ajax.php' ),
 			'nonce'   => wp_create_nonce( 'ctc_chat_public_nonce' ),
+		);
+
+		// Check if abandonment nudge is active on cart or checkout.
+		$nudge_settings = isset( $this->settings['cart_checkout_nudge'] ) ? $this->settings['cart_checkout_nudge'] : array();
+		if ( ! empty( $nudge_settings['enabled'] ) && ( is_cart() || ( is_checkout() && ! is_wc_endpoint_url( 'order-received' ) ) ) ) {
+			require_once CTC_CHAT_PLUGIN_DIR . 'includes/class-ctc-chat-whatsapp-link-generator.php';
+			$link_generator = new CTC_Chat_WhatsApp_Link_Generator();
+			$nudge_url      = $link_generator->get_cart_url();
+
+			if ( empty( $nudge_url ) ) {
+				$nudge_url = $link_generator->get_floating_url();
+			}
+			if ( empty( $nudge_url ) ) {
+				$wa_num = $link_generator->get_whatsapp_number();
+				if ( ! empty( $wa_num ) ) {
+					$nudge_url = 'https://wa.me/' . preg_replace( '/[^0-9]/', '', $wa_num );
+				}
+			}
+
+			$cart_total = '';
+			if ( function_exists( 'WC' ) && WC()->cart && method_exists( WC()->cart, 'get_total' ) && ! WC()->cart->is_empty() ) {
+				$cart_total = wp_strip_all_tags( wc_price( WC()->cart->get_total( 'edit' ) ) );
+			}
+
+			if ( ! empty( $nudge_url ) ) {
+				$localize_data['nudge'] = array(
+					'enabled'     => true,
+					'trigger'     => isset( $nudge_settings['trigger'] ) ? $nudge_settings['trigger'] : 'both',
+					'delay'       => isset( $nudge_settings['delay'] ) ? max( 3, absint( $nudge_settings['delay'] ) ) : 20,
+					'frequency'   => isset( $nudge_settings['frequency'] ) ? $nudge_settings['frequency'] : 'reappear',
+					'title'       => ! empty( $nudge_settings['title'] ) ? esc_html( $nudge_settings['title'] ) : esc_html__( 'Need help with your order?', 'aicoso-click-to-chat' ),
+					'message'     => ! empty( $nudge_settings['message'] ) ? esc_html( $nudge_settings['message'] ) : esc_html__( 'Have questions about payment, shipping, or need assistance? Chat with us on WhatsApp!', 'aicoso-click-to-chat' ),
+					'button_text' => ! empty( $nudge_settings['button_text'] ) ? esc_html( $nudge_settings['button_text'] ) : esc_html__( 'Chat with Support 💬', 'aicoso-click-to-chat' ),
+					'cart_total'  => $cart_total,
+					'url'         => $nudge_url,
+				);
+			}
+		}
+
+		// Back in stock notification settings.
+		$stock_settings = isset( $this->settings['back_in_stock'] ) ? $this->settings['back_in_stock'] : array();
+		$localize_data['stock'] = array(
+			'enabled'     => ! empty( $stock_settings['enabled'] ),
+			'button_text' => ! empty( $stock_settings['button_text'] ) ? esc_html( $stock_settings['button_text'] ) : esc_html__( 'Notify Me on WhatsApp 🔔', 'aicoso-click-to-chat' ),
+			'bg_color'    => ! empty( $stock_settings['bg_color'] ) ? sanitize_hex_color( $stock_settings['bg_color'] ) : '#ff9800',
+			'text_color'  => ! empty( $stock_settings['text_color'] ) ? sanitize_hex_color( $stock_settings['text_color'] ) : '#ffffff',
+		);
+
+		// Desktop QR modal settings.
+		$localize_data['qr_modal'] = array(
+			'enabled'       => $qr_enabled,
+			'title'         => ! empty( $qr_settings['title'] ) ? esc_html( $qr_settings['title'] ) : esc_html__( 'Scan to Chat on WhatsApp', 'aicoso-click-to-chat' ),
+			'description'   => ! empty( $qr_settings['description'] ) ? esc_html( $qr_settings['description'] ) : esc_html__( 'Point your phone camera or WhatsApp QR scanner at this code to start chatting instantly.', 'aicoso-click-to-chat' ),
+			'show_web_link' => ! isset( $qr_settings['show_web_link'] ) || ! empty( $qr_settings['show_web_link'] ),
+			'web_link_text' => esc_html__( 'Or continue with WhatsApp Web on this computer →', 'aicoso-click-to-chat' ),
+		);
+
+		// GDPR & Privacy compliance settings.
+		$privacy_settings = isset( $this->settings['privacy_compliance'] ) ? $this->settings['privacy_compliance'] : array();
+		$privacy_enabled  = ! empty( $privacy_settings['enabled'] );
+		$policy_url       = ! empty( $privacy_settings['custom_policy_url'] ) ? esc_url( $privacy_settings['custom_policy_url'] ) : '';
+		if ( empty( $policy_url ) && function_exists( 'get_privacy_policy_url' ) ) {
+			$policy_url = esc_url( get_privacy_policy_url() );
+		}
+		$link_text        = ! empty( $privacy_settings['link_text'] ) ? esc_html( $privacy_settings['link_text'] ) : esc_html__( 'Privacy Policy', 'aicoso-click-to-chat' );
+		$policy_link_html = $policy_url ? '<a href="' . $policy_url . '" target="_blank" rel="noopener noreferrer" class="ctc-privacy-link">' . $link_text . '</a>' : $link_text;
+		$notice_template  = ! empty( $privacy_settings['notice_text'] ) ? $privacy_settings['notice_text'] : esc_html__( 'By chatting with us on WhatsApp, you agree to our {privacy_policy_link} and consent to communication regarding your inquiry.', 'aicoso-click-to-chat' );
+		$notice_html      = str_replace( '{privacy_policy_link}', $policy_link_html, esc_html( $notice_template ) );
+
+		$localize_data['privacy'] = array(
+			'enabled'       => $privacy_enabled,
+			'consent_mode'  => $privacy_settings['consent_mode'] ?? 'prompt',
+			'notice_html'   => $notice_html,
+			'policy_url'    => $policy_url,
+			'agree_button'  => ! empty( $privacy_settings['agree_button'] ) ? esc_html( $privacy_settings['agree_button'] ) : esc_html__( 'Accept & Chat', 'aicoso-click-to-chat' ),
+			'cancel_button' => ! empty( $privacy_settings['cancel_button'] ) ? esc_html( $privacy_settings['cancel_button'] ) : esc_html__( 'Cancel', 'aicoso-click-to-chat' ),
 		);
 
 		wp_localize_script( 'ctc-chat-public-script', 'ctc_chat_public', $localize_data );
@@ -178,10 +283,10 @@ class CTC_Chat_Public {
 			return true;
 		}
 
-		// Load on single product pages if enabled.
+		// Load on single product pages if enabled or if back in stock alert is enabled.
 		if ( is_product() &&
-			 isset( $this->settings['single_product']['enabled'] ) &&
-			 $this->settings['single_product']['enabled'] ) {
+			 ( ( isset( $this->settings['single_product']['enabled'] ) && $this->settings['single_product']['enabled'] ) ||
+			   ! empty( $this->settings['back_in_stock']['enabled'] ) ) ) {
 			return true;
 		}
 
@@ -201,8 +306,21 @@ class CTC_Chat_Public {
 
 		// Load on thank you page if enabled.
 		if ( is_wc_endpoint_url( 'order-received' ) &&
-			 isset( $this->settings['thankyou_page']['enabled'] ) &&
-			 $this->settings['thankyou_page']['enabled'] ) {
+			 ! empty( $this->settings['thankyou_page']['enabled'] ) ) {
+			return true;
+		}
+
+		// Load on My Account pages if order tracking is enabled.
+		if ( function_exists( 'is_account_page' ) && is_account_page() ) {
+			if ( ! empty( $this->settings['thankyou_page']['my_account_orders'] ) ||
+				 ! empty( $this->settings['thankyou_page']['my_account_view_order'] ) ) {
+				return true;
+			}
+		}
+
+		// Load on cart or checkout if abandonment nudge is enabled.
+		if ( ( is_cart() || ( is_checkout() && ! is_wc_endpoint_url( 'order-received' ) ) ) &&
+			 ! empty( $this->settings['cart_checkout_nudge']['enabled'] ) ) {
 			return true;
 		}
 
@@ -528,9 +646,10 @@ class CTC_Chat_Public {
 			wp_send_json_error( array( 'message' => __( 'Security check failed.', 'aicoso-click-to-chat' ) ) );
 		}
 
-		// Get product ID and variations.
+		// Get product ID, variations, and quantity.
 		$product_id = isset( $_POST['product_id'] ) ? intval( $_POST['product_id'] ) : 0;
 		$variations = isset( $_POST['variations'] ) ? array_map( 'sanitize_text_field', wp_unslash( $_POST['variations'] ) ) : array();
+		$quantity   = isset( $_POST['quantity'] ) ? max( 1, intval( $_POST['quantity'] ) ) : 1;
 
 		if ( ! $product_id ) {
 			wp_send_json_error( array( 'message' => __( 'Invalid product ID.', 'aicoso-click-to-chat' ) ) );
@@ -539,13 +658,150 @@ class CTC_Chat_Public {
 		// Initialize link generator.
 		$link_generator = new CTC_Chat_WhatsApp_Link_Generator();
 
-		// Generate WhatsApp URL with variations.
-		$whatsapp_url = $link_generator->get_product_url( $product_id, $variations );
+		// Generate WhatsApp URL with variations and quantity.
+		$whatsapp_url = $link_generator->get_product_url( $product_id, $variations, $quantity );
+
+		if ( empty( $whatsapp_url ) ) {
+			wp_send_json_error( array( 'message' => __( 'Could not generate WhatsApp URL.', 'aicoso-click-to-chat' ) ) );
+		}
+
+		$product     = function_exists( 'wc_get_product' ) ? wc_get_product( $product_id ) : null;
+		$unit_price  = ( $product && method_exists( $product, 'get_price' ) ) ? (float) $product->get_price() : 0;
+		$order_total = $unit_price * $quantity;
+
+		wp_send_json_success(
+			array(
+				'url'         => $whatsapp_url,
+				'quantity'    => $quantity,
+				'order_total' => $order_total,
+			)
+		);
+	}
+
+	/**
+	 * AJAX handler to get back-in-stock alert WhatsApp URL for out-of-stock variations.
+	 */
+	public function ajax_get_stock_url() {
+		if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['nonce'] ) ), 'ctc_chat_public_nonce' ) ) {
+			wp_send_json_error( array( 'message' => __( 'Security check failed.', 'aicoso-click-to-chat' ) ) );
+		}
+
+		$product_id = isset( $_POST['product_id'] ) ? intval( $_POST['product_id'] ) : 0;
+		$variations = isset( $_POST['variations'] ) ? array_map( 'sanitize_text_field', wp_unslash( $_POST['variations'] ) ) : array();
+
+		if ( ! $product_id ) {
+			wp_send_json_error( array( 'message' => __( 'Invalid product ID.', 'aicoso-click-to-chat' ) ) );
+		}
+
+		require_once CTC_CHAT_PLUGIN_DIR . 'includes/class-ctc-chat-whatsapp-link-generator.php';
+		$link_generator = new CTC_Chat_WhatsApp_Link_Generator();
+		$whatsapp_url   = $link_generator->get_back_in_stock_url( $product_id, $variations );
 
 		if ( empty( $whatsapp_url ) ) {
 			wp_send_json_error( array( 'message' => __( 'Could not generate WhatsApp URL.', 'aicoso-click-to-chat' ) ) );
 		}
 
 		wp_send_json_success( array( 'url' => $whatsapp_url ) );
+	}
+
+	/**
+	 * Output custom CSS from Advanced settings in the document head.
+	 */
+	public function output_custom_css() {
+		$plugin_enabled = isset( $this->settings['plugin_enabled'] ) ? $this->settings['plugin_enabled'] : true;
+		if ( ! $plugin_enabled ) {
+			return;
+		}
+
+		if ( ! empty( $this->settings['advanced']['custom_css'] ) ) {
+			$custom_css = trim( $this->settings['advanced']['custom_css'] );
+			if ( '' !== $custom_css ) {
+				echo "\n<!-- AICOSO Click to Chat Custom CSS -->\n";
+				echo '<style id="ctc-chat-custom-css">' . "\n" . wp_strip_all_tags( $custom_css ) . "\n</style>\n"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- wp_strip_all_tags strips HTML tags from user custom CSS.
+			}
+		}
+	}
+
+	/**
+	 * Render the desktop "Scan QR Code to Chat" modal markup in the footer.
+	 *
+	 * @since 1.2.0
+	 */
+	public function render_qr_modal() {
+		$qr_settings = isset( $this->settings['qr_modal'] ) ? $this->settings['qr_modal'] : array();
+		$qr_enabled  = ! isset( $qr_settings['enabled'] ) ? true : ! empty( $qr_settings['enabled'] );
+		if ( ! $qr_enabled ) {
+			return;
+		}
+
+		$title         = ! empty( $qr_settings['title'] ) ? $qr_settings['title'] : esc_html__( 'Scan to Chat on WhatsApp', 'aicoso-click-to-chat' );
+		$show_web_link = ! isset( $qr_settings['show_web_link'] ) || ! empty( $qr_settings['show_web_link'] );
+		?>
+		<div id="ctc-chat-qr-popover" class="ctc-chat-qr-popover ctc-qr-floating-docked" aria-hidden="true" role="dialog" aria-labelledby="ctc-chat-qr-title">
+			<div class="ctc-chat-qr-card">
+				<button type="button" class="ctc-chat-qr-close" aria-label="<?php esc_attr_e( 'Close', 'aicoso-click-to-chat' ); ?>">&times;</button>
+				<div class="ctc-chat-qr-header">
+					<div class="ctc-chat-qr-icon-wrap">
+						<svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M17.498 14.382c-.301-.15-1.767-.867-2.04-.966-.273-.101-.473-.15-.673.15-.197.295-.771.964-.944 1.162-.175.195-.349.21-.646.075-.3-.15-1.263-.465-2.403-1.485-.888-.795-1.484-1.77-1.66-2.07-.174-.3-.019-.465.13-.615.136-.135.301-.345.451-.523.146-.181.194-.301.297-.496.1-.21.049-.375-.025-.524-.075-.15-.672-1.62-.922-2.206-.24-.584-.487-.51-.672-.51-.172-.015-.371-.015-.571-.015-.2 0-.523.074-.797.359-.273.3-1.045 1.02-1.045 2.475s1.07 2.865 1.219 3.075c.149.195 2.105 3.195 5.1 4.485.714.3 1.27.48 1.704.629.714.227 1.365.195 1.88.121.574-.091 1.767-.721 2.016-1.426.255-.705.255-1.29.18-1.425-.074-.135-.27-.21-.57-.345m-5.446 7.443h-.016c-1.77 0-3.524-.48-5.055-1.38l-.36-.214-3.75.975 1.005-3.645-.239-.375c-.99-1.576-1.516-3.391-1.516-5.26 0-5.445 4.455-9.885 9.942-9.885 2.654 0 5.145 1.035 7.021 2.91 1.875 1.859 2.909 4.35 2.909 6.99-.004 5.444-4.46 9.885-9.935 9.885M20.52 3.449C18.24 1.245 15.24 0 12.045 0 5.463 0 .104 5.334.101 11.893c0 2.096.549 4.14 1.595 5.945L0 24l6.335-1.652c1.746.943 3.71 1.444 5.71 1.447h.006c6.585 0 11.946-5.336 11.949-11.896 0-3.176-1.24-6.165-3.495-8.411"/></svg>
+					</div>
+					<div class="ctc-chat-qr-header-text">
+						<h4 id="ctc-chat-qr-title" class="ctc-chat-qr-heading"><?php echo esc_html( $title ); ?></h4>
+						<p class="ctc-chat-qr-subtext"><?php esc_html_e( 'Scan with phone camera or WhatsApp', 'aicoso-click-to-chat' ); ?></p>
+					</div>
+				</div>
+				<div class="ctc-chat-qr-code-wrapper">
+					<div id="ctc-chat-qr-canvas-target" class="ctc-chat-qr-canvas-target"></div>
+				</div>
+				<?php if ( $show_web_link ) : ?>
+				<div class="ctc-chat-qr-footer">
+					<a href="#" id="ctc-chat-qr-web-action" class="ctc-chat-qr-web-btn" target="_blank" rel="noopener noreferrer">
+						<?php esc_html_e( 'Or continue with WhatsApp Web', 'aicoso-click-to-chat' ); ?> &rarr;
+					</a>
+				</div>
+				<?php endif; ?>
+			</div>
+		</div>
+		<?php
+	}
+
+	/**
+	 * Render GDPR Pre-Chat Privacy Consent prompt modal in footer.
+	 *
+	 * @since 1.2.1
+	 */
+	public function render_privacy_prompt() {
+		$privacy = isset( $this->settings['privacy_compliance'] ) ? $this->settings['privacy_compliance'] : array();
+		if ( empty( $privacy['enabled'] ) || ( $privacy['consent_mode'] ?? 'prompt' ) !== 'prompt' ) {
+			return;
+		}
+
+		$policy_url = ! empty( $privacy['custom_policy_url'] ) ? esc_url( $privacy['custom_policy_url'] ) : '';
+		if ( empty( $policy_url ) && function_exists( 'get_privacy_policy_url' ) ) {
+			$policy_url = esc_url( get_privacy_policy_url() );
+		}
+		$link_text        = ! empty( $privacy['link_text'] ) ? esc_html( $privacy['link_text'] ) : esc_html__( 'Privacy Policy', 'aicoso-click-to-chat' );
+		$policy_link_html = $policy_url ? '<a href="' . $policy_url . '" target="_blank" rel="noopener noreferrer" class="ctc-privacy-link">' . $link_text . '</a>' : $link_text;
+		$notice_template  = ! empty( $privacy['notice_text'] ) ? $privacy['notice_text'] : esc_html__( 'By chatting with us on WhatsApp, you agree to our {privacy_policy_link} and consent to communication regarding your inquiry.', 'aicoso-click-to-chat' );
+		$notice_html      = str_replace( '{privacy_policy_link}', $policy_link_html, esc_html( $notice_template ) );
+		$agree_btn        = ! empty( $privacy['agree_button'] ) ? esc_html( $privacy['agree_button'] ) : esc_html__( 'Accept & Chat', 'aicoso-click-to-chat' );
+		$cancel_btn       = ! empty( $privacy['cancel_button'] ) ? esc_html( $privacy['cancel_button'] ) : esc_html__( 'Cancel', 'aicoso-click-to-chat' );
+		?>
+		<div id="ctc-chat-privacy-prompt" class="ctc-chat-privacy-prompt" aria-hidden="true" role="dialog" aria-labelledby="ctc-chat-privacy-title">
+			<div class="ctc-chat-privacy-backdrop"></div>
+			<div class="ctc-chat-privacy-card">
+				<div class="ctc-chat-privacy-icon-wrap">
+					<svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+				</div>
+				<h4 id="ctc-chat-privacy-title" class="ctc-chat-privacy-title"><?php esc_html_e( 'Privacy & Consent', 'aicoso-click-to-chat' ); ?></h4>
+				<div class="ctc-chat-privacy-body">
+					<?php echo wp_kses_post( $notice_html ); ?>
+				</div>
+				<div class="ctc-chat-privacy-actions">
+					<button type="button" class="ctc-chat-privacy-btn ctc-chat-privacy-cancel" id="ctc-chat-privacy-cancel"><?php echo esc_html( $cancel_btn ); ?></button>
+					<button type="button" class="ctc-chat-privacy-btn ctc-chat-privacy-agree" id="ctc-chat-privacy-agree"><?php echo esc_html( $agree_btn ); ?></button>
+				</div>
+			</div>
+		</div>
+		<?php
 	}
 }

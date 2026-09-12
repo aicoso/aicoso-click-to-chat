@@ -151,6 +151,106 @@ $current_tab        = $this->get_current_settings_tab();
 			</tr>
 		</table>
 		<?php $this->render_settings_card_close(); ?>
+
+		<?php
+		$preview_btn_text       = isset( $settings['button_settings']['text'] ) ? $settings['button_settings']['text'] : esc_html__( 'Order via WhatsApp', 'aicoso-click-to-chat' );
+		$preview_btn_icon       = ! isset( $settings['button_settings']['icon'] ) || ! empty( $settings['button_settings']['icon'] );
+		$preview_btn_bg         = isset( $settings['button_settings']['bg_color'] ) ? $settings['button_settings']['bg_color'] : '#25D366';
+		$preview_btn_color      = isset( $settings['button_settings']['text_color'] ) ? $settings['button_settings']['text_color'] : '#ffffff';
+
+		$this->render_settings_card_open(
+			esc_html__( 'Live Visual Customizer & Device Preview', 'aicoso-click-to-chat' ),
+			array(
+				'description' => esc_html__( 'Preview your WhatsApp button in real-time across Desktop and Mobile viewports as you configure settings.', 'aicoso-click-to-chat' ),
+				'icon'        => 'dashicons-visibility',
+			)
+		);
+		?>
+		<div class="ctc-live-customizer">
+			<div class="ctc-customizer-toolbar">
+				<div class="ctc-device-switcher" role="group" aria-label="<?php esc_attr_e( 'Device Viewport Switcher', 'aicoso-click-to-chat' ); ?>">
+					<button type="button" class="button ctc-device-btn active" data-device="desktop">
+						<span class="dashicons dashicons-desktop"></span> <?php esc_html_e( 'Desktop Preview', 'aicoso-click-to-chat' ); ?>
+					</button>
+					<button type="button" class="button ctc-device-btn" data-device="mobile">
+						<span class="dashicons dashicons-smartphone"></span> <?php esc_html_e( 'Mobile Preview', 'aicoso-click-to-chat' ); ?>
+					</button>
+				</div>
+				<span class="ctc-customizer-hint"><?php esc_html_e( '⚡ Changes above update preview instantly', 'aicoso-click-to-chat' ); ?></span>
+			</div>
+
+			<div class="ctc-preview-viewport-container" id="ctc-preview-container" data-active-device="desktop">
+				<!-- Desktop Mockup Frame -->
+				<div class="ctc-mockup-frame ctc-mockup-desktop">
+					<div class="ctc-mockup-browser-header">
+						<div class="ctc-mockup-dots">
+							<span class="dot dot-red"></span>
+							<span class="dot dot-yellow"></span>
+							<span class="dot dot-green"></span>
+						</div>
+						<div class="ctc-mockup-address-bar">
+							<span class="dashicons dashicons-lock"></span> https://yourstore.com/product/summer-hoodie
+						</div>
+					</div>
+					<div class="ctc-mockup-content">
+						<div class="ctc-mockup-product-page">
+							<div class="ctc-mockup-product-image">
+								<div class="ctc-mockup-img-placeholder">
+									<span class="dashicons dashicons-format-image"></span>
+								</div>
+							</div>
+							<div class="ctc-mockup-product-details">
+								<div class="ctc-mockup-badge"><?php esc_html_e( 'In Stock', 'aicoso-click-to-chat' ); ?></div>
+								<h3 class="ctc-mockup-title"><?php esc_html_e( 'Premium Cotton Hoodie', 'aicoso-click-to-chat' ); ?></h3>
+								<div class="ctc-mockup-price">$49.00</div>
+								<p class="ctc-mockup-desc"><?php esc_html_e( 'Crafted with 100% organic cotton fleece. Breathable, durable, and exceptionally comfortable.', 'aicoso-click-to-chat' ); ?></p>
+								<div class="ctc-mockup-actions">
+									<button type="button" class="ctc-mockup-cart-btn" disabled><?php esc_html_e( 'Add to cart', 'aicoso-click-to-chat' ); ?></button>
+									<a href="#" class="ctc-chat-whatsapp-button ctc-preview-button-target" style="background-color: <?php echo esc_attr( $preview_btn_bg ); ?> !important; color: <?php echo esc_attr( $preview_btn_color ); ?> !important;" onclick="return false;">
+										<span class="ctc-chat-whatsapp-icon" <?php echo ! $preview_btn_icon ? 'style="display:none;"' : ''; ?>>
+											<svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M17.498 14.382c-.301-.15-1.767-.867-2.04-.966-.273-.101-.473-.15-.673.15-.197.295-.771.964-.944 1.162-.175.195-.349.21-.646.075-.3-.15-1.263-.465-2.403-1.485-.888-.795-1.484-1.77-1.66-2.07-.174-.3-.019-.465.13-.615.136-.135.301-.345.451-.523.146-.181.194-.301.297-.496.1-.21.049-.375-.025-.524-.075-.15-.672-1.62-.922-2.206-.24-.584-.487-.51-.672-.51-.172-.015-.371-.015-.571-.015-.2 0-.523.074-.797.359-.273.3-1.045 1.02-1.045 2.475s1.07 2.865 1.219 3.075c.149.195 2.105 3.195 5.1 4.485.714.3 1.27.48 1.704.629.714.227 1.365.195 1.88.121.574-.091 1.767-.721 2.016-1.426.255-.705.255-1.29.18-1.425-.074-.135-.27-.21-.57-.345m-5.446 7.443h-.016c-1.77 0-3.524-.48-5.055-1.38l-.36-.214-3.75.975 1.005-3.645-.239-.375c-.99-1.576-1.516-3.391-1.516-5.26 0-5.445 4.455-9.885 9.942-9.885 2.654 0 5.145 1.035 7.021 2.91 1.875 1.859 2.909 4.35 2.909 6.99-.004 5.444-4.46 9.885-9.935 9.885M20.52 3.449C18.24 1.245 15.24 0 12.045 0 5.463 0 .104 5.334.101 11.893c0 2.096.549 4.14 1.595 5.945L0 24l6.335-1.652c1.746.943 3.71 1.444 5.71 1.447h.006c6.585 0 11.946-5.336 11.949-11.896 0-3.176-1.24-6.165-3.495-8.411"/></svg>
+										</span>
+										<span class="ctc-chat-button-text ctc-preview-button-text"><?php echo esc_html( $preview_btn_text ); ?></span>
+									</a>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<!-- Mobile Mockup Frame -->
+				<div class="ctc-mockup-frame ctc-mockup-mobile" style="display: none;">
+					<div class="ctc-mockup-phone-notch">
+						<div class="ctc-phone-speaker"></div>
+						<div class="ctc-phone-camera"></div>
+					</div>
+					<div class="ctc-mockup-phone-screen">
+						<div class="ctc-phone-status-bar">
+							<span>9:41</span>
+							<span>📶 5G 🔋</span>
+						</div>
+						<div class="ctc-phone-browser-nav">
+							<span class="dashicons dashicons-lock"></span> yourstore.com
+						</div>
+						<div class="ctc-phone-body">
+							<div class="ctc-phone-img-placeholder">
+								<span class="dashicons dashicons-format-image"></span>
+							</div>
+							<div class="ctc-phone-title"><?php esc_html_e( 'Premium Cotton Hoodie', 'aicoso-click-to-chat' ); ?></div>
+							<div class="ctc-phone-price">$49.00</div>
+							<button type="button" class="ctc-phone-cart-btn" disabled><?php esc_html_e( 'Add to cart', 'aicoso-click-to-chat' ); ?></button>
+							<a href="#" class="ctc-chat-whatsapp-button ctc-preview-button-target ctc-preview-mobile-btn" style="background-color: <?php echo esc_attr( $preview_btn_bg ); ?> !important; color: <?php echo esc_attr( $preview_btn_color ); ?> !important;" onclick="return false;">
+								<span class="ctc-chat-whatsapp-icon" <?php echo ! $preview_btn_icon ? 'style="display:none;"' : ''; ?>>
+									<svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M17.498 14.382c-.301-.15-1.767-.867-2.04-.966-.273-.101-.473-.15-.673.15-.197.295-.771.964-.944 1.162-.175.195-.349.21-.646.075-.3-.15-1.263-.465-2.403-1.485-.888-.795-1.484-1.77-1.66-2.07-.174-.3-.019-.465.13-.615.136-.135.301-.345.451-.523.146-.181.194-.301.297-.496.1-.21.049-.375-.025-.524-.075-.15-.672-1.62-.922-2.206-.24-.584-.487-.51-.672-.51-.172-.015-.371-.015-.571-.015-.2 0-.523.074-.797.359-.273.3-1.045 1.02-1.045 2.475s1.07 2.865 1.219 3.075c.149.195 2.105 3.195 5.1 4.485.714.3 1.27.48 1.704.629.714.227 1.365.195 1.88.121.574-.091 1.767-.721 2.016-1.426.255-.705.255-1.29.18-1.425-.074-.135-.27-.21-.57-.345m-5.446 7.443h-.016c-1.77 0-3.524-.48-5.055-1.38l-.36-.214-3.75.975 1.005-3.645-.239-.375c-.99-1.576-1.516-3.391-1.516-5.26 0-5.445 4.455-9.885 9.942-9.885 2.654 0 5.145 1.035 7.021 2.91 1.875 1.859 2.909 4.35 2.909 6.99-.004 5.444-4.46 9.885-9.935 9.885M20.52 3.449C18.24 1.245 15.24 0 12.045 0 5.463 0 .104 5.334.101 11.893c0 2.096.549 4.14 1.595 5.945L0 24l6.335-1.652c1.746.943 3.71 1.444 5.71 1.447h.006c6.585 0 11.946-5.336 11.949-11.896 0-3.176-1.24-6.165-3.495-8.411"/></svg>
+								</span>
+								<span class="ctc-chat-button-text ctc-preview-button-text"><?php echo esc_html( $preview_btn_text ); ?></span>
+							</a>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<?php $this->render_settings_card_close(); ?>
 	</div>
 
 	<div id="ctc-chat-settings-display" class="ctc-chat-settings-panel<?php echo 'display' === $current_tab ? ' active' : ''; ?>">
@@ -279,12 +379,281 @@ $current_tab        = $this->get_current_settings_tab();
 				</td>
 			</tr>
 			<tr>
-				<th scope="row"><?php esc_html_e( 'Thank you page', 'aicoso-click-to-chat' ); ?></th>
+				<th scope="row" colspan="2" style="padding-top: 25px; border-top: 1px solid #eee;">
+					<h4 style="margin: 0 0 5px; font-size: 15px;"><?php esc_html_e( 'Thank You Page & Order Tracking', 'aicoso-click-to-chat' ); ?></h4>
+					<p class="description"><?php esc_html_e( 'Enable 1-click WhatsApp order tracking on the order confirmation screen and in customer My Account views.', 'aicoso-click-to-chat' ); ?></p>
+				</th>
+			</tr>
+			<tr>
+				<th scope="row"><?php esc_html_e( 'Order Confirmation', 'aicoso-click-to-chat' ); ?></th>
 				<td>
 					<label for="ctc_chat_thankyou_page_enabled">
-						<input type="checkbox" name="ctc_chat_thankyou_page[enabled]" id="ctc_chat_thankyou_page_enabled" value="1" <?php checked( isset( $settings['thankyou_page']['enabled'] ) ? $settings['thankyou_page']['enabled'] : false ); ?>>
-						<?php esc_html_e( 'Show WhatsApp button on the thank you/order confirmation page', 'aicoso-click-to-chat' ); ?>
+						<input type="checkbox" name="ctc_chat_thankyou_page[enabled]" id="ctc_chat_thankyou_page_enabled" value="1" <?php checked( ! empty( $settings['thankyou_page']['enabled'] ) ); ?>>
+						<?php esc_html_e( 'Show 1-Click Order Tracking card on the Order Received (Thank You) page', 'aicoso-click-to-chat' ); ?>
 					</label>
+				</td>
+			</tr>
+			<tr>
+				<th scope="row"><?php esc_html_e( 'My Account Placements', 'aicoso-click-to-chat' ); ?></th>
+				<td>
+					<fieldset>
+						<label for="ctc_chat_thankyou_my_account_orders" style="display: block; margin-bottom: 8px;">
+							<input type="checkbox" name="ctc_chat_thankyou_page[my_account_orders]" id="ctc_chat_thankyou_my_account_orders" value="1" <?php checked( ! empty( $settings['thankyou_page']['my_account_orders'] ) ); ?>>
+							<?php esc_html_e( 'Add "Track on WhatsApp" action button to the Orders table list in My Account', 'aicoso-click-to-chat' ); ?>
+						</label>
+						<label for="ctc_chat_thankyou_my_account_view_order" style="display: block;">
+							<input type="checkbox" name="ctc_chat_thankyou_page[my_account_view_order]" id="ctc_chat_thankyou_my_account_view_order" value="1" <?php checked( ! empty( $settings['thankyou_page']['my_account_view_order'] ) ); ?>>
+							<?php esc_html_e( 'Show Order Tracking card on the My Account > View Order details page', 'aicoso-click-to-chat' ); ?>
+						</label>
+					</fieldset>
+				</td>
+			</tr>
+			<tr>
+				<th scope="row"><label for="ctc_chat_thankyou_button_text"><?php esc_html_e( 'Button Text', 'aicoso-click-to-chat' ); ?></label></th>
+				<td>
+					<input type="text" name="ctc_chat_thankyou_page[button_text]" id="ctc_chat_thankyou_button_text" class="regular-text" value="<?php echo esc_attr( $settings['thankyou_page']['button_text'] ?? __( 'Track My Order on WhatsApp 🚚', 'aicoso-click-to-chat' ) ); ?>">
+					<p class="description"><?php esc_html_e( 'Supported placeholders: {order_number}, {order_date}, {ordered_items_list}, {coupon_code}, {order_total}, {order_status}, {customer_name}, {shipping_address}, {order_view_url}', 'aicoso-click-to-chat' ); ?></p>
+				</td>
+			</tr>
+			<tr>
+				<th scope="row" colspan="2" style="padding-top: 25px; border-top: 1px solid #eee;">
+					<h4 style="margin: 0 0 5px; font-size: 15px;"><?php esc_html_e( 'Cart & Checkout Abandonment Nudge', 'aicoso-click-to-chat' ); ?></h4>
+					<p class="description"><?php esc_html_e( 'Display a subtle, high-converting slide-in chat prompt when customers hesitate or attempt to leave the Cart or Checkout.', 'aicoso-click-to-chat' ); ?></p>
+				</th>
+			</tr>
+			<tr>
+				<th scope="row"><?php esc_html_e( 'Enable nudge', 'aicoso-click-to-chat' ); ?></th>
+				<td>
+					<label for="ctc_chat_nudge_enabled">
+						<input type="checkbox" name="ctc_chat_cart_checkout_nudge[enabled]" id="ctc_chat_nudge_enabled" value="1" <?php checked( ! empty( $settings['cart_checkout_nudge']['enabled'] ) ); ?>>
+						<?php esc_html_e( 'Enable behavioral slide-in chat prompt on Cart & Checkout', 'aicoso-click-to-chat' ); ?>
+					</label>
+				</td>
+			</tr>
+			<tr class="ctc-chat-nudge-row<?php echo empty( $settings['cart_checkout_nudge']['enabled'] ) ? ' ctc-chat-hidden' : ''; ?>">
+				<th scope="row"><label for="ctc_chat_nudge_trigger"><?php esc_html_e( 'Trigger Type', 'aicoso-click-to-chat' ); ?></label></th>
+				<td>
+					<select name="ctc_chat_cart_checkout_nudge[trigger]" id="ctc_chat_nudge_trigger">
+						<option value="both" <?php selected( $settings['cart_checkout_nudge']['trigger'] ?? 'both', 'both' ); ?>><?php esc_html_e( 'Inactivity & Exit-Intent (Recommended)', 'aicoso-click-to-chat' ); ?></option>
+						<option value="inactivity" <?php selected( $settings['cart_checkout_nudge']['trigger'] ?? '', 'inactivity' ); ?>><?php esc_html_e( 'Inactivity only', 'aicoso-click-to-chat' ); ?></option>
+						<option value="exit_intent" <?php selected( $settings['cart_checkout_nudge']['trigger'] ?? '', 'exit_intent' ); ?>><?php esc_html_e( 'Exit-Intent only (Desktop)', 'aicoso-click-to-chat' ); ?></option>
+					</select>
+				</td>
+			</tr>
+			<tr class="ctc-chat-nudge-row<?php echo empty( $settings['cart_checkout_nudge']['enabled'] ) ? ' ctc-chat-hidden' : ''; ?>">
+				<th scope="row"><label for="ctc_chat_nudge_delay"><?php esc_html_e( 'Inactivity Delay (Seconds)', 'aicoso-click-to-chat' ); ?></label></th>
+				<td>
+					<input type="number" name="ctc_chat_cart_checkout_nudge[delay]" id="ctc_chat_nudge_delay" value="<?php echo esc_attr( (string) ( $settings['cart_checkout_nudge']['delay'] ?? 20 ) ); ?>" min="3" max="300" step="1" style="width: 80px;">
+					<span class="description"><?php esc_html_e( 'Seconds of customer inactivity before prompting (default: 20s).', 'aicoso-click-to-chat' ); ?></span>
+				</td>
+			</tr>
+			<tr class="ctc-chat-nudge-row<?php echo empty( $settings['cart_checkout_nudge']['enabled'] ) ? ' ctc-chat-hidden' : ''; ?>">
+				<th scope="row"><label for="ctc_chat_nudge_frequency"><?php esc_html_e( 'Display Frequency', 'aicoso-click-to-chat' ); ?></label></th>
+				<td>
+					<select name="ctc_chat_cart_checkout_nudge[frequency]" id="ctc_chat_nudge_frequency">
+						<option value="reappear" <?php selected( $settings['cart_checkout_nudge']['frequency'] ?? 'reappear', 'reappear' ); ?>><?php esc_html_e( 'Re-appear on inactivity (prompts again after inactivity)', 'aicoso-click-to-chat' ); ?></option>
+						<option value="once_per_session" <?php selected( $settings['cart_checkout_nudge']['frequency'] ?? '', 'once_per_session' ); ?>><?php esc_html_e( 'Show only once per session (suppress once dismissed)', 'aicoso-click-to-chat' ); ?></option>
+					</select>
+					<p class="description"><?php esc_html_e( 'Controls whether the nudge will prompt again if the customer remains inactive after closing, or only shows once per browser visit.', 'aicoso-click-to-chat' ); ?></p>
+				</td>
+			</tr>
+			<tr class="ctc-chat-nudge-row<?php echo empty( $settings['cart_checkout_nudge']['enabled'] ) ? ' ctc-chat-hidden' : ''; ?>">
+				<th scope="row"><label for="ctc_chat_nudge_title"><?php esc_html_e( 'Nudge Title', 'aicoso-click-to-chat' ); ?></label></th>
+				<td>
+					<input type="text" name="ctc_chat_cart_checkout_nudge[title]" id="ctc_chat_nudge_title" value="<?php echo esc_attr( $settings['cart_checkout_nudge']['title'] ?? esc_html__( 'Need help with your order?', 'aicoso-click-to-chat' ) ); ?>" class="regular-text">
+				</td>
+			</tr>
+			<tr class="ctc-chat-nudge-row<?php echo empty( $settings['cart_checkout_nudge']['enabled'] ) ? ' ctc-chat-hidden' : ''; ?>">
+				<th scope="row"><label for="ctc_chat_nudge_message"><?php esc_html_e( 'Nudge Message', 'aicoso-click-to-chat' ); ?></label></th>
+				<td>
+					<textarea name="ctc_chat_cart_checkout_nudge[message]" id="ctc_chat_nudge_message" rows="3" class="large-text"><?php echo esc_textarea( $settings['cart_checkout_nudge']['message'] ?? esc_html__( 'Have questions about payment, shipping, or need assistance? Chat with us on WhatsApp!', 'aicoso-click-to-chat' ) ); ?></textarea>
+				</td>
+			</tr>
+			<tr class="ctc-chat-nudge-row<?php echo empty( $settings['cart_checkout_nudge']['enabled'] ) ? ' ctc-chat-hidden' : ''; ?>">
+				<th scope="row"><label for="ctc_chat_nudge_button_text"><?php esc_html_e( 'Button Text', 'aicoso-click-to-chat' ); ?></label></th>
+				<td>
+					<input type="text" name="ctc_chat_cart_checkout_nudge[button_text]" id="ctc_chat_nudge_button_text" value="<?php echo esc_attr( $settings['cart_checkout_nudge']['button_text'] ?? esc_html__( 'Chat with Support 💬', 'aicoso-click-to-chat' ) ); ?>" class="regular-text">
+				</td>
+			</tr>
+		</table>
+		<?php $this->render_settings_card_close(); ?>
+
+		<?php
+		$this->render_settings_card_open(
+			esc_html__( 'Back-in-Stock Alerts (Notify Me on WhatsApp)', 'aicoso-click-to-chat' ),
+			array(
+				'description' => esc_html__( 'Convert missed sales into leads by letting customers request WhatsApp alerts for out-of-stock products.', 'aicoso-click-to-chat' ),
+				'icon'        => 'dashicons-bell',
+			)
+		);
+		?>
+		<table class="form-table" role="presentation">
+			<tr>
+				<th scope="row"><?php esc_html_e( 'Enable alert', 'aicoso-click-to-chat' ); ?></th>
+				<td>
+					<label for="ctc_chat_stock_enabled">
+						<input type="checkbox" name="ctc_chat_back_in_stock[enabled]" id="ctc_chat_stock_enabled" value="1" <?php checked( ! empty( $settings['back_in_stock']['enabled'] ) ); ?>>
+						<?php esc_html_e( 'Show "Notify Me on WhatsApp" button when a product or variation is out of stock', 'aicoso-click-to-chat' ); ?>
+					</label>
+				</td>
+			</tr>
+			<tr class="ctc-chat-stock-row<?php echo empty( $settings['back_in_stock']['enabled'] ) ? ' ctc-chat-hidden' : ''; ?>">
+				<th scope="row"><label for="ctc_chat_stock_button_text"><?php esc_html_e( 'Button Text', 'aicoso-click-to-chat' ); ?></label></th>
+				<td>
+					<input type="text" name="ctc_chat_back_in_stock[button_text]" id="ctc_chat_stock_button_text" value="<?php echo esc_attr( $settings['back_in_stock']['button_text'] ?? esc_html__( 'Notify Me on WhatsApp 🔔', 'aicoso-click-to-chat' ) ); ?>" class="regular-text">
+				</td>
+			</tr>
+			<tr class="ctc-chat-stock-row<?php echo empty( $settings['back_in_stock']['enabled'] ) ? ' ctc-chat-hidden' : ''; ?>">
+				<th scope="row"><label for="ctc_chat_stock_bg_color"><?php esc_html_e( 'Button Background Color', 'aicoso-click-to-chat' ); ?></label></th>
+				<td>
+					<input type="text" name="ctc_chat_back_in_stock[bg_color]" id="ctc_chat_stock_bg_color" value="<?php echo esc_attr( $settings['back_in_stock']['bg_color'] ?? '#ff9800' ); ?>" class="ctc-chat-color-field" data-default-color="#ff9800">
+					<div class="ctc-chat-stock-color-swatches" style="margin-top: 8px; display: flex; gap: 8px; align-items: center;">
+						<span style="font-size: 12px; color: #64748b;"><?php esc_html_e( 'Popular presets:', 'aicoso-click-to-chat' ); ?></span>
+						<button type="button" class="button button-small ctc-stock-swatch" data-bg="#ff9800" data-text="#ffffff" style="background:#ff9800;color:#fff;border:none;padding:2px 8px;font-weight:600;"><?php esc_html_e( 'Amber', 'aicoso-click-to-chat' ); ?></button>
+						<button type="button" class="button button-small ctc-stock-swatch" data-bg="#f97316" data-text="#ffffff" style="background:#f97316;color:#fff;border:none;padding:2px 8px;font-weight:600;"><?php esc_html_e( 'Orange', 'aicoso-click-to-chat' ); ?></button>
+						<button type="button" class="button button-small ctc-stock-swatch" data-bg="#dc2626" data-text="#ffffff" style="background:#dc2626;color:#fff;border:none;padding:2px 8px;font-weight:600;"><?php esc_html_e( 'Red', 'aicoso-click-to-chat' ); ?></button>
+						<button type="button" class="button button-small ctc-stock-swatch" data-bg="#25D366" data-text="#ffffff" style="background:#25D366;color:#fff;border:none;padding:2px 8px;font-weight:600;"><?php esc_html_e( 'Green', 'aicoso-click-to-chat' ); ?></button>
+						<button type="button" class="button button-small ctc-stock-swatch" data-bg="#2563eb" data-text="#ffffff" style="background:#2563eb;color:#fff;border:none;padding:2px 8px;font-weight:600;"><?php esc_html_e( 'Blue', 'aicoso-click-to-chat' ); ?></button>
+						<button type="button" class="button button-small ctc-stock-swatch" data-bg="#1e293b" data-text="#ffffff" style="background:#1e293b;color:#fff;border:none;padding:2px 8px;font-weight:600;"><?php esc_html_e( 'Dark', 'aicoso-click-to-chat' ); ?></button>
+					</div>
+				</td>
+			</tr>
+			<tr class="ctc-chat-stock-row<?php echo empty( $settings['back_in_stock']['enabled'] ) ? ' ctc-chat-hidden' : ''; ?>">
+				<th scope="row"><label for="ctc_chat_stock_text_color"><?php esc_html_e( 'Button Text Color', 'aicoso-click-to-chat' ); ?></label></th>
+				<td>
+					<input type="text" name="ctc_chat_back_in_stock[text_color]" id="ctc_chat_stock_text_color" value="<?php echo esc_attr( $settings['back_in_stock']['text_color'] ?? '#ffffff' ); ?>" class="ctc-chat-color-field" data-default-color="#ffffff">
+				</td>
+			</tr>
+			<tr class="ctc-chat-stock-row<?php echo empty( $settings['back_in_stock']['enabled'] ) ? ' ctc-chat-hidden' : ''; ?>">
+				<th scope="row"><?php esc_html_e( 'Button Live Preview', 'aicoso-click-to-chat' ); ?></th>
+				<td>
+					<div class="ctc-chat-stock-preview-box" style="padding: 16px 20px; background: #f8fafc; border: 1px dashed #cbd5e1; border-radius: 8px; display: inline-flex; align-items: center;">
+						<a href="#" class="ctc-chat-whatsapp-button ctc-chat-button-stock" id="ctc-chat-stock-preview-btn" style="background-color: <?php echo esc_attr( $settings['back_in_stock']['bg_color'] ?? '#ff9800' ); ?> !important; color: <?php echo esc_attr( $settings['back_in_stock']['text_color'] ?? '#ffffff' ); ?> !important; text-decoration: none; cursor: default;" onclick="return false;">
+							<span class="ctc-chat-whatsapp-icon">
+								<svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M17.498 14.382c-.301-.15-1.767-.867-2.04-.966-.273-.101-.473-.15-.673.15-.197.295-.771.964-.944 1.162-.175.195-.349.21-.646.075-.3-.15-1.263-.465-2.403-1.485-.888-.795-1.484-1.77-1.66-2.07-.174-.3-.019-.465.13-.615.136-.135.301-.345.451-.523.146-.181.194-.301.297-.496.1-.21.049-.375-.025-.524-.075-.15-.672-1.62-.922-2.206-.24-.584-.487-.51-.672-.51-.172-.015-.371-.015-.571-.015-.2 0-.523.074-.797.359-.273.3-1.045 1.02-1.045 2.475s1.07 2.865 1.219 3.075c.149.195 2.105 3.195 5.1 4.485.714.3 1.27.48 1.704.629.714.227 1.365.195 1.88.121.574-.091 1.767-.721 2.016-1.426.255-.705.255-1.29.18-1.425-.074-.135-.27-.21-.57-.345m-5.446 7.443h-.016c-1.77 0-3.524-.48-5.055-1.38l-.36-.214-3.75.975 1.005-3.645-.239-.375c-.99-1.576-1.516-3.391-1.516-5.26 0-5.445 4.455-9.885 9.942-9.885 2.654 0 5.145 1.035 7.021 2.91 1.875 1.859 2.909 4.35 2.909 6.99-.004 5.444-4.46 9.885-9.935 9.885M20.52 3.449C18.24 1.245 15.24 0 12.045 0 5.463 0 .104 5.334.101 11.893c0 2.096.549 4.14 1.595 5.945L0 24l6.335-1.652c1.746.943 3.71 1.444 5.71 1.447h.006c6.585 0 11.946-5.336 11.949-11.896 0-3.176-1.24-6.165-3.495-8.411"/></svg>
+							</span>
+							<span class="ctc-chat-button-text"><?php echo esc_html( $settings['back_in_stock']['button_text'] ?? esc_html__( 'Notify Me on WhatsApp 🔔', 'aicoso-click-to-chat' ) ); ?></span>
+						</a>
+					</div>
+				</td>
+			</tr>
+			<tr class="ctc-chat-stock-row<?php echo empty( $settings['back_in_stock']['enabled'] ) ? ' ctc-chat-hidden' : ''; ?>">
+				<th scope="row"><label for="ctc_chat_stock_message"><?php esc_html_e( 'WhatsApp Message Template', 'aicoso-click-to-chat' ); ?></label></th>
+				<td>
+					<textarea name="ctc_chat_back_in_stock[message]" id="ctc_chat_stock_message" rows="4" class="large-text"><?php echo esc_textarea( $settings['back_in_stock']['message'] ?? esc_html__( "Hello! I noticed that *{product_name}* (SKU: {product_sku}) is currently out of stock.\n\nPlease notify me via WhatsApp as soon as it is back in stock!\nLink: {product_url}", 'aicoso-click-to-chat' ) ); ?></textarea>
+					<p class="description">
+						<?php esc_html_e( 'Available tokens: {product_name}, {product_sku}, {variation_details}, {product_url}', 'aicoso-click-to-chat' ); ?>
+					</p>
+				</td>
+			</tr>
+		</table>
+		<?php $this->render_settings_card_close(); ?>
+
+		<?php
+		$this->render_settings_card_open(
+			esc_html__( 'Chat to Unlock Discount (Coupon Engine)', 'aicoso-click-to-chat' ),
+			array(
+				'description' => esc_html__( 'Offer an interactive discount or promotional code when visitors initiate a WhatsApp chat, skyrocketing conversation and conversion rates.', 'aicoso-click-to-chat' ),
+				'icon'        => 'dashicons-tickets-alt',
+			)
+		);
+		$available_coupons   = CTC_Chat_Admin::get_available_coupons();
+		$current_coupon_code = $settings['coupon_engine']['coupon_code'] ?? '';
+		?>
+		<table class="form-table" role="presentation">
+			<tr>
+				<th scope="row"><?php esc_html_e( 'Enable discount incentive', 'aicoso-click-to-chat' ); ?></th>
+				<td>
+					<label for="ctc_chat_coupon_enabled">
+						<input type="checkbox" name="ctc_chat_coupon_engine[enabled]" id="ctc_chat_coupon_enabled" value="1" <?php checked( ! empty( $settings['coupon_engine']['enabled'] ) ); ?>>
+						<?php esc_html_e( 'Show "Chat to Unlock Discount" teaser badge and attach coupon greeting in WhatsApp', 'aicoso-click-to-chat' ); ?>
+					</label>
+				</td>
+			</tr>
+			<tr class="ctc-chat-coupon-row<?php echo empty( $settings['coupon_engine']['enabled'] ) ? ' ctc-chat-hidden' : ''; ?>">
+				<th scope="row"><label for="ctc_chat_coupon_select"><?php esc_html_e( 'WooCommerce Coupon', 'aicoso-click-to-chat' ); ?></label></th>
+				<td>
+					<select name="ctc_chat_coupon_engine[coupon_code]" id="ctc_chat_coupon_select" style="max-width: 320px;">
+						<option value=""><?php esc_html_e( '— Select a WooCommerce Coupon or custom below —', 'aicoso-click-to-chat' ); ?></option>
+						<?php foreach ( $available_coupons as $c ) : ?>
+							<option value="<?php echo esc_attr( $c['code'] ); ?>" <?php selected( $current_coupon_code, $c['code'] ); ?>>
+								<?php echo esc_html( $c['code'] . ( ! empty( $c['description'] ) ? ' (' . $c['description'] . ')' : '' ) ); ?>
+							</option>
+						<?php endforeach; ?>
+					</select>
+					<p class="description" style="margin-top: 6px;">
+						<?php esc_html_e( 'Select an existing published WooCommerce coupon from your store.', 'aicoso-click-to-chat' ); ?>
+					</p>
+				</td>
+			</tr>
+			<tr class="ctc-chat-coupon-row<?php echo empty( $settings['coupon_engine']['enabled'] ) ? ' ctc-chat-hidden' : ''; ?>">
+				<th scope="row"><label for="ctc_chat_coupon_custom_discount"><?php esc_html_e( 'Custom Discount Label', 'aicoso-click-to-chat' ); ?></label></th>
+				<td>
+					<input type="text" name="ctc_chat_coupon_engine[custom_discount]" id="ctc_chat_coupon_custom_discount" value="<?php echo esc_attr( $settings['coupon_engine']['custom_discount'] ?? '' ); ?>" placeholder="e.g. 10% OFF or $15 OFF" class="regular-text">
+					<p class="description"><?php esc_html_e( 'Used for the {discount_amount} token if no WooCommerce coupon is selected or as a custom override.', 'aicoso-click-to-chat' ); ?></p>
+				</td>
+			</tr>
+			<tr class="ctc-chat-coupon-row<?php echo empty( $settings['coupon_engine']['enabled'] ) ? ' ctc-chat-hidden' : ''; ?>">
+				<th scope="row"><label for="ctc_chat_coupon_badge_text"><?php esc_html_e( 'Badge Teaser Text', 'aicoso-click-to-chat' ); ?></label></th>
+				<td>
+					<input type="text" name="ctc_chat_coupon_engine[badge_text]" id="ctc_chat_coupon_badge_text" value="<?php echo esc_attr( $settings['coupon_engine']['badge_text'] ?? __( '🎁 Chat to get 10% OFF!', 'aicoso-click-to-chat' ) ); ?>" class="regular-text">
+					<p class="description"><?php esc_html_e( 'The promotional teaser text displayed on the floating widget chip and product pages.', 'aicoso-click-to-chat' ); ?></p>
+				</td>
+			</tr>
+			<tr class="ctc-chat-coupon-row<?php echo empty( $settings['coupon_engine']['enabled'] ) ? ' ctc-chat-hidden' : ''; ?>">
+				<th scope="row"><label for="ctc_chat_coupon_badge_bg"><?php esc_html_e( 'Badge Background Color', 'aicoso-click-to-chat' ); ?></label></th>
+				<td>
+					<input type="text" name="ctc_chat_coupon_engine[badge_bg]" id="ctc_chat_coupon_badge_bg" value="<?php echo esc_attr( $settings['coupon_engine']['badge_bg'] ?? '#e11d48' ); ?>" class="ctc-chat-color-field" data-default-color="#e11d48">
+					<div class="ctc-chat-coupon-color-swatches" style="margin-top: 8px; display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
+						<span style="font-size: 12px; color: #64748b; font-weight: 500;"><?php esc_html_e( 'Popular presets:', 'aicoso-click-to-chat' ); ?></span>
+						<button type="button" class="button button-small ctc-coupon-swatch" data-bg="#e11d48" data-text="#ffffff" style="background:#e11d48;color:#fff;border:none;padding:3px 10px;font-weight:600;border-radius:4px;"><?php esc_html_e( 'Rose Red', 'aicoso-click-to-chat' ); ?></button>
+						<button type="button" class="button button-small ctc-coupon-swatch" data-bg="#6366f1" data-text="#ffffff" style="background:#6366f1;color:#fff;border:none;padding:3px 10px;font-weight:600;border-radius:4px;"><?php esc_html_e( 'Indigo', 'aicoso-click-to-chat' ); ?></button>
+						<button type="button" class="button button-small ctc-coupon-swatch" data-bg="#059669" data-text="#ffffff" style="background:#059669;color:#fff;border:none;padding:3px 10px;font-weight:600;border-radius:4px;"><?php esc_html_e( 'Emerald', 'aicoso-click-to-chat' ); ?></button>
+						<button type="button" class="button button-small ctc-coupon-swatch" data-bg="#d97706" data-text="#ffffff" style="background:#d97706;color:#fff;border:none;padding:3px 10px;font-weight:600;border-radius:4px;"><?php esc_html_e( 'Amber', 'aicoso-click-to-chat' ); ?></button>
+						<button type="button" class="button button-small ctc-coupon-swatch" data-bg="#25D366" data-text="#ffffff" style="background:#25D366;color:#fff;border:none;padding:3px 10px;font-weight:600;border-radius:4px;"><?php esc_html_e( 'WhatsApp Green', 'aicoso-click-to-chat' ); ?></button>
+						<button type="button" class="button button-small ctc-coupon-swatch" data-bg="#0f172a" data-text="#ffffff" style="background:#0f172a;color:#fff;border:none;padding:3px 10px;font-weight:600;border-radius:4px;"><?php esc_html_e( 'Midnight', 'aicoso-click-to-chat' ); ?></button>
+					</div>
+				</td>
+			</tr>
+			<tr class="ctc-chat-coupon-row<?php echo empty( $settings['coupon_engine']['enabled'] ) ? ' ctc-chat-hidden' : ''; ?>">
+				<th scope="row"><label for="ctc_chat_coupon_badge_color"><?php esc_html_e( 'Badge Text Color', 'aicoso-click-to-chat' ); ?></label></th>
+				<td>
+					<input type="text" name="ctc_chat_coupon_engine[badge_color]" id="ctc_chat_coupon_badge_color" value="<?php echo esc_attr( $settings['coupon_engine']['badge_color'] ?? '#ffffff' ); ?>" class="ctc-chat-color-field" data-default-color="#ffffff">
+				</td>
+			</tr>
+			<tr class="ctc-chat-coupon-row<?php echo empty( $settings['coupon_engine']['enabled'] ) ? ' ctc-chat-hidden' : ''; ?>">
+				<th scope="row"><?php esc_html_e( 'Display Placements', 'aicoso-click-to-chat' ); ?></th>
+				<td>
+					<fieldset>
+						<label for="ctc_chat_coupon_show_floating" style="display: block; margin-bottom: 8px;">
+							<input type="checkbox" name="ctc_chat_coupon_engine[show_on_floating]" id="ctc_chat_coupon_show_floating" value="1" <?php checked( ! empty( $settings['coupon_engine']['show_on_floating'] ) ); ?>>
+							<?php esc_html_e( 'Display pulsing discount teaser chip above floating WhatsApp widget', 'aicoso-click-to-chat' ); ?>
+						</label>
+						<label for="ctc_chat_coupon_show_product" style="display: block;">
+							<input type="checkbox" name="ctc_chat_coupon_engine[show_on_product]" id="ctc_chat_coupon_show_product" value="1" <?php checked( ! empty( $settings['coupon_engine']['show_on_product'] ) ); ?>>
+							<?php esc_html_e( 'Display promotional discount badge on Single Product pages adjacent to WhatsApp button', 'aicoso-click-to-chat' ); ?>
+						</label>
+					</fieldset>
+				</td>
+			</tr>
+			<tr class="ctc-chat-coupon-row<?php echo empty( $settings['coupon_engine']['enabled'] ) ? ' ctc-chat-hidden' : ''; ?>">
+				<th scope="row"><?php esc_html_e( 'Teaser Live Preview', 'aicoso-click-to-chat' ); ?></th>
+				<td>
+					<div class="ctc-chat-coupon-preview-wrapper" style="padding: 18px 24px; background: #f8fafc; border: 1px dashed #cbd5e1; border-radius: 8px; display: inline-flex; align-items: center; gap: 12px;">
+						<div id="ctc-chat-coupon-preview-chip" style="display: inline-flex; align-items: center; gap: 8px; background: <?php echo esc_attr( $settings['coupon_engine']['badge_bg'] ?? '#e11d48' ); ?>; color: <?php echo esc_attr( $settings['coupon_engine']['badge_color'] ?? '#ffffff' ); ?>; padding: 7px 16px; border-radius: 20px; font-weight: 600; font-size: 13.5px; border: 1px solid rgba(255,255,255,0.28); box-shadow: 0 4px 14px rgba(0,0,0,0.16);">
+							<span id="ctc-chat-coupon-preview-text"><?php echo esc_html( $settings['coupon_engine']['badge_text'] ?? __( '🎁 Chat to get 10% OFF!', 'aicoso-click-to-chat' ) ); ?></span>
+							<span style="opacity: 0.7; font-size: 14px; margin-left: 4px;">&times;</span>
+						</div>
+					</div>
+				</td>
+			</tr>
+			<tr class="ctc-chat-coupon-row<?php echo empty( $settings['coupon_engine']['enabled'] ) ? ' ctc-chat-hidden' : ''; ?>">
+				<th scope="row"><label for="ctc_chat_coupon_message"><?php esc_html_e( 'WhatsApp Claim Message Template', 'aicoso-click-to-chat' ); ?></label></th>
+				<td>
+					<textarea name="ctc_chat_coupon_engine[message]" id="ctc_chat_coupon_message" rows="6" class="large-text"><?php echo esc_textarea( $settings['coupon_engine']['message'] ?? esc_html__( "🎁 *Special Discount Claim*\n\nHello! I'd like to claim my discount coupon: *{coupon_code}* ({discount_amount})\n\n*Product:* {product_name}\n*Page:* {current_page_url}\n\nCan you please assist me with applying this discount to my order? Thank you!", 'aicoso-click-to-chat' ) ); ?></textarea>
+					<p class="description">
+						<?php esc_html_e( 'Available tokens: {coupon_code}, {discount_amount}, {product_name}, {current_page_url}', 'aicoso-click-to-chat' ); ?>
+					</p>
 				</td>
 			</tr>
 		</table>
@@ -319,6 +688,156 @@ $current_tab        = $this->get_current_settings_tab();
 							<option value="<?php echo esc_attr( $value ); ?>" <?php selected( isset( $settings['floating_button']['position'] ) ? $settings['floating_button']['position'] : 'bottom_right', $value ); ?>><?php echo esc_html( $label ); ?></option>
 						<?php endforeach; ?>
 					</select>
+				</td>
+			</tr>
+		</table>
+		<?php $this->render_settings_card_close(); ?>
+
+		<?php
+		$this->render_settings_card_open(
+			esc_html__( 'Desktop "Scan QR Code to Chat" Modal', 'aicoso-click-to-chat' ),
+			array(
+				'description' => esc_html__( 'Bridge desktop shoppers directly to WhatsApp on their mobile phone by displaying a high-resolution QR code modal when clicking chat buttons on desktop screens.', 'aicoso-click-to-chat' ),
+				'icon'        => 'dashicons-smartphone',
+			)
+		);
+		?>
+		<?php
+		$qr_enabled = ! isset( $settings['qr_modal']['enabled'] ) || ! empty( $settings['qr_modal']['enabled'] );
+		?>
+		<table class="form-table" role="presentation">
+			<tr>
+				<th scope="row"><?php esc_html_e( 'Enable desktop QR modal', 'aicoso-click-to-chat' ); ?></th>
+				<td>
+					<label for="ctc_chat_qr_modal_enabled">
+						<input type="checkbox" name="ctc_chat_qr_modal[enabled]" id="ctc_chat_qr_modal_enabled" value="1" <?php checked( $qr_enabled ); ?>>
+						<?php esc_html_e( 'Open interactive QR code modal on desktop instead of redirecting immediately (mobile devices bypass this automatically)', 'aicoso-click-to-chat' ); ?>
+					</label>
+				</td>
+			</tr>
+			<tr class="ctc-chat-qr-modal-row<?php echo ! $qr_enabled ? ' ctc-chat-hidden' : ''; ?>">
+				<th scope="row"><label for="ctc_chat_qr_modal_title"><?php esc_html_e( 'Modal Title', 'aicoso-click-to-chat' ); ?></label></th>
+				<td>
+					<input type="text" name="ctc_chat_qr_modal[title]" id="ctc_chat_qr_modal_title" value="<?php echo esc_attr( $settings['qr_modal']['title'] ?? esc_html__( 'Scan to Chat on WhatsApp', 'aicoso-click-to-chat' ) ); ?>" class="regular-text">
+				</td>
+			</tr>
+			<tr class="ctc-chat-qr-modal-row<?php echo ! $qr_enabled ? ' ctc-chat-hidden' : ''; ?>">
+				<th scope="row"><label for="ctc_chat_qr_modal_desc"><?php esc_html_e( 'Instructions / Description', 'aicoso-click-to-chat' ); ?></label></th>
+				<td>
+					<textarea name="ctc_chat_qr_modal[description]" id="ctc_chat_qr_modal_desc" rows="3" class="large-text"><?php echo esc_textarea( $settings['qr_modal']['description'] ?? esc_html__( 'Point your phone camera or WhatsApp QR scanner at this code to start chatting instantly.', 'aicoso-click-to-chat' ) ); ?></textarea>
+				</td>
+			</tr>
+			<tr class="ctc-chat-qr-modal-row<?php echo empty( $settings['qr_modal']['enabled'] ) ? ' ctc-chat-hidden' : ''; ?>">
+				<th scope="row"><?php esc_html_e( 'WhatsApp Web Alternative', 'aicoso-click-to-chat' ); ?></th>
+				<td>
+					<label for="ctc_chat_qr_modal_web_link">
+						<input type="checkbox" name="ctc_chat_qr_modal[show_web_link]" id="ctc_chat_qr_modal_web_link" value="1" <?php checked( ! isset( $settings['qr_modal']['show_web_link'] ) || ! empty( $settings['qr_modal']['show_web_link'] ) ); ?>>
+						<?php esc_html_e( 'Include secondary link inside modal: "Or continue with WhatsApp Web on this computer"', 'aicoso-click-to-chat' ); ?>
+					</label>
+				</td>
+			</tr>
+			<tr class="ctc-chat-qr-modal-row<?php echo empty( $settings['qr_modal']['enabled'] ) ? ' ctc-chat-hidden' : ''; ?>">
+				<th scope="row"><?php esc_html_e( 'Desktop Modal Preview', 'aicoso-click-to-chat' ); ?></th>
+				<td>
+					<div class="ctc-chat-qr-admin-preview" style="max-width: 320px; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 16px; padding: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.08); text-align: center;">
+						<div style="width: 44px; height: 44px; margin: 0 auto 12px; border-radius: 50%; background: #e6f9ed; color: #25D366; display: flex; align-items: center; justify-content: center;">
+							<svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path d="M17.498 14.382c-.301-.15-1.767-.867-2.04-.966-.273-.101-.473-.15-.673.15-.197.295-.771.964-.944 1.162-.175.195-.349.21-.646.075-.3-.15-1.263-.465-2.403-1.485-.888-.795-1.484-1.77-1.66-2.07-.174-.3-.019-.465.13-.615.136-.135.301-.345.451-.523.146-.181.194-.301.297-.496.1-.21.049-.375-.025-.524-.075-.15-.672-1.62-.922-2.206-.24-.584-.487-.51-.672-.51-.172-.015-.371-.015-.571-.015-.2 0-.523.074-.797.359-.273.3-1.045 1.02-1.045 2.475s1.07 2.865 1.219 3.075c.149.195 2.105 3.195 5.1 4.485.714.3 1.27.48 1.704.629.714.227 1.365.195 1.88.121.574-.091 1.767-.721 2.016-1.426.255-.705.255-1.29.18-1.425-.074-.135-.27-.21-.57-.345m-5.446 7.443h-.016c-1.77 0-3.524-.48-5.055-1.38l-.36-.214-3.75.975 1.005-3.645-.239-.375c-.99-1.576-1.516-3.391-1.516-5.26 0-5.445 4.455-9.885 9.942-9.885 2.654 0 5.145 1.035 7.021 2.91 1.875 1.859 2.909 4.35 2.909 6.99-.004 5.444-4.46 9.885-9.935 9.885M20.52 3.449C18.24 1.245 15.24 0 12.045 0 5.463 0 .104 5.334.101 11.893c0 2.096.549 4.14 1.595 5.945L0 24l6.335-1.652c1.746.943 3.71 1.444 5.71 1.447h.006c6.585 0 11.946-5.336 11.949-11.896 0-3.176-1.24-6.165-3.495-8.411"/></svg>
+						</div>
+						<h4 style="margin: 0 0 6px; font-size: 15px; font-weight: 700; color: #1e293b;"><?php esc_html_e( 'Scan to Chat on WhatsApp', 'aicoso-click-to-chat' ); ?></h4>
+						<p style="margin: 0 0 14px; font-size: 12px; color: #64748b; line-height: 1.4;"><?php esc_html_e( 'Point your phone camera at this QR code to chat immediately on your mobile device.', 'aicoso-click-to-chat' ); ?></p>
+						<div style="width: 140px; height: 140px; margin: 0 auto 14px; background: #f8fafc; border: 1px dashed #cbd5e1; border-radius: 12px; display: flex; align-items: center; justify-content: center; color: #64748b;">
+							<span class="dashicons dashicons-camera" style="font-size: 36px; width: 36px; height: 36px; opacity: 0.6;"></span>
+						</div>
+						<span style="font-size: 12px; font-weight: 600; color: #128C7E; text-decoration: underline;"><?php esc_html_e( 'Or continue with WhatsApp Web →', 'aicoso-click-to-chat' ); ?></span>
+					</div>
+				</td>
+			</tr>
+		</table>
+		<?php $this->render_settings_card_close(); ?>
+
+		<?php
+		$privacy_settings = isset( $settings['privacy_compliance'] ) && is_array( $settings['privacy_compliance'] ) ? $settings['privacy_compliance'] : array();
+		$privacy_enabled  = ! empty( $privacy_settings['enabled'] );
+		$consent_mode     = $privacy_settings['consent_mode'] ?? 'prompt';
+		$wp_policy_url    = function_exists( 'get_privacy_policy_url' ) ? get_privacy_policy_url() : '';
+
+		$this->render_settings_card_open(
+			esc_html__( 'GDPR & Privacy Compliance Mode', 'aicoso-click-to-chat' ),
+			array(
+				'description' => esc_html__( 'Ensure compliance with GDPR, ePrivacy, and data protection regulations by requesting user consent or displaying privacy disclaimers before connecting to WhatsApp.', 'aicoso-click-to-chat' ),
+				'icon'        => 'dashicons-shield-alt',
+			)
+		);
+		?>
+		<table class="form-table" role="presentation">
+			<tr>
+				<th scope="row"><?php esc_html_e( 'Enable privacy compliance', 'aicoso-click-to-chat' ); ?></th>
+				<td>
+					<label for="ctc_chat_privacy_enabled">
+						<input type="checkbox" name="ctc_chat_privacy_compliance[enabled]" id="ctc_chat_privacy_enabled" value="1" <?php checked( $privacy_enabled ); ?>>
+						<?php esc_html_e( 'Enable GDPR & Privacy Compliance Mode', 'aicoso-click-to-chat' ); ?>
+					</label>
+					<p class="description"><?php esc_html_e( 'Enforces consent management and privacy transparency when customers interact with WhatsApp.', 'aicoso-click-to-chat' ); ?></p>
+				</td>
+			</tr>
+			<tr class="ctc-chat-privacy-row<?php echo ! $privacy_enabled ? ' ctc-chat-hidden' : ''; ?>">
+				<th scope="row"><label for="ctc_chat_privacy_consent_mode"><?php esc_html_e( 'Consent Mode', 'aicoso-click-to-chat' ); ?></label></th>
+				<td>
+					<select name="ctc_chat_privacy_compliance[consent_mode]" id="ctc_chat_privacy_consent_mode">
+						<option value="prompt" <?php selected( $consent_mode, 'prompt' ); ?>><?php esc_html_e( 'Pre-Chat Consent Modal (Recommended for strict GDPR)', 'aicoso-click-to-chat' ); ?></option>
+						<option value="inline_notice" <?php selected( $consent_mode, 'inline_notice' ); ?>><?php esc_html_e( 'Inline Privacy Disclaimer Below WhatsApp Buttons', 'aicoso-click-to-chat' ); ?></option>
+					</select>
+					<p class="description"><?php esc_html_e( 'Modal mode prompts the visitor before first chat redirect; Inline mode displays a subtle disclaimer beneath buttons.', 'aicoso-click-to-chat' ); ?></p>
+				</td>
+			</tr>
+			<tr class="ctc-chat-privacy-row<?php echo ! $privacy_enabled ? ' ctc-chat-hidden' : ''; ?>">
+				<th scope="row"><label for="ctc_chat_privacy_notice_text"><?php esc_html_e( 'Consent Notice Text', 'aicoso-click-to-chat' ); ?></label></th>
+				<td>
+					<textarea name="ctc_chat_privacy_compliance[notice_text]" id="ctc_chat_privacy_notice_text" rows="3" class="large-text"><?php echo esc_textarea( $privacy_settings['notice_text'] ?? esc_html__( 'By chatting with us on WhatsApp, you agree to our {privacy_policy_link} and consent to communication regarding your inquiry.', 'aicoso-click-to-chat' ) ); ?></textarea>
+					<p class="description"><?php esc_html_e( 'Use {privacy_policy_link} as a placeholder where your clickable Privacy Policy link should appear.', 'aicoso-click-to-chat' ); ?></p>
+				</td>
+			</tr>
+			<tr class="ctc-chat-privacy-row<?php echo ! $privacy_enabled ? ' ctc-chat-hidden' : ''; ?>">
+				<th scope="row"><label for="ctc_chat_privacy_link_text"><?php esc_html_e( 'Privacy Policy Link Text', 'aicoso-click-to-chat' ); ?></label></th>
+				<td>
+					<input type="text" name="ctc_chat_privacy_compliance[link_text]" id="ctc_chat_privacy_link_text" value="<?php echo esc_attr( $privacy_settings['link_text'] ?? esc_html__( 'Privacy Policy', 'aicoso-click-to-chat' ) ); ?>" class="regular-text">
+				</td>
+			</tr>
+			<tr class="ctc-chat-privacy-row<?php echo ! $privacy_enabled ? ' ctc-chat-hidden' : ''; ?>">
+				<th scope="row"><label for="ctc_chat_privacy_custom_policy_url"><?php esc_html_e( 'Privacy Policy URL Override', 'aicoso-click-to-chat' ); ?></label></th>
+				<td>
+					<input type="url" name="ctc_chat_privacy_compliance[custom_policy_url]" id="ctc_chat_privacy_custom_policy_url" value="<?php echo esc_url( $privacy_settings['custom_policy_url'] ?? '' ); ?>" placeholder="<?php echo esc_attr( $wp_policy_url ? $wp_policy_url : 'https://yourwebsite.com/privacy-policy/' ); ?>" class="large-text">
+					<p class="description">
+						<?php
+						if ( $wp_policy_url ) {
+							/* translators: %s: WordPress privacy policy URL */
+							printf( esc_html__( 'Leave blank to use WordPress default Privacy Policy page: %s', 'aicoso-click-to-chat' ), '<code>' . esc_url( $wp_policy_url ) . '</code>' );
+						} else {
+							esc_html_e( 'No WordPress privacy policy page is configured yet under Settings > Privacy. Enter a custom URL here or configure one in WordPress.', 'aicoso-click-to-chat' );
+						}
+						?>
+					</p>
+				</td>
+			</tr>
+			<tr class="ctc-chat-privacy-row<?php echo ! $privacy_enabled ? ' ctc-chat-hidden' : ''; ?>">
+				<th scope="row"><label for="ctc_chat_privacy_agree_button"><?php esc_html_e( 'Consent Accept Button', 'aicoso-click-to-chat' ); ?></label></th>
+				<td>
+					<input type="text" name="ctc_chat_privacy_compliance[agree_button]" id="ctc_chat_privacy_agree_button" value="<?php echo esc_attr( $privacy_settings['agree_button'] ?? esc_html__( 'Accept & Chat', 'aicoso-click-to-chat' ) ); ?>" class="regular-text">
+				</td>
+			</tr>
+			<tr class="ctc-chat-privacy-row<?php echo ! $privacy_enabled ? ' ctc-chat-hidden' : ''; ?>">
+				<th scope="row"><label for="ctc_chat_privacy_cancel_button"><?php esc_html_e( 'Consent Cancel Button', 'aicoso-click-to-chat' ); ?></label></th>
+				<td>
+					<input type="text" name="ctc_chat_privacy_compliance[cancel_button]" id="ctc_chat_privacy_cancel_button" value="<?php echo esc_attr( $privacy_settings['cancel_button'] ?? esc_html__( 'Cancel', 'aicoso-click-to-chat' ) ); ?>" class="regular-text">
+				</td>
+			</tr>
+			<tr class="ctc-chat-privacy-row<?php echo ! $privacy_enabled ? ' ctc-chat-hidden' : ''; ?>">
+				<th scope="row"><?php esc_html_e( 'Telemetry IP Anonymization', 'aicoso-click-to-chat' ); ?></th>
+				<td>
+					<label for="ctc_chat_privacy_anonymize_ip">
+						<input type="checkbox" name="ctc_chat_privacy_compliance[anonymize_ip]" id="ctc_chat_privacy_anonymize_ip" value="1" <?php checked( ! isset( $privacy_settings['anonymize_ip'] ) || ! empty( $privacy_settings['anonymize_ip'] ) ); ?>>
+						<?php esc_html_e( 'Anonymize visitor IP addresses in telemetry logs (masks the last octet in IPv4/IPv6 per GDPR guidelines)', 'aicoso-click-to-chat' ); ?>
+					</label>
 				</td>
 			</tr>
 		</table>
@@ -376,6 +895,17 @@ $current_tab        = $this->get_current_settings_tab();
 						<?php esc_html_e( 'Enable catalog mode (hides all purchase buttons)', 'aicoso-click-to-chat' ); ?>
 					</label>
 					<p class="description"><?php esc_html_e( 'Turns your store into a catalog where customers must contact via WhatsApp to purchase', 'aicoso-click-to-chat' ); ?></p>
+				</td>
+			</tr>
+			<tr>
+				<th scope="row">
+					<label for="ctc_chat_custom_css"><?php esc_html_e( 'Custom CSS', 'aicoso-click-to-chat' ); ?></label>
+				</th>
+				<td>
+					<textarea name="ctc_chat_advanced[custom_css]" id="ctc_chat_custom_css" rows="8" class="large-text code" style="font-family: Consolas, Monaco, monospace; font-size: 13px; line-height: 1.5; background: #fafafa;" placeholder=".ctc-chat-whatsapp-button {&#10;    /* Your custom CSS rules here */&#10;}"><?php echo esc_textarea( $settings['advanced']['custom_css'] ?? '' ); ?></textarea>
+					<p class="description">
+						<?php esc_html_e( 'Add custom CSS rules to customize buttons, widgets, badges, and popups. Do not include <style> tags.', 'aicoso-click-to-chat' ); ?>
+					</p>
 				</td>
 			</tr>
 		</table>

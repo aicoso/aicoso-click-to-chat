@@ -542,12 +542,16 @@ class CTC_Chat_Settings {
 
 				$date_format = function_exists( 'wc_date_format' ) ? wc_date_format() : get_option( 'date_format' );
 				$replacements = array(
-					'{order_number}'      => '12345',
-					'{order_date}'        => date_i18n( $date_format, time() ),
+					'{order_number}'       => '12345',
+					'{order_date}'         => date_i18n( $date_format, time() ),
 					'{ordered_items_list}' => 'Sample Product x 2 - ' . $price1 . "\n" .
 											'Another Product x 1 - ' . $price2,
-					'{coupon_code}'       => 'SAMPLE10',
-					'{order_total}'       => $order_total,
+					'{coupon_code}'        => 'SAMPLE10',
+					'{order_total}'        => $order_total,
+					'{order_status}'       => 'Processing',
+					'{customer_name}'      => 'John Doe',
+					'{shipping_address}'   => '123 Main St, New York, NY 10001',
+					'{order_view_url}'     => site_url( '/my-account/view-order/12345/' ),
 				);
 				break;
 
@@ -573,6 +577,7 @@ class CTC_Chat_Settings {
 	 */
 	public function get_product_position_options() {
 		return array(
+			'next_to_add_to_cart'   => esc_html__( 'Next to Add to Cart button (Inline)', 'aicoso-click-to-chat' ),
 			'after_add_to_cart'     => esc_html__( 'Below add to cart button', 'aicoso-click-to-chat' ),
 			'before_add_to_cart'    => esc_html__( 'Above add to cart button', 'aicoso-click-to-chat' ),
 			'after_price'           => esc_html__( 'Below price', 'aicoso-click-to-chat' ),
@@ -622,7 +627,10 @@ class CTC_Chat_Settings {
 			case 'single_product':
 				$placeholders = array(
 					'{product_name}' => esc_html__( 'Product name', 'aicoso-click-to-chat' ),
-					'{price}'        => esc_html__( 'Product price', 'aicoso-click-to-chat' ),
+					'{product_sku}'  => esc_html__( 'Product SKU', 'aicoso-click-to-chat' ),
+					'{price}'        => esc_html__( 'Unit price', 'aicoso-click-to-chat' ),
+					'{quantity}'     => esc_html__( 'Selected quantity', 'aicoso-click-to-chat' ),
+					'{order_total}'  => esc_html__( 'Order total (Price × Quantity)', 'aicoso-click-to-chat' ),
 					'{product_url}'  => esc_html__( 'Product URL', 'aicoso-click-to-chat' ),
 				);
 				break;
@@ -637,8 +645,11 @@ class CTC_Chat_Settings {
 			case 'variations':
 				$placeholders = array(
 					'{product_name}'      => esc_html__( 'Product name', 'aicoso-click-to-chat' ),
+					'{product_sku}'       => esc_html__( 'Product/Variation SKU', 'aicoso-click-to-chat' ),
 					'{variation_details}' => esc_html__( 'Selected variation details', 'aicoso-click-to-chat' ),
-					'{variation_price}'   => esc_html__( 'Selected variation price', 'aicoso-click-to-chat' ),
+					'{variation_price}'   => esc_html__( 'Variation unit price', 'aicoso-click-to-chat' ),
+					'{quantity}'          => esc_html__( 'Selected quantity', 'aicoso-click-to-chat' ),
+					'{order_total}'       => esc_html__( 'Order total (Price × Quantity)', 'aicoso-click-to-chat' ),
 					'{product_url}'       => esc_html__( 'Product URL', 'aicoso-click-to-chat' ),
 				);
 				break;
@@ -656,11 +667,15 @@ class CTC_Chat_Settings {
 
 			case 'thank_you':
 				$placeholders = array(
-					'{order_number}'      => esc_html__( 'Order number', 'aicoso-click-to-chat' ),
-					'{order_date}'        => esc_html__( 'Order date', 'aicoso-click-to-chat' ),
+					'{order_number}'       => esc_html__( 'Order number', 'aicoso-click-to-chat' ),
+					'{order_date}'         => esc_html__( 'Order date', 'aicoso-click-to-chat' ),
 					'{ordered_items_list}' => esc_html__( 'List of ordered items', 'aicoso-click-to-chat' ),
-					'{coupon_code}'       => esc_html__( 'Applied coupon code', 'aicoso-click-to-chat' ),
-					'{order_total}'       => esc_html__( 'Order total', 'aicoso-click-to-chat' ),
+					'{coupon_code}'        => esc_html__( 'Applied coupon code', 'aicoso-click-to-chat' ),
+					'{order_total}'        => esc_html__( 'Order total', 'aicoso-click-to-chat' ),
+					'{order_status}'       => esc_html__( 'Order status (e.g. Processing, Completed)', 'aicoso-click-to-chat' ),
+					'{customer_name}'      => esc_html__( 'Customer full name', 'aicoso-click-to-chat' ),
+					'{shipping_address}'   => esc_html__( 'Shipping address', 'aicoso-click-to-chat' ),
+					'{order_view_url}'     => esc_html__( 'Order details URL', 'aicoso-click-to-chat' ),
 				);
 				break;
 

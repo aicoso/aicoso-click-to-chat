@@ -89,6 +89,33 @@ class CTC_Chat_Button_Renderer {
 			<span class="ctc-chat-button-text"><?php echo esc_html( $args['text'] ); ?></span>
 		</a>
 		<?php
+		// GDPR Privacy Compliance Inline Notice.
+		$settings = get_option( 'ctc_chat_settings', array() );
+		$privacy  = isset( $settings['privacy_compliance'] ) ? $settings['privacy_compliance'] : array();
+		if ( ! empty( $privacy['enabled'] ) && ( $privacy['consent_mode'] ?? 'prompt' ) === 'inline_notice' && 'floating' !== $type ) {
+			echo self::get_inline_privacy_notice( $privacy ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		}
+	}
+
+	/**
+	 * Build HTML for GDPR inline privacy notice.
+	 *
+	 * @param array $privacy Privacy settings.
+	 * @return string
+	 */
+	public static function get_inline_privacy_notice( $privacy ) {
+		$policy_url = ! empty( $privacy['custom_policy_url'] ) ? esc_url( $privacy['custom_policy_url'] ) : '';
+		if ( empty( $policy_url ) && function_exists( 'get_privacy_policy_url' ) ) {
+			$policy_url = esc_url( get_privacy_policy_url() );
+		}
+
+		$link_text        = ! empty( $privacy['link_text'] ) ? esc_html( $privacy['link_text'] ) : esc_html__( 'Privacy Policy', 'aicoso-click-to-chat' );
+		$policy_link_html = $policy_url ? '<a href="' . $policy_url . '" target="_blank" rel="noopener noreferrer" class="ctc-privacy-link">' . $link_text . '</a>' : $link_text;
+
+		$notice_template = ! empty( $privacy['notice_text'] ) ? $privacy['notice_text'] : esc_html__( 'By chatting with us on WhatsApp, you agree to our {privacy_policy_link} and consent to communication regarding your inquiry.', 'aicoso-click-to-chat' );
+		$notice_html     = str_replace( '{privacy_policy_link}', $policy_link_html, esc_html( $notice_template ) );
+
+		return '<div class="ctc-chat-inline-privacy-notice"><span class="ctc-chat-privacy-lock">🔒</span> ' . $notice_html . '</div>';
 	}
 
 	/**

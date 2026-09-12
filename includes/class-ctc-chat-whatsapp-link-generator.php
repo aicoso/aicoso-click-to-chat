@@ -248,10 +248,11 @@ class CTC_Chat_WhatsApp_Link_Generator {
 	 *
 	 * @param int   $product_id  The product ID.
 	 * @param array $variations  The selected variations (optional).
+	 * @param int   $quantity    The product quantity.
 	 * @return string The generated WhatsApp URL.
 	 */
-	public function get_product_url( $product_id, $variations = array() ) {
-		// Check if WooCommerce is active and function exists.
+	public function get_product_url( $product_id = null, $variations = array(), $quantity = 1 ) {
+		// Check if WooCommerce is active.
 		if ( ! function_exists( 'wc_get_product' ) ) {
 			return '';
 		}
@@ -293,13 +294,69 @@ class CTC_Chat_WhatsApp_Link_Generator {
 
 		// Prepare the message.
 		if ( empty( $variations ) ) {
-			$message = $this->prepare_single_product_message( $product );
+			$message = $this->prepare_single_product_message( $product, $quantity );
 		} else {
-			$message = $this->prepare_variation_message( $product, $variations );
+			$message = $this->prepare_variation_message( $product, $variations, $quantity );
 		}
 
 		// Build the WhatsApp URL.
 		return $this->build_whatsapp_url( $whatsapp_number, $message );
+	}
+
+	/**
+	 * Generate a WhatsApp URL for out-of-stock back-in-stock notifications.
+	 *
+	 * @param int   $product_id Product ID.
+	 * @param array $variations Optional variation attributes.
+	 * @return string WhatsApp URL.
+	 */
+	public function get_back_in_stock_url( $product_id, $variations = array() ) {
+		if ( ! function_exists( 'wc_get_product' ) ) {
+			return '';
+		}
+
+		$product = wc_get_product( $product_id );
+		if ( ! $product || ! is_a( $product, 'WC_Product' ) ) {
+			return '';
+		}
+
+		$whatsapp_number = $this->get_whatsapp_number( $product_id, null, is_page() ? get_the_ID() : null );
+		if ( empty( $whatsapp_number ) ) {
+			return '';
+		}
+
+		$whatsapp_number = preg_replace( '/[^0-9]/', '', $whatsapp_number );
+
+		$template = ! empty( $this->settings['back_in_stock']['message'] )
+			? $this->settings['back_in_stock']['message']
+			: "Hello! I noticed that *{product_name}* (SKU: {product_sku}) is currently out of stock.\n\nPlease notify me via WhatsApp as soon as it is back in stock!\nLink: {product_url}";
+
+		$product_name = method_exists( $product, 'get_name' ) ? $product->get_name() : '';
+		$product_sku  = method_exists( $product, 'get_sku' ) && $product->get_sku() ? $product->get_sku() : 'N/A';
+		$product_url  = function_exists( 'get_permalink' ) ? get_permalink( $product->get_id() ) : '';
+
+		$variation_details = '';
+		if ( ! empty( $variations ) && is_array( $variations ) ) {
+			$details = array();
+			foreach ( $variations as $tax => $val ) {
+				$label = function_exists( 'wc_attribute_label' ) ? wc_attribute_label( str_replace( 'attribute_', '', $tax ), $product ) : $tax;
+				$details[] = $label . ': ' . $val;
+			}
+			$variation_details = implode( ', ', $details );
+		}
+
+		$replacements = array(
+			'{product_name}'      => $product_name,
+			'{product_sku}'       => $product_sku,
+			'{variation_details}' => $variation_details ? '(' . $variation_details . ')' : '',
+			'{product_url}'       => $product_url,
+		);
+
+		foreach ( $replacements as $key => $val ) {
+			$template = str_replace( $key, $val, $template );
+		}
+
+		return $this->build_whatsapp_url( $whatsapp_number, $template );
 	}
 
 	/**
@@ -504,6 +561,105 @@ class CTC_Chat_WhatsApp_Link_Generator {
 	}
 
 	/**
+	 * Get the discount description for a coupon code.
+	 *
+	 * @param string $coupon_code The coupon code.
+	 * @return string
+	 */
+	public function get_coupon_discount_description( $coupon_code ) {
+		$coupon_code = trim( $coupon_code );
+		if ( ! empty( $coupon_code ) && class_exists( 'WC_Coupon' ) ) {
+			try {
+				$coupon = new WC_Coupon( $coupon_code );
+				if ( $coupon->get_id() ) {
+					$amount = $coupon->get_amount();
+					$type   = $coupon->get_discount_type();
+					if ( 'percent' === $type ) {
+						return $amount . '% OFF';
+					} elseif ( 'fixed_cart' === $type || 'fixed_product' === $type ) {
+						return function_exists( 'wc_price' ) ? wp_strip_all_tags( wc_price( $amount ) ) . ' OFF' : '$' . $amount . ' OFF';
+					}
+				}
+			} catch ( Exception $e ) {
+				// Silently handle exception.
+			}
+		}
+
+		return ! empty( $this->settings['coupon_engine']['custom_discount'] )
+			? $this->settings['coupon_engine']['custom_discount']
+			: 'Special Discount';
+	}
+
+	/**
+	 * Generate WhatsApp URL for claiming a discount coupon.
+	 *
+	 * @param int|null $product_id Optional product ID if on product page.
+	 * @return string The generated WhatsApp URL.
+	 */
+	public function get_coupon_claim_url( $product_id = null ) {
+		$coupon_settings = isset( $this->settings['coupon_engine'] ) ? $this->settings['coupon_engine'] : array();
+		$coupon_code     = ! empty( $coupon_settings['coupon_code'] ) ? $coupon_settings['coupon_code'] : 'SPECIAL';
+		$discount_amount = $this->get_coupon_discount_description( $coupon_code );
+
+		$default_message = "🎁 *Special Discount Claim*\n\nHello! I'd like to claim my discount coupon: *{coupon_code}* ({discount_amount})\n\n*Product:* {product_name}\n*Page:* {current_page_url}\n\nCan you please assist me with applying this discount to my order? Thank you!";
+
+		$message_template = ! empty( $coupon_settings['message'] )
+			? $coupon_settings['message']
+			: $default_message;
+
+		// Convert any literal escaped newlines to real newlines.
+		$message_template = str_replace( array( '\r\n', '\n', "\\r\\n", "\\n" ), "\n", $message_template );
+
+		// Replace tokens.
+		$product_name = '';
+		$product_sku  = '';
+		if ( $product_id && function_exists( 'wc_get_product' ) ) {
+			$product = wc_get_product( $product_id );
+			if ( $product ) {
+				$product_name = $product->get_name();
+				$product_sku  = $product->get_sku();
+			}
+		}
+
+		// If product_name is empty, remove any line mentioning {product_name} so we do not leave an empty "*Product:* " line.
+		if ( empty( $product_name ) ) {
+			$message_template = preg_replace( '/^[^\n]*\{product_name\}[^\n]*\n?/m', '', $message_template );
+		}
+
+		$current_url = ( isset( $_SERVER['HTTPS'] ) && 'on' === $_SERVER['HTTPS'] ? 'https' : 'http' ) . '://';
+		$current_url .= isset( $_SERVER['HTTP_HOST'] ) ? sanitize_text_field( wp_unslash( $_SERVER['HTTP_HOST'] ) ) : '';
+		$current_url .= isset( $_SERVER['REQUEST_URI'] ) ? sanitize_text_field( wp_unslash( $_SERVER['REQUEST_URI'] ) ) : '';
+
+		$replacements = array(
+			'{coupon_code}'      => $coupon_code,
+			'{discount_amount}'  => $discount_amount,
+			'{discount_value}'   => $discount_amount,
+			'{product_name}'     => $product_name,
+			'{product_sku}'      => $product_sku,
+			'{current_page_url}' => $current_url,
+		);
+
+		foreach ( $replacements as $placeholder => $value ) {
+			$message_template = str_replace( $placeholder, $value, $message_template );
+		}
+
+		// Ensure proper spacing before URL/Page if it was cramped in previous template versions.
+		$message_template = preg_replace( '/(?<!\n)\nPage:/', "\n\nPage:", $message_template );
+		$message_template = preg_replace( '/(?<!\n)\n\*Page:\*/', "\n\n*Page:*", $message_template );
+
+		// Normalize multiple consecutive line breaks down to double line breaks.
+		$message_template = preg_replace( "/\n{3,}/", "\n\n", trim( $message_template ) );
+
+		$whatsapp_number = $this->get_whatsapp_number( $product_id );
+		if ( empty( $whatsapp_number ) ) {
+			return '';
+		}
+
+		$whatsapp_number = preg_replace( '/[^0-9]/', '', $whatsapp_number );
+		return $this->build_whatsapp_url( $whatsapp_number, $message_template );
+	}
+
+	/**
 	 * Build a WhatsApp URL with the provided number and message.
 	 *
 	 * @param string $number  The WhatsApp number.
@@ -527,10 +683,11 @@ class CTC_Chat_WhatsApp_Link_Generator {
 	/**
 	 * Prepare message for a single product.
 	 *
-	 * @param WC_Product $product The product object.
+	 * @param WC_Product $product  The product object.
+	 * @param int        $quantity Optional product quantity.
 	 * @return string The prepared message.
 	 */
-	private function prepare_single_product_message( $product ) {
+	private function prepare_single_product_message( $product, $quantity = 1 ) {
 		// Check if product is valid.
 		if ( ! is_object( $product ) || ! $product instanceof WC_Product ) {
 			return '';
@@ -552,9 +709,9 @@ class CTC_Chat_WhatsApp_Link_Generator {
 		}
 
 		// Get product data safely.
-		$product_name = '';
+		$product_name  = '';
 		$product_price = 0;
-		$product_url = '';
+		$product_url   = '';
 
 		if ( method_exists( $product, 'get_name' ) ) {
 			$product_name = $product->get_name();
@@ -568,10 +725,17 @@ class CTC_Chat_WhatsApp_Link_Generator {
 			$product_url = get_permalink( $product->get_id() );
 		}
 
+		$quantity     = max( 1, absint( $quantity ) );
+		$total_price  = (float) $product_price * $quantity;
+		$product_sku  = method_exists( $product, 'get_sku' ) && $product->get_sku() ? $product->get_sku() : 'N/A';
+
 		// Build replacements for single product template.
 		$replacements = array(
 			'{product_name}' => $product_name,
+			'{product_sku}'  => $product_sku,
 			'{price}'        => wp_strip_all_tags( wc_price( $product_price ) ),
+			'{quantity}'     => (string) $quantity,
+			'{order_total}'  => wp_strip_all_tags( wc_price( $total_price ) ),
 			'{product_url}'  => $product_url,
 		);
 
@@ -683,11 +847,19 @@ class CTC_Chat_WhatsApp_Link_Generator {
 			$formatted_price = '$' . $variation_price;
 		}
 
+		$quantity      = max( 1, absint( $quantity ) );
+		$total_price   = (float) $variation_price * $quantity;
+		$variation_sku = ( $variation && method_exists( $variation, 'get_sku' ) && $variation->get_sku() ) ? $variation->get_sku() : ( method_exists( $product, 'get_sku' ) && $product->get_sku() ? $product->get_sku() : 'N/A' );
+
 		// Replace placeholders.
 		$replacements = array(
 			'{product_name}'      => $product_name,
+			'{product_sku}'       => $variation_sku,
 			'{variation_details}' => $variation_details,
 			'{variation_price}'   => $formatted_price,
+			'{price}'             => $formatted_price,
+			'{quantity}'          => (string) $quantity,
+			'{order_total}'       => wp_strip_all_tags( wc_price( $total_price ) ),
 			'{product_url}'       => $product_url,
 		);
 
@@ -936,13 +1108,68 @@ class CTC_Chat_WhatsApp_Link_Generator {
 			// Silently handle any exceptions.
 		}
 
+		// Safely get customer name.
+		$customer_name = '';
+		try {
+			if ( method_exists( $order, 'get_formatted_billing_full_name' ) ) {
+				$customer_name = $order->get_formatted_billing_full_name();
+			}
+			if ( empty( $customer_name ) && method_exists( $order, 'get_billing_first_name' ) ) {
+				$customer_name = trim( $order->get_billing_first_name() . ' ' . $order->get_billing_last_name() );
+			}
+		} catch ( Exception $e ) {
+			// Silently handle any exceptions.
+		}
+
+		// Safely get order status name.
+		$order_status = '';
+		try {
+			if ( method_exists( $order, 'get_status' ) ) {
+				$raw_status = $order->get_status();
+				if ( function_exists( 'wc_get_order_status_name' ) ) {
+					$order_status = wc_get_order_status_name( $raw_status );
+				} else {
+					$order_status = ucfirst( $raw_status );
+				}
+			}
+		} catch ( Exception $e ) {
+			// Silently handle any exceptions.
+		}
+
+		// Safely get formatted shipping address.
+		$shipping_address = '';
+		try {
+			if ( method_exists( $order, 'get_formatted_shipping_address' ) ) {
+				$shipping_address = wp_strip_all_tags( $order->get_formatted_shipping_address() );
+			}
+			if ( empty( $shipping_address ) && method_exists( $order, 'get_formatted_billing_address' ) ) {
+				$shipping_address = wp_strip_all_tags( $order->get_formatted_billing_address() );
+			}
+		} catch ( Exception $e ) {
+			// Silently handle any exceptions.
+		}
+
+		// Safely get order view URL.
+		$order_view_url = '';
+		try {
+			if ( method_exists( $order, 'get_view_order_url' ) ) {
+				$order_view_url = $order->get_view_order_url();
+			}
+		} catch ( Exception $e ) {
+			// Silently handle any exceptions.
+		}
+
 		// Replace placeholders.
 		$replacements = array(
-			'{order_number}'      => $order_number,
-			'{order_date}'        => $order_date,
+			'{order_number}'       => $order_number,
+			'{order_date}'         => $order_date,
 			'{ordered_items_list}' => $ordered_items_list,
-			'{coupon_code}'       => $coupon_code,
-			'{order_total}'       => wp_strip_all_tags( wc_price( $order_total ) ),
+			'{coupon_code}'        => $coupon_code,
+			'{order_total}'        => wp_strip_all_tags( wc_price( $order_total ) ),
+			'{order_status}'       => $order_status,
+			'{customer_name}'      => $customer_name,
+			'{shipping_address}'   => $shipping_address,
+			'{order_view_url}'     => $order_view_url,
 		);
 
 		foreach ( $replacements as $placeholder => $value ) {
